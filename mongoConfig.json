@@ -1,0 +1,19 @@
+{
+   "mongodb": {
+      "admin": {
+         "host": "localhost",
+         "port": 27017,
+         "database": "superfin",
+         "privileges": ["readWriteAnyDatabase"],
+         "connectionString": "mongodb+srv://admin:Admin@superfin.gg6s1.mongodb.net/test"
+      }
+      
+      "customer": {
+         "host": "localhost",
+         "port": 27017,
+         "database": "superfin",
+         "privileges": ["read@superfin.product", "readWrite@superfin.customer"],
+         "connectionString": "mongodb+srv://customer:CustomerPassword@superfin.gg6s1.mongodb.net/test"
+      }
+   }
+}
