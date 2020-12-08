@@ -3,9 +3,6 @@ A website for purchasing paperbags
 
 # DO NOT DELETE
 ## Connect to MongoDB
-Root user's username: admin
-Root user's password: Admin (change "password" to the actual password in connection string)
-
-Connection String: mongodb+srv://admin:"password"@superfin.gg6s1.mongodb.net/admin
+Use the info provided in mongoConfig.json for connecting to the database.
 
 Connect to Atlas through Compass: https://downloads.mongodb.com/compass/mongodb-compass-1.22.1-win32-x64.exe 
