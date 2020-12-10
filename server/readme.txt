@@ -1,4 +1,5 @@
 # Mongo Compass Login Credentials #
-tttn941@uowmail.edu.au Meoconvt20
+Username: tttn941@uowemail.edu.au 
+Password: Meoconvt20
 
 Installation Instructions:
