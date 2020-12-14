@@ -1,103 +1,47 @@
 import { Menu } from 'antd';
+import {UserOutlined, ShoppingCartOutlined} from '@ant-design/icons';
 import React, { useState } from 'react';
-import './Navbar.css'
-import {Link} from "react-router-dom";
+import '../../CSS/Navbar.css'
+import image from '../../Images/Logo.jpg'
+
 
 
 export default function Navbar(props){
-  let menuItemKey = "Login";
-  let menuItemTo = "/login";
-  let menuItemValue = "Login/sign up";
- 
-
-  if(props.loggedInStatus === "CUSTOMER"){
-    menuItemKey = "MyAccount";
-    menuItemTo = "/myaccount";
-    menuItemValue = "My Account/ Sign Out";
-    console.log("this should NOT print");
-  }
-
   const[currentMenuItem, setMenuItem] = useState('');
-
+  
     return (
+      <Menu className="Menu" onClick={(menu) => setMenuItem(menu.key)}  mode="horizontal" >
 
-      <Menu className="Menu" style={{ textAlign: 'center' }} onClick={(menu) => setMenuItem(menu.key)} selectedKeys={currentMenuItem} mode="horizontal">
-          <Menu.Item key="Logo">
-            <Link to = "/">Logo/Home</Link>
+          <Menu.Item key="Logo" style = {{ right: 500 }}>
+              <img src={image} width = "150" heigh = "150" alt="Logo" />
           </Menu.Item >
-          <Menu.Item key="Delivery">
-            <Link to = "/deliverydispatch">Delivery and Dispatch</Link>
+   
+          <Menu.Item key="Delivery" >
+            Delivery and Dispatch
           </Menu.Item >
+
           <Menu.Item key="Contact" >
-            <Link to = "/contactus">Contact Us</Link>
+            Contact Us
           </Menu.Item>
+
           <Menu.Item key="About">
-            <Link to = "/aboutus">About us</Link>
+            About us
           </Menu.Item>
+
           <Menu.Item key="Blog">
-            <Link to = "/blog">Blog</Link>
+            Blog
           </Menu.Item>
-          <Menu.Item key = {menuItemKey}>
-            <Link to = {menuItemTo}>{menuItemValue}</Link>
+
+          <Menu.Item key = "Login" style = {{ left: 500}} icon={<UserOutlined />} >
+            Log in/Sign up
           </Menu.Item>
-          <Menu.Item key="Cart">
-            <Link to = "/cart">Cart</Link>
+
+          <Menu.Item key="Cart" style = {{ left: 500}} className = "rightItems"  icon = {<ShoppingCartOutlined />} >
+            Cart
           </Menu.Item>
-      </Menu>
+
+      </Menu> 
   );
-
 }
-
-
-
-/*
-export default class Navbar extends React.Component {
-
-
-  state = {
-    current: '',
-  };
-
-  
-
-  handleClick = e => {
-    console.log('click ', e);
-    this.setState({ current: e.key});
-  };
-
-  
-  
-
-  render() {
-    const { current } = this.state;
-    return (
-
-            <Menu className="Menu" style={{ textAlign: 'center' }} onClick={this.handleClick} selectedKeys={[current]} mode="horizontal">
-                <Menu.Item key="Logo">
-                  <Link to = "/">Logo/Home</Link>
-                </Menu.Item >
-                <Menu.Item key="Delivery">
-                  <Link to = "/deliverydispatch">Delivery and Dispatch</Link>
-                </Menu.Item >
-                <Menu.Item key="Contact" >
-                  <Link to = "/contactus">Contact Us</Link>
-                </Menu.Item>
-                <Menu.Item key="About">
-                  <Link to = "/aboutus">About us</Link>
-                </Menu.Item>
-                <Menu.Item key="Blog">
-                  <Link to = "/blog">Blog</Link>
-                </Menu.Item>
-                <Menu.Item key="Login">
-                  <Link to = "/login">Login/Sign Up</Link>
-                </Menu.Item>
-                <Menu.Item key="Cart">
-                  <Link to = "/cart">Cart</Link>
-                </Menu.Item>
-            </Menu>
-    );
-  }
-}*/
-
 
 
