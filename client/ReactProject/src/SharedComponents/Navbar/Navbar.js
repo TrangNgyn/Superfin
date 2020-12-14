@@ -1,8 +1,8 @@
 import { Menu } from 'antd';
 import {UserOutlined, ShoppingCartOutlined} from '@ant-design/icons';
 import React, { useState } from 'react';
-import '../../CSS/Navbar.css'
-import image from '../../Images/Logo.jpg'
+// import '../../_assets/CSS/Navbar.css'
+import image from '../../_assets/Images/Logo.png'
 
 
 
@@ -13,7 +13,7 @@ export default function Navbar(props){
       <Menu className="Menu" onClick={(menu) => setMenuItem(menu.key)}  mode="horizontal" >
 
           <Menu.Item key="Logo" style = {{ right: 500 }}>
-              <img src={image} width = "150" heigh = "150" alt="Logo" />
+              <img src={image} style= {{ width: "8%" }} alt="Logo" />
           </Menu.Item >
    
           <Menu.Item key="Delivery" >

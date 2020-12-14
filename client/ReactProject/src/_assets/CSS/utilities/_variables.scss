@@ -1,0 +1,162 @@
+/* Break-point
+--------------------------*/
+$sm: 576px !default;
+$md: 768px !default;
+$lg: 992px !default;
+$xl: 1200px !default;
+
+$breakpoints: (
+    'xs': (
+            max-width: $sm - 1,
+    ),
+    'sm': (
+            min-width: $sm,
+    ),
+    'md': (
+            min-width: $md,
+    ),
+    'lg': (
+            min-width: $lg,
+    ),
+    'xl': (
+            min-width: $xl,
+    ),
+);
+
+// Color system
+
+$orange: #EB6E00 !default;
+$orange-light: #F5AE85 !default;
+$gray: #4D4D4D !default;
+$gray-light: #E5E5E5 !default;
+$black: #000000 !default;
+$white: #ffffff !default;
+
+$colors: (
+    orange: $orange,
+    orange-light: $orange-light,
+    gray: $gray,
+    gray-light: $gray-light,
+    black: $black,
+    white: $white,
+);
+
+@each $color-var, $color in $colors {
+  //background
+  .bg-#{$color-var} {
+    background-color: $color;
+  }
+  // color text
+  .#{$color-var} {
+    color: $color;
+  }
+}
+
+/* Grid */
+
+// Grid breakpoints
+$grid-breakpoints: (
+    xs: 0,
+    sm: $sm,
+    md: $md,
+    lg: $lg,
+    xl: $xl,
+) !default;
+
+// Grid containers
+$container-max-widths: (
+    sm: 570px,
+    md: 750px,
+    lg: 990px,
+    xl: 1170px,
+) !default;
+
+//Border color
+$border-color: gray;
+
+// Typography
+
+$font-md: 16px !default; // Assumes the browser default, typically `16px`
+$font-sm: 14px !default;
+$font-xs: 12px !default;
+
+//Spacing
+
+$spacing: 8px;
+$spacing-2: $spacing * 2;
+$spacing-3: $spacing * 3;
+$spacing-4: $spacing * 4;
+
+$spacings: (
+        5: 5px,
+        10: 10px,
+        15: 15px,
+        20: 20px,
+        25: 25px,
+        30: 30px,
+        35: 35px,
+        40: 40px,
+        // another case
+        16: 16px,
+        45: 45px,
+        55: 55px,
+        65: 65px,
+        75:75px,
+        80:80px,
+        98:98px,
+        100:100px,
+        115: 115px,
+        135:135px,
+        150:150px
+);
+
+@each $spacing-var, $space in $spacings {
+  //margin
+  .mb#{$spacing-var} {
+    margin-bottom: $space;
+  }
+  .mt#{$spacing-var} {
+    margin-top: $space;
+  }
+  .ml#{$spacing-var} {
+    margin-left: $space;
+  }
+  .mr#{$spacing-var} {
+    margin-right: $space;
+  }
+  .m#{$spacing-var} {
+    margin: $space;
+  }
+  .mtb#{$spacing-var} {
+    margin-top: $space;
+    margin-bottom: $space;
+  }
+  .mlr#{$spacing-var} {
+    margin-left: $space;
+    margin-right: $space;
+  }
+  //padding
+  .pb#{$spacing-var} {
+    padding-bottom: $space;
+  }
+  .pt#{$spacing-var} {
+    padding-top: $space;
+  }
+  .pl#{$spacing-var} {
+    padding-left: $space;
+  }
+  .pr#{$spacing-var} {
+    padding-right: $space;
+  }
+  .p#{$spacing-var} {
+    padding: $space;
+  }
+  .ptb#{$spacing-var} {
+    padding-top: $space;
+    padding-bottom: $space;
+  }
+  .plr#{$spacing-var} {
+    padding-left: $space;
+    padding-right: $space;
+  }
+}
