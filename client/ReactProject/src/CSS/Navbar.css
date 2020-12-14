@@ -1,0 +1,8 @@
+.Menu{
+    text-align: center;
+    background-color: E5E5Er5;
+}
+.rightItems{        /*This does not work*/
+    left: 500;
+}
+
