@@ -57,10 +57,10 @@
 .un-active-link {
 color: $black;
 &:hover {
-    color: $blue;
+    color: $gray;
 }
 &.active {
-    color: $blue;
+    color: $gray;
     font-weight: 600;
 }
 }
