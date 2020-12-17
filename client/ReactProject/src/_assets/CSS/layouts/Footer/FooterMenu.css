@@ -1,0 +1,10 @@
+.FooterMenu {
+    text-align: center;
+    background-color : #b3b3b3;
+    position: relative;
+    border-bottom: black;
+}
+
+.FooterMenuItem {
+    width: 175px;
+}
