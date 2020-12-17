@@ -10,6 +10,9 @@ const productSchema = new Schema({
     ItemName: {
         type: String,
         require: true
+    },
+    Category: {
+        type: String
     }
 },
 {
