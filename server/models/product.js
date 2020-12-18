@@ -5,11 +5,11 @@ const Schema = mongoose.Schema;
 const productSchema = new Schema({
     ItemCode : {
         type: String,
-        require: true
+        required: true
     },
     ItemName: {
         type: String,
-        require: true
+        required: true
     },
     Category: {
         type: String

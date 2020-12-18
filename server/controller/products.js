@@ -1,5 +1,4 @@
 const product_model = require('../models/product');
-const fs = require('fs');
 
 var empty_field = { error: "All fields must be filled" }
 class Product {
@@ -46,6 +45,10 @@ class Product {
         }
     }
 
+    // @route   POST api/products/product-by-category
+    // @desc    Get products by category
+    // @access  Public
+
     async post_product_by_category(req,res) {
         try{
             let { cat } = req.body
@@ -77,7 +80,8 @@ class Product {
 
     async post_add_product(req,res) {
         try {
-            let { ItemName, ItemCode } = req.body;
+            var ItemCode = req.body['*ItemCode'];
+            var ItemName = req.body.ItemName;
 
             // validate that input was recieved
             if( !ItemName | !ItemCode ){
@@ -97,8 +101,41 @@ class Product {
             });
             new_product
                 .save()
-                .then(() => res.json({ success: "Product created succesfully"}))  
-                .catch(() => res.json({ failure: "Product was not created"}))
+                .then(() => res.json({ success: true}))  
+                .catch(() => res.json({ success: false}))
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+    // @route   POST api/products/edit-product
+    // @desc    edit an existing product
+    // @access  Public
+
+    async post_edit_product(req, res) {
+        try {
+
+            // need to change the database from using *ItemCode to use ItemCode 
+            // or find a way to allow for the use of *ItemCode that can be read into the js
+
+            let { _id, ItemCode: ItemCode, ItemName } = req.body
+
+            if(!ItemCode | !ItemName ) {
+                return res.json(empty_field);
+            }
+            else if(ItemCode > 225 | ItemName > 225) {
+                return res.json({ error: "Name and Code cannot be longer than 255 characters"})
+            }
+            else {
+                product_model
+                    .findByIdAndUpdate(_id, { ItemCode, ItemName }, { useFindAndModify: false })
+                    .exec(err => {
+                        if(err)
+                            console.log(err)
+                        return res.json({ success: true })
+                    })
             }
         }
         catch (err) {
@@ -120,6 +157,9 @@ class Product {
             if( !id ) {
                 return res.json(empty_field)
             }
+
+            //could use findOneAndDelete here
+
             else{
                 product_model
                     .findById(id)
