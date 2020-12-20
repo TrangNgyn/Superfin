@@ -1,8 +1,8 @@
 import { Menu } from 'antd';
 import { UserOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
-// import '../../_assets/CSS/Navbar.css'
-import image from '../../_assets/Images/Logo.png'
+import '../_assets/CSS/layouts/_navbar.scss';
+import image from '../_assets/Images/Logo.png';
 
 export default function Navbar(props){
   const[currentMenuItem, setMenuItem] = useState('');
