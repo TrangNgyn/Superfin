@@ -36,7 +36,8 @@ const customer_schema = new Schema({
         required: true
     },
     POPostalCode: {
-        type: int32,
+        //change back to int32 
+        type: String,
         required: true
     },
     POCountry: {
@@ -49,7 +50,8 @@ const customer_schema = new Schema({
         default: '+61'
     },
     MobileNumber: {
-        type: int32,
+        // change back to int32
+        type: String,
         required: true
         // how do you make it so there is no leading 0??
     }

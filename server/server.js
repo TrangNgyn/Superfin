@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 // Imported routers
 //
 const product = require('./routes/api/products');
-const customer = require('./routes/api/customers');
+//const customer = require('./routes/api/customers');
 
 const app = express();
 
@@ -23,7 +23,7 @@ mongoose
 
 // Routes
 app.use('/api/products', product);
-app.use('/api/customers', customer)
+//app.use('/api/customers', customer)
 
 // Run Server
 const port = process.env.PORT || 5000

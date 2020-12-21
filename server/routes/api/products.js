@@ -11,5 +11,8 @@ router.post('/add-product', product_controller.post_add_product);
 router.post('/delete-product', product_controller.post_delete_product);
 router.post('/edit-product', product_controller.post_edit_product);
 
+
+// add information for image stoarage and ability to call images from the front end
+
 module.exports = router
 
