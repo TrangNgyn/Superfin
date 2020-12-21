@@ -9,7 +9,7 @@ export default function FooterMain(){
             <FooterMenu />
             
             <div id="signup-text-background">
-                <div id="signup-text">SIGN UP FOR SPEACIAL OFFERS</div>
+                <div id="signup-text">SIGN UP FOR SPECIAL OFFERS</div>
             </div>
 
             <div id="email-input-background">

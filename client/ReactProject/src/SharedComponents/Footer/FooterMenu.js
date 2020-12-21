@@ -4,7 +4,7 @@ import '../../_assets/CSS/layouts/Footer/FooterMenu.css';
 
 export default function FooterMenu(){
     const[currentMenuItem, setMenuItem] = useState('');
-    
+      console.log(currentMenuItem);
       return (
         <Menu className="FooterMenu" 
               onClick={(menu) => setMenuItem(menu.key)}  

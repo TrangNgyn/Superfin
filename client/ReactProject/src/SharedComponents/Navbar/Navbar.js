@@ -6,7 +6,7 @@ import image from '../../_assets/Images/Logo.png'
 
 export default function Navbar(props){
   const[currentMenuItem, setMenuItem] = useState('');
-  
+    console.log(currentMenuItem);
     return (
       
       <Menu className="Menu" onClick={(menu) => setMenuItem(menu.key)}  mode="horizontal" >
