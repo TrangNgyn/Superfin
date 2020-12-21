@@ -15,16 +15,21 @@ class Customer {
 
     async get_all_customers(req,res) {
         try{            
-            role_model.findOne({name: 'customer_role'}, {_id: 1}, function(err, docs){
-                // Get the id of the customer_role document
-                var c_id = docs._id;
+            // DO NOT DELETE -- For future reference
+            // role_model.findOne({name: 'customer_role'}, {_id: 1}, function(err, docs){
+            //     // Get the id of the customer_role document
+            //     var c_id = docs._id;
 
-                // Get the users who are customers
-                customer_model
-                    .find({Role: new ObjectId(c_id)})
-                    .sort({ EmailAddress: 1 })
-                    .then(customer_model => res.json(customer_model));
-            }) 
+            //     // Get the users who are customers
+            //     customer_model
+            //         .find({Role: new ObjectId(c_id)})
+            //         .sort({ EmailAddress: 1 })
+            //         .then(customer_model => res.json(customer_model));
+            // }) 
+            customer_model
+                .find()
+                .sort({ EmailAddress: 1 })
+                .then(customer_model => res.json(customer_model));
 
         }catch(err) {
             console.log(err)
@@ -36,25 +41,13 @@ class Customer {
     // @access  Public
 
     async post_customer_by_email(req, res) {
-        try{
-            let { email } = req.body
-            if(!email){
-                return res.json(empty_field)
-            }
-            else {
-                if(checkDuplicatedEmail){
-                    customer_model
-                        .findById(email)
-                        .then(customer_model => res.json(customer_model))
-                }else{
-                    return res.json({ error: `Email ${email} does not exist.`});
-                }
-                
-            }
-        }
-        catch (err) {
-            console.log(err)
-        }
+        // Using fetch
+        let {email} = req.body;
+        // Get the users with matched email
+        customer_model
+            .find({EmailAddress: email})
+            .then(customer_model => res.json(customer_model))
+            .catch(err=> res.json(err))
     }
 
     /*
