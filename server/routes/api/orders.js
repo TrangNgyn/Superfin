@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const customer_controller = require('../../controller/orders');
+const order_controller = require('../../controller/orders');
 
-router.get('/all-orders', customer_controller.get_all_orders);
-//router.post('/customer-by-email', customer_controller.post_customer_by_email);
+router.get('/all-orders', order_controller.get_all_orders);
+router.post('/order-by-email', order_controller.post_order_by_email);
+router.post('/add-tracking', order_controller.add_tracking);
 
 module.exports = router;

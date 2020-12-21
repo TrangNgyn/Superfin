@@ -32,6 +32,22 @@ const order_schema = new Schema({
         type: String,
         required: true
     },
+    items: {    // array of items, incl. item_code, quantity and special requriements for each
+        type: [{
+            item_code: {
+                type: String,
+                required: true
+            },
+            quantity: {
+                type: Number,
+                required: true
+            },
+            special_requirements: {
+                type: String
+            }
+        }],
+        default: [],   
+    },
     tracking_number: {
         type: String
     },

@@ -8,7 +8,7 @@ var validateEmail = function(email) {
 
 // create schema
 const customer_schema = new Schema({
-    EmailAddress: {
+    email: {
         type: String,
         required: true,
         index:{
@@ -17,53 +17,53 @@ const customer_schema = new Schema({
 		validate: [validateEmail, 'Please fill a valid email address'],
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
     },
-    FirstName: {
+    first_name: {
         type: String,
         required: true
     },
-    LastName: {
+    last_name: {
         type: String,
         required: true
     },
-    POAttentionTo: {
+    PO_attention_to: {
         type: String,
         required: true
     },
-    POAddressLine1: {
+    PO_address_line1: {
         type: String,
         required: true
     },
-    POAddressLine2: {
+    PO_address_line2: {
         type: String,
         required: true
     },
-    POSuburb: {
+    PO_suburb: {
         type: String,
         required: true
     },
-    POState: {
+    PO_state: {
         type: String,
         required: true
     },
-    POPostalCode: {
+    PO_postal_code: {
         type: Number,
         required: true
     },
-    POCountry: {
+    PO_country: {
         type: String,
         required: true
     },
-    CountryCode: {
+    country_code: {
         type: String,
         required: true,
         default: '+61'
     },
-    MobileNumber: {
+    mobile_number: {
         type: Number,
         required: true
         // how do you make it so there is no leading 0?? 
     },
-    Role: {
+    role: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Role",
         required: true

@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
-const customer_model = require('../models/customer');
-const role_model = require('../models/role');
-const checkDuplicatedEmail = require('../middleware/verify-email');
+const customer_m = require('../models/customer');
+const role_m = require('../models/role');
 
 var empty_field = { error: "All fields must be filled" }
 
@@ -26,10 +25,10 @@ class Customer {
             //         .sort({ EmailAddress: 1 })
             //         .then(customer_model => res.json(customer_model));
             // }) 
-            customer_model
+            customer_m
                 .find()
-                .sort({ EmailAddress: 1 })
-                .then(customer_model => res.json(customer_model));
+                .sort({ email: 1 })
+                .then(customer_m => res.json(customer_m));
 
         }catch(err) {
             console.log(err)
@@ -44,10 +43,17 @@ class Customer {
         // Using fetch
         let {email} = req.body;
         // Get the users with matched email
-        customer_model
+        customer_m
             .find({EmailAddress: email})
-            .then(customer_model => res.json(customer_model))
-            .catch(err=> res.json(err))
+            .exec()
+            .then((user) => {
+                if (!user) {
+                    res.status(404)
+                    return res.json({success: false})
+                }
+                return res.json(user)
+            })
+            .catch(err => res.json(err))
     }
 
     /*
