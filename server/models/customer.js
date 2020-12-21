@@ -1,11 +1,21 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+var validateEmail = function(email) {
+    var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    return re.test(email)
+};
+
 // create schema
 const customer_schema = new Schema({
     EmailAddress: {
         type: String,
-        required: true
+        required: true,
+        index:{
+			unique:true,
+		},
+		validate: [validateEmail, 'Please fill a valid email address'],
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
     },
     FirstName: {
         type: String,
@@ -36,8 +46,7 @@ const customer_schema = new Schema({
         required: true
     },
     POPostalCode: {
-        //change back to int32 
-        type: String,
+        type: Number,
         required: true
     },
     POCountry: {
@@ -50,11 +59,16 @@ const customer_schema = new Schema({
         default: '+61'
     },
     MobileNumber: {
-        // change back to int32
-        type: String,
+        type: Number,
         required: true
-        // how do you make it so there is no leading 0??
+        // how do you make it so there is no leading 0?? 
+    },
+    Role: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Role",
+        required: true
     }
+    
 },
 {
     collection: 'customer'
