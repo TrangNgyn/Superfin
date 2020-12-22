@@ -3,7 +3,7 @@ import image_1 from '../../_assets/Images/HomepageImages/Image_1.png';
 import image_2 from '../../_assets/Images/HomepageImages/Image_2.png';
 import image_3 from '../../_assets/Images/HomepageImages/Image_3.png';
 import altImage from '../../_assets/Images/No_Image.jpg';
-import '../../_assets/CSS/layouts/Homepage/HomepageCarousel.css';
+import '../../_assets/CSS/pages/Homepage/HomepageCarousel.css';
 
 export const HomepageCarousel = () => {
     return(

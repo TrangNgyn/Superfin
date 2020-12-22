@@ -1,4 +1,6 @@
 import './App.less';
+import MyAccount from '../Pages/MyAccount/MyAccount';
+
 import "../_assets/CSS/style.scss";
 import Homepage from '../Pages/Homepage/Homepage';
 import Navbar from '../SharedComponents/Navbar/Navbar';
