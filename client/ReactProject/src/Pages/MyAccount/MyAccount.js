@@ -1,26 +1,29 @@
-import { Menu } from 'antd';
-// import React, { useState } from 'react';
+import { Layout } from 'antd';
+import { Avatar } from 'antd';
+import React, { useState } from 'react';
+import MyAccountSideMenu from '../MyAccount/MyAccountSideMenu'
+import { UserOutlined } from '@ant-design/icons';
+
+
+const { Header, Content, Sider } = Layout;
+const isAuthenticated = 1;
 
 export default function MyAccount(){
-  // const[currentMenuItem, setMenuItem] = useState('');
-
-    return (
-        <Menu style={{ width: 256 }} defaultSelectedKeys={['1']} defaultOpenKeys={['sub1']} mode="inline">
-        <Menu.Item key="myAccount">My Account</Menu.Item>
-
-        <Menu.Item key="browseProducts">Browse Products</Menu.Item>
-        <Menu.Item key="viewCart">View Cart</Menu.Item>
-        <Menu.Item key="manageOrders">Manage Orders</Menu.Item>
-        <Menu.Item key="editProfiles">Edit Profiles</Menu.Item>
-      
-        <Menu.Item key="manageProducts">Manage Products</Menu.Item>
-        <Menu.Item key="newOrders">New Orders</Menu.Item>
-        <Menu.Item key="processedOrders">Processed Orders</Menu.Item>
-        <Menu.Item key="editCompanyInformation">Edit Company Information </Menu.Item>
-        <Menu.Item key="editProfile">Edit Profile</Menu.Item>
-
-        <Menu.Item key="logOut">Log Out</Menu.Item>
-      </Menu>     
-      
+    const [userType,setUseType] = useState(1);
+    return(
+        <Layout>
+            <Sider width = "256" className="my-account-sider-menu"> 
+                <MyAccountSideMenu/>
+            </Sider>
+            <Content>
+                <div>
+                   <h1>My Account</h1> 
+                   <Avatar size="large" icon={<UserOutlined />} />
+                </div>
+                <div>
+                    
+                </div>
+            </Content>
+        </Layout>
     )
 }

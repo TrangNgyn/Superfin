@@ -16,7 +16,8 @@ const App = () => (
    </div>
 
    <div className="Website-Body">
-      <Homepage />
+      {/* <Homepage /> */}
+      <MyAccount />
       </div>
 
  <div className="Website-Footer">
