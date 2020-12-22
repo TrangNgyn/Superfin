@@ -9,35 +9,34 @@ class Product {
 
     async get_all_products(req,res) {
         try{
-            product_model
-                .find()
-                .sort({ ItemName: 1 })
-                .then(product_model => res.json(product_model))
+            var products = await product_model.find({})
+            if(products) {
+                return res.json({ products })
+            }
         }
         catch(err) {
             console.log(err)
         }
     }
 
-    // @route   POST api/products/product-by-code
+    // @route   POST api/products/product-by-id
     // @desc    Get all items sorted by code
     // @access  Public
 
     async post_product_by_id(req, res) {
         try{
-            let { id } = req.body
-            if(!id){
+            var { p_code } = req.body
+            if(!p_code){
                 return res.json(empty_field)
             }
             else {
-                product_model
-                    .findById(id)
-                    .then(product_model => res.json(product_model))
-                    // this should be cleaned up into if statements that catch if the product was not found
-                    // instead of a catch all error that potentially wont be correct
-                    .catch(() => res
-                                    .status(404)
-                                    .json({ failure: `Product with id: ${id} was not found`}))
+                var product = await product_model.find({ p_code })
+                if(product)
+                    return res.json(product)
+                else {
+                    res.status(404)
+                    return res.json({ success: false })
+                }
             }
         }
         catch (err) {
@@ -51,19 +50,14 @@ class Product {
 
     async post_product_by_category(req,res) {
         try{
-            let { cat } = req.body
-            if(!cat) {
+            var { catID } = req.body
+            if(!catID) {
                 return res.json(empty_field)
             }
             else {
-                product_model
-                    .find( { Category: cat })
-                    .then(product_model => res.json(product_model))
-                    // this should be cleaned up into if statements that catch if the product was not found
-                    // instead of a catch all error that potentially wont be correct
-                    .catch(() => res
-                                    .status(404)
-                                    .json({ failure: `Product with id: ${id} was not found`}))
+                var categories = await product_model.find({ p_catagories: catID })
+                if(categories)
+                    return res.json({ Categories: categories })
             }
         }
         catch (err) {
@@ -80,8 +74,8 @@ class Product {
 
     async post_add_product(req,res) {
         try {
-            var ItemCode = req.body['*ItemCode'];
-            var ItemName = req.body.ItemName;
+            
+            var { p_code, p_name, p_price, p_units_sold, p_catagories, p_image_uri, p_description } =  req.body
 
             // validate that input was recieved
             if( !ItemName | !ItemCode ){
@@ -120,7 +114,7 @@ class Product {
             // need to change the database from using *ItemCode to use ItemCode 
             // or find a way to allow for the use of *ItemCode that can be read into the js
 
-            let { _id, ItemCode: ItemCode, ItemName } = req.body
+            let { _id, ItemCode, ItemName } = req.body
 
             if(!ItemCode | !ItemName ) {
                 return res.json(empty_field);

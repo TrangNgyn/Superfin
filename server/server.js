@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 // Imported routers
 //
 const product = require('./routes/api/products');
+const categories = require('./routes/api/categories');
 const customer = require('./routes/api/customers');
 const order = require('./routes/api/orders');
 
@@ -24,6 +25,7 @@ mongoose
 
 // Routes
 app.use('/api/products', product);
+app.use('/api/categories', categories);
 app.use('/api/customers', customer);
 app.use('/api/orders', order);
 

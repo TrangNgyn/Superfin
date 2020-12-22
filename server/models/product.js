@@ -3,11 +3,11 @@ const Schema = mongoose.Schema;
 
 //Create schema
 const productSchema = new Schema({
-    _id : {
+    p_code : {
         type: String,
         required: true
     },
-    p_item_name: {
+    p_name: {
         type: String,
         required: true
     },
@@ -19,17 +19,20 @@ const productSchema = new Schema({
         type: Number,
         default: 0
     },
-    p_catagories: {
+    p_categories: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: "categories"
+        ref: 'categories'
     },
-    // p_image_uri: {
-    //     type: array
-    // }
+    p_image_uri: {
+        type: [String]
+    },
+    p_description: {
+        type: String
+    }
 },
 {
-    collection: 'product'
+    collection: 'products'
 });
 
-module.exports = product = mongoose.model('product', productSchema);
+module.exports = product = mongoose.model("products", productSchema);
