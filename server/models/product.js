@@ -3,14 +3,30 @@ const Schema = mongoose.Schema;
 
 //Create schema
 const productSchema = new Schema({
-    ItemCode : {
+    _id : {
         type: String,
-        require: true
+        required: true
     },
-    ItemName: {
+    p_item_name: {
         type: String,
-        require: true
-    }
+        required: true
+    },
+    p_price: {
+        type: Number,
+        required: true
+    },
+    p_units_sold: {
+        type: Number,
+        default: 0
+    },
+    p_catagories: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: "categories"
+    },
+    // p_image_uri: {
+    //     type: array
+    // }
 },
 {
     collection: 'product'
