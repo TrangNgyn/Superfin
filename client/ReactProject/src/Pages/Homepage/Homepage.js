@@ -1,6 +1,6 @@
 import ProductList from '../../SharedComponents/ProductList/ProductList';
 import {HomepageCarousel} from './HomepageCarousel';
-import '../../_assets/CSS/layouts/Homepage/Homepage.css';
+import '../../_assets/CSS/pages/Homepage/Homepage.css';
 
 export default function Homepage(){
     return(
