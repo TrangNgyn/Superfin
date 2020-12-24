@@ -44,7 +44,7 @@ class Customer {
         let {email} = req.body;
         // Get the users with matched email
         customer_m
-            .find({EmailAddress: email})
+            .find({email: email})
             .exec()
             .then((user) => {
                 if (!user) {

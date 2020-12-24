@@ -25,43 +25,40 @@ const customer_schema = new Schema({
         type: String,
         required: true
     },
-    PO_attention_to: {
+    po_attention_to: {
         type: String,
         required: true
     },
-    PO_address_line1: {
+    po_address_line1: {
         type: String,
         required: true
     },
-    PO_address_line2: {
+    po_address_line2: {
         type: String,
         required: true
     },
-    PO_suburb: {
+    po_suburb: {
         type: String,
         required: true
     },
-    PO_state: {
+    po_state: {
         type: String,
         required: true
     },
-    PO_postal_code: {
+    po_postal_code: {
         type: Number,
         required: true
     },
-    PO_country: {
+    po_country: {
         type: String,
         required: true
-    },
-    country_code: {
-        type: String,
-        required: true,
-        default: '+61'
     },
     mobile_number: {
-        type: Number,
+        type: String,
+        index:{
+			unique:true,
+		},
         required: true
-        // how do you make it so there is no leading 0?? 
     },
     role: {
         type: mongoose.Schema.Types.ObjectId,
