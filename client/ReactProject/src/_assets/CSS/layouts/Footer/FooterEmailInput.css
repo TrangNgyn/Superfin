@@ -1,0 +1,9 @@
+#footer-email-form {
+    position: absolute;
+    left: 200px;
+}
+
+.ant-form-item.Footer-email-form-item {
+    margin: 0px;
+    width:300px
+}
