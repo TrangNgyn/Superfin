@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
-const customer_m = require('../models/customer');
-const role_m = require('../models/role');
+const customer_model = require('../models/customer');
 
 var empty_field = { error: "All fields must be filled" }
 
@@ -25,10 +24,10 @@ class Customer {
             //         .sort({ EmailAddress: 1 })
             //         .then(customer_model => res.json(customer_model));
             // }) 
-            customer_m
+            customer_model
                 .find()
                 .sort({ email: 1 })
-                .then(customer_m => res.json(customer_m));
+                .then(customer_model => res.json(customer_model));
 
         }catch(err) {
             console.log(err)
@@ -43,7 +42,7 @@ class Customer {
         // Using fetch
         let {email} = req.body;
         // Get the users with matched email
-        customer_m
+        customer_model
             .find({email: email})
             .exec()
             .then((user) => {
@@ -102,33 +101,46 @@ class Customer {
             console.log(err);
         }
     }
+    */
 
     // @route   POST api/products/edit-product
     // @desc    edit an existing product
     // @access  Public
 
-    async post_edit_product(req, res) {
+    async post_edit_user_info(req, res) {
         try {
 
-            // need to change the database from using *ItemCode to use ItemCode 
-            // or find a way to allow for the use of *ItemCode that can be read into the js
-
-            let { _id, ItemCode: ItemCode, ItemName } = req.body
-
-            if(!ItemCode | !ItemName ) {
+            let { email, first_name, last_name, mobile_number,
+                po_attention_to, po_address_line1, po_address_line2,
+                po_suburb, po_state, po_postal_code, po_country } = req.body;
+            
+            if(req.body.constructor === Object && Object.keys(req.body).length === 0 ) {
                 return res.json(empty_field);
             }
-            else if(ItemCode > 225 | ItemName > 225) {
-                return res.json({ error: "Name and Code cannot be longer than 255 characters"})
-            }
+            else if(!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+                return res.json({ error: "Input email is not valid"})
+            } // checks for suburb, state, country and mobile number
             else {
-                product_model
-                    .findByIdAndUpdate(_id, { ItemCode, ItemName }, { useFindAndModify: false })
-                    .exec(err => {
-                        if(err)
-                            console.log(err)
-                        return res.json({ success: true })
+                customer_model.findOne({email: email}, {_id: 1}, function(err, docs){
+                    // Get the id of the customer_role document
+                    var c_id = docs._id;
+                    
+                    // Get the users who are customers
+                    customer_model.findByIdAndUpdate(c_id, 
+                        { email, first_name, last_name, mobile_number,
+                            po_attention_to, po_address_line1, po_address_line2,
+                            po_suburb, po_state, po_postal_code, po_country } , 
+                        {new: true, useFindAndModify: false})
+                    .exec()
+                    .then((customer) => {
+                        if (!customer) {
+                            res.status(404) // no document found
+                            return res.json({success: false})
+                        }
+                        return res.json(customer)
                     })
+                    .catch(err => res.json(err))
+                }) 
             }
         }
         catch (err) {
@@ -136,6 +148,7 @@ class Customer {
         }
     }
 
+    /*
     // @route   POST api/products/delete-product
     // @desc    Delete a product
     // @access  Public 
