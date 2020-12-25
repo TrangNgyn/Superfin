@@ -7,7 +7,7 @@ export default function MyAccountSideMenu(){
     const [userType,setUseType] = useState(1);
 
     return (
-      <Menu style={{ width: 256 }} defaultSelectedKeys={['1']} defaultOpenKeys={['sub1']} mode="inline">
+      <Menu defaultSelectedKeys={['1']} defaultOpenKeys={['sub1']} mode="inline">
         <Menu.Item key="myAccount">My Account</Menu.Item>
 
         { userType === 1 && isAuthenticated? 

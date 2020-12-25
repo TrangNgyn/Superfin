@@ -1,5 +1,4 @@
-import { Layout } from 'antd';
-import { Avatar } from 'antd';
+import { Layout, Row, Col, Avatar } from 'antd';
 import React, { useState } from 'react';
 import MyAccountSideMenu from '../MyAccount/MyAccountSideMenu'
 import { UserOutlined } from '@ant-design/icons';
@@ -16,13 +15,20 @@ export default function MyAccount(){
                 <MyAccountSideMenu/>
             </Sider>
             <Content>
-                <div>
-                   <h1>My Account</h1> 
-                   <Avatar size="large" icon={<UserOutlined />} />
-                </div>
-                <div>
+                <Row>
+                    <h1>My Account</h1> 
+                </Row>
+                <Row>
+                    <Col span={4}>
+                        <Avatar size="large" icon={<UserOutlined />} />
+                    </Col>
+                    <Col span={20}>
+                        Username
+                    </Col>                    
+                </Row>
+                <Row>
                     
-                </div>
+                </Row>
             </Content>
         </Layout>
     )
