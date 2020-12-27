@@ -1,4 +1,6 @@
 import './App.less';
+import MyAccount from '../Pages/MyAccount/MyAccount';
+
 import "../_assets/CSS/style.scss";
 import {HomepageAdmin} from '../Pages/HomepageAdmin/HomepageAdmin';
 import Navbar from '../SharedComponents/Navbar/Navbar';
@@ -14,7 +16,7 @@ const App = () => (
    </div>
 
    <div className="Website-Body">
-      <HomepageAdmin />
+      <MyAccount />
    </div>
 
  <div className="Website-Footer">
