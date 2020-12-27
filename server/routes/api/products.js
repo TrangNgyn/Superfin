@@ -1,6 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const product_controller = require('../../controller/products')
+const multer = require('multer')
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'public/uploads/products')
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + '_' + Math.round(Math.random() * 1E9)
+      cb(null, file.fieldname + '_' + uniqueSuffix)
+    }
+  })
+  
+  var upload = multer({ storage: storage })
 
 
 router.get('/all-product', product_controller.get_all_products);
