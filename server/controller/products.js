@@ -2,6 +2,10 @@ const product_model = require('../models/product');
 
 var empty_field = { error: "All fields must be filled" }
 class Product {
+
+    // Delete images 
+
+
     
     // @route   GET api/products/all-product
     // @desc    Get all itmes
@@ -78,7 +82,7 @@ class Product {
             var { p_code, p_name, p_price, p_units_sold, p_catagories, p_image_uri, p_description } =  req.body
 
             // validate that input was recieved
-            if( !ItemName | !ItemCode ){
+            if( !p_code | !p_name | !p_price | !p_catagories | !p_image_uri | !p_description){
                 return res.json(empty_field)
             }
             // validate that name and code
