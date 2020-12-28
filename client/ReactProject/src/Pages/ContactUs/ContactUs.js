@@ -1,6 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import '../../_assets/CSS/pages/ContactUs.css';
+import {Button, Form, Input,Typography} from 'antd';
+import {PhoneFilled,EnvironmentFilled} from '@ant-design/icons';
+const { TextArea } = Input;
+const { Title } = Typography;
 
 const useContactUs = (callback) => {
   const [inputs, setInputs] = useState({});
@@ -30,33 +34,31 @@ const ContactUs = () =>{
       <div id="contact-us-window" >
         We'd love to hear from you
       </div>
-
       <div id="contact-us-content">
-
       <div id="contact-us-content1">
         <form  onSubmit={handleSubmit}>
           <div>
-            <label id="contact-us-name">Name</label>
-            <input id="contact-us-name-input"type="text" name="name" onChange={handleInputChange} value={inputs.name} required />
+            <Title level={3}>Name</Title>
+            <Input size="large" onChange={handleInputChange} value={inputs.name} required/>
           </div>
           <div>
-            <label id="contact-us-email">Email</label>
-            <input id="contact-us-email-input" type="email" name="email" onChange={handleInputChange} value={inputs.email} required />
+            <Title level={3}>Email</Title>
+            <Input size="large" type="email" name="email" onChange={handleInputChange} value={inputs.email} required/>
           </div>
           <div>
-            <label id="contact-us-message">Message</label>
-            <textarea id="contact-us-message-input" type="message" name="message" onChange={handleInputChange} value={inputs.message} required/>
+            <Title level={3}>Message</Title>
+            <TextArea rows={4} type="message" name="message" onChange={handleInputChange} value={inputs.message} required/>
           </div>
           <div id="contact-us-button-div">
-          <button id="contact-us-button" type="submit">Send</button>
+            <Button type="primary" size="large" htmlType="submit">Send</Button>
           </div>
         </form>
       </div>
 
       <div id="contact-us-content2">
-      <h1><b>You can contact us via:</b></h1>
-      <h2><b>Phone</b>: (02) 9681 6075 </h2>
-      <h2><b>Address</b>: 3/34-36 Fairfield St, Fairfield East NSW 2165</h2>
+      <Title level={3}>You can contact us via:</Title>
+      <Title level={3}><PhoneFilled />: (02) 9681 6075</Title>
+      <Title level={3}><EnvironmentFilled />: 3/34-36 Fairfield St, Fairfield East NSW 2165</Title>
       </div>
 
       </div>
