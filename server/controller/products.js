@@ -1,11 +1,21 @@
 const product_model = require('../models/product');
+const fs = require('fs')
 
 var empty_field = { error: "All fields must be filled" }
 class Product {
 
-    // Delete images 
-
-
+    // delete images referenced by product
+    static delete_images(images) {
+        for (var i = 0; i < images.length; i++) {
+            var file_path = `../public/uploads/products/${images[i]}`
+            fs.unlink(file_path, (err) => {
+                if(err) { 
+                    console.log(err)
+                    break
+                }
+            })  
+        }
+    }
     
     // @route   GET api/products/all-product
     // @desc    Get all itmes
@@ -81,21 +91,28 @@ class Product {
             
             var { p_code, p_name, p_price, p_units_sold, p_catagories, p_image_uri, p_description } =  req.body
 
+            var images = req.files
+
             // validate that input was recieved
-            if( !p_code | !p_name | !p_price | !p_catagories | !p_image_uri | !p_description){
+            if( !p_code | !p_name |!p_catagories | !p_price ){
                 return res.json(empty_field)
             }
             // validate that name and code
-            else if( ItemName.length > 225 || ItemCode.length > 225 ) {
-                return res.json({ error: "Name and Code cannot be longer than 255 characters"})
+            else if( p_code.length > 255 || p_name.length > 255 || p_desciption > 511) {
+                return res.json({ error: "Name and Code cannot be longer than 255 characters and description cannot be larger than 511 "})
             }
             else {
             
             // need too clean input here potentially to ensure that product addition is not corrupting the database
 
               const new_product = new product_model({
-                ItemName: req.body.ItemName,
-                ItemCode: req.body.ItemCode
+                p_code,
+                p_name,
+                p_price,
+                p_units_sold,
+                p_catagories,
+                p_image_uri,
+                p_description
             });
             new_product
                 .save()
