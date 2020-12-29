@@ -1,6 +1,6 @@
 import './App.less';
 import "../_assets/CSS/style.scss";
-import Homepage from '../Pages/Homepage/Homepage';
+import Login from '../Pages/Login/Login';
 import Navbar from '../SharedComponents/Navbar/Navbar';
 import FooterMain from '../SharedComponents/Footer/FooterMain';
 
@@ -14,8 +14,8 @@ const App = () => (
    </div>
 
    <div className="Website-Body">
-      <Homepage />
-      </div>
+      <Login />
+   </div>
 
  <div className="Website-Footer">
       <FooterMain />
