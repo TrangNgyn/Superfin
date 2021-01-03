@@ -1,4 +1,67 @@
+@import 'layouts/_all';
 @import 'pages/_all';
 @import 'utilities/_all';
-@import 'base/_all';
-@import "layouts/_all";
+
+$base-font-size: 16px;
+$base-line-height: 16px;
+
+/* Any sizes apart from body will use em to ensure the consistency between different places where fonts are used
+
+https://all-markup-news.com/px-to-em/
+
+Use the link above, put the base font size as 16 and you should be able to have a corresponding px to em (or vice versa) value*/
+
+body {
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-size: $base-font-size;
+}
+
+code {
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+p {
+	font-size: 1em; /* 16px */
+	line-height: 1.0000em; /* 16px */
+	margin: 0 0 1.0000em 0;
+}
+
+h1 {
+	font-size: 2.2500em; /* 36px */
+	line-height: 1.3333em; /* 48px */
+	margin: 0.4444em 0 0 0;
+}
+
+h2 {
+	font-size: 2.0000em; /* 32px */
+	line-height: 1.0000em; /* 32px */
+	margin: 0.5000em 0 0 0;
+}
+
+h3 {
+	font-size: 1.7500em; /* 28px */
+	line-height: 1.1429em; /* 32px */
+	margin-top: 0.5714em 0 0 0;
+}
+
+h4 {
+	font-size: 1.5000em; /* 24px */
+	line-height: 1.3333em; /* 32px */
+	margin-top: 0.6667em 0 0 0;
+}
+
+h5 {
+	font-size: 1.2500em; /* 20px */
+	line-height: 1.6000em; /* 32px */
+	margin-top: 0.8000em 0 0 0;
+}
+
+h6 {
+	font-size: 1.0000em; /* 16px */
+	line-height: 1.0000em; /* 16px */
+	margin-top: 1.0000em 0 0 0;
+}
