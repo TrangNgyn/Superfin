@@ -1,26 +1,68 @@
 import './App.less';
 import "../_assets/CSS/style.scss";
-import Homepage from '../Pages/Homepage/Homepage';
+
+import { history } from '../_helpers/history';
+import { Router, Route, Switch, useParams } from 'react-router-dom';
+import {AdminRoute, GuestRoute, MemberRoute, CustomerRoute} from '../_routers/PrivateRoutes';
+
 import Navbar from '../SharedComponents/Navbar/Navbar';
+
+import Homepage from '../Pages/Homepage/Homepage';
+
 import FooterMain from '../SharedComponents/Footer/FooterMain';
 
 
 
 
-const App = () => (
-<div>
-   <div className="Website-Header">
-      <Navbar />
-   </div>
 
-   <div className="Website-Body">
-      <Homepage />
+
+//This is a demo Component to demonstrate Dynmaic Routing
+const Products = () => {
+   const {browseBy, browseByGroup} = useParams();
+   return(
+      <div>
+         <div>Products</div>
+         <div>{browseBy}</div>
+         <div>{browseByGroup}</div>
       </div>
+   ); 
+}
 
- <div className="Website-Footer">
-      <FooterMain />
-</div>
-</div>
+
+
+
+
+
+const App = () => (
+   <div>
+      <Router history = {history}>
+         <div className="Website-Header">
+            <Navbar />
+         </div>
+
+         <div className="Website-Body">
+            <Switch>
+               {/*<CustomerRoute path="/" component = {Homepage} exact />*/}           {/* This is how to use the private routes. Do not use them yet */}
+               <Route exact path="/">  </Route>
+
+               <Route exact path="/products"> <Products /> </Route>
+               <Route exact path="/products/:browseBy"> <Products /> </Route> 
+               <Route path="/products/:browseBy/:browseByGroup"> <Products /> </Route>          {/*Undecided on Products page path*/}
+
+               <Route path="/deliveryDispatch">  </Route>
+               <Route path="/contactUs">  </Route>
+               <Route path="/aboutUs">  </Route>  
+               <Route path="/blog">  </Route>
+               <Route path="/login">  </Route>
+               <Route path="/cart">  </Route>            
+            </Switch>
+         </div>
+
+         <div className="Website-Footer">
+            <FooterMain />
+         </div>  
+      </Router>
+   </div>
 );
 
 export default App;
