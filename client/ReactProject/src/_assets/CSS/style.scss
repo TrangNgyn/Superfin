@@ -2,6 +2,10 @@
 @import 'pages/_all';
 @import 'utilities/_all';
 
+/* ====================================== */
+/* =============== FONT ================= */
+/* ====================================== */
+// Set base font size and line height as belows
 $base-font-size: 16px;
 $base-line-height: 16px;
 
@@ -65,3 +69,119 @@ h6 {
 	line-height: 1.0000em; /* 16px */
 	margin-top: 1.0000em 0 0 0;
 }
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+.bold-text {
+    font-weight: bold;
+}
+
+.font-lg {
+    font-size: $font-lg;
+}
+
+.font-md {
+    font-size: $font-md;
+}
+
+.font-sm {
+    font-size: $font-sm;
+}
+
+.font-xs {
+    font-size: $font-xs;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.un-active-link {
+	color: $black;
+	&:hover {
+		color: $gray;
+	}
+	&.active {
+		color: $gray;
+		font-weight: 600;
+	}
+}
+
+/* ====================================== */
+/* ============= END FONT =============== */
+/* ====================================== */
+
+
+/* ====================================== */
+/* ============= ALIGNMENT ============== */
+/* ====================================== */
+
+.clearfix {
+    overflow: auto;
+}
+
+.flex {
+    display: flex !important;
+}
+
+.flex-center {
+    align-items: center;
+    justify-content: center;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+.no-padding {
+    padding: 0 !important;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.float-right {
+    float: right;
+}
+
+.float-left {
+    float: left;
+}
+
+.display-flex{
+	display: flex;
+}
+
+.mobile {
+	display: none !important;
+	@include res(xs) {
+	    display: inherit !important;
+	}
+}
+
+.desktop {
+	display: none !important;
+	@include res(sm) {
+	    display: inherit !important;
+	}
+}
+
+.bordered {
+	border: 1px solid $border-color;
+	border-radius: 4px;
+}
+
+.full-vertical-height {
+	height: 100vh; // Careful it might not be compatible with IE8 and backwards
+}
+
+/* ====================================== */
+/* ========== END ALIGNMENT ============= */
+/* ====================================== */
