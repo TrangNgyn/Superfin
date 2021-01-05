@@ -38,12 +38,11 @@ const getCategories = () => {
 
 
 export default function Navbar(props){
-  const[currentMenuItem, setMenuItem] = useState("About");
+  const[currentMenuItem, setMenuItem] = useState("");
   const [loggedStatus, setLoggedStatus] = useState(checkLoggedIn);
   console.log(currentMenuItem);
 
   function handleMenuClick(menuitem){
-    console.log(menuitem);
     setMenuItem(menuitem);
   }
 
