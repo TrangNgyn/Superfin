@@ -1,7 +1,6 @@
 import './App.less';
 import MyAccount from '../Pages/MyAccount/MyAccount';
 import "../_assets/CSS/style.scss";
-import {HomepageAdmin} from '../Pages/HomepageAdmin/HomepageAdmin';
 
 import { history } from '../_helpers/history';
 import { Router, Route, Switch, useParams } from 'react-router-dom';
