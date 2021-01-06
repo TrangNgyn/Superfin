@@ -54,19 +54,28 @@ class Purchased_Order {
     async add_tracking(req, res) {
         try {
             let { po_number, tracking_number, carrier } = req.body;
-            console.log(po_number)
+            let status = "Shipped";
+            
             if(!po_number | !tracking_number | !carrier ) {
                 return res.json(empty_field);
             }
             else {
-                order_model
-                    .findOneAndUpdate({PONumber: po_number}, 
-                                    { TrackingNumber: tracking_number, Carrier: carrier })
-                    .exec(err => {
-                        if(err)
-                            console.log(err)
-                        return res.json({ success: true })
+                order_model.findOne({po_number: po_number}, {_id: 1}, function(err, docs){
+                    // Get the id of the customer_role document
+                    var o_id = docs._id;
+                    // Get the users who are customers
+                    order_model.findByIdAndUpdate(o_id, {tracking_number, carrier, status}, 
+                        {new: true, useFindAndModify: false})
+                    .exec()
+                    .then((order) => {
+                        if (!order) {
+                            res.status(404) // no document found
+                            return res.json({success: false})
+                        }
+                        return res.json(order)
                     })
+                    .catch(err => res.json(err))
+                }) 
             }
         }
         catch (err) {
