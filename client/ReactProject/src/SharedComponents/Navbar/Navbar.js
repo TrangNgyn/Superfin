@@ -1,7 +1,6 @@
 import { Menu } from 'antd';
 import { UserOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
-import '../../_assets/CSS/layouts/_navbar.scss';
 import image from '../../_assets/Images/Logo.png';
 
 export default function Navbar(props){
@@ -9,7 +8,7 @@ export default function Navbar(props){
     console.log(currentMenuItem);
     return (
       
-      <Menu className="Menu" onClick={(menu) => setMenuItem(menu.key)}  mode="horizontal" >
+      <Menu className="Navbar" onClick={(menu) => setMenuItem(menu.key)}  mode="horizontal" >
 
           <Menu.Item key="Logo" style = {{ right: 200 }}>
               <img src={image} style= {{ width: "100px", left: 500}} alt="Logo" />
