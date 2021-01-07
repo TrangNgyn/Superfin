@@ -1,0 +1,15 @@
+.ae-product-devider {
+    height: 100%;
+    width: 50%;
+    position: fixed;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.ae-product-content-wrapper {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}

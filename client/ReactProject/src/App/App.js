@@ -1,8 +1,10 @@
 import './App.less';
 import "../_assets/CSS/style.scss";
-import Homepage from '../Pages/Homepage/Homepage';
+//import Homepage from '../Pages/Homepage/Homepage';
+import AddEditProduct from '../Pages/AddEditProduct/AddEditProduct';
 import Navbar from '../SharedComponents/Navbar/Navbar';
 import FooterMain from '../SharedComponents/Footer/FooterMain';
+
 
 
 
@@ -14,7 +16,7 @@ const App = () => (
    </div>
 
    <div className="Website-Body">
-      <Homepage />
+      <AddEditProduct />
       </div>
 
  <div className="Website-Footer">
