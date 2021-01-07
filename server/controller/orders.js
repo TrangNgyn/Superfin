@@ -63,7 +63,6 @@ class Purchased_Order {
                 order_model.findOne({po_number: po_number}, {_id: 1}, function(err, docs){
                     // Get the id of the customer_role document
                     var o_id = docs._id;
-                    
                     // Get the users who are customers
                     order_model.findByIdAndUpdate(o_id, {tracking_number, carrier, status}, 
                         {new: true, useFindAndModify: false})
