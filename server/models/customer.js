@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 
 var validateEmail = function(email) {
@@ -15,7 +16,8 @@ const customer_schema = new Schema({
 			unique:true,
 		},
 		validate: [validateEmail, 'Please fill a valid email address'],
-        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'],
+        trim: true
     },
     first_name: {
         type: String,
@@ -60,16 +62,37 @@ const customer_schema = new Schema({
 		},
         required: true
     },
+    /*
     role: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Role",
         required: true
+    },
+    */
+    hash_password: {
+        type: String
+    },
+    created: {
+        type: Date,
+        default: Date.now
+    },
+    reset_password_token: {
+        type: String
+    },
+    reset_password_expires: {
+        type: Date
     }
     
 },
 {
     collection: 'customer'
 });
+
+// function for comparing input password against hashed password
+// allowing proctection from direct access to hashed password from controller/customer.js
+customer_schema.methods.comparePassword = function(password) {
+   return bcrypt.compareSync(password, this.hash_password);
+};
 
 module.exports = customer = mongoose.model('customer',customer_schema);
 
