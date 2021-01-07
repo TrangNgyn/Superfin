@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import image from '../../_assets/Images/Logo.png'
 
-
 //fake user and login check
 const fakeUser = {
   name: "Homer",
@@ -25,18 +24,6 @@ const getCategories = () => {
     {c_name: "Boxes"}
   ];
 }
-
-
-
-
-
-
-
-
-
-
-
-
 export default function Navbar(props){
   const[currentMenuItem, setMenuItem] = useState("");
   const [loggedStatus, setLoggedStatus] = useState(checkLoggedIn);
@@ -56,14 +43,7 @@ export default function Navbar(props){
     fakeUser.loggedIn = true;
     setLoggedStatus(true);
   }
-
-
-    
-
-
-
-
-                                                    //Welcome, User dropdown
+  //Welcome, User dropdown
   const welcomeDropdown = (
     <Menu>
       <Menu.Item>
@@ -86,15 +66,7 @@ export default function Navbar(props){
       </Menu.Item>
     </Menu>
   );
-
-
-
-
-
-
-
-
-    //Fake categories API call
+  //Fake categories API call
   const categories = getCategories();   
 
   const ourProductsDropdown = (                     //Our Products dropdown
@@ -117,15 +89,7 @@ export default function Navbar(props){
         </Link>
       </Menu.Item>
     </Menu>
-  );
-
-    
-    
-    
-
-
-
-        
+  );     
     //Login/Welcome, User menu item that changes based on whether user is logged in or not
 
     let login = ( <Menu.Item key = "Login" style = {{ left: 450}} icon={<UserOutlined />} >

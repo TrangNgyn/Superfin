@@ -1,6 +1,9 @@
 import './App.less';
 import MyAccount from '../Pages/MyAccount/MyAccount';
 import "../_assets/CSS/style.scss";
+import { history } from '../_helpers/history';
+import { Router, Route, Switch, useParams } from 'react-router-dom';
+import {AdminRoute, GuestRoute, MemberRoute, CustomerRoute} from '../_routers/PrivateRoutes';
 import Login from '../Pages/Login/Login';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ResetPasswordConfirmation from '../Pages/ResetPasswordConfirmation/ResetPasswordConfirmation';
@@ -9,20 +12,29 @@ import { history } from '../_helpers/history';
 import { Router, Route, Switch, useParams } from 'react-router-dom';
 import {AdminRoute, GuestRoute, MemberRoute, CustomerRoute} from '../_routers/PrivateRoutes';
 
-
 import Navbar from '../SharedComponents/Navbar/Navbar';
-
 import Homepage from '../Pages/Homepage/Homepage';
-
 import FooterMain from '../SharedComponents/Footer/FooterMain';
 
 
 
+//This is a demo Component to demonstrate Dynmaic Routing
+const Products = () => {
+   const {browseBy, browseByGroup} = useParams();
+   return(
+      <div>
+         <div>Products</div>
+         <div>{browseBy}</div>
+         <div>{browseByGroup}</div>
+      </div>
+   ); 
+}
 
 
-   <div className="Website-Body">
-      <ReenterPassword />
-   </div>
+
+//    <div className="Website-Body">
+//       <ReenterPassword />
+//    </div>
 
 
 // //This is a demo Component to demonstrate Dynmaic Routing
@@ -36,10 +48,6 @@ import FooterMain from '../SharedComponents/Footer/FooterMain';
 //       </div>
 //    ); 
 // }
-
-
-
-
 
 const App = () => (
    <div>
