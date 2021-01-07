@@ -27,7 +27,7 @@ const productSchema = new Schema({
     p_image_uri: {
         type: [String]
     },
-    x   : {
+    p_description: {
         type: String
     }
 },

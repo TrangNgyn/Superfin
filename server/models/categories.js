@@ -11,7 +11,7 @@ const categories_schema = new Schema({
         type: String
     },
     c_image: {
-        type: String
+        type: [String]
     } 
 },
 {
