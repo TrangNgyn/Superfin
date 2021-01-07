@@ -1,10 +1,14 @@
 import './App.less';
 import MyAccount from '../Pages/MyAccount/MyAccount';
 import "../_assets/CSS/style.scss";
-
+import Login from '../Pages/Login/Login';
+import EmailRequest from '../Pages/EmailRequest/EmailRequest';
+import ResetPasswordConfirmation from '../Pages/ResetPasswordConfirmation/ResetPasswordConfirmation';
+import ReenterPassword from '../Pages/ReenterPassword/ReenterPassword';
 import { history } from '../_helpers/history';
 import { Router, Route, Switch, useParams } from 'react-router-dom';
 import {AdminRoute, GuestRoute, MemberRoute, CustomerRoute} from '../_routers/PrivateRoutes';
+
 
 import Navbar from '../SharedComponents/Navbar/Navbar';
 
@@ -16,19 +20,22 @@ import FooterMain from '../SharedComponents/Footer/FooterMain';
 
 
 
+   <div className="Website-Body">
+      <ReenterPassword />
+   </div>
 
-//This is a demo Component to demonstrate Dynmaic Routing
-const Products = () => {
-   const {browseBy, browseByGroup} = useParams();
-   return(
-      <div>
-         <div>Products</div>
-         <div>{browseBy}</div>
-         <div>{browseByGroup}</div>
-      </div>
-   ); 
-}
 
+// //This is a demo Component to demonstrate Dynmaic Routing
+// const Products = () => {
+//    const {browseBy, browseByGroup} = useParams();
+//    return(
+//       <div>
+//          <div>Products</div>
+//          <div>{browseBy}</div>
+//          <div>{browseByGroup}</div>
+//       </div>
+//    ); 
+// }
 
 
 
