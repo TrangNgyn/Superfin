@@ -1,3 +1,15 @@
-export default function DeliveryDispatch(){
-    return <h1>DELIVERY AND DISPATCH PAGE</h1>
+import '../../_assets/CSS/pages/DeliveryDispatch.css';
+const DeliveryDispatch = () =>{
+    return (
+      <body>
+      <div id="deliverydispatch-window">
+        Delivery and Dispatch
+      </div>
+      <div id="deliverydispatch-text">
+        Placeholder text
+      </div>
+      </body>
+    )
 }
+
+export default DeliveryDispatch
