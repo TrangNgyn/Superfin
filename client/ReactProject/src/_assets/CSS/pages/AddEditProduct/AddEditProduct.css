@@ -1,15 +1,23 @@
-.ae-product-devider {
-    height: 100%;
-    width: 50%;
-    position: fixed;
-    overflow-x: hidden;
-    padding-top: 20px;
+
+#ae-product-header-title {
+    position: absolute;
+    left: 10%;
 }
 
-.ae-product-content-wrapper {
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
+.ae-product-input-container {
+    padding-left:300px;
+}
+
+.ae-product-input-container-2 {
+    padding-bottom: 25px;
+}
+
+.ae-product-input-title {
+    font-weight: bold;
+}
+
+.ae-product-dragger-inner {
+    height: 500px;
+    width: 500px; 
+    padding:25%;
 }
