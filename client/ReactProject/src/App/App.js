@@ -8,9 +8,6 @@ import Login from '../Pages/Login/Login';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ResetPasswordConfirmation from '../Pages/ResetPasswordConfirmation/ResetPasswordConfirmation';
 import ReenterPassword from '../Pages/ReenterPassword/ReenterPassword';
-import { history } from '../_helpers/history';
-import { Router, Route, Switch, useParams } from 'react-router-dom';
-import {AdminRoute, GuestRoute, MemberRoute, CustomerRoute} from '../_routers/PrivateRoutes';
 
 import Navbar from '../SharedComponents/Navbar/Navbar';
 import Homepage from '../Pages/Homepage/Homepage';

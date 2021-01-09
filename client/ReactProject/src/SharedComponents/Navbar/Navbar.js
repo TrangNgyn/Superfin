@@ -70,7 +70,7 @@ export default function Navbar(props){
   const categories = getCategories();   
 
   const ourProductsDropdown = (                     //Our Products dropdown
-    <Menu>
+    <Menu >
       <Menu.Item>
         <Link to="/products/categories">
           <b>Shop By Category</b>
@@ -92,12 +92,12 @@ export default function Navbar(props){
   );     
     //Login/Welcome, User menu item that changes based on whether user is logged in or not
 
-    let login = ( <Menu.Item key = "Login" style = {{ left: 450}} icon={<UserOutlined />} >
+    let login = ( <Menu.Item key = "Login" icon={<UserOutlined />} style = {{float: "right"}}>
                     <Link to="/login" onClick={loginUser}> Login/Sign up </Link>        {/*remove onclick event. This is for demonstration only*/}
                   </Menu.Item> );
 
     if(loggedStatus){
-      login = ( <Menu.Item key = "Welcome" style = {{ left: 450}} icon={<UserOutlined />} >
+      login = ( <Menu.Item key = "Welcome"  icon={<UserOutlined />} style = {{float: "right"}}>
                   <Dropdown overlay={welcomeDropdown}>
                     <span> Welcome, {fakeUser.name} </span>
                   </Dropdown>
@@ -106,42 +106,43 @@ export default function Navbar(props){
     }
 
     return (
-      <div>
-        <Menu className="Menu" onClick={(menu) => handleMenuClick(menu.key)} mode="horizontal" >
+      <div >
+  
+        <Menu className="Menu" onClick={(menu) => handleMenuClick(menu.key)} mode="horizontal" style={{textAlign: "center"}}>
 
-            <Menu.Item key="Logo" style = {{ right: 300 }}>
+            <Menu.Item key="Logo" style = {{float: "left"}}>
               <Link to="/">
                 <img src={image} style= {{ width: "100px"}} alt="Logo" />
               </Link>
             </Menu.Item >
 
-            <Menu.Item key="Products" >
+            <Menu.Item key="Products" style = {{marginLeft: "30px", marginRight: "30px"}}>
               <Dropdown overlay={ourProductsDropdown}>
                 <span>Our Products</span>
               </Dropdown>
             </Menu.Item >
     
-            <Menu.Item key="Delivery" >
+            <Menu.Item key="Delivery" style = {{marginLeft: "30px", marginRight: "30px"}}>
               <Link to="/deliveryDispatch"> Delivery and Dispatch </Link>
             </Menu.Item >
 
-            <Menu.Item key="Contact" >
+            <Menu.Item key="Contact" style = {{marginLeft: "30px", marginRight: "30px"}}>
               <Link to="/contactUs"> Contact Us </Link>
             </Menu.Item>
 
-            <Menu.Item key="About">
+            <Menu.Item key="About" style = {{marginLeft: "30px", marginRight: "30px"}}>
               <Link to="/aboutUs"> About Us </Link>
             </Menu.Item>
 
-            <Menu.Item key="Blog">
+            <Menu.Item key="Blog" style = {{marginLeft: "30px"}}>
               <Link to="/blog"> Blog </Link>
             </Menu.Item>
 
-            {login}
-
-            <Menu.Item key="Cart" style = {{ left: 450}} className = "rightItems"  icon = {<ShoppingCartOutlined />} >
+            <Menu.Item key="Cart" className = "rightItems"  icon = {<ShoppingCartOutlined /> } style = {{float: "right", marginLeft:"60px"}}>
               <Link to="/cart"> Cart </Link>
             </Menu.Item>
+
+            {login}
         </Menu> 
       </div>
   );
