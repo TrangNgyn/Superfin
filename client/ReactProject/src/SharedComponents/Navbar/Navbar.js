@@ -93,7 +93,7 @@ export default function Navbar(props){
     //Login/Welcome, User menu item that changes based on whether user is logged in or not
 
     let login = ( <Menu.Item key = "Login" icon={<UserOutlined />} style = {{float: "right"}}>
-                    <Link to="/login" onClick={loginUser}> Login/Sign up </Link>        {/*remove onclick event. This is for demonstration only*/}
+                    <Link to="/login"> Login/Sign up </Link>        {/*remove onclick event. This is for demonstration only*/}
                   </Menu.Item> );
 
     if(loggedStatus){
