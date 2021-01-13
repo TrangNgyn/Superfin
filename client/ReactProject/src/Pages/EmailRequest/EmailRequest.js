@@ -1,5 +1,6 @@
 import '../../_assets/CSS/pages/EmailRequest/EmailRequest.css';
 import { Form, Input, Button } from 'antd';
+import { history } from '../../_helpers/history';
 
 
 //Layout stuff//
@@ -27,6 +28,7 @@ const EmailRequest = () => {
 
     const onFinish = values => {
         console.log('Success:', values);
+        history.push('/resetPasswordConfirmation');
     };
     
     const onFinishFailed = errorInfo => {

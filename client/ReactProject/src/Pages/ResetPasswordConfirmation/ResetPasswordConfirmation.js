@@ -1,6 +1,12 @@
 import '../../_assets/CSS/pages/ResetPasswordConfirmation/ResetPasswordConfirmation.css';
+import { history } from  '../../_helpers/history';
 
 const ResetPasswordConfirmation = () => {
+
+    const navigateLoginPage = () => {
+        history.push('/login');
+    }
+
     return (
         <div>
             <div style = {{height: "5px"}}/>
@@ -17,7 +23,7 @@ const ResetPasswordConfirmation = () => {
                     </div>
 
                     <div className="rpc-text" style={{fontSize: "17px", top:"30px"}}>
-                        Please click <b id = "rpc-login-link">here</b> to login
+                        Please click <b id = "rpc-login-link" onClick={navigateLoginPage}>here</b> to login
                     </div>
                 </div>
         </div>

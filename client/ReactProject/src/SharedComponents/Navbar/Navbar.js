@@ -1,4 +1,5 @@
 import { Menu, Dropdown } from 'antd';
+import { history } from '../../_helpers/history';
 import { UserOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -42,6 +43,7 @@ export default function Navbar(props){
   const loginUser = () => {
     fakeUser.loggedIn = true;
     setLoggedStatus(true);
+    history.push('/');
   }
   //Welcome, User dropdown
   const welcomeDropdown = (
@@ -92,7 +94,7 @@ export default function Navbar(props){
   );     
     //Login/Welcome, User menu item that changes based on whether user is logged in or not
 
-    let login = ( <Menu.Item key = "Login" icon={<UserOutlined />} style = {{float: "right"}}>
+    let login = ( <Menu.Item key = "Login" onContextMenu={loginUser} icon={<UserOutlined />} style = {{float: "right"}}>
                     <Link to="/login"> Login/Sign up </Link>        {/*remove onclick event. This is for demonstration only*/}
                   </Menu.Item> );
 

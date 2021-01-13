@@ -1,4 +1,5 @@
 import { Form, Input, Button } from 'antd';
+import { history } from '../../_helpers/history';
 import '../../_assets/CSS/pages/Login/Login.css';
 
 
@@ -37,7 +38,7 @@ const Login = () => {
     };
 
     const navigateForgotPasswordPage = () => {
-        
+        history.push('/emailRequest');
     }
 
     const navigateRegisterPage = () => {
