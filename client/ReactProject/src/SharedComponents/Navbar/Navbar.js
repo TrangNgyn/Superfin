@@ -35,10 +35,10 @@ export default function Navbar(props){
   }
 
   const logout = () => {          //fake login logout functions
-    fakeUser.loggedIn = false; 
+    fakeUser.loggedIn = false;
     setLoggedStatus(false);
   }
-  
+
   //delete this
   const loginUser = () => {
     fakeUser.loggedIn = true;
@@ -69,7 +69,7 @@ export default function Navbar(props){
     </Menu>
   );
   //Fake categories API call
-  const categories = getCategories();   
+  const categories = getCategories();
 
   const ourProductsDropdown = (                     //Our Products dropdown
     <Menu >
@@ -80,7 +80,7 @@ export default function Navbar(props){
       </Menu.Item>
 
       {categories.map((cat) => {
-        return  <Menu.Item key={cat.c_name}> 
+        return  <Menu.Item key={cat.c_name}>
                   <Link to={"/products/categories/" + cat.c_name}> {cat.c_name} </Link>
                 </Menu.Item>
       })}
@@ -91,7 +91,7 @@ export default function Navbar(props){
         </Link>
       </Menu.Item>
     </Menu>
-  );     
+  );
     //Login/Welcome, User menu item that changes based on whether user is logged in or not
 
     let login = ( <Menu.Item key = "Login" onContextMenu={loginUser} icon={<UserOutlined />} style = {{float: "right"}}>
@@ -109,7 +109,7 @@ export default function Navbar(props){
 
     return (
       <div >
-  
+
         <Menu className="Menu" onClick={(menu) => handleMenuClick(menu.key)} mode="horizontal" style={{textAlign: "center"}}>
 
             <Menu.Item key="Logo" style = {{float: "left"}}>
@@ -123,7 +123,7 @@ export default function Navbar(props){
                 <span>Our Products</span>
               </Dropdown>
             </Menu.Item >
-    
+
             <Menu.Item key="Delivery" style = {{marginLeft: "30px", marginRight: "30px"}}>
               <Link to="/deliveryDispatch"> Delivery and Dispatch </Link>
             </Menu.Item >
@@ -145,9 +145,7 @@ export default function Navbar(props){
             </Menu.Item>
 
             {login}
-        </Menu> 
+        </Menu>
       </div>
   );
 }
-
-

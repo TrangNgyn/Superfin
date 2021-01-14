@@ -12,6 +12,7 @@ import DeliveryDispatch from '../Pages/DeliveryDispatch/DeliveryDispatch';
 import AboutUS from '../Pages/AboutUs/AboutUs';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ResetPasswordConfirmation from '../Pages/ResetPasswordConfirmation/ResetPasswordConfirmation';
+import TermsConditions from '../Pages/TermsConditions/TermsConditions';
 
 
 
@@ -28,7 +29,7 @@ const Products = () => {
          <div>{browseBy}</div>
          <div>{browseByGroup}</div>
       </div>
-   ); 
+   );
 }
 
 
@@ -50,21 +51,22 @@ const App = () => (
                <Route exact path="/"><Homepage /></Route>
 
                <Route exact path="/products"> <Products /></Route>
-               <Route exact path="/products/:browseBy"><Products /></Route> 
+               <Route exact path="/products/:browseBy"><Products /></Route>
                <Route path="/products/:browseBy/:browseByGroup"><Products /></Route>          {/*Undecided on Products page path*/}
 
                <Route path="/deliveryDispatch"> <DeliveryDispatch /></Route>
                <Route path="/contactUs"> <ContactUs /></Route>
-               <Route path="/aboutUs"><AboutUS /></Route>  
+               <Route path="/aboutUs"><AboutUS /></Route>
                <Route path="/login"><Login /></Route>
                <Route path="/emailRequest"><EmailRequest /></Route>
                <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
+               <Route path="/TermsConditions"><TermsConditions /></Route>
             </Switch>
          </div>
 
          <div className="Website-Footer">
             <FooterMain />
-         </div>  
+         </div>
       </Router>
    </div>
 );
