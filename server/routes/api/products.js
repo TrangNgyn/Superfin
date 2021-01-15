@@ -26,7 +26,6 @@ router.post('/product-by-category-price',product_controller.post_product_by_cate
 router.post('/add-product', upload.any(), product_controller.post_add_product);
 router.post('/delete-product', product_controller.post_delete_product);
 router.post('/edit-product', product_controller.post_edit_product);
-router.post('/edit-')
 
 
 // add information for image stoarage and ability to call images from the front end

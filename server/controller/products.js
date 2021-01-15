@@ -1,4 +1,5 @@
 const product_model = require('../models/product');
+const categories_model = require('../models/categories')
 const fs = require('fs');
 
 var empty_field = { error: "All fields must be filled" }
@@ -50,7 +51,8 @@ class Product {
                     return res.json(product)
                 else {
                     res.status(404)
-                    return res.json({ success: false })
+                    return res.json({ success: false,
+                                      message: "Product was not found" })
                 }
             }
         }
@@ -75,7 +77,8 @@ class Product {
                     return res.json({ Categories: categories })
                 else { 
                     res.status(404)
-                    return res.json({ success: false })
+                    return res.json({ success: false,
+                                      message: "The category was not found" })
                 }
             }
         }
@@ -101,7 +104,8 @@ class Product {
                 }
                 else {
                     res.status(404)
-                    return res.json({ success: false })
+                    return res.json({ success: false,
+                                      message: "The category was not found" })
                 }
             }
         }
@@ -121,7 +125,8 @@ class Product {
                 return res.json(products)
             }
             else {
-                return res.json({ success: false })
+                return res.json({ ssuccess: false,
+                                  message: "An error occured while getting products, check log" })
             }
         }
         catch (err) {
@@ -139,7 +144,7 @@ class Product {
     async post_add_product(req,res) {
         try {
             
-            var { p_code, p_name, p_price, p_units_sold, p_catagories, p_image_uri, p_description } =  req.body
+            var { p_code, p_name, p_price, p_units_sold, p_catagories, p_description } =  req.body
 
             var images = req.files
 
@@ -153,6 +158,15 @@ class Product {
                 Product.delete_images(images)
                 return res.json({ error: "Name and Code cannot be longer than 255 characters and description cannot be larger than 511 "})
             }
+
+            var matching_code = await product_model.findOne({ p_code: p_code })
+
+            if(matching_code)
+            {
+                return res.json({ success: false,
+                                  message: "p_code needs to be unique"})
+            }
+
             else {
             
             // need too clean input here potentially to ensure that product addition is not corrupting the database
@@ -178,7 +192,8 @@ class Product {
                     return res.json({ success: true })
                 }
                 else {
-                    return res.json({ success: false })
+                    return res.json({ success: false,
+                                      message: "Product was not added"})
                 }
             }
         }
@@ -194,23 +209,83 @@ class Product {
     async post_edit_product(req, res) {
         try {
 
-            let { _id, ItemCode, ItemName } = req.body
+            var { p_code, p_name, p_price, p_units_sold, p_catagories, p_image_uri, p_description }
 
-            if(!ItemCode | !ItemName ) {
-                return res.json(empty_field);
+            var images = req.files
+
+            // ensure all the required fields are present 
+            if( !p_code | !p_name | !p_catagories | !p_price ){
+                Product.delete_images(images)
+                return res.json(empty_field)
             }
-            else if(ItemCode > 225 | ItemName > 225) {
-                return res.json({ error: "Name and Code cannot be longer than 255 characters"})
+
+            // ensure that some fields are not too long or short 
+            if( p_code.length > 255 || p_name.length > 255 || p_desciption > 511) {
+                Product.delete_images(images)
+                return res.json({ error: "Name and Code cannot be longer than 255 characters and description cannot be larger than 511 "})
             }
-            else {
-                product_model
-                    .findByIdAndUpdate(_id, { ItemCode, ItemName }, { useFindAndModify: false })
-                    .exec(err => {
-                        if(err)
+
+            // price must be greater than 0
+            if(p_price <= 0)
+            {
+                Product.delete_images(images)
+                return res.json({ sucess: false,
+                                  message: "Price must be greater than 0"})
+            }
+
+            var found_product = await product_model.findOne({ p_code: p_code })
+
+            if(!found_product) 
+            {
+                res.status(404)
+                return res.json({ sucess: false,
+                                  message: "No matching product was found"})
+            }
+
+            // unlink images from the array as they are read in 
+
+            for(i = 0; i < found_product.p_image_uri.length; i++)
+            {
+                var image = found_product.p_image_uri[i];
+                var found = false;
+                for(s_image in p_image_uri)
+                {
+                    if(image == s_image)
+                    {
+                        found = true
+                        break
+                    }
+                }
+                if(found === false)
+                {
+                    fs.unlink(image, (err) => {
+                        if(err) 
+                        {
                             console.log(err)
-                        return res.json({ success: true })
+                        }
                     })
+                }
+
             }
+
+            for(image in images)
+            {
+                p_image_uri.push(image.filename)
+            }
+
+            found_product = 
+            {
+                p_code,
+                p_image_uri,
+                p_name,
+                p_price,
+                p_units_sold,
+                p_catagories,
+                p_description,
+                p_catagories
+            }
+
+
         }
         catch (err) {
             console.log(err);
@@ -241,11 +316,42 @@ class Product {
                     return res.json({ success: true });
                 } 
                 else {
-                    return res.json( { success: false })
+                    return res.json( { success: false,
+                                       message: "Product was not deleted"})
                 }
             }
         }
         catch (err) {
+            console.log(err)
+        }
+    }
+
+    // @route   POST api/products/product-sold
+    // @desc    Increase the products sold count
+    // @access  Public
+
+    async post_product_sold(req,res) {
+        try{
+            var { p_code, count } = req.body
+
+            // find the code and matching product
+            var found_product = await product_model.findOne({ p_code: p_code })
+
+            if(!found_product){
+                res.status(404)
+                return res.json({ success: false,
+                                  message: "No product was found" })
+            }
+
+            found_product.p_units_sold += count;
+
+            return res.json({ success: true })
+
+            // how do i ensure concistency?!
+            // need to update this if there is something more i need to do 
+            
+        }
+        catch(err){
             console.log(err)
         }
     }
