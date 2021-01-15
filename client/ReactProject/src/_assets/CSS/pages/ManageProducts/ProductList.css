@@ -1,0 +1,24 @@
+#manage-products-header {
+    height: 150px;
+    background-color: #F5AE85;
+    text-align: center;
+    line-height: 150px;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+
+.manage-products-icon {
+    cursor: pointer;
+    transition-duration: 0.2s;
+}
+
+.manage-products-icon:hover {
+    color: #EB6E00;
+}
+
+.manage-products-table-row>td {
+    padding-bottom: 2em;
+}
+
