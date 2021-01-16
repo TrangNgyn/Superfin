@@ -8,6 +8,12 @@
     margin-bottom: 30px;
 }
 
+#manage-products-select-table {
+    width: 50%; 
+    text-align: left;
+    margin-bottom: 20px; 
+    margin-left: 1%;
+}
 
 .manage-products-icon {
     cursor: pointer;
@@ -19,6 +25,6 @@
 }
 
 .manage-products-table-row>td {
-    padding-bottom: 2em;
+    padding-bottom: 12px;
 }
 

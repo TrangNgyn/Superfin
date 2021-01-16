@@ -12,7 +12,7 @@ import DeliveryDispatch from '../Pages/DeliveryDispatch/DeliveryDispatch';
 import AboutUS from '../Pages/AboutUs/AboutUs';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ResetPasswordConfirmation from '../Pages/ResetPasswordConfirmation/ResetPasswordConfirmation';
-import ProductList from '../Pages/ManageProducts/ProductsList';
+import ManageProducts from '../Pages/ManageProducts/ManageProducts';
 
 
 
@@ -40,14 +40,12 @@ const Products = () => {
 
 const App = () => (
    <div>
-      <ProductList />
-      {/*
       <Router history = {history}>
          <div className="Website-Header">
             <Navbar />
          </div>
 
-         <div className="Website-Body">
+         <div className="Website-Body" >
             <Switch>
            
                <Route exact path="/"><Homepage /></Route>
@@ -62,6 +60,9 @@ const App = () => (
                <Route path="/login"><Login /></Route>
                <Route path="/emailRequest"><EmailRequest /></Route>
                <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
+
+               
+               <Route path="/manageProducts"><ManageProducts /></Route>
             </Switch>
          </div>
 
@@ -69,7 +70,6 @@ const App = () => (
             <FooterMain />
          </div>  
       </Router>
-      */}
    </div>
 );
 
