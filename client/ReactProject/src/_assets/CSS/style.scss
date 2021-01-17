@@ -161,14 +161,14 @@ h6 {
 
 .mobile {
 	display: none !important;
-	@include res(xs) {
+	@include screen-size(xs) {
 	    display: inherit !important;
 	}
 }
 
 .desktop {
 	display: none !important;
-	@include res(sm) {
+	@include screen-size(sm) {
 	    display: inherit !important;
 	}
 }
@@ -184,4 +184,65 @@ h6 {
 
 /* ====================================== */
 /* ========== END ALIGNMENT ============= */
+/* ====================================== */
+
+
+
+
+/* ====================================== */
+/* =============== Navbar =============== */
+/* ====================================== */
+ul.Navbar {
+	text-align: center;
+	background-color: gray-light;
+}
+
+ul.Navbar-Mobile {
+	text-align: justify;
+}
+
+@include screen-size('xs', $breakpoints) {
+	ul.Navbar {
+		display: none;
+	}
+
+	ul.Navbar-Mobile {
+		display: block;
+	}
+}
+
+@include screen-size('sm', $breakpoints) {
+	ul.Navbar {
+		display: block;
+	}
+
+	ul.Navbar-Mobile {
+		display: none;
+	}
+}
+
+ul.Navbar > li#Logo,
+ul.Navbar > li:nth-child(2) {
+	float: left;
+}
+
+ul.Navbar > li#Logo > a:only-child > img:only-child,
+ul.Navbar > li:nth-child(2) > a:only-child > img:only-child,
+ul.Navbar-Mobile > li#Logo > a:only-child > img:only-child,
+ul.Navbar-Mobile > li:nth-child(2) > a:only-child > img:only-child  {
+	width: 120px;
+}
+
+ul.Navbar > li:not(#Logo):not(:nth-child(2)):not(:nth-last-child(2)):not(:nth-last-child(4)){
+
+	background-color: blue;
+	margin: 0 30px 0 30px !important;
+}
+
+ul.Navbar > li:nth-last-child(2),
+ul.Navbar > li:nth-last-child(4) {
+	float: right;
+}
+/* ====================================== */
+/* =========== End Navbar =============== */
 /* ====================================== */
