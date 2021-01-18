@@ -13,6 +13,7 @@ import DeliveryDispatch from '../Pages/DeliveryDispatch/DeliveryDispatch';
 import AboutUS from '../Pages/AboutUs/AboutUs';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ResetPasswordConfirmation from '../Pages/ResetPasswordConfirmation/ResetPasswordConfirmation';
+import ManageProducts from '../Pages/ManageProducts/ManageProducts';
 
 
 
@@ -45,14 +46,14 @@ const App = () => (
             <Navbar />
          </div>
 
-         <div className="Website-Body">
+         <div className="Website-Body" >
             <Switch>
-               {/*<CustomerRoute path="/" component = {Homepage} exact />*/}           {/* This is how to use the private routes. Do not use them yet */}
+           
                <Route exact path="/"><Homepage /></Route>
 
                <Route exact path="/products"> <Products /></Route>
                <Route exact path="/products/:browseBy"><Products /></Route> 
-               <Route path="/products/:browseBy/:browseByGroup"><Products /></Route>          {/*Undecided on Products page path*/}
+               <Route path="/products/:browseBy/:browseByGroup"><Products /></Route>         
 
                <Route path="/deliveryDispatch"> <DeliveryDispatch /></Route>
                <Route path="/contactUs"> <ContactUs /></Route>
@@ -60,6 +61,9 @@ const App = () => (
                <Route path="/login"><Login /></Route>
                <Route path="/emailRequest"><EmailRequest /></Route>
                <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
+
+               
+               <Route path="/manageProducts"><ManageProducts /></Route>
             </Switch>
          </div>
 
