@@ -146,7 +146,7 @@ const ManageProducts = () => {
 
 
     return (
-        <>
+        <div >
             <Modal title="Delete Product" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
                 <p>Are you sure you want to delete this product?</p>
             </Modal>
@@ -195,7 +195,7 @@ const ManageProducts = () => {
                     </tbody>
                 </table>  
             </div>
-            <div style = {{height: "400px"}}>
+            <div style = {{height: "400px", display: "table"}}>
                 <table style={{width:"100%", textAlign: "center", tableLayout: "fixed"}}>
                     <tbody>
                         <tr style = {{border: "solid black 1px"}}>
@@ -216,7 +216,7 @@ const ManageProducts = () => {
             <div style = {{textAlign: "center"}}>
                 <Pagination  defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange = {onChange}/>
             </div>  
-        </>
+        </div>
     );
 }
 
