@@ -159,6 +159,13 @@ class Product {
                 return res.json({ error: "Name and Code cannot be longer than 255 characters and description cannot be larger than 511 "})
             }
 
+            var found_category = await categories_model.findOne({ c_name: p_catagories })
+
+            if(!found_category){
+                return res.json({ success: false,
+                                  message: "Product was not added - the category was not valid"})
+            }
+
             var matching_code = await product_model.findOne({ p_code: p_code })
 
             if(matching_code)
@@ -209,7 +216,7 @@ class Product {
     async post_edit_product(req, res) {
         try {
 
-            var { p_code, p_name, p_price, p_units_sold, p_catagories, p_image_uri, p_description }
+            var { p_code, p_name, p_price, p_units_sold, p_catagories, p_image_uri, p_description } = req.body
 
             var images = req.files
 
@@ -226,8 +233,7 @@ class Product {
             }
 
             // price must be greater than 0
-            if(p_price <= 0)
-            {
+            if(p_price <= 0){
                 Product.delete_images(images)
                 return res.json({ sucess: false,
                                   message: "Price must be greater than 0"})
@@ -235,8 +241,7 @@ class Product {
 
             var found_product = await product_model.findOne({ p_code: p_code })
 
-            if(!found_product) 
-            {
+            if(!found_product){
                 res.status(404)
                 return res.json({ sucess: false,
                                   message: "No matching product was found"})
@@ -244,37 +249,28 @@ class Product {
 
             // unlink images from the array as they are read in 
 
-            for(i = 0; i < found_product.p_image_uri.length; i++)
-            {
+            for(i = 0; i < found_product.p_image_uri.length; i++){
                 var image = found_product.p_image_uri[i];
                 var found = false;
-                for(s_image in p_image_uri)
-                {
-                    if(image == s_image)
-                    {
+                for(s_image in p_image_uri){
+                    if(image == s_image){
                         found = true
                         break
                     }
                 }
-                if(found === false)
-                {
+                if(found === false){
                     fs.unlink(image, (err) => {
                         if(err) 
-                        {
                             console.log(err)
-                        }
                     })
                 }
 
             }
-
-            for(image in images)
-            {
+            for(image in images){
                 p_image_uri.push(image.filename)
             }
 
-            found_product = 
-            {
+            found_product = {
                 p_code,
                 p_image_uri,
                 p_name,
@@ -284,8 +280,6 @@ class Product {
                 p_description,
                 p_catagories
             }
-
-
         }
         catch (err) {
             console.log(err);
