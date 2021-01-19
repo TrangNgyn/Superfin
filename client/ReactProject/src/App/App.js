@@ -12,6 +12,7 @@ import DeliveryDispatch from '../Pages/DeliveryDispatch/DeliveryDispatch';
 import AboutUS from '../Pages/AboutUs/AboutUs';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ResetPasswordConfirmation from '../Pages/ResetPasswordConfirmation/ResetPasswordConfirmation';
+import EditCompanyInfo from '../Pages/EditCompanyInfo/EditCompanyInfo';
 
 
 
@@ -59,6 +60,7 @@ const App = () => (
                <Route path="/login"><Login /></Route>
                <Route path="/emailRequest"><EmailRequest /></Route>
                <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
+               <Route path="/editCompanyInformation"><EditCompanyInfo /></Route>  
             </Switch>
          </div>
 
