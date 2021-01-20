@@ -75,7 +75,7 @@ $container-max-widths: (
 $border-color: gray;
 
 // Typography
-
+$font-lg: 24px !default;
 $font-md: 16px !default; // Assumes the browser default, typically `16px`
 $font-sm: 14px !default;
 $font-xs: 12px !default;
@@ -83,9 +83,9 @@ $font-xs: 12px !default;
 //Spacing
 
 $spacing: 8px;
-$spacing-2: $spacing * 2;
-$spacing-3: $spacing * 3;
-$spacing-4: $spacing * 4;
+$spacing-2x: $spacing * 2;
+$spacing-3x: $spacing * 3;
+$spacing-4x: $spacing * 4;
 
 $spacings: (
         5: 5px,
@@ -112,50 +112,50 @@ $spacings: (
 
 @each $spacing-var, $space in $spacings {
   //margin
-  .mb#{$spacing-var} {
+  .margin-bottom-#{$spacing-var} {
     margin-bottom: $space;
   }
-  .mt#{$spacing-var} {
+  .margin-top-#{$spacing-var} {
     margin-top: $space;
   }
-  .ml#{$spacing-var} {
+  .margin-left-#{$spacing-var} {
     margin-left: $space;
   }
-  .mr#{$spacing-var} {
+  .margin-right-#{$spacing-var} {
     margin-right: $space;
   }
-  .m#{$spacing-var} {
+  .margin-#{$spacing-var} {
     margin: $space;
   }
-  .mtb#{$spacing-var} {
+  .margin-top-bottom-#{$spacing-var} {
     margin-top: $space;
     margin-bottom: $space;
   }
-  .mlr#{$spacing-var} {
+  .margin-left-right#{$spacing-var} {
     margin-left: $space;
     margin-right: $space;
   }
   //padding
-  .pb#{$spacing-var} {
+  .padding-bottom-#{$spacing-var} {
     padding-bottom: $space;
   }
-  .pt#{$spacing-var} {
+  .padding-top-#{$spacing-var} {
     padding-top: $space;
   }
-  .pl#{$spacing-var} {
+  .padding-left-#{$spacing-var} {
     padding-left: $space;
   }
-  .pr#{$spacing-var} {
+  .padding-right-#{$spacing-var} {
     padding-right: $space;
   }
-  .p#{$spacing-var} {
+  .padding-#{$spacing-var} {
     padding: $space;
   }
-  .ptb#{$spacing-var} {
+  .padding-top-bottom-#{$spacing-var} {
     padding-top: $space;
     padding-bottom: $space;
   }
-  .plr#{$spacing-var} {
+  .padding-left-right-#{$spacing-var} {
     padding-left: $space;
     padding-right: $space;
   }

@@ -1,0 +1,37 @@
+#homepage-admin-order-container {
+    position: relative;
+    background-color: #F8F8F8;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #F0F0F0;
+    box-shadow: 0px 3px #EDEDED;
+    width: 350px;
+    height: 450px;
+}
+
+.Homepage-Admin-Order-Text {
+    text-align: center;
+    
+    padding-top: 30px;
+    font-size: 15px;
+    font-family: Helvetica;
+}
+
+
+
+#homepage-admin-order-icon-container {
+    position: absolute;
+    font-size: 40px;
+    bottom: 0;
+    right: 0;
+}
+
+
+.homepage-admin-order-icon {
+    padding-right: 15px;
+    cursor: pointer;
+}
+
+.homepage-admin-order-icon:hover {
+    color: #EB6E00;
+}
