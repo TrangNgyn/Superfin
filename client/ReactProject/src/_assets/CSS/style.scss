@@ -269,7 +269,7 @@ div.footer-content-container > div#footer-email-input > form#footer-email-form:b
 }
 
 div.footer-content-container > div#footer-email-input > form#footer-email-form {
-	margin: 0 5% 0 25%;
+	margin: 0 5% 0 10%;
 }
 
 div.footer-content-container > div#footer-email-input > form#footer-email-form > div.ant-form-item:first-child {
@@ -337,6 +337,12 @@ div#copyright-background{
 		display: block;
 	}
 
+	ul[class*="footer-menubar"]:after,
+	ul.footer-menubar:after,
+	ul.footer-menubar-mobile:after {
+		width: 100%;
+	}
+
 	div.footer-content-container > div#footer-social-media-links {
 		align-items: center; // Make the logo vertically centered if below XS
 	}
@@ -358,6 +364,10 @@ div#copyright-background{
 		display: none;
 	}
 
+	div.footer-content-container > div#footer-email-input > form#footer-email-form {
+		margin: 0 5% 0 15%;
+	}
+
 	div.footer-content-container > div#footer-social-media-links {
 		align-items: center; // Make the logo vertically centered if below SM
 	}
@@ -368,6 +378,10 @@ div#copyright-background{
 }
 
 @include screen-size('md', $breakpoints) {
+	div.footer-content-container > div#footer-email-input > form#footer-email-form {
+		margin: 0 5% 0 25%;
+	}
+
 	div.footer-content-container > div#footer-social-media-links {
 		align-items: flex-end; // Make the icons start from the bottom of the div
 	}

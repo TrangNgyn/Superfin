@@ -1,4 +1,3 @@
-import { Form, Input, Button } from 'antd';
 import { 
     FacebookFilled, 
     InstagramFilled, 
@@ -8,7 +7,7 @@ import {
 import FooterEmailInput from './FooterEmailInput';
 export default function FooterMain(){
     return (
-        <div class="footer-content-container">
+        <div className="footer-content-container">
             <div id="footer-email-input">
                 <FooterEmailInput />
             </div>
