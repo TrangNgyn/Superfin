@@ -28,7 +28,8 @@ const productSchema = new Schema({
         type: [String]
     },
     p_description: {
-        type: String
+        type: String,
+        default: ""
     }
 },
 {

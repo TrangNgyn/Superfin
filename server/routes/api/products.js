@@ -16,16 +16,17 @@ var storage = multer.diskStorage({
   
   var upload = multer({ storage: storage })
 
-
+// product viewing routes
 router.get('/all-product', product_controller.get_all_products);
 router.post('/product-by-id',product_controller.post_product_by_id);
 router.post('/product-by-category', product_controller.post_product_by_category);
-router.get('/product-by-price',product_controller.get_product_by_price);
 router.post('/product-by-category-price',product_controller.post_product_by_category_price);
 
+// product management routes
 router.post('/add-product', upload.any(), product_controller.post_add_product);
 router.post('/delete-product', product_controller.post_delete_product);
-router.post('/edit-product', product_controller.post_edit_product);
+router.post('/edit-product', upload.any(), product_controller.post_edit_product);
+router.post('/product-sold',product_controller.post_product_sold);
 
 
 // add information for image stoarage and ability to call images from the front end

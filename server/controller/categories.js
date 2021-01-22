@@ -34,6 +34,8 @@ class Category {
         }
     }
 
+    // leave all of this commented out until we decide if we are going to only have prefixed categories
+
     // @route   POST api/categories/add-category
     // @desc    Add a new category to the category database
     // @acess   Public
