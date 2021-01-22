@@ -201,26 +201,6 @@ ul.Navbar-Mobile {
 	text-align: justify;
 }
 
-@include screen-size('xs', $breakpoints) {
-	ul.Navbar {
-		display: none;
-	}
-
-	ul.Navbar-Mobile {
-		display: block;
-	}
-}
-
-@include screen-size('sm', $breakpoints) {
-	ul.Navbar {
-		display: block;
-	}
-
-	ul.Navbar-Mobile {
-		display: none;
-	}
-}
-
 ul.Navbar > li#Logo,
 ul.Navbar > li:nth-child(2) {
 	float: left;
@@ -234,8 +214,6 @@ ul.Navbar-Mobile > li:nth-child(2) > a:only-child > img:only-child  {
 }
 
 ul.Navbar > li:not(#Logo):not(:nth-child(2)):not(:nth-last-child(2)):not(:nth-last-child(4)){
-
-	background-color: blue;
 	margin: 0 30px 0 30px !important;
 }
 
@@ -245,4 +223,166 @@ ul.Navbar > li:nth-last-child(4) {
 }
 /* ====================================== */
 /* =========== End Navbar =============== */
+/* ====================================== */
+
+/* ====================================== */
+/* =============== Footer =============== */
+/* ====================================== */
+
+ul[class*="footer-menubar"],
+ul.footer-menubar,
+ul.footer-menubar-mobile {
+    text-align: center;
+    background-color : $gray-light;
+}
+ul[class*="footer-menubar"]:after,
+ul.footer-menubar:after,
+ul.footer-menubar-mobile:after {
+	content: "";
+	display: block;
+	margin: 0 auto;
+	width: 90%;
+	border-bottom: 1px solid black;
+}
+
+ul.footer-menubar > li.item {
+    width: 175px;
+}
+
+div.footer-content-container {
+	background-color : $gray-light;
+	min-height: 128px;
+	width: 100%;
+	display: flex;
+	flex-flow: row wrap;
+}
+
+div.footer-content-container > div {
+	flex: 1 0 calc(100%/3); // set the flex item to grow evenly by 1 with each base on the width of 100% / 3
+}
+
+div.footer-content-container > div#footer-email-input > form#footer-email-form:before {
+	content: "SIGN UP FOR SPECIAL OFFERS";
+	display: block; // So that the form is below the pseudo element
+	width: 100%; // Make its width equal that of the form
+	font-size: $base-font-size;
+}
+
+div.footer-content-container > div#footer-email-input > form#footer-email-form {
+	margin: 0 5% 0 25%;
+}
+
+div.footer-content-container > div#footer-email-input > form#footer-email-form > div.ant-form-item:first-child {
+	max-width: 300px; // Set the maximum width so that the content won't clip outside the div
+	min-width: 128px; // Set the minimum width so that it wouldn't be too small
+	width: 100%; // Make the div fill the whole width of the form
+}
+
+div.footer-content-container > div#footer-email-input > form#footer-email-form > div {
+	margin: 4px 0 4px 0; // Set this so the email input box + button are not mashed together like potato
+}
+
+div.footer-content-container > div#footer-social-media-links {
+	flex: 0 1 auto !important; // set this as important so it would disbable the ability to grow and allow to shrink to it's content-width
+	display: flex;
+	justify-content: center; // To align the content center of the main-axis (horizontal align to center)
+	align-items: flex-end; // To align the items to the end of the cross-axis (vertical align to bottom)
+}
+
+div.footer-content-container > div#footer-social-media-links > a {
+	color: $black;
+	font-size: 30px;
+	margin: 10px;
+}
+
+div.footer-content-container > div#footer-support-details {
+	display: flex;
+	flex-flow: column wrap; // Make the email and phone div flow in column
+	align-items: center; // Align the items in the middle of the div (vertically)
+	justify-content: center; // Align the items in the center of the div (horizontally)
+}
+
+div.footer-content-container > div#footer-support-details > div {
+	text-align: center;
+	font-size: 11px;
+	font-weight: bold;
+}
+
+div#copyright-background{
+	padding: 4px 0;
+	width: 100%;
+	background-color: $gray-light;
+	text-align: center;
+	font-size: 10px;
+}
+
+/* ====================================== */
+/* =========== End Footer =============== */
+/* ====================================== */
+
+
+
+/* ====================================== */
+/* =========== MEDIA QUERIES ============ */
+/* ====================================== */
+
+@include screen-size('xs', $breakpoints) {
+	ul.Navbar,
+	ul.footer-menubar {
+		display: none;
+	}
+
+	ul.Navbar-Mobile,
+	ul.footer-menubar-mobile {
+		display: block;
+	}
+
+	div.footer-content-container > div#footer-social-media-links {
+		align-items: center; // Make the logo vertically centered if below XS
+	}
+
+	div.footer-content-container > div#footer-support-details {
+		align-items: flex-end; // Set the details to be aligned to the right of the div
+		padding-right: 2%; // Add padding to the right to not be clashing with the main browser window
+	}
+}
+
+@include screen-size('sm', $breakpoints) {
+	ul.Navbar,
+	ul.footer-menubar{
+		display: block;
+	}
+
+	ul.Navbar-Mobile,
+	ul.footer-menubar-mobile {
+		display: none;
+	}
+
+	div.footer-content-container > div#footer-social-media-links {
+		align-items: center; // Make the logo vertically centered if below SM
+	}
+
+	div.footer-content-container > div#footer-support-details > div {
+		margin: 0; // Set the margin to nothing to make them align
+	}
+}
+
+@include screen-size('md', $breakpoints) {
+	div.footer-content-container > div#footer-social-media-links {
+		align-items: flex-end; // Make the icons start from the bottom of the div
+	}
+
+	div.footer-content-container > div#footer-support-details > div {
+		margin-left: 15%; // Set margin relative to keep the design consistent
+	}
+}
+
+@include screen-size('lg', $breakpoints) {
+	div.footer-content-container > div#footer-support-details > div {
+		margin-left: 35%; // Set margin relative to keep the design consistent
+	}
+}
+
+/* ====================================== */
+/* =========== END MEDIA QUERIES ======== */
 /* ====================================== */
