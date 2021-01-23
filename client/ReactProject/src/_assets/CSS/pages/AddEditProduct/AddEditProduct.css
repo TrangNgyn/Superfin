@@ -1,0 +1,21 @@
+
+#ae-product-header-title {
+   margin-left: 15%;
+   margin-top: 1%;
+   margin-bottom: 3%;
+}
+
+#ae-product-form-wrapper {
+    width: 100%;
+    overflow: hidden; 
+}
+.ae-product-form {
+    font-weight: bold;
+    font-size: 15px;
+    float:left; 
+    padding-left: 15%;
+}
+
+.ae-product-input {
+    padding-top: 10%;
+}
