@@ -1,7 +1,23 @@
 const product_model = require('../models/product');
+const categories_model = require('../models/categories')
+const fs = require('fs');
 
 var empty_field = { error: "All fields must be filled" }
 class Product {
+
+    // delete images referenced by product
+    static delete_images(images) {
+        for (var i = 0; i < images.length; i++) {
+            var file_path = `../public/uploads/products/${images[i].filename}`
+            fs.unlink(file_path, (err) => {
+                if(err) { 
+                    console.log(err)
+                    // do we break here? i feel like you should just log the error and continue to try
+                    // and delete all of the files associated with the path
+                }
+            })  
+        }
+    }
     
     // @route   GET api/products/all-product
     // @desc    Get all itmes
@@ -9,35 +25,35 @@ class Product {
 
     async get_all_products(req,res) {
         try{
-            product_model
-                .find()
-                .sort({ ItemName: 1 })
-                .then(product_model => res.json(product_model))
+            var products = await product_model.find({})
+            if(products) {
+                return res.json({ products })
+            }
         }
         catch(err) {
             console.log(err)
         }
     }
 
-    // @route   POST api/products/product-by-code
+    // @route   POST api/products/product-by-id
     // @desc    Get all items sorted by code
     // @access  Public
 
     async post_product_by_id(req, res) {
         try{
-            let { id } = req.body
-            if(!id){
+            var { p_code } = req.body
+            if(!p_code){
                 return res.json(empty_field)
             }
             else {
-                product_model
-                    .findById(id)
-                    .then(product_model => res.json(product_model))
-                    // this should be cleaned up into if statements that catch if the product was not found
-                    // instead of a catch all error that potentially wont be correct
-                    .catch(() => res
-                                    .status(404)
-                                    .json({ failure: `Product with id: ${id} was not found`}))
+                var product = await product_model.findOne({ p_code: p_code })
+                if(product)
+                    return res.json(product)
+                else {
+                    res.status(404)
+                    return res.json({ success: false,
+                                      message: "Product was not found" })
+                }
             }
         }
         catch (err) {
@@ -51,23 +67,51 @@ class Product {
 
     async post_product_by_category(req,res) {
         try{
-            let { cat } = req.body
-            if(!cat) {
+            var { cat_id } = req.body
+            if(!cat_id) {
                 return res.json(empty_field)
             }
             else {
-                product_model
-                    .find( { Category: cat })
-                    .then(product_model => res.json(product_model))
-                    // this should be cleaned up into if statements that catch if the product was not found
-                    // instead of a catch all error that potentially wont be correct
-                    .catch(() => res
-                                    .status(404)
-                                    .json({ failure: `Product with id: ${id} was not found`}))
+                var categories = await product_model.find({ p_catagories: cat_id })
+                                                    .populate('p_categores','c_name')
+                if(categories)
+                    return res.json({ Categories: categories })
+                else { 
+                    res.status(404)
+                    return res.json({ success: false,
+                                      message: "The category was not found" })
+                }
             }
         }
         catch (err) {
             console.log(err);
+        }
+    }
+
+    // @route   POST api/products/product-by-category-price
+    // @desc    Get products by category sorted by price
+    // @acesss  Public 
+
+    async post_product_by_category_price(req,res) {
+        try{
+            var { cat_id } = req.body
+            if(!cat_id) {
+                return res.json(empty_field)
+            }
+            else {
+                var categories = await product_model.find({ p_categories: cat_id }).sort({ p_price: 1 })
+                if(categories){
+                    return res.json(categories)
+                }
+                else {
+                    res.status(404)
+                    return res.json({ success: false,
+                                      message: "The category was not found" })
+                }
+            }
+        }
+        catch (err) {
+            console.log(err)
         }
     }
 
@@ -80,29 +124,76 @@ class Product {
 
     async post_add_product(req,res) {
         try {
-            var ItemCode = req.body['*ItemCode'];
-            var ItemName = req.body.ItemName;
+            
+            var { p_code, p_name, p_price, p_units_sold, p_categories, p_description } =  req.body
+
+            var images = req.files
+
+            // if(images.length <= 0) {
+            //     Product.delete_images(images)
+            //     return res.json({ success: false,
+            //                       message: "An image must be supplied"})
+            // }
 
             // validate that input was recieved
-            if( !ItemName | !ItemCode ){
+            if( !p_code | !p_name | !p_categories | !p_price){
+                Product.delete_images(images)
                 return res.json(empty_field)
             }
             // validate that name and code
-            else if( ItemName.length > 225 || ItemCode.length > 225 ) {
-                return res.json({ error: "Name and Code cannot be longer than 255 characters"})
+            else if( p_code.length > 255 || p_name.length > 255 || p_description > 511) {
+                Product.delete_images(images)
+                return res.json({ error: "Name and Code cannot be longer than 255 characters and description cannot be larger than 511 "})
             }
+
+            var found_category = await categories_model.findOne({ _id: p_categories })
+
+            if(!found_category){
+                Product.delete_images(images)
+                return res.json({ success: false,
+                                  message: `Product was not added - the category ${p_categories} is not valid`})
+            }
+
+            var matching_code = await product_model.findOne({ p_code: p_code })
+
+            if(matching_code){
+                Product.delete_images(images)
+                return res.json({ success: false,
+                                  message: `Product was not added, the p_code ${p_code} is already in use` })
+            }
+
             else {
             
             // need too clean input here potentially to ensure that product addition is not corrupting the database
 
-              const new_product = new product_model({
-                ItemName: req.body.ItemName,
-                ItemCode: req.body.ItemCode
-            });
-            new_product
-                .save()
-                .then(() => res.json({ success: true}))  
-                .catch(() => res.json({ success: false}))
+                var all_images = []
+
+                // this does work :)
+
+                for (const image of images) {
+                    all_images.push(image.filename)
+                }
+
+                const new_product = new product_model({
+                    p_image_uri: all_images,
+                    p_code,
+                    p_name,
+                    p_price,
+                    p_units_sold,
+                    p_categories,
+                    p_description
+                })
+
+                var saved_product = await new_product.save()
+                if (saved_product) {
+                    return res.json({ success: true,
+                                      message: `The product with code ${p_code} was added.` })
+                }
+                else {
+                    Product.delete_images(images)
+                    return res.json({ success: false,
+                                      message: "Product was not added"})
+                }
             }
         }
         catch (err) {
@@ -117,26 +208,88 @@ class Product {
     async post_edit_product(req, res) {
         try {
 
-            // need to change the database from using *ItemCode to use ItemCode 
-            // or find a way to allow for the use of *ItemCode that can be read into the js
+            var { p_code, p_name, p_price, p_units_sold, p_categories, p_image_uri, p_description } = req.body
 
-            let { _id, ItemCode: ItemCode, ItemName } = req.body
+            var images = req.files
 
-            if(!ItemCode | !ItemName ) {
-                return res.json(empty_field);
+            // if(images.length <= 0 && p_image_uri.length == 0) {
+            //     Product.delete_images(images)
+            //     return res.json({ success: false,
+            //                       message: `An image must be present in the edited product`})
+            // }
+
+            // ensure all the required fields are present 
+            if( !p_code | !p_name | !p_categories | !p_price ){
+                Product.delete_images(images)
+                return res.json(empty_field)
             }
-            else if(ItemCode > 225 | ItemName > 225) {
-                return res.json({ error: "Name and Code cannot be longer than 255 characters"})
+
+            // ensure that some fields are not too long or short 
+            if( p_code.length > 255 || p_name.length > 255) {
+                Product.delete_images(images)
+                return res.json({ error: "Name and Code cannot be longer than 255 characters."})
             }
-            else {
-                product_model
-                    .findByIdAndUpdate(_id, { ItemCode, ItemName }, { useFindAndModify: false })
-                    .exec(err => {
-                        if(err)
-                            console.log(err)
-                        return res.json({ success: true })
-                    })
+
+            // price must be greater than 0
+            if(p_price <= 0){
+                Product.delete_images(images)
+                return res.json({ sucess: false,
+                                  message: "Price must be greater than 0"})
             }
+
+            var found_product = await product_model.findOne({ p_code: p_code })
+
+            if(!found_product){
+                res.status(404)
+                return res.json({ sucess: false,
+                                  message: `No product with code ${p_code} was found`})
+            }
+
+            // unlink images from the array as they are read in 
+
+            // for(var i = 0; i < found_product.p_image_uri.length; i++){
+            //     var image = found_product.p_image_uri[i];
+            //     var found = false;
+            //     for(s_image in p_image_uri){
+            //         if(image == s_image){
+            //             found = true
+            //             break
+            //         }
+            //     }
+            //     if(found === false){
+            //         fs.unlink(image, (err) => {
+            //             if(err) 
+            //                 console.log(err)
+            //         })
+            //     }
+
+            // }
+            // for(image in images){
+            //     p_image_uri.push(image.filename)
+            // }
+
+            var edited_product = product_model.findByIdAndUpdate(found_product._id, {
+                p_code,
+                p_image_uri,
+                p_name,
+                p_price,
+                p_units_sold,
+                p_categories,
+                p_description,
+            })
+            
+            edited_product.exec(err => {
+                if(err)
+                    console.log(err)
+                return res.json({ success: true,
+                                  message: `Product ${p_code} was edited`})
+            })
+
+
+
+            // need to set up response
+            
+
         }
         catch (err) {
             console.log(err);
@@ -151,27 +304,77 @@ class Product {
 
     async post_delete_product(req,res) {
         try{
-            let { id } = req.body
+            let { p_code } = req.body
             
             // validate input was recieved
-            if( !id ) {
+            if( !p_code ) {
                 return res.json(empty_field)
             }
 
             //could use findOneAndDelete here
-
-            else{
-                product_model
-                    .findById(id)
-                    .then(product_controller => product_controller
-                                                    .remove()
-                                                    .then(() => res.json({ success: `Product with id: ${id} was removed`})))
-                    .catch(() => res
-                                    .status(404)
-                                    .json({ failure: `Product with id: ${id} was not found`}))
+            else {
+                var delete_product = await product_model.findOne({ p_code: p_code })
+                if(delete_product) {
+                    if(delete_product.p_image_uri){
+                        Product.delete_images(delete_product.p_image_uri);
+                    }
+                    product_model.deleteOne({ p_code: p_code }, (err,result) => {
+                        if(err){
+                            res.send(err)
+                        }
+                        else {
+                            if(result.deletedCount === 1){
+                                return res.json({ succes: true,
+                                                  message: `The product with code ${p_code} was deleted` })
+                            }
+                            else {
+                                res.send(result)
+                            }
+                        }
+                    });
+                } 
+                else {
+                    return res.json( { success: false,
+                                       message: `Product with code ${p_code} not found, no product was deleted`})
+                }
             }
         }
         catch (err) {
+            console.log(err)
+        }
+    }
+
+    // @route   POST api/products/product-sold
+    // @desc    Increase the products sold count
+    // @access  Public
+
+    async post_product_sold(req,res) {
+        try{
+            var { p_code, count } = req.body
+
+            // find the code and matching product
+            var found_product = await product_model.findOne({ p_code: p_code })
+
+            if(!found_product){
+                res.status(404)
+                return res.json({ success: false,
+                                  message: "No product was found" })
+            }
+
+            var updated_product = product_model.findByIdAndUpdate(found_product._id,{
+                p_units_sold: Number(count) + found_product.p_units_sold
+            })
+            updated_product.exec(err => {
+                if(err)
+                    console.log(err)
+                return res.json({ success: true,
+                                  message: `Product ${1111} sales has been updated` })
+            })
+            // how do i ensure concistency?!
+            // need to update this if there is something more i need to do 
+            
+        }
+        catch(err){
             console.log(err)
         }
     }

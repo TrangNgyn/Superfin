@@ -133,3 +133,8 @@ export function fetchProducts(){
     console.log("fetching products from mock product list...");
     return products;
 }
+
+export const getNumberOfproducts = () => {
+    console.log("fetching number of products from product list...");
+    return products.length;
+}

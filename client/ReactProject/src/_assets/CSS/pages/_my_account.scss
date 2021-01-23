@@ -1,0 +1,23 @@
+main.ant-layout-content > div.ant-row.my-account-username-avatar {
+	display: flex;
+	flex-flow: column wrap;
+	align-content: center;
+}
+
+main.ant-layout-content > div.ant-row.my-account-username-avatar > * {
+	margin: .25em 0 0 0;
+	text-align: center;
+	flex: 1 0;
+}
+
+main.ant-layout-content > div.ant-row.my-account-details > form {
+	margin-top: 1.5em;
+	padding: 1em;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+main.ant-layout-content > div.ant-row.my-account-details > form > * {
+	flex: 0 45%;
+	margin: .5em;
+}
