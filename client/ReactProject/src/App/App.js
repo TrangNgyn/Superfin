@@ -1,4 +1,7 @@
 import './App.less';
+import "../_assets/CSS/style.scss";
+//import Homepage from '../Pages/Homepage/Homepage';
+import AddEditProduct from '../Pages/AddEditProduct/AddEditProduct';
 import Navbar from '../SharedComponents/Navbar/Navbar';
 import FooterMain from '../SharedComponents/Footer/FooterMain';
 
@@ -12,7 +15,6 @@ import DeliveryDispatch from '../Pages/DeliveryDispatch/DeliveryDispatch';
 import AboutUS from '../Pages/AboutUs/AboutUs';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ResetPasswordConfirmation from '../Pages/ResetPasswordConfirmation/ResetPasswordConfirmation';
-
 
 
 
