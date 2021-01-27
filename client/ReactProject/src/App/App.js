@@ -1,5 +1,4 @@
 import './App.less';
-import "../_assets/CSS/style.scss";
 //import Homepage from '../Pages/Homepage/Homepage';
 import AddEditProduct from '../Pages/AddEditProduct/AddEditProduct';
 import Navbar from '../SharedComponents/Navbar/Navbar';
@@ -43,17 +42,23 @@ const App = () => (
                <Route exact path="/"><Homepage /></Route>
                <Route exact path="/products"> <Products /></Route>
                <Route exact path="/products/:browseBy"><Products /></Route> 
-               <Route path="/products/:browseBy/:browseByGroup"><Products /></Route>         
+               <Route path="/products/:browseBy/:browseByGroup"><Products /></Route> 
+
                <Route path="/deliveryDispatch"> <DeliveryDispatch /></Route>
                <Route path="/contactUs"> <ContactUs /></Route>
                <Route path="/aboutUs"><AboutUS /></Route>  
                <Route path="/login"><Login /></Route>
                <Route path="/emailRequest"><EmailRequest /></Route>
                <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
+
                <Route path="/currentOrders"><CurrentOrders /></Route>
                <Route path="/processedOrders"><ProcessedOrders /></Route>
+               
                <Route path="/editCompanyInformation"><EditCompanyInfo /></Route>                 
                <Route path="/manageProducts"><ManageProducts /></Route>
+
+               <Route exact path="/editAddProducts"><AddEditProduct /></Route>
+               <Route path="/editAddProducts/:_id"><AddEditProduct /></Route>
             </Switch>
          </div>
 

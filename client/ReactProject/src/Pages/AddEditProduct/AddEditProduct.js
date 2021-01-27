@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Upload, Button, message, Form, Input, Select, Modal} from 'antd';
 import '../../_assets/CSS/pages/AddEditProduct/AddEditProduct.css';
+import { useParams } from 'react-router-dom';
 
 
 
@@ -14,6 +15,9 @@ import '../../_assets/CSS/pages/AddEditProduct/AddEditProduct.css';
 
 
 const AddEditProduct = () => {
+    const {_id} = useParams();
+
+    _id ? console.log("_id", _id) : console.log("no _id found, rendering a blank form"); 
 
     //mock fetch function for categories
     const getCategories = () => {
@@ -262,7 +266,7 @@ const AddEditProduct = () => {
 
 
 
-            <h1 id="ae-product-header-title">Add Product</h1>
+            <h1 id="ae-product-header-title">Add/Edit Product</h1>
 
 
 

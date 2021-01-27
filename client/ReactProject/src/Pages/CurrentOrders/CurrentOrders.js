@@ -160,7 +160,7 @@ const CurrentOrders = () => {
 
         const onFinishFail = () => {
             setTimeout(() => {
-                formRef.current.resetFields();  
+                if(formRef.current) formRef.current.resetFields();          //checking if the form still exists 
             }, 3000)
         }
         
