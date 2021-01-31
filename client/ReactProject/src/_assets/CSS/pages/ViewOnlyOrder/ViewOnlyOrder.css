@@ -9,10 +9,9 @@
     width: 50%;
     padding: 15px;
     text-align: center;  
-    font-weight: bold;
 }
 
-@media screen and (max-width:1300px) {
+@media screen and (max-width:1500px) {
     .view-order-column {
         width: 100%;
     }
@@ -27,6 +26,19 @@
     content: "";
     display: table;
     clear: both;
+}
+
+.view-order-icon {
+    cursor: pointer;
+    transition-duration: 0.2s;
+}
+
+.view-order-icon:hover {
+    color: #EB6E00;
+}
+
+.view-order-table-row>td {
+    padding-bottom: 12px;
 }
 
 
