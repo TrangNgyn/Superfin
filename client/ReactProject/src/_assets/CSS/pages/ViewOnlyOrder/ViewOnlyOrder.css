@@ -41,6 +41,13 @@
     padding-bottom: 12px;
 }
 
+.view-order-field-header {
+    width: 500px; 
+    margin: auto; 
+    text-align: left;
+    font-weight: bold;
+}
+
 
 
   
