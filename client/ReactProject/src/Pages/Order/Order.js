@@ -32,7 +32,6 @@ import POFormPart2 from './Forms/POForm/POFormPart2';
     Tidy CSS
     make search button clear custoemr fields on fail
 
-    Add live update to all fields
     Change undo edits so rather then refreshing the page, it will use orderOriginal and customerOriginal
     Instead of having 'editedCustomer' and 'editedOrder', just check if difference between current order/customer and original order/customer
 
@@ -55,31 +54,30 @@ const Order = () => {
     const { po_number } = useParams();      
 
     const [order, setOrder] = useState(getMockOrder(po_number));
-    //const [orderOriginal, setOrderOriginal] = useState(order);
+    const [orderOriginal, setOrderOriginal] = useState(order);
     const [customer, setCustomer] = useState(getCustomer(order.c_email));
-   // const [customerOriginal, setCustomerOriginal] = useState(customer);
+    const [customerOriginal, setCustomerOriginal] = useState(customer);
+
+
     
 
+    
+    
     const [mode, setMode] = useState(getMode());
     const [editedOrder, setEditedOrder] = useState(false);
     const [editedCustomer, setEditedCustomer] = useState(false);
     const [newItemFormVisible, setNewItemFormVisible] = useState(false);
-
+    
     const [form_1] = Form.useForm();
     const [form_2] = Form.useForm();
     const [form_3] = Form.useForm();
 
 
-    useEffect(() => {                           //for refreshing the item list
-        let items = [...order.items]
-        form_1.setFieldsValue({items: items});
+    useEffect(() => {     //for refreshing the item list
+        form_1.setFieldsValue({items: [...order.items]}); 
     })
 
     
-
-
-
-
     const handleSubmit = () => {                    //validates all of the form fields
             if(order.items.length > 0){
                 const promise_1 = form_1.validateFields();
@@ -120,12 +118,14 @@ const Order = () => {
                 newObj.items = tempArray;   
         
                 setOrder(newObj);
+                setOrderOriginal(newObj);
                 setEditedOrder(false);
             }
             if(editedCustomer){
                 console.log("submitting customer details", values[1]);
 
                 setCustomer(values[1]);
+                setCustomerOriginal(values[1]);
                 setEditedCustomer(false);
             }
         }
@@ -185,43 +185,22 @@ const Order = () => {
 
     //toggles the edit view
     const toggleView = () => {
-        console.log(order);
         if(mode===MODE.VIEW) setMode(MODE.EDIT);
         else setMode(MODE.VIEW);
     }
 
-    //not finished. Updates the state as soon as user leaves a field.
-    /*const liveUpdate = e => {
-        const field = e.target.id;
-        const temp_order = {...order};
-        temp_order[field] = e.target.value;
-        setOrder(temp_order);
-    }*/
-
-
-    //Form initial values
-    const form_1_init_values = {
-        po_number: order.po_number,
-        c_email: order.c_email,
-        issued_date: order.issued_date,
-        status: order.status,
-        tracking_number: order.tracking_number,
-        carrier: order.carrier,
+    const resetForms = () => {
+        form_1.resetFields();
+        form_2.resetFields();
+        setOrder(orderOriginal);
     }
 
-    const form_2_init_values = {
-        email: customer.email,
-        first_name: customer.first_name,
-        last_name: customer.last_name,
-        po_attention_to: customer.po_attention_to,
-        po_address_line1: customer.po_address_line1,
-        po_address_line2: customer.po_address_line2,
-        po_suburb: customer.po_suburb,
-        po_state: customer.po_state,
-        po_postal_code: customer.po_postal_code,
-        po_country: customer.po_country,
-        mobile_number: customer.mobile_number
-    }
+    
+
+    
+
+    
+    
     
     //props
     const addItemModal_props = {
@@ -233,21 +212,28 @@ const Order = () => {
 
     const customerForm_props = {
         onChange: setEditedCustomer,
-        initialValues: form_2_init_values,
-        form: form_2
+        customerOriginal: customerOriginal,
+        customer: customer,
+        setCustomer: setCustomer,
+        form: form_2,
     }
+
+  
 
     const poFormPart1props = {
         onChange: setEditedOrder,
         order: order,
+        orderOriginal: orderOriginal,
+        setOrder: setOrder,
         mode: mode,
         form: form_1,
-        initialValues: form_1_init_values,
         onSearch: autoFillEmail
     }
 
+    
     const poFormPart_2_props = {
         order: order,
+        orderOriginal: orderOriginal,
         mode: mode,
         form: form_1,
         onChange: setEditedOrder,
@@ -256,11 +242,12 @@ const Order = () => {
         setOrder: setOrder
     }
 
+    
 
 
 
 
-
+    
     //button for toggling edit mode
     const toggleButton = (
         <div style={{ margin: "30px", textAlign: "center"}}>
@@ -279,7 +266,7 @@ const Order = () => {
             </div>
             
             <div style={{ margin: "30px"}}>
-                <Button onClick={() => {window.location.reload()}} style={{width: "500px", fontWeight: "bold"}}>Undo Edits</Button>
+                <Button onClick={resetForms} style={{width: "500px", fontWeight: "bold"}}>Undo Changes</Button>
             </div>
         </div>
     );
@@ -332,7 +319,10 @@ const Order = () => {
 
             <AddItemModal {...addItemModal_props} />
         </div>
-    );
+    
+    )
+
+
 }
 
 export default Order;

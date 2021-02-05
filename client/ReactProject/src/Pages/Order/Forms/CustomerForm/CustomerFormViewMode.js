@@ -1,4 +1,5 @@
 const CustomerFormViewMode = props => {
+    console.log(props.customer.state);
     return (
         <>
             <div className="view-order-field-header">First Name</div>
@@ -20,7 +21,7 @@ const CustomerFormViewMode = props => {
             <div className="view-order-field-header" style={{paddingBottom: "20px", fontWeight: "normal"}}>{props.customer.po_suburb}</div>
 
             <div className="view-order-field-header">State</div>
-            <div className="view-order-field-header" style={{paddingBottom: "20px", fontWeight: "normal"}}>{props.customer.state}</div>
+            <div className="view-order-field-header" style={{paddingBottom: "20px", fontWeight: "normal"}}>{props.customer.po_state}</div>
 
             <div className="view-order-field-header">Post Code</div>
             <div className="view-order-field-header" style={{paddingBottom: "20px", fontWeight: "normal"}}>{props.customer.po_postal_code}</div>

@@ -1,14 +1,51 @@
 import { onlyNumbers } from '../../Helpers/NumberOnlyFunctions';
-import { Form, Input, Tooltip } from 'antd';
+import { Form, Input, Tooltip, Button} from 'antd';
 
 const CustomerForm = props => {
+
+    console.log("Reander Customer Form");
+
+
+    const updateCustomer = e => {
+        const field = e.target.id;
+        if(props.customer[field] !== e.target.value){
+            const temp_customer = {...props.customer};
+            temp_customer[field] = e.target.value;
+            props.setCustomer(temp_customer); 
+        }      
+    }
+
+
+    const initialValues = {
+        email: props.customerOriginal.email,
+        first_name: props.customerOriginal.first_name,
+        last_name: props.customerOriginal.last_name,
+        po_attention_to: props.customerOriginal.po_attention_to,
+        po_address_line1: props.customerOriginal.po_address_line1,
+        po_address_line2: props.customerOriginal.po_address_line2,
+        po_suburb: props.customerOriginal.po_suburb,
+        po_state: props.customerOriginal.po_state,
+        po_postal_code: props.customerOriginal.po_postal_code,
+        po_country: props.customerOriginal.po_country,
+        mobile_number: props.customerOriginal.mobile_number
+    }
+
+
+
+
+        
+
+ 
+
+    
     return(
+        <>
         <Tooltip
             trigger={['focus']}
             title="Please be aware that when applied to an existing customer email, editing the right hand fields will edit that customer's actual profile"
-            placement="topLeft"
+            placement="topRight"
         >
-            <Form onChange={() => { props.onChange(true)}} initialValues={props.initialValues} form={props.form}>
+            <Form onBlur={updateCustomer} onChange={() => { props.onChange(true)}} initialValues={initialValues} form={props.form} >
                     <Form.Item hidden name="email"><Input/></Form.Item>  
 
                     <div className="view-order-field-header">First Name</div>
@@ -25,7 +62,7 @@ const CustomerForm = props => {
                         <Input maxLength={100} style={{width: "500px"}} />
                     </Form.Item>
         
-                    <div className="view-order-field-header">Last Name</div>
+                   {} <div className="view-order-field-header">Last Name</div>
                     <Form.Item 
                         name="last_name"
                         rules={[
@@ -122,7 +159,7 @@ const CustomerForm = props => {
                         <Input maxLength={100} style={{width: "500px"}} />
                     </Form.Item>
 
-                    <div className="view-order-field-header">Phone Number</div>
+                     <div className="view-order-field-header">Phone Number</div>
                     <Form.Item 
                         name="mobile_number"
                         rules={[
@@ -140,6 +177,7 @@ const CustomerForm = props => {
                     </Form.Item>
                 </Form>
         </Tooltip>
+        </>
     );
 }
 

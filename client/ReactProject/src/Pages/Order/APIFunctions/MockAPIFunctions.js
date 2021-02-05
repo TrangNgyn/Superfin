@@ -47,7 +47,7 @@ export const getMockOrder = po_number => {
     if(po_number === "123abc") return order;
 
 
-    return {items: []};
+    return {items:[]};
 }
 
 export const getCustomer = c_email => {
