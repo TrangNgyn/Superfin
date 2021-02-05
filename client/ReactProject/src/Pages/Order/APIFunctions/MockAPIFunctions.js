@@ -1,10 +1,12 @@
 import moment from 'moment';
 
+//sets the product names in the item list
 export const getItemName = item_code => {
     //search for the name using item_code
     return "Product Name" + item_code;
 }
 
+//retuns a fake PO order if it is found
 export const getMockOrder = po_number => {
     //Do a check to make sure the po_number can be found
     const order = {
@@ -40,16 +42,14 @@ export const getMockOrder = po_number => {
 
     order.issued_date = moment(order.issued_date);
 
-    order.items.forEach(i => {
-        i.item_name = getItemName(i.item_code);
-    });
+    order.items.forEach(i => { i.item_name = getItemName(i.item_code) });
 
     if(po_number === "123abc") return order;
-
 
     return {items:[]};
 }
 
+//returns  fake customer if the PO order.c_email is found
 export const getCustomer = c_email => {
     //do a check to make sure the customer can be found
     const email = {
@@ -70,6 +70,7 @@ export const getCustomer = c_email => {
     return {};
 }
 
+//checks if the purchase order number is unique
 export const poNumberUnique = po_number => {
     if(po_number === "123abc") return false;
     return true;

@@ -1,10 +1,11 @@
 import MODE from '../../Helpers/PageConstants';
-import { poNumberUnique } from '../../APIFunctions/MockAPIFunctions';
-import { Form, Input, DatePicker, Select, Button } from 'antd';
+import { poNumberUnique, getCustomer } from '../../APIFunctions/MockAPIFunctions';
+import { emailDoesNotExist } from '../../Helpers/Modals';
+import { Form, Input, DatePicker, Select } from 'antd';
 
 const POFormPart1 = props => {
 
-    console.log("Reander POForm Part 1");
+    //These update functions update the order state when edits are made
     const updateOrderText = e => {
         const field = e.target.id;
         if(props.order[field] !== e.target.value){
@@ -26,6 +27,18 @@ const POFormPart1 = props => {
         props.setOrder(temp_order);
     }
 
+    //Auto fills customer details if email exists
+    const autoFillEmail = c_email => {
+        if(c_email !== ""){
+            const cust = getCustomer(c_email);
+            if(Object.keys(cust).length !== 0 || cust.constructor !== Object) props.form_2.setFieldsValue(cust);
+            else{
+                emailDoesNotExist();
+                props.form_2.resetFields();
+            } 
+        }
+    }
+
     const initialValues = {
         po_number: props.orderOriginal.po_number,
         c_email:  props.orderOriginal.c_email,
@@ -36,11 +49,7 @@ const POFormPart1 = props => {
         items: props.orderOriginal.items 
     }
 
-  
-    
-    
-    
-
+    //First section of the form if in edit mode
     const section_1_a = (
         <>
             <div className="view-order-field-header">Purchase Order Number</div>
@@ -52,7 +61,8 @@ const POFormPart1 = props => {
             <Form.Item hidden name="c_email"><Input/></Form.Item> 
         </>
     );
-
+    
+    //First section of the form if in add mode
     const section_1_b = (
         <>
             <div className="view-order-field-header">Purchase Order Number</div>
@@ -90,7 +100,7 @@ const POFormPart1 = props => {
             >
                 <Input.Search 
                     placeholder="Search existing customer to auto-fill details"
-                    onSearch={props.onSearch}
+                    onSearch={autoFillEmail}
                     maxLength={100} 
                     style={{width: "500px"}}
                 />  
@@ -98,24 +108,14 @@ const POFormPart1 = props => {
         </>
     );
 
-
-
-
-
-    
-
     return(
-        <>
-        <Form onChange={() => {props.onChange(true)}} initialValues={initialValues} form = {props.form} >
+        <Form initialValues={initialValues} form = {props.form} >
             {props.mode === MODE.EDIT   ?   section_1_a   :   <></>}
             {props.mode === MODE.ADD    ?   section_1_b   :   <></>}
 
             <div className="view-order-field-header">Issue Date</div>
             <Form.Item name="issued_date">
-                    <DatePicker onChange={(value) => {
-                        props.onChange(true);
-                        updateOrderDate(value);
-                    }} format="DD/MM/YYYY" style={{width: "500px"}} />
+                    <DatePicker onChange={updateOrderDate} format="DD/MM/YYYY" style={{width: "500px"}} />
             </Form.Item>
 
             <div className="view-order-field-header">Status</div>
@@ -129,10 +129,7 @@ const POFormPart1 = props => {
                     }
                 ]}
             >
-                <Select onChange={(value) => { 
-                        props.onChange(true);
-                        updateOrderSelect(value);
-                    }} style={{width: "500px", textAlign: "left"}}>
+                <Select onChange={updateOrderSelect} style={{width: "500px", textAlign: "left"}}>
                     <Select.Option value="New">New</Select.Option>                         
                     <Select.Option value="On Hold">On Hold</Select.Option>
                     <Select.Option value="In Transit">In Transit</Select.Option>
@@ -150,8 +147,6 @@ const POFormPart1 = props => {
                 <Input onBlur={updateOrderText} maxLength={100} style={{width: "500px"}}/>
             </Form.Item>    
         </Form>
-   
-        </>
     );
 }
 

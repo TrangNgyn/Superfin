@@ -1,7 +1,9 @@
 import { ExclamationCircleOutlined} from '@ant-design/icons';
 import NewItemForm from '../Forms/NewItemForm/NewItemForm';
+import { getItemName } from '../APIFunctions/MockAPIFunctions';
 import { Modal } from 'antd';
 
+//Appears when confirming a delete on a PO item
 export const showDeleteConfirm = (index, deleteOrderItem) => {
     Modal.confirm({
         title: 'Warning!',
@@ -10,8 +12,7 @@ export const showDeleteConfirm = (index, deleteOrderItem) => {
         okText: 'Delete',
         cancelText: 'No',
 
-        onOk() { deleteOrderItem(index) },
-        onCancel() { console.log('Cancel delete order') },
+        onOk() { deleteOrderItem(index) }
     });
 }
 
@@ -24,8 +25,7 @@ export const showNoItemsPresent = setNewItemFormVisible => {
         okText: 'Add Item',
         cancelText: 'Back',
 
-        onOk() { setNewItemFormVisible(true) },
-        onCancel() { console.log('Not adding an item') },
+        onOk() { setNewItemFormVisible(true) }
     });
 }
 
@@ -38,11 +38,11 @@ export const showNoItemsPresent = setNewItemFormVisible => {
         okText: 'Submit',
         cancelText: 'Cancel',
 
-        onOk() { confirmSubmit(values) },
-        onCancel() { console.log("Cancel submit") }
+        onOk() { confirmSubmit(values) }
     });
 }
 
+//Appears when email can't be found in PO form part 1
 export const emailDoesNotExist = () => {
     Modal.info({
         title: 'Email does not exist',
@@ -50,9 +50,38 @@ export const emailDoesNotExist = () => {
     });
 }
 
+//Modal/form for adding new items to the PO
 export const AddItemModal = props => {
+
+    //adds an item after validating and updates the state
+    const addItem = () => {
+        props.form.validateFields()
+            .then((new_item) => {
+
+                new_item.item_name = getItemName(new_item.item_code);
+                const new_items = [...props.order.items];
+                new_items.unshift(new_item);
+
+                const new_order = {...props.order};
+                new_order.items = new_items;
+
+                props.setOrder(new_order);
+                props.setNewItemFormVisible(false);
+                props.form.resetFields();
+            })
+            .catch((errorInfo) => {
+                console.log(errorInfo);
+            })
+    }
+
+    //resets the fields of the addItem form
+    const cancelAddItem = () => {
+        props.form.resetFields();
+        props.setNewItemFormVisible(false);
+    }
+
     return(
-            <Modal title="Add Item" visible={props.visible} onOk={props.onOk} onCancel={props.onCancel}>
+            <Modal title="Add Item" visible={props.visible} onOk={addItem} onCancel={cancelAddItem}>
                 <NewItemForm form={props.form} />
             </Modal>
     );

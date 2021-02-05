@@ -1,18 +1,16 @@
-import '../../_assets/CSS/pages/ViewOnlyOrder/ViewOnlyOrder.css';
+import '../../_assets/CSS/pages/Order/Order.css';
 import { Form, Button } from 'antd';
-
 import { getItemName, getMockOrder, getCustomer } from './APIFunctions/MockAPIFunctions'; //These functions will need to be real in future
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { history } from '../../_helpers/history';
 import MODE from './Helpers/PageConstants';
-import { showNoItemsPresent, showEditConfirmation, emailDoesNotExist, AddItemModal} from './Helpers/Modals';
+import { showNoItemsPresent, showEditConfirmation, AddItemModal} from './Helpers/Modals';
 import CustomerForm from './Forms/CustomerForm/CustomerForm';
 import CustomerFormViewMode from './Forms/CustomerForm/CustomerFormViewMode';
 import POFormPart1 from './Forms/POForm/POFormPart1';
 import POFormPart1ViewMode from './Forms/POForm/POFormPart1ViewMode';
 import POFormPart2 from './Forms/POForm/POFormPart2';
-
 
 //IMPORTANT
 /*
@@ -23,29 +21,9 @@ import POFormPart2 from './Forms/POForm/POFormPart2';
     Add limit to number of items allowed in order?
 */
 
-
-/*
-    IF TIME
-    
-    Thoroughly test
-    Tidy code
-    Tidy CSS
-    make search button clear custoemr fields on fail
-
-    Change undo edits so rather then refreshing the page, it will use orderOriginal and customerOriginal
-    Instead of having 'editedCustomer' and 'editedOrder', just check if difference between current order/customer and original order/customer
-
-*/
-
-
-
-
-
-
-
-
 const Order = () => {
 
+    //determines the initial MODE of the page
     const getMode = () => {
         if(order.hasOwnProperty('po_number')) return MODE.VIEW;
         return MODE.ADD;
@@ -57,28 +35,20 @@ const Order = () => {
     const [orderOriginal, setOrderOriginal] = useState(order);
     const [customer, setCustomer] = useState(getCustomer(order.c_email));
     const [customerOriginal, setCustomerOriginal] = useState(customer);
-
-
-    
-
-    
-    
     const [mode, setMode] = useState(getMode());
-    const [editedOrder, setEditedOrder] = useState(false);
-    const [editedCustomer, setEditedCustomer] = useState(false);
     const [newItemFormVisible, setNewItemFormVisible] = useState(false);
     
     const [form_1] = Form.useForm();
     const [form_2] = Form.useForm();
     const [form_3] = Form.useForm();
 
-
-    useEffect(() => {     //for refreshing the item list
+    //for refreshing the item list
+    useEffect(() => {     
         form_1.setFieldsValue({items: [...order.items]}); 
     })
 
-    
-    const handleSubmit = () => {                    //validates all of the form fields
+    //validates all of the form fields
+    const handleSubmit = () => {                    
             if(order.items.length > 0){
                 const promise_1 = form_1.validateFields();
                 const promise_2 = form_2.validateFields();
@@ -86,7 +56,6 @@ const Order = () => {
                 Promise.all([promise_1, promise_2])
                 .then(values => {
                     showEditConfirmation(values, confirmSubmit);
-                    console.log(values);
                 })
                 .catch(errorInfo => {
                     console.log(errorInfo);
@@ -95,17 +64,21 @@ const Order = () => {
             else showNoItemsPresent(setNewItemFormVisible);
     }
 
+    //after validating fields, this function submits the forms
     const confirmSubmit = (values) => {
+        const editedCustomer = JSON.stringify(customer) !== JSON.stringify(customerOriginal);
+        const editedOrder = JSON.stringify(order) !== JSON.stringify(orderOriginal);
+
         if(mode===MODE.ADD){
             console.log("submitting order details in add mode", values[0]);
        
             if(editedCustomer){
                 values[1].email = values[0].c_email;
-                console.log("submitting customer details", values[1]);
+                console.log("submitting customer details in add mode", values[1]);
             } 
 
             history.push(`/order/${values[0].po_number}`);             //relocate to edit page
-            //window.location.reload();
+            window.location.reload();
         }
         else if(mode===MODE.EDIT){
             if(editedOrder){
@@ -119,68 +92,15 @@ const Order = () => {
         
                 setOrder(newObj);
                 setOrderOriginal(newObj);
-                setEditedOrder(false);
+   
             }
             if(editedCustomer){
-                console.log("submitting customer details", values[1]);
+                console.log("submitting customer details in edit mode", values[1]);
 
                 setCustomer(values[1]);
                 setCustomerOriginal(values[1]);
-                setEditedCustomer(false);
             }
         }
-    }
-
-    
-    //function that removes item from order and updates the state
-    const deleteOrderItem = index => {
-        const new_items = [...order.items];
-        new_items.splice(index, 1);
-
-        const new_order = {...order};
-        new_order.items = new_items;
-        
-        console.log(new_order);
-        setOrder(new_order);
-        setEditedOrder(true);
-    }
-
-    //adds an item after validating and updates the state
-    const addItem = () => {
-        form_3.validateFields()
-            .then((new_item) => {
-                console.log("Adding item", new_item);
-
-                new_item.item_name = getItemName(new_item.item_code);
-                const new_items = [...order.items];
-                new_items.unshift(new_item);
-
-                const new_order = {...order};
-                new_order.items = new_items;
-
-                setOrder(new_order);
-                setEditedOrder(true);
-                setNewItemFormVisible(false);
-                form_3.resetFields();
-            })
-            .catch((errorInfo) => {
-                //catch error 
-                console.log(errorInfo);
-            })
-    }
-
-    //resets the fields of the addItem form
-    const cancelAddItem = () => {
-        form_3.resetFields();
-        setNewItemFormVisible(false);
-    }
-
-
-    //Auto fills customer details if email exists
-    const autoFillEmail = c_email => {
-        const cust = getCustomer(c_email);
-        if(Object.keys(cust).length !== 0 || cust.constructor !== Object) form_2.setFieldsValue(cust);
-        else emailDoesNotExist();
     }
 
     //toggles the edit view
@@ -189,65 +109,51 @@ const Order = () => {
         else setMode(MODE.VIEW);
     }
 
+    //resets the fields to original values
     const resetForms = () => {
-        form_1.resetFields();
-        form_2.resetFields();
-        setOrder(orderOriginal);
+        if(JSON.stringify(customer) !== JSON.stringify(customerOriginal)){
+            form_2.resetFields();
+        }
+        if(JSON.stringify(order) !== JSON.stringify(orderOriginal)){
+            form_1.resetFields();
+            setOrder(orderOriginal);
+        }  
     }
 
-    
-
-    
-
-    
-    
-    
-    //props
+    //props for child components 
     const addItemModal_props = {
-        onOk:addItem,
-        onCancel:cancelAddItem,
-        visible:newItemFormVisible,
-        form:form_3
+        order: order,
+        setOrder: setOrder,
+        visible: newItemFormVisible,
+        setNewItemFormVisible: setNewItemFormVisible,
+        form: form_3
     }
 
     const customerForm_props = {
-        onChange: setEditedCustomer,
         customerOriginal: customerOriginal,
         customer: customer,
         setCustomer: setCustomer,
         form: form_2,
     }
 
-  
-
     const poFormPart1props = {
-        onChange: setEditedOrder,
         order: order,
         orderOriginal: orderOriginal,
         setOrder: setOrder,
         mode: mode,
         form: form_1,
-        onSearch: autoFillEmail
+        form_2: form_2
     }
 
-    
     const poFormPart_2_props = {
         order: order,
         orderOriginal: orderOriginal,
         mode: mode,
         form: form_1,
-        onChange: setEditedOrder,
         onClick: setNewItemFormVisible,
-        deleteOrderItem: deleteOrderItem,
         setOrder: setOrder
     }
 
-    
-
-
-
-
-    
     //button for toggling edit mode
     const toggleButton = (
         <div style={{ margin: "30px", textAlign: "center"}}>
@@ -255,32 +161,21 @@ const Order = () => {
         </div>
     );
     
-
     //submit and undo buttons
     const submitUndoButtons = (
         <div style={{textAlign: "center"}}>
             <div>  
                 <Button type="primary" onClick={() => {
-                    if(editedOrder || editedCustomer) handleSubmit();
+                    if(JSON.stringify(customer) !== JSON.stringify(customerOriginal) || JSON.stringify(order) !== JSON.stringify(orderOriginal)) handleSubmit();
                 }} style={{width: "500px", fontWeight: "bold"}}>Submit Details</Button>
             </div>
             
-            <div style={{ margin: "30px"}}>
+            <div style={{ paddingTop: "30px", paddingBottom: "30px"}}>
                 <Button onClick={resetForms} style={{width: "500px", fontWeight: "bold"}}>Undo Changes</Button>
             </div>
         </div>
     );
     
-   
-
-
-
-
-
-
-
-
-
     //HTML Main
     return (
         <div>
@@ -319,10 +214,7 @@ const Order = () => {
 
             <AddItemModal {...addItemModal_props} />
         </div>
-    
     )
-
-
 }
 
 export default Order;

@@ -1,3 +1,4 @@
+//Event handler that only allows numbers as input
 export const onlyNumbers = (e, form, field, index, subfield) => {
     const reg = /^[0-9]*$/;
     const str = e.target.value;
@@ -19,6 +20,7 @@ export const onlyNumbers = (e, form, field, index, subfield) => {
     form.setFieldsValue(field_obj);
 }
 
+//Removes characters that are not numbers from a string
 export const makeNumber = str => {
     for(let i = 0; i < str.length; i++){
         if(isNaN(str[i]) || str[i]===" "){

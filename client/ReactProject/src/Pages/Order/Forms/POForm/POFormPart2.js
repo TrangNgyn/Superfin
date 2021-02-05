@@ -1,18 +1,29 @@
 import MODE from '../../Helpers/PageConstants';
-import { Form, Input, Button } from 'antd';
+import { Form, Input } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import { onlyNumbers } from '../../Helpers/NumberOnlyFunctions';
 import { showDeleteConfirm } from '../../Helpers/Modals';
 
 const POFormPart2 = props => {
-    console.log("Reander POForm Part 2");
 
+    //updates the order state when changes are made
     const updateOrder = () => {
         if(JSON.stringify(props.order.items) !== JSON.stringify(props.form.getFieldValue('items'))){
             const temp_order = {...props.order};
             temp_order.items = props.form.getFieldValue('items');
             props.setOrder(temp_order);
         }
+    }
+
+    //deletes specific order items
+    const deleteOrderItem = index => {
+        const new_items = [...props.order.items];
+        new_items.splice(index, 1);
+
+        const new_order = {...props.order};
+        new_order.items = new_items;
+        
+        props.setOrder(new_order);
     }
 
     const initialValues = {
@@ -25,68 +36,62 @@ const POFormPart2 = props => {
         items: props.orderOriginal.items 
     }
 
-
+    //Dynamic production of item forms
     const itemRow = props.order.items.map((item, index) => {
-            return (
-                <tr key = {item.item_code} className="view-order-table-row">
-                    <td>{item.item_name}</td>
-                
-                    <td>
-                        {item.item_code}
-                        <Form.Item hidden name={['items', index, 'item_code']} initialValue="hello"><Input /></Form.Item>
-                    </td>
-    
-                    <td>
-                        {props.mode===MODE.EDIT || props.mode===MODE.ADD
-                            ?   <Form.Item 
-                                    name={['items', index, 'quantity']}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            validateTrigger: 'onSubmit',
-                                            message: 'Please input a required quantity',
-                                        },
-                                        {
-                                            validateTrigger: 'onSubmit',
-                                            validator: async (_, value) => {
-                                                if (Number(value) === 0){
-                                                    return Promise.reject(new Error("Cannot have value of 0"));
-                                                } 
-                                            }
-                                        }
-                                    ]}  
-                                >
-                                    <Input maxLength={4} onChange={e => onlyNumbers(e, props.form, "items", index, 'quantity')} style={{width: "50px"}} />
-                                </Form.Item>
-                            :   item.quantity                    
-                        } 
-                    </td>
-    
-                    <td>
-                        {props.mode===MODE.EDIT || props.mode===MODE.ADD
-                            ?   <Form.Item name ={['items', index, 'special_requirements']}>
-                                    <Input.TextArea maxLength={500} style={{width: "500px"}} />
-                                </Form.Item>
-                            :   item.special_requirements
-                        } 
-                    </td>
+        return (
+            <tr key = {item.item_code} className="view-order-table-row">
+                <td>{item.item_name}</td>
+            
+                <td>
+                    {item.item_code}
+                    <Form.Item hidden name={['items', index, 'item_code']} initialValue="hello"><Input /></Form.Item>
+                </td>
+
+                <td>
                     {props.mode===MODE.EDIT || props.mode===MODE.ADD
-                        ?   <td onClick={() => showDeleteConfirm(index, props.deleteOrderItem)}><DeleteOutlined className="view-order-icon"/></td> 
-                        :   <></>
-                    }     
-                </tr>
-            ); 
-        })
-    
+                        ?   <Form.Item 
+                                name={['items', index, 'quantity']}
+                                rules={[
+                                    {
+                                        required: true,
+                                        validateTrigger: 'onSubmit',
+                                        message: 'Please input a required quantity',
+                                    },
+                                    {
+                                        validateTrigger: 'onSubmit',
+                                        validator: async (_, value) => {
+                                            if (Number(value) === 0){
+                                                return Promise.reject(new Error("Cannot have value of 0"));
+                                            } 
+                                        }
+                                    }
+                                ]}  
+                            >
+                                <Input maxLength={4} onChange={e => onlyNumbers(e, props.form, "items", index, 'quantity')} style={{width: "50px"}} />
+                            </Form.Item>
+                        :   item.quantity                    
+                    } 
+                </td>
 
+                <td>
+                    {props.mode===MODE.EDIT || props.mode===MODE.ADD
+                        ?   <Form.Item name ={['items', index, 'special_requirements']}>
+                                <Input.TextArea maxLength={500} style={{width: "500px"}} />
+                            </Form.Item>
+                        :   item.special_requirements
+                    } 
+                </td>
+                {props.mode===MODE.EDIT || props.mode===MODE.ADD
+                    ?   <td onClick={() => showDeleteConfirm(index, deleteOrderItem)}><DeleteOutlined className="view-order-icon"/></td> 
+                    :   <></>
+                }     
+            </tr>
+        ); 
+    })
 
-     //For rendering the individual rows in the item list
-
-   
-    
     return(
-        <Form initialValues={initialValues} onChange={() => { props.onChange(true)}} onBlur={updateOrder} form={props.form}>
-            <table style={{width:"100%", textAlign: "center", tableLayout: "fixed"}}>
+        <Form initialValues={initialValues} onBlur={updateOrder} form={props.form}>
+            <table id="view-order-table-wrapper">
                 <tbody>
                     <tr style = {{border: "solid black 1px"}}>
                         <th>Product Name</th>

@@ -1,11 +1,9 @@
 import { onlyNumbers } from '../../Helpers/NumberOnlyFunctions';
-import { Form, Input, Tooltip, Button} from 'antd';
+import { Form, Input, Tooltip } from 'antd';
 
 const CustomerForm = props => {
 
-    console.log("Reander Customer Form");
-
-
+    //updates the customer state when ever edits are made
     const updateCustomer = e => {
         const field = e.target.id;
         if(props.customer[field] !== e.target.value){
@@ -14,7 +12,6 @@ const CustomerForm = props => {
             props.setCustomer(temp_customer); 
         }      
     }
-
 
     const initialValues = {
         email: props.customerOriginal.email,
@@ -30,22 +27,13 @@ const CustomerForm = props => {
         mobile_number: props.customerOriginal.mobile_number
     }
 
-
-
-
-        
-
- 
-
-    
     return(
-        <>
         <Tooltip
             trigger={['focus']}
             title="Please be aware that when applied to an existing customer email, editing the right hand fields will edit that customer's actual profile"
             placement="topRight"
         >
-            <Form onBlur={updateCustomer} onChange={() => { props.onChange(true)}} initialValues={initialValues} form={props.form} >
+            <Form onBlur={updateCustomer} initialValues={initialValues} form={props.form} >
                     <Form.Item hidden name="email"><Input/></Form.Item>  
 
                     <div className="view-order-field-header">First Name</div>
@@ -62,7 +50,7 @@ const CustomerForm = props => {
                         <Input maxLength={100} style={{width: "500px"}} />
                     </Form.Item>
         
-                   {} <div className="view-order-field-header">Last Name</div>
+                    <div className="view-order-field-header">Last Name</div>
                     <Form.Item 
                         name="last_name"
                         rules={[
@@ -177,7 +165,6 @@ const CustomerForm = props => {
                     </Form.Item>
                 </Form>
         </Tooltip>
-        </>
     );
 }
 

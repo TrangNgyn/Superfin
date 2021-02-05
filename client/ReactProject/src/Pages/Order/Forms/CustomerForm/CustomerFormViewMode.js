@@ -1,5 +1,4 @@
 const CustomerFormViewMode = props => {
-    console.log(props.customer.state);
     return (
         <>
             <div className="view-order-field-header">First Name</div>
@@ -33,7 +32,6 @@ const CustomerFormViewMode = props => {
             <div className="view-order-field-header" style={{paddingBottom: "20px", fontWeight: "normal"}}>{props.customer.mobile_number}</div>
         </>
     );
-
 }
 
 export default CustomerFormViewMode;
