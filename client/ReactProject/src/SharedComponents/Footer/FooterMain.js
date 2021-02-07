@@ -1,29 +1,14 @@
-import '../../_assets/CSS/layouts/Footer/FooterMain.css';
 import FooterMenu from './FooterMenu';
-import FooterEmailInput from './FooterEmailInput';
-import FooterSocialMediaLinks from './FooterSocialMediaLinks';
+import FooterMenuMobile from './FooterMenuMobile';
+import FooterContent from './FooterContent';
+
 
 export default function FooterMain(){
     return (
-        <div id="footer">
+        <div>
             <FooterMenu />
-            
-            <div id="signup-text-background">
-                <div id="signup-text">SIGN UP FOR SPECIAL OFFERS</div>
-            </div>
-
-            <div id="email-input-background">
-                <FooterEmailInput />
-                <div id="support-details">
-                    <div>Email: support@supergfin.com</div>
-                    <div>Phone: 1800xxxx</div>
-                </div>
-            </div>
-
-            <div id="social-media-links-background">
-                <FooterSocialMediaLinks />
-            </div>
-
+            <FooterMenuMobile />
+            <FooterContent />
             <div id="copyright-background">©Copyright ©2020 Sungent Packaging | All rights reserved</div>
         </div>
     );
