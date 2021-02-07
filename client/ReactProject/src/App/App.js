@@ -11,12 +11,15 @@ import Homepage from '../Pages/Homepage/Homepage';
 import ContactUs from '../Pages/ContactUs/ContactUs';
 import DeliveryDispatch from '../Pages/DeliveryDispatch/DeliveryDispatch';
 import AboutUS from '../Pages/AboutUs/AboutUs';
+import TermsConditions from '../Pages/TC/termsconditions';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ResetPasswordConfirmation from '../Pages/ResetPasswordConfirmation/ResetPasswordConfirmation';
+import ReenterPassword from '../Pages/ReenterPassword/ReenterPassword'
 import CurrentOrders from '../Pages/CurrentOrders/CurrentOrders';
 import ProcessedOrders from '../Pages/ProcessedOrders/ProcessedOrders';
 import EditCompanyInfo from '../Pages/EditCompanyInfo/EditCompanyInfo';
 import ManageProducts from '../Pages/ManageProducts/ManageProducts';
+import MyAccount from '../Pages/MyAccount/MyAccount';
 
 //This is a demo Component to demonstrate Dynmaic Routing
 const Products = () => {
@@ -48,10 +51,14 @@ const App = () => (
                <Route path="/deliveryDispatch"> <DeliveryDispatch /></Route>
                <Route path="/contactUs"> <ContactUs /></Route>
                <Route path="/aboutUs"><AboutUS /></Route>  
+               <Route path="/ "><TermsConditions/></Route>  
+
                <Route path="/login"><Login /></Route>
                <Route path="/emailRequest"><EmailRequest /></Route>
                <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
+               <Route path="/reenterPassword"><ReenterPassword /></Route>
 
+               <Route path="/myAccount"><MyAccount/></Route>
                <Route path="/currentOrders"><CurrentOrders /></Route>
                <Route path="/processedOrders"><ProcessedOrders /></Route>
                

@@ -72,11 +72,8 @@ export const HomepageAdmin = () => {
                     </div>
                 </div>
             </div>
-
             <div style  = {{height:"50px"}}></div>
-        
             <Button id="homepage-admin-button-1" type="primary">View Full List</Button>
-
             <div style = {{height: "50px"}}></div> 
         </>
     );
