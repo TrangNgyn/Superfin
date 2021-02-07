@@ -24,4 +24,4 @@ export default function FooterMenu(){
             </Menu.Item>
         </Menu>
     );
-  }
+}
