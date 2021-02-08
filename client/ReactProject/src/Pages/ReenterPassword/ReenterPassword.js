@@ -18,9 +18,6 @@ const tailLayout = {
     },
 };
 
-
-
-
 const ReenterPassword = () => {
 
     const unMatchError = () => {
@@ -37,11 +34,6 @@ const ReenterPassword = () => {
         });
       }
 
-
-
-
-
-
     const onFinish = values => {
         if(values.newPassword !== values.reenterPassword) unMatchError()
         else{
@@ -53,13 +45,7 @@ const ReenterPassword = () => {
     const onFinishFailed = errorInfo => {
         console.log('Failed:', errorInfo);
     };
-
-
-
-
-
-
-    
+  
     return (
         <div>
             <div style = {{height: "5px"}}/>
@@ -69,10 +55,6 @@ const ReenterPassword = () => {
             </div>
 
             <div id="reenter-devider-1"/>
-
-
-
-
 
             <Form
                 {...layout}

@@ -3,13 +3,7 @@ import { history } from '../../_helpers/history';
 import { UserOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import image from '../../_assets/Images/Logo.png'
-
-
-
-
-
-
+import image from '../../_assets/Images/new_logo.jpg'
 
 //fake user and login check
 const fakeUser = {
@@ -17,7 +11,6 @@ const fakeUser = {
   loggedIn: false,
   userType: "GUEST"
 }
-
 
 //fake getCategories API function
 const getCategories = () => {
@@ -30,36 +23,9 @@ const getCategories = () => {
   ];
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export default function Navbar(){
 
   const [userType, setUserType] = useState(fakeUser.userType);
-
-
-
-
-
-
-
 
   const logout = () => {          //fake login logout functions
     setUserType("GUEST");
@@ -75,11 +41,6 @@ export default function Navbar(){
     setUserType("ADMIN");
     history.push('/admin');
   }
-
-
-
-
-
 
   const subCustomer = (
     <>
@@ -107,16 +68,13 @@ export default function Navbar(){
     </Menu.Item>
   );
 
-
   let subWelcome = <></>;
 
   if(userType==="CUSTOMER") subWelcome = subCustomer;
   else if(userType==="ADMIN") subWelcome = subAdmin;
 
-
   //Welcome User CUSTOMER dropdown
   const welcomeDropdown = (
-
     
     <Menu>
       {subWelcome}
@@ -126,13 +84,6 @@ export default function Navbar(){
     </Menu>
   );
   
-  
-
-
-
-
-
-
   //Fake categories API call
   const categories = getCategories();   
 
@@ -158,27 +109,6 @@ export default function Navbar(){
     </Menu>
   );  
   
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
   //Login/Welcome, User menu item that changes based on whether user is logged in or not
 
   let login = ( <Menu.Item key = "Login" onContextMenu={loginUserCustomer} onDoubleClick={loginUserAdmin} icon={<UserOutlined />} style = {{float: "right"}}>
@@ -203,9 +133,6 @@ export default function Navbar(){
       </Menu.Item>
     );
   }
-
-
-
 
   const orderDropdown = (
     <Menu>
@@ -242,10 +169,10 @@ export default function Navbar(){
           <span>Our Products</span>
         </Dropdown>
       </Menu.Item >
-    
-      <Menu.Item key="Contact" style = {{marginLeft: "30px", marginRight: "30px"}}>
-        <Link to="/contactUs"> Contact Us </Link>
-      </Menu.Item>
+
+      <Menu.Item key="Delivery">
+              <Link to="/deliveryDispatch"> Delivery and Dispatch </Link>
+            </Menu.Item>
 
       <Menu.Item key="About" style = {{marginLeft: "30px", marginRight: "30px"}}>
         <Link to="/aboutUs"> About Us </Link>
@@ -283,17 +210,6 @@ export default function Navbar(){
     );
   }
 
-
-
-
-
-
-
-
-
-
-
-
     return (
       <div>
         <Menu mode="horizontal" style={{textAlign: "center"}}>
@@ -302,13 +218,9 @@ export default function Navbar(){
                 <img src={image} style= {{ width: "100px"}} alt="Logo" />
               </Link>
             </Menu.Item >
-
             {mainMenu}
-          
             {login}
         </Menu> 
       </div>
   );
 }
-
-

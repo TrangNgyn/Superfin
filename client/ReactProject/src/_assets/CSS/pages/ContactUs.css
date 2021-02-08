@@ -24,14 +24,13 @@
   }
 }
 #contact-us-content1{
+  font-family: Helvetica;
   background: #FFFFFF;
-  border: 1px solid #000000;
   box-sizing: border-box;
 }
 #contact-us-content2{
   font-family: Helvetica;
   background: #C4C4C4;
-  border: 1px solid #000000;
   box-sizing: border-box;
   text-align: center;
   font-size:120%;
