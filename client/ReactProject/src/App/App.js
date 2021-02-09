@@ -12,7 +12,6 @@ import Cart from '../Pages/Cart/Cart';
 import ContactUs from '../Pages/ContactUs/ContactUs';
 import DeliveryDispatch from '../Pages/DeliveryDispatch/DeliveryDispatch';
 import AboutUS from '../Pages/AboutUs/AboutUs';
-import TermsConditions from '../Pages/TC/termsconditions';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ResetPasswordConfirmation from '../Pages/ResetPasswordConfirmation/ResetPasswordConfirmation';
 import ReenterPassword from '../Pages/ReenterPassword/ReenterPassword'
