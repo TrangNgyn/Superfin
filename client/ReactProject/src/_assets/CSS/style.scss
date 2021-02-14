@@ -274,13 +274,6 @@ ul.Navbar > li:nth-last-child(4) {
 /* ====================================== */
 /* =============== Footer =============== */
 /* ====================================== */
-
-div.Website-Footer {
-	position: fixed;
-	bottom: 0;
-	width: 100%;
-}
-
 ul[class*="footer-menubar"],
 ul.footer-menubar,
 ul.footer-menubar-mobile {
@@ -458,6 +451,12 @@ div.page-title-holder > h6 {
 
 	div.Website-Body {
 		margin-top: 50px;
+	}
+
+	div.Website-Footer {
+		position: fixed;
+		bottom: 0;
+		width: 100%;
 	}
 
 	div.footer-content-container > div#footer-email-input > form#footer-email-form {
