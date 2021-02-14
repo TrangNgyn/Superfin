@@ -132,9 +132,8 @@ export default function Navbar(props){
     }
 
     return (
-      <div >
-  
-        <Menu className="Navbar" onClick={(menu) => handleMenuClick(menu.key)} mode="horizontal" selectable={false}>
+      <div>
+        <Menu className="Navbar box-shadow" onClick={(menu) => handleMenuClick(menu.key)} mode="horizontal" selectable={false}>
 
             <Menu.Item key="Logo" id="Logo" selectable="false">
               <Link to="/" >

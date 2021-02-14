@@ -187,6 +187,21 @@ h6 {
 /* ====================================== */
 
 
+/* ====================================== */
+/* ========== Additional Style ========== */
+/* ====================================== */
+.box-shadow {
+	-webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+				0 3px 1px -2px rgba(0, 0, 0, 0.12),
+				0 1px 5px 0 rgba(0, 0, 0, 0.2);
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+				0 3px 1px -2px rgba(0, 0, 0, 0.12),
+				0 1px 5px 0 rgba(0, 0, 0, 0.2);
+}
+/* ====================================== */
+/* ======== End Additional Style ======== */
+/* ====================================== */
+
 
 
 /* ====================================== */
@@ -195,6 +210,11 @@ h6 {
 ul.Navbar {
 	text-align: center;
 	background-color: gray-light;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 99;
 }
 
 ul.Navbar-Mobile {
@@ -226,8 +246,40 @@ ul.Navbar > li:nth-last-child(4) {
 /* ====================================== */
 
 /* ====================================== */
+/* ================ Body ================ */
+/* ====================================== */
+.flex-horizontal-box-container,
+.flex-vertical-box-container {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.flex-horizontal-box-container {
+	flex-direction: row;
+}
+
+.flex-vertical-box-container {
+	flex-direction: column;
+}
+
+// Flex horizontal will be in 12 columns and calculated in _variables.scss
+.flex-vertical-box-container > .box-item {
+	flex: 1 1 0px;
+}
+
+/* ====================================== */
+/* ============== End Body ============== */
+/* ====================================== */
+
+/* ====================================== */
 /* =============== Footer =============== */
 /* ====================================== */
+
+div.Website-Footer {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+}
 
 ul[class*="footer-menubar"],
 ul.footer-menubar,
@@ -258,7 +310,7 @@ div.footer-content-container {
 }
 
 div.footer-content-container > div {
-	flex: 1 0 calc(100%/3); // set the flex item to grow evenly by 1 with each base on the width of 100% / 3
+	flex: 1 0 0px; // set the flex item to grow evenly by 1 with each base on the width of 100% / 3
 }
 
 div.footer-content-container > div#footer-email-input > form#footer-email-form:before {
@@ -327,6 +379,32 @@ div#copyright-background{
 
 
 /* ====================================== */
+/* ============ Page Title  ============= */
+/* ====================================== */
+
+div.page-title-holder {
+	height: 150px;
+	background-color: $orange-light;
+	text-align: center;
+}
+
+div.page-title-holder > h1,
+div.page-title-holder > h2,
+div.page-title-holder > h3,
+div.page-title-holder > h4,
+div.page-title-holder > h5,
+div.page-title-holder > h6 {
+	position: relative;
+	top: 35%;
+}
+
+
+/* ====================================== */
+/* =========== End Page Title  ========== */
+/* ====================================== */
+
+
+/* ====================================== */
 /* =========== MEDIA QUERIES ============ */
 /* ====================================== */
 
@@ -339,6 +417,10 @@ div#copyright-background{
 	ul.Navbar-Mobile,
 	ul.footer-menubar-mobile {
 		display: block;
+	}
+
+	div.Website-Body {
+		margin-top: 0;
 	}
 
 	ul[class*="footer-menubar"]:after,
@@ -355,6 +437,12 @@ div#copyright-background{
 		align-items: flex-end; // Set the details to be aligned to the right of the div
 		padding-right: 2%; // Add padding to the right to not be clashing with the main browser window
 	}
+	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
+	@for $flex-grow-width from 1 through 12 {
+		.flex-horizontal-box-container > .box-item-xs-#{$flex-grow-width} {
+			flex: $flex-grow-width 1 percentage($flex-grow-width / 12);
+		}
+	}
 }
 
 @include screen-size('sm', $breakpoints) {
@@ -368,6 +456,10 @@ div#copyright-background{
 		display: none;
 	}
 
+	div.Website-Body {
+		margin-top: 50px;
+	}
+
 	div.footer-content-container > div#footer-email-input > form#footer-email-form {
 		margin: 0 5% 0 15%;
 	}
@@ -378,6 +470,12 @@ div#copyright-background{
 
 	div.footer-content-container > div#footer-support-details > div {
 		margin: 0; // Set the margin to nothing to make them align
+	}
+	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
+	@for $flex-grow-width from 1 through 12 {
+		.flex-horizontal-box-container > .box-item-sm-#{$flex-grow-width} {
+			flex: $flex-grow-width 1 percentage($flex-grow-width / 12);
+		}
 	}
 }
 
@@ -393,14 +491,49 @@ div#copyright-background{
 	div.footer-content-container > div#footer-support-details > div {
 		margin-left: 15%; // Set margin relative to keep the design consistent
 	}
+	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
+	@for $flex-grow-width from 1 through 12 {
+		.flex-horizontal-box-container > .box-item-md-#{$flex-grow-width} {
+			flex: $flex-grow-width 1 percentage($flex-grow-width / 12);
+		}
+	}
 }
 
 @include screen-size('lg', $breakpoints) {
 	div.footer-content-container > div#footer-support-details > div {
 		margin-left: 35%; // Set margin relative to keep the design consistent
 	}
+	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
+	@for $flex-grow-width from 1 through 12 {
+		.flex-horizontal-box-container > .box-item-lg-#{$flex-grow-width} {
+			flex: $flex-grow-width 1 percentage($flex-grow-width / 12);
+		}
+	}
 }
 
 /* ====================================== */
 /* =========== END MEDIA QUERIES ======== */
+/* ====================================== */
+
+
+/* ====================================== */
+/* ============ Contact Us Page ========= */
+/* ====================================== */
+div#contact-us-content > div {
+	border: 1px solid #000000;
+	padding: 20px;
+}
+
+div#contact-us-content > div:nth-child(1) > form > div:nth-last-child(1) {
+	margin-top: 12px;
+	text-align: center;
+}
+
+div#contact-us-content > div:nth-child(2) {
+	background-color: $gray-light;
+	text-align: center;
+}
+
+/* ====================================== */
+/* ========== End Contact Us Page ======= */
 /* ====================================== */

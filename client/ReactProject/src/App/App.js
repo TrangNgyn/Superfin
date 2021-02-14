@@ -1,4 +1,5 @@
 import './App.less';
+import '../_assets/CSS/style.scss'
 //import Homepage from '../Pages/Homepage/Homepage';
 import AddEditProduct from '../Pages/AddEditProduct/AddEditProduct';
 import Navbar from '../SharedComponents/Navbar/Navbar';
@@ -30,43 +31,41 @@ const Products = () => {
 }
 
 const App = () => (
-   <div>
-      <Router history = {history}>
-         <div className="Website-Header">
-            <Navbar />
-         </div>
+   <Router history = {history}>
+      <div className="Website-Header">
+         <Navbar />
+      </div>
 
-         <div className="Website-Body" >
-            <Switch>
-           
-               <Route exact path="/"><Homepage /></Route>
-               <Route exact path="/products"> <Products /></Route>
-               <Route exact path="/products/:browseBy"><Products /></Route> 
-               <Route path="/products/:browseBy/:browseByGroup"><Products /></Route> 
+      <div className="Website-Body" >
+         <Switch>
+        
+            <Route exact path="/"><Homepage /></Route>
+            <Route exact path="/products"> <Products /></Route>
+            <Route exact path="/products/:browseBy"><Products /></Route> 
+            <Route path="/products/:browseBy/:browseByGroup"><Products /></Route> 
 
-               <Route path="/deliveryDispatch"> <DeliveryDispatch /></Route>
-               <Route path="/contactUs"> <ContactUs /></Route>
-               <Route path="/aboutUs"><AboutUS /></Route>  
-               <Route path="/login"><Login /></Route>
-               <Route path="/emailRequest"><EmailRequest /></Route>
-               <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
+            <Route path="/deliveryDispatch"> <DeliveryDispatch /></Route>
+            <Route path="/contactUs"> <ContactUs /></Route>
+            <Route path="/aboutUs"><AboutUS /></Route>  
+            <Route path="/login"><Login /></Route>
+            <Route path="/emailRequest"><EmailRequest /></Route>
+            <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
 
-               <Route path="/currentOrders"><CurrentOrders /></Route>
-               <Route path="/processedOrders"><ProcessedOrders /></Route>
-               
-               <Route path="/editCompanyInformation"><EditCompanyInfo /></Route>                 
-               <Route path="/manageProducts"><ManageProducts /></Route>
+            <Route path="/currentOrders"><CurrentOrders /></Route>
+            <Route path="/processedOrders"><ProcessedOrders /></Route>
+            
+            <Route path="/editCompanyInformation"><EditCompanyInfo /></Route>                 
+            <Route path="/manageProducts"><ManageProducts /></Route>
 
-               <Route exact path="/editAddProducts"><AddEditProduct /></Route>
-               <Route path="/editAddProducts/:_id"><AddEditProduct /></Route>
-            </Switch>
-         </div>
+            <Route exact path="/editAddProducts"><AddEditProduct /></Route>
+            <Route path="/editAddProducts/:_id"><AddEditProduct /></Route>
+         </Switch>
+      </div>
 
-         <div className="Website-Footer">
-            <FooterMain />
-         </div>  
-      </Router>
-   </div>
+      <div className="Website-Footer box-shadow">
+         <FooterMain />
+      </div>  
+   </Router>
 );
 
 export default App;
