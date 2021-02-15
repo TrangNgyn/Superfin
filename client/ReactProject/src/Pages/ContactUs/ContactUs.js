@@ -30,7 +30,7 @@ const ContactUs = () =>{
   const {inputs, handleInputChange, handleSubmit} = useContactUs();
   return (
       <>
-      <div className="page-title-holder">
+      <div className="page-title-holder fill center-text">
         <h2>We'd love to hear from you</h2>
       </div>
       <div className="flex-horizontal-box-container" id="contact-us-content">

@@ -375,22 +375,71 @@ div#copyright-background{
 /* ============ Page Title  ============= */
 /* ====================================== */
 
-div.page-title-holder {
+.page-title-holder {
 	height: 150px;
+}
+
+.page-title-holder.fill {
 	background-color: $orange-light;
+}
+
+.page-title-holder.center-text {
 	text-align: center;
 }
 
-div.page-title-holder > h1,
-div.page-title-holder > h2,
-div.page-title-holder > h3,
-div.page-title-holder > h4,
-div.page-title-holder > h5,
-div.page-title-holder > h6 {
+.page-title-holder.with-divider {
+	border-bottom: 1px solid #B7B7B7;
+	position: relative;
+}
+
+.page-title-holder.center-page {
+	margin: 0 25% auto;
+}
+
+.page-title-holder > h1,
+.page-title-holder > h2,
+.page-title-holder > h3,
+.page-title-holder > h4,
+.page-title-holder > h5,
+.page-title-holder > h6 {
 	position: relative;
 	top: 35%;
 }
 
+.page-title-holder.with-divider > h1,
+.page-title-holder.with-divider > h2,
+.page-title-holder.with-divider > h3,
+.page-title-holder.with-divider > h4,
+.page-title-holder.with-divider > h5,
+.page-title-holder.with-divider > h6 {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+.page-title-holder.with-divider > h1 {
+	margin-top: 40px;
+}
+
+.page-title-holder.with-divider > h2 {
+	margin-top: 45px;
+}
+
+.page-title-holder.with-divider > h3 {
+	margin-top: 50px;
+}
+
+.page-title-holder.with-divider > h4 {
+	margin-top: 55px;
+}
+
+.page-title-holder.with-divider > h5 {
+	margin-top: 60px;
+}
+
+.page-title-holder.with-divider > h6 {
+	margin-top: 65px;
+}
 
 /* ====================================== */
 /* =========== End Page Title  ========== */
@@ -414,6 +463,10 @@ div.page-title-holder > h6 {
 
 	div.Website-Body {
 		margin-top: 0;
+	}
+
+	.page-title-holder.center-page {
+		margin: 0;
 	}
 
 	ul[class*="footer-menubar"]:after,
@@ -535,4 +588,30 @@ div#contact-us-content > div:nth-child(2) {
 
 /* ====================================== */
 /* ========== End Contact Us Page ======= */
+/* ====================================== */
+
+/* ====================================== */
+/* =============== Login Page =========== */
+/* ====================================== */
+
+form#login-form {
+	margin-top: 32px;
+}
+
+form#login-form > div {
+	margin: 10px 25% auto;
+}
+
+form#login-form > div:nth-last-child(1),
+form#login-form > div:nth-last-child(2),
+form#login-form > div:nth-last-child(3) {
+	text-align: right;
+}
+
+form#login-form > div:nth-last-child(1) {
+	margin-top: 32px;
+}
+
+/* ====================================== */
+/* ============= End Login Page ========= */
 /* ====================================== */

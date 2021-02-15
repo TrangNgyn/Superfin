@@ -1,6 +1,5 @@
 import { Form, Input, Button } from 'antd';
 import { history } from '../../_helpers/history';
-import '../../_assets/CSS/pages/Login/Login.css';
 
 
 
@@ -8,22 +7,18 @@ import '../../_assets/CSS/pages/Login/Login.css';
 //Layout stuff//
 const layout = {
     labelCol: {
-      span: 8,
+      span: 8
     },
     wrapperCol: {
-      span: 7,
-    },
+      span: 14
+    }
 };
 
-const tailLayout = {
+const actionButtonsLayout = {
     wrapperCol: {
-      offset: 8,
-      span: 16,
-    },
+        span: 22
+    }
 };
-
-
-
 
 
 
@@ -46,47 +41,25 @@ const Login = () => {
     }
 
     return(
-        <>  
-            
-            <div style = {{height: "5px"}}/>
-
-            <div id="login-header-title-wrapper">
-                <h1 id="login-header-title">Login</h1>
+        <>
+            <div className="page-title-holder with-divider center-page">
+                <h1>Login</h1>
             </div>
-
-            <div id="login-devider-1"/>
-
-            <div style = {{position:"relative"}} >
-                <div id="login-forgot-password-button" onClick = {navigateForgotPasswordPage}>Forgot Password?</div>
-            </div>
-
-
-
-
-
-
-
-
-
-
 
             <Form
                 {...layout}
-                name="basic"
-                initialValues={{
-                    remember: true,
-                }}
+                name="login-form"
+                initialValues={{remember: true,}}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-            >
+                onFinishFailed={onFinishFailed}>
+                
                 <Form.Item
                     label="User ID/Email"
                     name="username"
                     rules={[{
-                            required: true,
-                            message: 'Please input your username!',
-                    },]}
-                >
+                        required: true,
+                        message: 'Please input your username!',
+                    },]}>
                     <Input />
                 </Form.Item>
 
@@ -96,15 +69,20 @@ const Login = () => {
                     rules={[{
                         required: true,
                         message: 'Please input your password!',
-                    },]}
-                >
+                    },]}>
                     <Input.Password />   
                 </Form.Item >
-                   
-                <Form.Item {...tailLayout}>
-                    <Button style = {{width:"150px"}} type="primary" onClick={navigateRegisterPage}> Create an Account </Button>
 
-                    <Button style = {{left:"17%", width:"150px"}} type="primary" htmlType="submit"> Login</Button>
+                <Form.Item {...actionButtonsLayout}>
+                    <a onClick = {navigateForgotPasswordPage}>Forgot Password ?</a>
+                </Form.Item>
+
+                <Form.Item {...actionButtonsLayout}>
+                    <Button type="primary" htmlType="submit">Login</Button>
+                </Form.Item>
+
+                <Form.Item {...actionButtonsLayout}>
+                    <span>Don't have an account yet ? &nbsp; <Button type="secondary" onClick={navigateRegisterPage}>Create an Account</Button></span>
                 </Form.Item>
             </Form>
         </>
