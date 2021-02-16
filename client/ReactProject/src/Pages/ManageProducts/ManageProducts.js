@@ -1,156 +1,58 @@
 import '../../_assets/CSS/pages/ManageProducts/ManageProducts.css';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { fetchProducts } from '../../SharedComponents/ProductList/MockProductList';
-import { Select, Modal, Pagination } from 'antd';
+import { Select, Pagination, Spin } from 'antd';
 import { useState, useEffect } from 'react';
 import { history } from '../../_helpers/history';
+import { getAllProducts } from '../../_actions/productActions';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleFilter, handleOrder } from './Functions';
+import ProductTableRows from './ProductTableRows';
 
 const { Option, OptGroup } = Select;
 
 
 
 
+
+/*
+    Tasks if time:
+    Implement loading circle for the delete modal
+    Implement 'item not deleted' modal
+    Implement 'item deleted successful' message
+*/
+
+/*
+    Tasks that still need to be done
+    Implement filtering
+    Upadate spelling error in 'productActions.js'. (Check the comments in that file)
+*/
+
+
+
+
+
 const ManageProducts = () => {
-    const mockProducts = fetchProducts();
-    const [productsList, setProductsList] = useState(mockProducts);
-    const [isModalVisible, setIsModalVisible] = useState(false);
+    const dispatch = useDispatch();
+    const productsList = useSelector(state => state.productState.products);                 //Redux store product list
+    const errorLoading = useSelector(state => state.productState.error);
+    const loading = useSelector(state => state.productState.isLoading);
+
+
     const [page, setPage] = useState(0);
-
-
-
-
-
-
-
-    //modal stuff
-    const showModal = () => {
-        setIsModalVisible(true);
-    };
-
-    const handleOk = () => {
-        //delete the product
-        setIsModalVisible(false);
-    };
-
-    const handleCancel = () => {
-        setIsModalVisible(false);
-    };
-
-    /*
-    useEffect(() => {
-        console.log("This will get called every time the page is rendered");
-    });
-
-    useEffect(() => {
-        console.log("This will get called evertime the product list changes state");
-    }, [productsList]);*/
-
-    
-
-
-
-
-    //renderable items
-    const onChange = p => { setPage(p - 1) };
     const itemsPerPage = 10;
-    const maxNumberOfPages = (Math.ceil(productsList.length/itemsPerPage) - 1);
+    const maxNumberOfPages = (Math.ceil(productsList.length/itemsPerPage) - 1);             //pagination stuff
 
-    let renderableProducts = productsList.slice( page * itemsPerPage, 
-        ((page + 1) * itemsPerPage) > productsList.length ? productsList.length : ((page + 1) * itemsPerPage));
-
-    const row = renderableProducts.map((p, i) => {
-        return (
-            <tr key = {p.id} className="manage-products-table-row">
-                <td>{p.name}</td>
-                <td>{p.id}</td>
-                <td>${p.price}</td>
-                <td>{i}</td>
-                <td>{p.category}</td>
-                <td>{10}</td>
-                <td>
-                    <EditOutlined props={p.id} className="manage-products-icon" onClick={() => {
-                        history.push('/editAddProducts/' + p.id);
-                    }}/> 
-                    <DeleteOutlined className="manage-products-icon" onClick={showModal} style = {{paddingLeft: "15px"}}/> 
-                </td>
-            </tr>
-        );
-    });
-
-
-
-
-
-
-    //filtering stuff
-    const handleFilter = value => {
-        console.log(`selected ${value}`);
-
-        switch(value){
-            case "in_stock": {
-                //fetch from db all products in stock
-                break;
-            }
-            case "out_stock": {
-                break;
-            }
-            case "category_1": {
-                break;
-            }
-            case "category_2": {
-                break;
-            }
-            case "i_ascending": {
-                break;
-            }
-            case "category_4": {
-                break;
-            }
-            default:{
-                //return all products
-            }
-        }
+    const productTableRowsProps = {                                                         //props for the product table rows
+        productsList: productsList,
+        page: page,
+        dispatch: dispatch
     }
 
-    const handleOrder = value => {
-        console.log(`selected ${value}`);
-
-        switch(value){
-            case "p_decending": {
-                //re order state array
-                break;
-            }
-            case "p_ascending": {
-                break;
-            }
-            case "n_ascending": {
-                break;
-            }
-            case "n_decending": {
-                break;
-            }
-            case "i_ascending": {
-                break;
-            }
-            case "i_decending": {
-                break;
-            }
-            default: return;
-        }
-    }
-
-
-
-    
-
-
+    useEffect(() => {                                                                      //checks if the store is empty. If so, do an API request
+        if(!productsList.length) dispatch(getAllProducts());
+    }, [productsList, dispatch]);
 
     return (
         <div >
-            <Modal title="Delete Product" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-                <p>Are you sure you want to delete this product?</p>
-            </Modal>
-
             <div id="manage-products-header">Manage Products</div>
 
             <div>
@@ -175,8 +77,9 @@ const ManageProducts = () => {
                                     </OptGroup>    
                                 </Select>
                             </td>
+                            
                             <td>
-                                <Select placeholder="Order By" style = {{width:"300px"}} onChange={handleOrder}>
+                                <Select placeholder="Order By" style = {{width:"300px"}} onChange={v => handleOrder(v, dispatch)}>
                                     <OptGroup label="Price">
                                         <Option value="p_decending">high to low</Option>
                                         <Option value="p_ascending">low to high</Option>
@@ -195,7 +98,11 @@ const ManageProducts = () => {
                     </tbody>
                 </table>  
             </div>
-            <div style = {{height: "400px", display: "table"}}>
+
+            {errorLoading ? <h1 style = {{textAlign: 'center', color: 'red'}}>Could not load data, please try again</h1> : <></>}
+            {loading ? <div style={{textAlign: 'center'}}><Spin size="large"/></div> : <></>}
+      
+            <div style = {{height: "500px", display: "table"}}>
                 <table style={{width:"100%", textAlign: "center", tableLayout: "fixed"}}>
                     <tbody>
                         <tr style = {{border: "solid black 1px"}}>
@@ -209,13 +116,15 @@ const ManageProducts = () => {
                                 history.push('/editAddProducts');
                             }}>+</th>
                         </tr>
-                        {row}
+                      
+                      <ProductTableRows {...productTableRowsProps} />
                     </tbody>
                 </table>  
             </div>
+            
             <div style = {{textAlign: "center"}}>
-                <Pagination  defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange = {onChange}/>
-            </div>  
+                <Pagination  defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange = {p => {setPage(p - 1)}}/>
+            </div>
         </div>
     );
 }
