@@ -4,8 +4,10 @@
   "description": "Back end code for the paper bag online shopping solution",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "client-install": "npm install --prefix ../client/ReactProject",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix ../client/ReactProject",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "author": "",
   "license": "MIT",

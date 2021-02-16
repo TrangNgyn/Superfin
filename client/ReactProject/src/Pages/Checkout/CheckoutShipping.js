@@ -1,6 +1,9 @@
 import '../../_assets/CSS/pages/CheckoutShipping.css';
-import { Typography, Form, Input, Button, Row, Col, Steps } from 'antd';
+import { Typography, Form, Input, Button, Row, Col, Steps, Select, InputNumber } from 'antd';
 import {CaretLeftOutlined} from '@ant-design/icons';
+import { Link } from 'react-router-dom';
+
+
 
 
 
@@ -20,14 +23,20 @@ const CheckoutShipping = () =>{
         required: '${label} is required',
         types: {
           email: '${label} is not a valid email',
+          number: '${label} is not a valid number!',
+        },
+        number: {
+          range: '${label} must be between ${min} and ${max}',
         },
       };
+      const { Option } = Select;
+
       return(
         <body>
         <div id="checkout-shipping-head">
         <Title level={3}>CHECK OUT</Title>
         </div>
-        <div id="checkout-shipping-content">
+        <div id="checkout-shipping-status">
         <div>
         <Steps current={0}>
             <Step title="Shipping Address"/>
@@ -36,6 +45,7 @@ const CheckoutShipping = () =>{
             <Step title="Order Complete"/>
           </Steps>,
         </div>
+        <div id="checkout-shipping-content">
         <Form
               layout={'vertical'}
               form={form}
@@ -79,21 +89,30 @@ const CheckoutShipping = () =>{
               </Col>
             </Row>
             <Row gutter={16}>
-              <Col span={12}>
+              <Col >
               <Form.Item label="State/Province" name="stateprovince" rules={[{ required: true}]}>
-              <Input/>
+              <Select  style={{ width: 120 }} >
+                <Option value="NSW">NSW</Option>
+                <Option value="VIC">VIC</Option>
+                <Option value="ACT">ACT</Option>
+                <Option value="NT">NT</Option>
+                <Option value="QLD">QLD</Option>
+                <Option value="SA">SA</Option>
+                <Option value="TAS">TAS</Option>
+                <Option value="WA">WA</Option>
+              </Select>
               </Form.Item>
               </Col>
               <Col span={12}>
-              <Form.Item label="Postcode" name="postcode" rules={[{ required: true }]}>
-              <Input />
+              <Form.Item label="Postcode" name="Postcode"  rules={[{ type: 'number',min: 200, max: 9729,},{required: true}]}>
+                <InputNumber min={200} max={9729} />
               </Form.Item>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={24}>
-              <Form.Item label="Contact Phone Number" name="contactphonenumber" rules={[{ required: true}]}>
-              <Input/>
+              <Form.Item name="Phone Number" label="Phone Number" rules={[{ type: 'number'},{required: true}]}>
+                <InputNumber  style={{ width: 226 }}/>
               </Form.Item>
               </Col>
             </Row>
@@ -105,22 +124,22 @@ const CheckoutShipping = () =>{
               </Col>
             </Row>
             <Row gutter={16}>
-              <Col span={12}>
+              <Col span={10}>
               <Form.Item>
               <Button type="text" htmlType="submit" ><CaretLeftOutlined />Return to cart</Button>
               </Form.Item>
               </Col>
               <Col span={12}>
               <Form.Item >
-              <Button type="primary" htmlType="submit">Continue</Button>
+              <Button type="primary" htmlType="submit"><Link to="/CheckoutSecurePayment">Continue</Link></Button>
               </Form.Item>
               </Col>
             </Row>
         </Form>
         </div>
+        </div>
         </body>
       );
-
 }
 
 export default CheckoutShipping

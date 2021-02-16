@@ -8,6 +8,7 @@
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.4.0",
     "antd": "^4.9.1",
+    "axios": "^0.21.1",
     "craco-less": "^1.17.1",
     "node-sass": "^4.14.1",
     "react": "^17.0.1",
@@ -24,6 +25,7 @@
     "test": "craco test",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://localhost:5000",
   "eslintConfig": {
     "extends": [
       "react-app",
