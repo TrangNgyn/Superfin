@@ -1,7 +1,8 @@
-import { GET_PRODUCTS, LOADING_PRODUCTS, DELETE_PRODUCT, ORDER_BY, ERROR } from './actionTypes';
+import { GET_PRODUCTS, DEFAULT_ORDER, LOADING_PRODUCTS, DELETE_PRODUCT, ORDER_BY, ERROR } from './actionTypes';
 import axios from 'axios';
 
 export const getAllProducts = () => dispatch  => {
+    console.log("get products...");
     dispatch(setIsLoading(true));
 
     axios.get('api/products/all-product')
@@ -18,6 +19,12 @@ export const getAllProducts = () => dispatch  => {
         })
     });
 };
+
+export const setDefaultOrder = () => {
+    return {
+        type: DEFAULT_ORDER
+    }
+}
 
 export const deleteProduct = p_code => dispatch => {
     axios.post('api/products/delete-product', {

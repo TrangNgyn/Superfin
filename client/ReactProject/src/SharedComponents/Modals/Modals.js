@@ -1,7 +1,7 @@
 import { Modal } from 'antd';
 import { deleteProduct } from '../../_actions/productActions';
 
-//All modals
+//All shared modals
 
 export const deleteConfirm = (p_code, dispatch) => {
     Modal.confirm({

@@ -1,24 +1,27 @@
-import ProductAdmin from './ProductAdmin';
-import {fetchProducts} from '../../SharedComponents/ProductList/MockProductList';
 import '../../_assets/CSS/pages/HomepageAdmin/ProductListAdmin.css';
+import ProductAdmin from './ProductAdmin';
+import { Spin } from 'antd'; 
 
-const prods = fetchProducts();
+const ProductList = props => {
 
-const ProductList = () => {
-    //const [isLoading, setIsLoading] = useState(true);
-
-    const rederableProducts = prods.map((p) => {
-      return <div key={p.id}><ProductAdmin {...p}/></div>
+    const rederableProducts = props.productsList.map(p => {
+        const productProps = {
+            product: p,
+            dispatch: props.dispatch
+        }
+        return <div key={p._id}><ProductAdmin {...productProps}/></div>
     });
 
     return (
-      <>
-        <div id="admin-product-list-container">
-          {rederableProducts}
-        </div>
+        <div>  
+            {props.errorLoading ? <h1 style = {{textAlign: 'center', color: 'red'}}>Could not load data, please try refreshing page</h1> : <></>}
+            {props.loading ? <div style={{textAlign: 'center'}}><Spin size="large"/></div> : <></>}
 
-      </>
-  );
+            <div id="admin-product-list-container">
+                {rederableProducts}
+            </div>
+        </div>
+    );
 };
 
 export default ProductList;

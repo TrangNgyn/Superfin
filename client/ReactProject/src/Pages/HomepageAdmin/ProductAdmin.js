@@ -1,20 +1,32 @@
 import React from "react";
 import '../../_assets/CSS/pages/HomepageAdmin/ProductAdmin.css';
 import altImage from "../../_assets/Images/No_Image.jpg"
+import { useDispatch } from 'react-redux';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { deleteConfirm } from '../../SharedComponents/Modals/Modals';
+import { history } from '../../_helpers/history';
 
 const Product = props => {
-    const product  = props;
+    const dispatch = props.dispatch;
+    const product = props.product;
    
+
+
+
+
     const viewCategory = () => {
         console.log("View product info for " + product.name);
         //This will link to product info page
     } 
 
+
+
+
+    
     return (
         <div id="admin-product-container">
             <img id="admin-product-image"
-                src= {product.image}
+                src= {product.p_image_uri}
                 alt={altImage}
                 onClick={viewCategory}
                 style={{height: '310px', width:'310px'}}
@@ -23,23 +35,23 @@ const Product = props => {
             <table id="admin-product-text-container">
                 <tbody>
                     <tr>
-                        <td>Product Code: {product.id}</td>
+                        <td>Product Code: {product.p_code}</td>
                     </tr>
                     <tr>
-                        <td>Product Name: {product.name}</td>
+                        <td>Product Name: {product.p_name}</td>
                     </tr>
                     <tr>
-                        <td>Unit Price: ${product.price}</td>
+                        <td>Unit Price: ${product.p_price}</td>
                     </tr>
                     <tr>
-                        <td>Category: {product.category}</td>
+                        <td>Category: {product.p_catagories}</td>
                     </tr>
                 </tbody>
             </table>
 
             <div id="admin-product-icon-container">
-                <DeleteOutlined className="admin-product-icon"/>
-                <EditOutlined className="admin-product-icon"/>
+                <DeleteOutlined onClick={() => {deleteConfirm(product.p_code, dispatch)}} className="admin-product-icon"/>
+                <EditOutlined onClick={() => { history.push(`/editAddProducts/${product.p_code}`)}} className="admin-product-icon"/>
             </div>  
         </div>
     );

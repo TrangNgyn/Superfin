@@ -1,19 +1,69 @@
 import '../../_assets/CSS/pages/HomepageAdmin/HomepageAdmin.css';
-import ProductListAdmin from './ProductListAdmin';
-import {getNumberOfproducts} from '../../SharedComponents/ProductList/MockProductList';
-import { Button, Radio } from 'antd';
-import {useState} from 'react';
 import HomepageAdminOrderList from './HomepageAdminOrderList';
+import ProductListAdmin from './ProductListAdmin';
+import { getAllProducts, setDefaultOrder } from '../../_actions/productActions';
+import { history } from '../../_helpers/history';
+
+import { Button, Radio } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState , useEffect } from 'react';
 
 
-export const HomepageAdmin = () => {
-    const numberOfProducts = getNumberOfproducts();
+
+
+
+/*
+    Tasks left
+    Loading circle for products     **
+    Error message for failed load   **
+    Make Images work for products.
+    Hook up Orders API
+*/
+
+/*
+    If time
+    Modal after successful delete
+    Modal after unsuccessful delete
+    Loading circle for delete process
+*/
+
+
+
+
+
+const HomepageAdmin = () => {
     const [radioState, setRadioState] = useState(false);            //false is 'Current Orders'
-   
+
+    const productsList = useSelector(state => state.productState.products);
+    const errorLoading = useSelector(state => state.productState.error);
+    const loading = useSelector(state => state.productState.isLoading);
+    const dispatch = useDispatch();
+
+    const productListProps = {
+        dispatch: dispatch,
+        productsList: productsList,
+        errorLoading: errorLoading,
+        loading:loading
+    }
+
+
+
+
+
+    useEffect(() => {                                                              //checks if the store is empty. If so, do an API request. If data is already there, set it to default ordering
+        if(!productsList.length) dispatch(getAllProducts());      
+        else dispatch(setDefaultOrder());
+    }, []);
+    
     const radioToggle = () => {
         radioState ? setRadioState(false) : setRadioState(true);
     }
    
+
+
+
+
+
     return(
         <>
             <div id="homepage-admin-header">Admin Station</div>
@@ -21,22 +71,24 @@ export const HomepageAdmin = () => {
             <div style  = {{height:"20px"}}></div>
 
             <div style = {{textAlign: "center"}}>
-                <div className="Homepage-Admin-Products-Orders-Plus" onClick = { () => console.log("Navigate to: add products page")}>Product +</div>
+                <div className="Homepage-Admin-Products-Orders-Plus" onClick = {() => {history.push('/editAddProducts')}}>Product +</div>
             </div>
 
             <div id="homepage-admin-number-of-products-container">
-                <div id="homepage-admin-number-of-products">Total Products: {numberOfProducts}</div>
+                <div id="homepage-admin-number-of-products">Total Products: {productsList.length}</div>
             </div>
 
             <div className="Homepage-Admin-Scrollbox-Container">
                 <div className="Homepage-Admin-Scrollbox">
-                    <ProductListAdmin />
+                    <ProductListAdmin {...productListProps}/>
                 </div>
             </div>
 
             <div style  = {{height:"50px"}}></div>
         
-            <Button id="homepage-admin-button-1" type="primary">View Full List</Button>
+            <Button id="homepage-admin-button-1" type="primary" onClick={() => {
+                history.push('manageProducts');
+            }}>View Full List</Button>
 
             <div style  = {{height:"50px"}}></div>
   
@@ -78,3 +130,5 @@ export const HomepageAdmin = () => {
         </>
     );
 }
+
+export default HomepageAdmin;

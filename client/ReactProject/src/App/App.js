@@ -1,5 +1,5 @@
 import './App.less';
-//import Homepage from '../Pages/Homepage/Homepage';
+import HomepageAdmin from '../Pages/HomepageAdmin/HomepageAdmin';
 import AddEditProduct from '../Pages/AddEditProduct/AddEditProduct';
 import '../_assets/CSS/style.scss'
 import Navbar from '../SharedComponents/Navbar/Navbar';
@@ -55,6 +55,8 @@ const App = () => (
             <Switch>
            
                <Route exact path="/"><Homepage /></Route>
+               <Route exact path="/admin"><HomepageAdmin /></Route>
+
                <Route exact path="/products"> <Products /></Route>
                <Route exact path="/products/:browseBy"><Products /></Route> 
                <Route path="/products/:browseBy/:browseByGroup"><Products /></Route> 

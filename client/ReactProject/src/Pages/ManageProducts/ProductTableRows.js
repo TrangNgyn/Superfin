@@ -1,4 +1,4 @@
-import { deleteConfirm } from './Modals';
+import { deleteConfirm } from '../../SharedComponents/Modals/Modals';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { history } from '../../_helpers/history';
 
