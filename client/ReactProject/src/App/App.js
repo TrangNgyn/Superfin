@@ -14,6 +14,7 @@ import DeliveryDispatch from '../Pages/DeliveryDispatch/DeliveryDispatch';
 import AboutUS from '../Pages/AboutUs/AboutUs';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ResetPasswordConfirmation from '../Pages/ResetPasswordConfirmation/ResetPasswordConfirmation';
+import Order from '../Pages/Order/Order';
 import ReenterPassword from '../Pages/ReenterPassword/ReenterPassword'
 import CurrentOrders from '../Pages/CurrentOrders/CurrentOrders';
 import ProcessedOrders from '../Pages/ProcessedOrders/ProcessedOrders';
@@ -68,6 +69,10 @@ const App = () => (
                <Route path="/emailRequest"><EmailRequest /></Route>
                <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
                <Route path="/reenterPassword"><ReenterPassword /></Route>
+              
+               <Route exact path="/order"><Order /></Route>
+               <Route path="/order/:po_number"><Order /></Route>
+
 
                <Route path="/myAccount"><MyAccount/></Route>
                <Route path="/currentOrders"><CurrentOrders /></Route>
@@ -85,7 +90,6 @@ const App = () => (
                <Route path="/CheckoutOrderComplete"><CheckoutOrderComplete /></Route>
             </Switch>
          </div>
-
          <div className="Website-Footer">
             <FooterMain />
          </div>
