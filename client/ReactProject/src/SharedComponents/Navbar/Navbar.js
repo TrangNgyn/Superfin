@@ -7,7 +7,7 @@ import image from '../../_assets/Images/new_logo.jpg'
 const { SubMenu } = Menu;
 
 //fake user and login check
-const fakeUser = {
+const userDetails = {
   name: "Homer",
   loggedIn: false,
   userType: "GUEST"
@@ -26,7 +26,7 @@ const getCategories = () => {
 
 export default function Navbar(props){
 
-  const [userType, setUserType] = useState(fakeUser.userType);
+  const [userType, setUserType] = useState(userDetails.userType);
 
   const logout = () => {          //fake login logout functions
     setUserType("GUEST");
@@ -71,38 +71,48 @@ export default function Navbar(props){
     </>
   );
 
-  let navbarSpecificAccountMenu = <></>;
+  let accountSpecificMenu = <></>;
 
-  if(userType==="CUSTOMER") navbarSpecificAccountMenu = customerMenu;
-  else if(userType==="ADMIN") navbarSpecificAccountMenu = adminMenu;
+  if(userType==="CUSTOMER") accountSpecificMenu = customerMenu;
+  else if(userType==="ADMIN") accountSpecificMenu = adminMenu;
 
-  // Navbar Menu
-  const navbarMenu = (
-    
+  // Account Menu
+  const accountMenu = (
     <Menu>
-      {navbarSpecificAccountMenu}
+      {accountSpecificMenu}
       <Menu.Item>
         <Link to="/" onClick={logout}> Logout</Link>
       </Menu.Item>
     </Menu>
   );
+
+  const accountMenuMobile = (<SubMenu key="AccountMenuMobile" className="submenu-background"  icon={<UserOutlined />} title={"Welcome, " + userDetails.name}>
+      {accountSpecificMenu}
+      <Menu.Item>
+        <Link to="/" onClick={logout}>Logout</Link>
+      </Menu.Item>
+    </SubMenu>
+  );
   
   //Fake categories API call
   const categories = getCategories();   
 
-  const ourProductsDropdown = (                     //Our Products dropdown
-    <Menu >
+  const ourProductsDropdown = ( //Our Products dropdown
+    <Menu>
       <Menu.Item>
         <Link to="/products/categories">
           <b>Shop By Category</b>
         </Link>
       </Menu.Item>
 
-      {categories.map((cat) => {
-        return  <Menu.Item key={cat.c_name}> 
-                  <Link to={"/products/categories/" + cat.c_name}> {cat.c_name} </Link>
-                </Menu.Item>
-      })}
+      {
+        categories.map((cat) => {
+          return  <Menu.Item key={cat.c_name}> 
+                    <Link to={"/products/categories/" + cat.c_name}> {cat.c_name} </Link>
+                  </Menu.Item>
+                }
+              )
+      }
 
       <Menu.Item>
         <Link to="/products">
@@ -110,45 +120,74 @@ export default function Navbar(props){
         </Link>
       </Menu.Item>
     </Menu>
-  );  
+  );
+
+  const ourProductsSubmenuMobile = ( //Our Products Submenu
+    <SubMenu key="OurProductsSubmenu" className="submenu-background" title="Our Products">
+      <Menu.Item>
+        <Link to="/products/categories">
+          <b>Shop By Category</b>
+        </Link>
+      </Menu.Item>
+
+      {
+        categories.map((cat) => {
+          return  <Menu.Item key={cat.c_name}> 
+                    <Link to={"/products/categories/" + cat.c_name}> {cat.c_name} </Link>
+                  </Menu.Item>
+                }
+              )
+      }
+
+      <Menu.Item>
+        <Link to="/products">
+          <b>{"View all Products  >"}</b>
+        </Link>
+      </Menu.Item>
+    </SubMenu>
+  );
   
   //Login/Welcome, User menu item that changes based on whether user is logged in or not
 
-  let login = ( <Menu.Item key = "Login" onContextMenu={loginUserCustomer} onDoubleClick={loginUserAdmin} icon={<UserOutlined />} style = {{float: "right"}}>
-                  <Link to="/login"> Login/Sign up </Link>       
-                </Menu.Item>
-      );
+  let login = ( <Menu.Item key = "Login" onContextMenu={loginUserCustomer} onDoubleClick={loginUserAdmin} icon={<UserOutlined />}>
+      <Link to="/login"> Login/Sign up </Link>       
+    </Menu.Item>
+  );
+  let loginMobile = login;
 
   if(userType==="CUSTOMER"){
-    login = ( <Menu.Item key = "Welcome"  icon={<UserOutlined />} style = {{float: "right"}}>
-                <Dropdown overlay={welcomeDropdown}>
-                  <span> Welcome, {fakeUser.name} </span>
-                </Dropdown>
-              </Menu.Item>
-    );
-  }
-  else if(userType==="ADMIN"){
     login = (
-      <Menu.Item key = "Welcome"  icon={<UserOutlined />} style = {{float: "right"}}>
-        <Dropdown overlay={welcomeDropdown}>
-          <span> Welcome, {fakeUser.name} </span>
+      <Menu.Item key = "Welcome"  icon={<UserOutlined />}>
+        <Dropdown overlay={accountMenu}>
+          <span> Welcome, {userDetails.name} </span>
         </Dropdown>
       </Menu.Item>
     );
+    loginMobile = (<>{accountMenuMobile}</>);
+  }
+  else if(userType==="ADMIN"){
+    login = (
+      <Menu.Item key = "Welcome"  icon={<UserOutlined />}>
+        <Dropdown overlay={accountMenu}>
+          <span> Welcome, {userDetails.name} </span>
+        </Dropdown>
+      </Menu.Item>
+    );
+    loginMobile = (<>{accountMenuMobile}</>);
   }
 
   const orderDropdown = (
     <Menu>
         <Menu.Item>
-            <Link to="/currentOrders">Current Orders</Link>
+          <Link to="/currentOrders">Current Orders</Link>
         </Menu.Item>
 
         <Menu.Item>
-            <Link to="/admin">Add Order</Link>
+          <Link to="/admin">Add Order</Link>
         </Menu.Item>
 
         <Menu.Item>
-            <Link to="/processedOrders">Processed Orders</Link>
+          <Link to="/processedOrders">Processed Orders</Link>
         </Menu.Item>
     </Menu>
   );
@@ -156,57 +195,74 @@ export default function Navbar(props){
   const productsDropdown = (
     <Menu>
         <Menu.Item>
-            <Link to="/manageProducts">Manage Products</Link>
+          <Link to="/manageProducts">Manage Products</Link>
         </Menu.Item>
 
         <Menu.Item>
-            <Link to="/editAddProducts">Add Product</Link>
+          <Link to="/editAddProducts">Add Product</Link>
         </Menu.Item>
     </Menu>
   );
 
   let mainMenu = (
     <>
-      <Menu.Item key="Products" style = {{marginLeft: "30px", marginRight: "30px"}}>
+      <Menu.Item key="Products">
         <Dropdown overlay={ourProductsDropdown}>
           <span>Our Products</span>
         </Dropdown>
       </Menu.Item >
 
       <Menu.Item key="Delivery">
-              <Link to="/deliveryDispatch"> Delivery and Dispatch </Link>
-            </Menu.Item>
+        <Link to="/deliveryDispatch"> Delivery and Dispatch </Link>
+      </Menu.Item>
 
-      <Menu.Item key="About" style = {{marginLeft: "30px", marginRight: "30px"}}>
+      <Menu.Item key="About">
         <Link to="/aboutUs"> About Us </Link>
       </Menu.Item>
 
-      <Menu.Item key="Blog" style = {{marginLeft: "30px"}}>
+      <Menu.Item key="Blog">
         <Link to="/blog"> Blog </Link>
       </Menu.Item>
 
-      <Menu.Item key="Cart" className = "rightItems"  icon = {<ShoppingCartOutlined /> } style = {{float: "right", marginLeft:"60px"}}>
+      <Menu.Item key="Cart" icon = {<ShoppingCartOutlined />}>
         <Link to="/cart"> Cart </Link>
       </Menu.Item>
     </>       
   );
 
+  let mainMenuMobile = (
+    <SubMenu key="SubMenuMoreDetails" icon={<MenuOutlined />} title="Menu">
+      {ourProductsSubmenuMobile}
+      <Menu.Item key="Delivery">
+        <Link to="/deliveryDispatch"> Delivery and Dispatch </Link>
+      </Menu.Item>
+
+      <Menu.Item key="About">
+        <Link to="/aboutUs"> About Us </Link>
+      </Menu.Item>
+
+      <Menu.Item key="Blog">
+        <Link to="/blog"> Blog </Link>
+      </Menu.Item>
+    </SubMenu>
+  );
+
   if(userType==="ADMIN"){
     mainMenu = (
       <>
-        <Menu.Item key="Orders" style = {{marginLeft: "30px", marginRight: "30px"}}>
+        <Menu.Item key="Orders">
           <Dropdown overlay={orderDropdown}>
             <span>Orders</span>
           </Dropdown>
         </Menu.Item>
 
-        <Menu.Item key="Products" style = {{marginLeft: "30px", marginRight: "30px"}}>
+        <Menu.Item key="Products">
           <Dropdown overlay={productsDropdown}>
             <span>Products</span>
           </Dropdown>
         </Menu.Item>
 
-        <Menu.Item key="EditCompany" style = {{marginLeft: "30px", marginRight: "30px"}}>
+        <Menu.Item key="EditCompany">
             <Link to="/editCompanyInformation">Edit Company Information</Link>
         </Menu.Item>
       </>
@@ -214,7 +270,7 @@ export default function Navbar(props){
   }
 
   return (
-    <div>
+    <>
       <Menu className="Navbar box-shadow" mode="horizontal" selectable={false}>
         <Menu.Item key="Logo" id="Logo" selectable="false">
           <Link to="/" >
@@ -223,7 +279,19 @@ export default function Navbar(props){
         </Menu.Item>
         {mainMenu}
         {login}
-      </Menu> 
-    </div>
+      </Menu>
+      <Menu className="Navbar-Mobile" mode="inline" selectable={false}>
+        <Menu.Item key="Logo" id="Logo">
+          <Link to="/" >
+            <img src={image} alt="Logo" />
+          </Link>
+        </Menu.Item>
+        {mainMenuMobile}
+        <Menu.Item key="Cart" icon = {<ShoppingCartOutlined/>}>
+          <Link to="/cart"> Cart </Link>
+        </Menu.Item>
+        {loginMobile}
+      </Menu>
+    </>
   );
 }

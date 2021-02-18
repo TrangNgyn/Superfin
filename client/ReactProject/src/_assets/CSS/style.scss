@@ -241,6 +241,10 @@ ul.Navbar > li:nth-last-child(2),
 ul.Navbar > li:nth-last-child(4) {
 	float: right;
 }
+
+.submenu-background > ul.ant-menu {
+	background-color: $gray-light !important;
+}
 /* ====================================== */
 /* =========== End Navbar =============== */
 /* ====================================== */
