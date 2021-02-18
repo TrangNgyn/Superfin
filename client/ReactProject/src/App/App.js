@@ -1,18 +1,31 @@
 import './App.less';
+//import Homepage from '../Pages/Homepage/Homepage';
+import AddEditProduct from '../Pages/AddEditProduct/AddEditProduct';
+import '../_assets/CSS/style.scss'
 import Navbar from '../SharedComponents/Navbar/Navbar';
 import FooterMain from '../SharedComponents/Footer/FooterMain';
-
 import { history } from '../_helpers/history';
 import { Router, Route, Switch, useParams } from 'react-router-dom';
-
 import Login from '../Pages/Login/Login';
 import Homepage from '../Pages/Homepage/Homepage';
+import Cart from '../Pages/Cart/Cart';
 import ContactUs from '../Pages/ContactUs/ContactUs';
 import DeliveryDispatch from '../Pages/DeliveryDispatch/DeliveryDispatch';
 import AboutUS from '../Pages/AboutUs/AboutUs';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ResetPasswordConfirmation from '../Pages/ResetPasswordConfirmation/ResetPasswordConfirmation';
 import Order from '../Pages/Order/Order';
+import ReenterPassword from '../Pages/ReenterPassword/ReenterPassword'
+import CurrentOrders from '../Pages/CurrentOrders/CurrentOrders';
+import ProcessedOrders from '../Pages/ProcessedOrders/ProcessedOrders';
+import EditCompanyInfo from '../Pages/EditCompanyInfo/EditCompanyInfo';
+import ManageProducts from '../Pages/ManageProducts/ManageProducts';
+import MyAccount from '../Pages/MyAccount/MyAccount';
+import TermsConditions from '../Pages/TermsConditions/TermsConditions';
+import CheckoutShipping from '../Pages/Checkout/CheckoutShipping';
+import CheckoutSecurePayment from '../Pages/Checkout/CheckoutSecurePayment';
+import CheckoutReviewOrder from '../Pages/Checkout/CheckoutReviewOrder';
+import CheckoutOrderComplete from '../Pages/Checkout/CheckoutOrderComplete';
 
 
 
@@ -29,14 +42,8 @@ const Products = () => {
          <div>{browseBy}</div>
          <div>{browseByGroup}</div>
       </div>
-   ); 
+   );
 }
-
-
-
-
-
-
 
 const App = () => (
    <div>
@@ -45,31 +52,47 @@ const App = () => (
             <Navbar />
          </div>
 
-         <div className="Website-Body">
+         <div className="Website-Body" >
             <Switch>
-               {/*<CustomerRoute path="/" component = {Homepage} exact />*/}           {/* This is how to use the private routes. Do not use them yet */}
+           
                <Route exact path="/"><Homepage /></Route>
-
                <Route exact path="/products"> <Products /></Route>
                <Route exact path="/products/:browseBy"><Products /></Route> 
-               <Route path="/products/:browseBy/:browseByGroup"><Products /></Route>          {/*Undecided on Products page path*/}
+               <Route path="/products/:browseBy/:browseByGroup"><Products /></Route> 
 
                <Route path="/deliveryDispatch"> <DeliveryDispatch /></Route>
                <Route path="/contactUs"> <ContactUs /></Route>
                <Route path="/aboutUs"><AboutUS /></Route>  
+               <Route path="/TermsConditions"><TermsConditions /></Route>
+
                <Route path="/login"><Login /></Route>
                <Route path="/emailRequest"><EmailRequest /></Route>
                <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
-
+               <Route path="/reenterPassword"><ReenterPassword /></Route>
+              
                <Route exact path="/order"><Order /></Route>
                <Route path="/order/:po_number"><Order /></Route>
 
+
+               <Route path="/myAccount"><MyAccount/></Route>
+               <Route path="/currentOrders"><CurrentOrders /></Route>
+               <Route path="/processedOrders"><ProcessedOrders /></Route>
+               
+               <Route path="/editCompanyInformation"><EditCompanyInfo /></Route>                 
+               <Route path="/manageProducts"><ManageProducts /></Route>
+
+               <Route exact path="/editAddProducts"><AddEditProduct /></Route>
+               <Route path="/editAddProducts/:_id"><AddEditProduct /></Route>
+
+               <Route path="/CheckoutShipping"><CheckoutShipping /></Route>
+               <Route path="/CheckoutSecurePayment"><CheckoutSecurePayment /></Route>
+               <Route path="/CheckoutReviewOrder"><CheckoutReviewOrder /></Route>
+               <Route path="/CheckoutOrderComplete"><CheckoutOrderComplete /></Route>
             </Switch>
          </div>
-
          <div className="Website-Footer">
-         
-         </div>  
+            <FooterMain />
+         </div>
       </Router>
    </div>
 );

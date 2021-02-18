@@ -1,0 +1,25 @@
+#cart-head {
+  font-family:Helvetica;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  margin-left: 4%;
+  margin-right: 4%;
+  border-bottom: 1px solid #292929;
+}
+
+#cart-content{
+  font-family:Helvetica;
+  margin-left: 4%;
+  margin-right: 4%;
+  margin-top: 2%;
+}
+
+#cart-summary{
+  font-family:Helvetica;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin: auto;
+  width: 100%;
+  border-bottom: 1px solid #292929;
+  border-top: 1px solid #292929;
+}

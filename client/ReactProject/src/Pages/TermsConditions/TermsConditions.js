@@ -1,4 +1,4 @@
-import '../../_assets/CSS/pages/TC.css';
+import '../../_assets/CSS/pages/TermsConditions.css';
 const TermsConditions = () =>{
     return (
       <body>

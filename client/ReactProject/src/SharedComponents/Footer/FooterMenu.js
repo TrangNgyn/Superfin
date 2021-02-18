@@ -1,30 +1,27 @@
 import { Menu } from 'antd';
 import React, { useState } from 'react';
-import '../../_assets/CSS/layouts/Footer/FooterMenu.css';
+import { Link } from 'react-router-dom';
+
 
 export default function FooterMenu(){
     const[currentMenuItem, setMenuItem] = useState('');
       console.log(currentMenuItem);
       return (
-        <Menu className="FooterMenu" 
+        <Menu className="footer-menubar" 
               onClick={(menu) => setMenuItem(menu.key)}  
               mode="horizontal" >
-  
-            <Menu.Item key="Home" className="FooterMenuItem">
-              Home
+
+            <Menu.Item key="Terms" className="item">
+              <Link to="/termsAndConditions"> Terms and Conditions </Link>
             </Menu.Item >
 
-            <Menu.Item key="Terms" className="FooterMenuItem">
-              Terms and conditions
-            </Menu.Item >
-
-            <Menu.Item key="Support" className="FooterMenuItem">
+            <Menu.Item key="Support" className="item">
               Support
             </Menu.Item >
 
-            <Menu.Item key="Contact" className="FooterMenuItem">
-              Contact us
-            </Menu.Item >
+            <Menu.Item key="Contact" style = {{marginLeft: "30px", marginRight: "30px"}}>
+              <Link to="/contactUs"> Contact Us </Link>
+            </Menu.Item>
         </Menu>
     );
-  }
+}
