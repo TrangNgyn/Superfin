@@ -127,7 +127,7 @@ class Product {
             
             var { p_code, p_name, p_price, p_units_sold, p_categories, p_description } =  req.body
 
-            var images = req.files
+            //var images = req.files
 
             // if(images.length <= 0) {
             //     Product.delete_images(images)
@@ -137,19 +137,19 @@ class Product {
 
             // validate that input was recieved
             if( !p_code | !p_name | !p_categories | !p_price){
-                Product.delete_images(images)
+                //Product.delete_images(images)
                 return res.json(empty_field)
             }
             // validate that name and code
             else if( p_code.length > 255 || p_name.length > 255 || p_description > 511) {
-                Product.delete_images(images)
+                //Product.delete_images(images)
                 return res.json({ error: "Name and Code cannot be longer than 255 characters and description cannot be larger than 511 "})
             }
 
             var found_category = await categories_model.findOne({ _id: p_categories })
 
             if(!found_category){
-                Product.delete_images(images)
+                //Product.delete_images(images)
                 return res.json({ success: false,
                                   message: `Product was not added - the category ${p_categories} is not valid`})
             }
@@ -157,7 +157,7 @@ class Product {
             var matching_code = await product_model.findOne({ p_code: p_code })
 
             if(matching_code){
-                Product.delete_images(images)
+                //Product.delete_images(images)
                 return res.json({ success: false,
                                   message: `Product was not added, the p_code ${p_code} is already in use` })
             }
@@ -170,12 +170,12 @@ class Product {
 
                 // this does work :)
 
-                for (const image of images) {
+                /*for (const image of images) {
                     all_images.push(image.filename)
-                }
+                } */
 
                 const new_product = new product_model({
-                    p_image_uri: all_images,
+                    //p_image_uri: all_images,
                     p_code,
                     p_name,
                     p_price,
@@ -190,7 +190,7 @@ class Product {
                                       message: `The product with code ${p_code} was added.` })
                 }
                 else {
-                    Product.delete_images(images)
+                    //Product.delete_images(images)
                     return res.json({ success: false,
                                       message: "Product was not added"})
                 }
