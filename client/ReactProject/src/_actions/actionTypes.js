@@ -13,3 +13,7 @@ export const ORDER_BY = {
     CODE_A: "CODE_A",
     CODE_D: "CODE_D"
 }
+
+//Category Action Types
+export const GET_CATEGORIES = "GET_CATEGORIES";
+export const CATEGORY_ERROR = "CATEGORY_ERROR";

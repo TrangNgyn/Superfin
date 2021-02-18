@@ -1,9 +1,11 @@
 import '../../_assets/CSS/pages/ManageProducts/ManageProducts.css';
 import { Select, Pagination, Spin } from 'antd';
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { history } from '../../_helpers/history';
 import { getAllProducts, setDefaultOrder } from '../../_actions/productActions';
-import { useDispatch, useSelector } from 'react-redux';
+
 import { handleFilter, handleOrder } from './Functions';
 import ProductTableRows from './ProductTableRows';
 
@@ -26,31 +28,7 @@ const { Option, OptGroup } = Select;
     Upadate spelling error in 'productActions.js'. (Check the comments in that file)
 */
 
-/*
-export const TempHome = () => {
-    const dispatch = useDispatch();
-    const productsList = useSelector(state => state.productState.products);                 //Redux store product list
 
-    
-    useEffect(() => {                                                              //checks if the store is empty. If so, do an API request
-        if(!productsList.length) dispatch(getAllProducts());
-        else dispatch(setDefaultOrder());
-    }, []);
-
-    
-
-    return(
-        <>
-            <button onClick = { () => {
-                history.push('/manageProducts');
-            }}>products</button>
-
-            <button onClick = {() => {
-                console.log(store.getState().productState.products);
-            }}>Show products</button>
-        </>)
-    ;
-}*/
 
 
 

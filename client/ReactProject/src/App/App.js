@@ -8,7 +8,6 @@ import { history } from '../_helpers/history';
 import { Router, Route, Switch, useParams } from 'react-router-dom';
 import Login from '../Pages/Login/Login';
 import Homepage from '../Pages/Homepage/Homepage';
-import Cart from '../Pages/Cart/Cart';
 import ContactUs from '../Pages/ContactUs/ContactUs';
 import DeliveryDispatch from '../Pages/DeliveryDispatch/DeliveryDispatch';
 import AboutUS from '../Pages/AboutUs/AboutUs';
