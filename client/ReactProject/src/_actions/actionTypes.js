@@ -16,4 +16,3 @@ export const ORDER_BY = {
 
 //Category Action Types
 export const GET_CATEGORIES = "GET_CATEGORIES";
-export const CATEGORY_ERROR = "CATEGORY_ERROR";

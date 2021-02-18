@@ -10,7 +10,6 @@ import { useEffect } from 'react';
 
 const ProductTableRows = props => {
     const categories = useSelector(state => state.categoryState.categories);
-    const categoryError = useSelector(state => state.categoryState.error);
 
     useEffect(() => {             
         if(!categories.length) dispatch(getAllCategories());
@@ -36,7 +35,7 @@ const ProductTableRows = props => {
                     <td>{p.p_code}</td>
                     <td>${p.p_price}</td>
                     <td>{i}</td>
-                    <td>{ !categoryError && categories.length  ? getCategoryName(p.p_categories, categories) : "error loading category names"}</td>
+                    <td>{ getCategoryName(p.p_categories, categories) }</td>
                     <td>{10}</td>
                     <td>
                         <EditOutlined props={p.p_code} className="manage-products-icon" onClick={() => {

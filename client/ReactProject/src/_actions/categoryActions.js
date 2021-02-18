@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_CATEGORIES, CATEGORY_ERROR } from './actionTypes';
+import { GET_CATEGORIES } from './actionTypes';
 
 export const getAllCategories = () => dispatch => {
     axios.get('api/categories/all-categories')
@@ -11,9 +11,6 @@ export const getAllCategories = () => dispatch => {
     })
     .catch(err => {
         console.log(err);
-        dispatch({
-            type: CATEGORY_ERROR
-        });
     })
 }
 

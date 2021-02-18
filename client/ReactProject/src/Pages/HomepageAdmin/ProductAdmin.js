@@ -4,7 +4,6 @@ import altImage from "../../_assets/Images/No_Image.jpg"
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { deleteConfirm } from '../../SharedComponents/Modals/Modals';
 import { history } from '../../_helpers/history';
-import { getCategoryName } from '../../_services/SharedFunctions';
 
 
 
@@ -13,7 +12,7 @@ import { getCategoryName } from '../../_services/SharedFunctions';
 const Product = props => {
     const dispatch = props.dispatch;
     const product = props.product;
-    
+    const categoryName = props.categoryName;
 
 
 
@@ -48,7 +47,7 @@ const Product = props => {
                         <td>Unit Price: ${product.p_price}</td>
                     </tr>
                     <tr>
-                        <td>Category: { product.p_catagories}</td>
+                        <td>Category: { categoryName }</td>
                     </tr>
                 </tbody>
             </table>

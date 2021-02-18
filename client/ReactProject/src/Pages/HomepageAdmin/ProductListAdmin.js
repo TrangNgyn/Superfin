@@ -5,25 +5,31 @@ import { getAllCategories } from '../../_actions/categoryActions';
 import { useSelector  } from 'react-redux';
 import { useEffect } from 'react'; 
 import { Spin } from 'antd';
+import { getCategoryName } from '../../_services/SharedFunctions';
 
 const ProductList = props => {
 
     const categories = useSelector(state => state.categoryState.categories);
-    const categoryError = useSelector(state => state.categoryState.error);
+
+    console.log("cats", categories);
 
     useEffect(() => {             
         if(!categories.length) props.dispatch(getAllCategories());
     }, []);
 
     let rederableProducts;
+    
+    
 
     if(!props.productsList.length) rederableProducts = [];
     else{
         rederableProducts = props.productsList.map(p => {
+            
+
             const productProps = {
                 product: p,
-                dispatch: props.dispatch
-    
+                dispatch: props.dispatch,
+                categoryName: getCategoryName(p.p_categories, categories)
             }
             return <div key={p._id}><ProductAdmin {...productProps}/></div>
         });
