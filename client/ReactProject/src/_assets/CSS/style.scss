@@ -14,9 +14,11 @@ $base-line-height: 16px;
 https://all-markup-news.com/px-to-em/
 
 Use the link above, put the base font size as 16 and you should be able to have a corresponding px to em (or vice versa) value*/
-
+html, body {
+    margin: 0;
+    padding: 0;
+}
 body {
-	margin: 0;
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
 		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 	-webkit-font-smoothing: antialiased;
@@ -271,6 +273,14 @@ ul.Navbar > li:nth-last-child(4) {
 	flex: 1 1 0px;
 }
 
+// Normal container
+.container {
+	margin: 16px 20% auto;
+}
+
+div.Website-Body {
+	z-index: 90;
+}
 /* ====================================== */
 /* ============== End Body ============== */
 /* ====================================== */
@@ -278,12 +288,17 @@ ul.Navbar > li:nth-last-child(4) {
 /* ====================================== */
 /* =============== Footer =============== */
 /* ====================================== */
+div.Website-Footer {
+    z-index: 99;
+}
+
 ul[class*="footer-menubar"],
 ul.footer-menubar,
 ul.footer-menubar-mobile {
     text-align: center;
     background-color : $gray-light;
 }
+
 ul[class*="footer-menubar"]:after,
 ul.footer-menubar:after,
 ul.footer-menubar-mobile:after {
@@ -466,7 +481,11 @@ div#copyright-background{
 	}
 
 	div.Website-Body {
-		margin-top: 0;
+		margin-top: -16px;
+	}
+
+	.container {
+		margin: 16px 5% auto;
 	}
 
 	.page-title-holder.center-page {
@@ -510,9 +529,20 @@ div#copyright-background{
 		margin-top: 50px;
 	}
 
+	div.Website-Body:after {
+		height: 200px;
+		content:'';
+		display: block;
+	}
+
+	.container {
+		margin: 16px 10% auto;
+	}
+
 	div.Website-Footer {
 		position: fixed;
 		bottom: 0;
+		left: 0;
 		width: 100%;
 	}
 
@@ -536,6 +566,10 @@ div#copyright-background{
 }
 
 @include screen-size('md', $breakpoints) {
+	.container {
+		margin: 16px 15% auto;
+	}
+
 	div.footer-content-container > div#footer-email-input > form#footer-email-form {
 		margin: 0 5% 0 25%;
 	}
