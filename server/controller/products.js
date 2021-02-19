@@ -50,7 +50,6 @@ class Product {
                 if(product)
                     return res.json(product)
                 else {
-                    res.status(404)
                     return res.json({ success: false,
                                       message: "Product was not found" })
                 }
