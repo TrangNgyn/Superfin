@@ -116,6 +116,7 @@ const AddEditProduct = () => {
         },
 
         onPreview: async file => {
+            
             let src = file.url;
             if (!src) {
               src = await new Promise(resolve => {
@@ -126,14 +127,16 @@ const AddEditProduct = () => {
             }
             const image = new Image();
             image.src = src;
+          
+
             const imgWindow = window.open(src);
-            imgWindow.document.write(image.outerHTML);
+            console.log(imgWindow);
+           // imgWindow.document.write(image.outerHTML);
           }
       };
 
 
 
-    
 
 
 
@@ -142,8 +145,8 @@ const AddEditProduct = () => {
 
     
 
-    const onFinish = () => {                      //handles form submission
-      
+    const onFinish = info => {                      //handles form submission
+        console.log(info);
     };
 
     const onFinishFailed = errorInfo => {                     //handles form submission fail
@@ -216,7 +219,6 @@ const AddEditProduct = () => {
                 form = {form}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
-                vai
              
             >
                 <div id="ae-product-form-wrapper">
