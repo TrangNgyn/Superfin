@@ -1,51 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Upload, Button, message, Form, Input, Select, Modal} from 'antd';
+import { useSelector } from 'react-redux';
 import '../../_assets/CSS/pages/AddEditProduct/AddEditProduct.css';
 import { useParams } from 'react-router-dom';
+import { EDIT, ADD } from './PageStates';
+
+import { getAllProducts } from '../../_actions/productActions';
+import { getProduct } from './APIFunctions';
+
+
+const _getProduct = (p_code, productsList) => {
+    return productsList.find(product => {
+        return product.p_code === p_code;
+    });
+}
 
 
 
-
-
-
-
-
-
- 
 
 
 const AddEditProduct = () => {
-    const {_id} = useParams();
+    
+    const { p_code } = useParams();
 
-    _id ? console.log("_id", _id) : console.log("no _id found, rendering a blank form"); 
+    const productsList = useSelector(state => state.productState.products);
 
-    //mock fetch function for categories
-    const getCategories = () => {
-        return  [
-            {
-                c_name:"Bags",
-                c_description:"Paper bags",
-                c_image:"https://media.tenor.com/images/07ab3cb87a5c02b4603982a6d33ed405/tenor.gif"
-            },
+    const categories = useSelector(state => state.categoryState.categories);
 
-            {
-                c_name:"Boxes",
-                c_description:"Paper boxes",
-                c_image:"https://media.tenor.com/images/07ab3cb87a5c02b4603982a6d33ed405/tenor.gif"
-            },
+    const [pageState, setPageState] = useState(ADD);
+    const [product, setProduct] = useState(null);
 
-            {
-                c_name:"Clams",
-                c_description:"Paper clamsaa",
-                c_image:"https://media.tenor.com/images/07ab3cb87a5c02b4603982a6d33ed405/tenor.gif"
+    useEffect(() => {
+        if(p_code){
+            if(productsList.length !== 0){
+                console.log("getting from the store...");
+                const product = _getProduct(p_code, productsList);
+                if(product !== undefined){
+                    setProduct(product);
+                    setPageState(EDIT);
+                } 
+                else console.log("could not find product in the store...");
             }
-        ];
-    }
+            else{
+                console.log("getting from the db...");
+                getProduct(p_code, setProduct, setPageState);
+            }
+        }
+    }, []);
+
 
     //loading the categories
-    const categories = getCategories().map(p => {
+   /* const categories = getCategories().map(p => {
         return <Select.Option key={p.c_name} value={p.c_name}>{p.c_name}</Select.Option>
-    });
+    });*/
+
+    let selectCategories = <></>;
+    if(categories.length !== 0){
+        selectCategories = categories.map(p => {
+            return <Select.Option key={p.c_name} value={p.c_name}>{p.c_name}</Select.Option>
+        })
+    }
+
+
+   
 
 
 
@@ -220,16 +237,7 @@ const AddEditProduct = () => {
 
     const fetchProduct = e => {
         if(check_p_codeExists(e)){
-            /*make API call
-            const fakeProduct = {
-                p_code:"123abc",
-                p_name:"Brown bag",
-                p_price:"11.50",
-                p_units_sold:"3",
-                p_categories:"Bags",
-                p_image_uri:["", "", ""],
-                p_description:"Brown paper bags"
-            };*/
+            //make API call
         }
         else{
             product_does_not_exist();
@@ -251,9 +259,10 @@ const AddEditProduct = () => {
 
 
 
-
+    
       return (
         <div>
+
             <Modal title="Are you sure you want to submit this product?" visible={isSubmitModalVisible} onOk={handleSubmitOk} onCancel={handleSubmitCancel}>
                 <p>Select 'Ok' to submit, or 'Cancel' to cancel form submission</p>
             </Modal>
@@ -267,6 +276,7 @@ const AddEditProduct = () => {
 
 
             <h1 id="ae-product-header-title">Add/Edit Product</h1>
+            {pageState === EDIT ? <h1>EDIT MODE</h1> : <h1>ADD MODE</h1> }
 
 
 
@@ -291,7 +301,7 @@ const AddEditProduct = () => {
 
 
 
-
+         
         
             <Form
                 form = {form}
@@ -384,7 +394,7 @@ const AddEditProduct = () => {
                                     }
                             ]}>
                                 <Select placeholder="Select a category">
-                                    {categories}
+                                    {/*categories*/}
                                 </Select>
                             </Form.Item>
                         </div>
@@ -407,7 +417,7 @@ const AddEditProduct = () => {
                         </Form.Item>
                     </div>
                 </div> 
-            </Form>     
+            </Form>   
         </div>
       );
     }

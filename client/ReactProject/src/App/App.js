@@ -3,7 +3,6 @@ import HomepageAdmin from '../Pages/HomepageAdmin/HomepageAdmin';
 import AddEditProduct from '../Pages/AddEditProduct/AddEditProduct';
 import '../_assets/CSS/style.scss'
 import Navbar from '../SharedComponents/Navbar/Navbar';
-import FooterMain from '../SharedComponents/Footer/FooterMain';
 import { history } from '../_helpers/history';
 import { Router, Route, Switch, useParams } from 'react-router-dom';
 import Login from '../Pages/Login/Login';
@@ -83,7 +82,7 @@ const App = () => (
                <Route path="/manageProducts"><ManageProducts /></Route>
 
                <Route exact path="/editAddProducts"><AddEditProduct /></Route>
-               <Route path="/editAddProducts/:_id"><AddEditProduct /></Route>
+               <Route path="/editAddProducts/:p_code"><AddEditProduct /></Route>
 
                <Route path="/CheckoutShipping"><CheckoutShipping /></Route>
                <Route path="/CheckoutSecurePayment"><CheckoutSecurePayment /></Route>
@@ -92,7 +91,7 @@ const App = () => (
             </Switch>
          </div>
          <div className="Website-Footer">
-            <FooterMain />
+       
          </div>
       </Router>
    </div>
