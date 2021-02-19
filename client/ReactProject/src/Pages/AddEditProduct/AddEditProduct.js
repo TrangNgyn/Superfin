@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Upload, Button, message, Form, Input, Select, Modal} from 'antd';
+import { Upload, Button, Form, Input, Select } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import '../../_assets/CSS/pages/AddEditProduct/AddEditProduct.css';
 import { useParams } from 'react-router-dom';
 import { EDIT, ADD } from './PageStates';
 import { history } from '../../_helpers/history'; 
-import { getProduct, _getProduct, onPriceChange } from './Functions';
+import { getProduct, _getProduct, onPriceChange, onPreview, beforeUpload, onRemove } from './Functions';
 import { getAllCategories } from '../../_actions/categoryActions';
+
 
 
 
@@ -26,6 +27,7 @@ const AddEditProduct = () => {
     const [pageState, setPageState] = useState(null);
     const [product, setProduct] = useState(null);
     const [fileList, updateFileList] = useState([]);
+
 
     const [form] = Form.useForm();
 
@@ -57,95 +59,8 @@ const AddEditProduct = () => {
     }
 
 
-   
-
-
-
-
-
-
-
-
-
-
-   
-
-
-
-
-
-
-
-
-
-
-    
-                                                                //props and state for the image uploader
-    const normFile = info => {
-        return info.fileList;
-    };
-                                                            
-    const props = {
-        fileList,
-
-        listType: "picture-card",
-
-        onRemove: file => {
-            const newFileList = fileList.slice();
-            newFileList.splice(fileList.indexOf(file), 1);
-            updateFileList(newFileList);
-        },
-
-        beforeUpload: (file, fileList) => {
-            const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-            if(!isJpgOrPng) message.error('You can only upload JPG/PNG file!');
-
-            const isLt2M = file.size / 1024 / 1024 < 2;
-            if(!isLt2M) message.error('Image must smaller than 2MB!');
-
-            if(!isJpgOrPng || !isLt2M) {
-                file = null;
-                fileList.pop();
-            }
-
-            return false;
-        },
-
-        onChange: info => { 
-            updateFileList([...info.fileList]);
-        },
-
-        onPreview: async file => {
-            
-            let src = file.url;
-            if (!src) {
-              src = await new Promise(resolve => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file.originFileObj);
-                reader.onload = () => resolve(reader.result);
-              });
-            }
-            const image = new Image();
-            image.src = src;
-          
-
-            const imgWindow = window.open(src);
-            console.log(imgWindow);
-           // imgWindow.document.write(image.outerHTML);
-          }
-      };
-
-
-
-
-
-
-
-
-
-    
-
     const onFinish = info => {                      //handles form submission
+        console.log("info", info);
         console.log(info);
     };
 
@@ -192,29 +107,9 @@ const AddEditProduct = () => {
     
       return (
         <div>
-
-
-
-
-            
             {pageState === EDIT ? <h1 id="ae-product-header-title">Editing Product: {product.p_code}</h1> : <></>}
             {pageState === ADD ? <h1 id="ae-product-header-title">Add Product</h1> : <></>}
 
-
-
-
-
-
-
- 
-    
-
-
-
-
-
-         
-        
             <Form
                 form = {form}
                 onFinish={onFinish}
@@ -240,15 +135,16 @@ const AddEditProduct = () => {
                         <div style = {{ width: "500px", paddingTop: "4%"}}>  
                             <Form.Item 
                                 name="p_image_uri"
-                                getValueFromEvent={normFile}                                      //this name is subject to change
-                                rules={[
-                                    {
-                                        validator: async () => {
-                                            if (fileList <= 0) return Promise.reject(new Error('Please upload an image'));
-                                        }
-                                    }
-                                ]}>
-                                <Upload {...props}>
+                                getValueFromEvent={info => { return info.fileList }}                                      //this name is subject to change
+                            >
+                                <Upload 
+                                    fileList={fileList}
+                                    listType = "picture-card"
+                                    onPreview = {file => { onPreview(file, fileList, updateFileList) }}
+                                    onChange = {info => { updateFileList([...info.fileList]) }}
+                                    beforeUpload = {beforeUpload}
+                                    onRemove = {file => {onRemove(file, fileList, updateFileList)}}
+                                >
                                     {fileList.length < 6 && '+ Drag image or click'} 
                                 </Upload>
                             </Form.Item>
@@ -307,14 +203,7 @@ const AddEditProduct = () => {
                         </div>
                      
                         <div> Product Description
-                            <Form.Item
-                                name="p_description"                                  
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: 'Please input the product description',
-                                    }
-                            ]}>
+                            <Form.Item name="p_description">
                                 <Input.TextArea style ={{width:"500px", height: "125px"}}/>
                             </Form.Item>
                         </div>
