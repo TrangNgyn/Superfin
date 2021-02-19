@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Upload, Button, message, Form, Input, Select, Modal} from 'antd';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import '../../_assets/CSS/pages/AddEditProduct/AddEditProduct.css';
 import { useParams } from 'react-router-dom';
 import { EDIT, ADD } from './PageStates';
+import { history } from '../../_helpers/history'; 
+import { getProduct, _getProduct, onPriceChange } from './Functions';
+import { getAllCategories } from '../../_actions/categoryActions';
 
-import { getAllProducts } from '../../_actions/productActions';
-import { getProduct } from './APIFunctions';
 
 
-const _getProduct = (p_code, productsList) => {
-    return productsList.find(product => {
-        return product.p_code === p_code;
-    });
-}
 
 
 
@@ -22,37 +18,36 @@ const _getProduct = (p_code, productsList) => {
 const AddEditProduct = () => {
     
     const { p_code } = useParams();
+    const dispatch = useDispatch();
 
     const productsList = useSelector(state => state.productState.products);
-
     const categories = useSelector(state => state.categoryState.categories);
 
-    const [pageState, setPageState] = useState(ADD);
+    const [pageState, setPageState] = useState(null);
     const [product, setProduct] = useState(null);
+    const [fileList, updateFileList] = useState([]);
+
+    const [form] = Form.useForm();
 
     useEffect(() => {
         if(p_code){
             if(productsList.length !== 0){
-                console.log("getting from the store...");
                 const product = _getProduct(p_code, productsList);
                 if(product !== undefined){
                     setProduct(product);
                     setPageState(EDIT);
-                } 
-                else console.log("could not find product in the store...");
+                }
+                else{
+                    history.push('/editAddProducts');
+                    window.location.reload();
+                }                                
             }
-            else{
-                console.log("getting from the db...");
-                getProduct(p_code, setProduct, setPageState);
-            }
+            else getProduct(p_code, setProduct, setPageState);
         }
+        else setPageState(ADD);
+
+        if(!categories.length) dispatch(getAllCategories());
     }, []);
-
-
-    //loading the categories
-   /* const categories = getCategories().map(p => {
-        return <Select.Option key={p.c_name} value={p.c_name}>{p.c_name}</Select.Option>
-    });*/
 
     let selectCategories = <></>;
     if(categories.length !== 0){
@@ -84,9 +79,9 @@ const AddEditProduct = () => {
 
 
 
-    const [fileList, updateFileList] = useState([]);
+    
                                                                 //props and state for the image uploader
-    const normFile = (info) => {
+    const normFile = info => {
         return info.fileList;
     };
                                                             
@@ -116,7 +111,7 @@ const AddEditProduct = () => {
             return false;
         },
 
-        onChange: (info) => { 
+        onChange: info => { 
             updateFileList([...info.fileList]);
         },
 
@@ -144,34 +139,19 @@ const AddEditProduct = () => {
 
 
 
-    //form stuff
-    const [form] = Form.useForm();
-    const [isSubmitModalVisible, setIsSubmitModalVisible] = useState(false);
-    const [isEditProductVisible, setIsEditProductVisible] = useState (false);
+
+    
 
     const onFinish = () => {                      //handles form submission
-        const p_code = form.getFieldValue('p_code');
-        if(check_p_codeExists(p_code)){
-            showEditProduct();
-            return;
-        }
-        else showSubmitModal();
+      
     };
 
-    const onFinishFailed = (errorInfo) => {                     //handles form submission fail
+    const onFinishFailed = errorInfo => {                     //handles form submission fail
         console.log('Submission Failed:', errorInfo);
     }
 
-    const check_p_codeExists = (p_code) => {
-        //This will check if the product code exists. Currently is mock.
-        console.log("checking p_code...");
-        if(p_code === "123abc") return true;
-    }
 
-    const showEditProduct = () => {
-        setIsEditProductVisible(true);
-    }
-
+    /*
     const handleEditOk = () => {
         const values = form.getFieldsValue();
         console.log('Success:', values);
@@ -179,20 +159,10 @@ const AddEditProduct = () => {
         console.log("clearing form fields...");
         form.resetFields();
         updateFileList([]);
-
-        setIsEditProductVisible(false);
-    }
-
-    const handleEditCancel = () => {
-        setIsEditProductVisible(false);
     }
 
 
-    const showSubmitModal = () => {             //brings up the submission modal
-        setIsSubmitModalVisible(true);
-    };
-
-    const handleSubmitOk = () => {                          //handles ok click
+    const handleSubmitOk = () => {                         
         //submit the form here
         const values = form.getFieldsValue();
         console.log('Success:', values);
@@ -201,57 +171,14 @@ const AddEditProduct = () => {
         form.resetFields();
         updateFileList([]);
 
-        setIsSubmitModalVisible(false);
-    };
+    };*/
 
-    const handleSubmitCancel = () => {                              //handles cancel click
-        setIsSubmitModalVisible(false);
-        console.log("product submission cancelled");
-    };
+   
 
-    const onPriceChange = e => {                            //controling user price input
-        const reg = /^(\d+(\.\d{0,2})?|\.?\d{1,2})$/;
-        let str = e.target.value;
-
-        if (str === '' || reg.test(str)) form.setFieldsValue({p_price: str});
-        else{
-            str = str.substring(0, str.length - 1);
-            if(!reg.test(str)) form.setFieldsValue({p_price: ''});
-            else form.setFieldsValue({p_price: str});   
-        }  
-    }
-
-    function hasWhiteSpace(s) {
-        return /\s/g.test(s);
-    }
 
     
 
 
-
-
-
-
-
-
-
-    const fetchProduct = e => {
-        if(check_p_codeExists(e)){
-            //make API call
-        }
-        else{
-            product_does_not_exist();
-        }
-        
- 
-    }
-
-    function product_does_not_exist() {                                           //Modal for already existing p_code
-        Modal.error({
-          title: 'That product cannot be found',
-          content: 'Please make sure you have typed the code correctly',
-        });
-    }
 
 
 
@@ -263,20 +190,13 @@ const AddEditProduct = () => {
       return (
         <div>
 
-            <Modal title="Are you sure you want to submit this product?" visible={isSubmitModalVisible} onOk={handleSubmitOk} onCancel={handleSubmitCancel}>
-                <p>Select 'Ok' to submit, or 'Cancel' to cancel form submission</p>
-            </Modal>
-
-            <Modal title="You have choosen to edit an already existing product" visible={isEditProductVisible} onOk={handleEditOk} onCancel={handleEditCancel}>
-                <p>If you wish to make a new product, change the product code to something unique</p>
-                <p>Select 'Ok' to make changes to product, or 'Cancel' to continue editing.</p>
-            </Modal>
 
 
 
+            
+            {pageState === EDIT ? <h1 id="ae-product-header-title">Editing Product: {product.p_code}</h1> : <></>}
+            {pageState === ADD ? <h1 id="ae-product-header-title">Add Product</h1> : <></>}
 
-            <h1 id="ae-product-header-title">Add/Edit Product</h1>
-            {pageState === EDIT ? <h1>EDIT MODE</h1> : <h1>ADD MODE</h1> }
 
 
 
@@ -284,18 +204,7 @@ const AddEditProduct = () => {
 
 
  
-            <div style = {{paddingLeft: "15%"}}>
-                <Input.Search
-                placeholder="Search a product code to edit product"
-                enterButton="Search"
-                onSearch={fetchProduct}
-                style={{ width:"500px" }}/>
-           </div>
-
-
-
-
-
+    
 
 
 
@@ -307,6 +216,7 @@ const AddEditProduct = () => {
                 form = {form}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
+                vai
              
             >
                 <div id="ae-product-form-wrapper">
@@ -318,6 +228,7 @@ const AddEditProduct = () => {
                                     {
                                         required: true,
                                         message: 'Please input the name of the product',
+                                        validateTrigger: "onSubmit"
                                     }
                             ]}>
                                 <Input style ={{width:"500px"}}/>
@@ -350,13 +261,7 @@ const AddEditProduct = () => {
                                         {
                                             required: true,
                                             message: 'Please input the product code',
-                                        },
-                                        {
-                                            validator: async (_, value) => {
-                                                if (hasWhiteSpace(value)){
-                                                    return Promise.reject(new Error('This field cannot contain spaces'));
-                                                } 
-                                            }
+                                            whitespace: true
                                         }
                                 ]}>
                                     <Input style ={{width:"500px"}}/>
@@ -380,7 +285,7 @@ const AddEditProduct = () => {
                                         }
                                     }
                             ]}>
-                                <Input onChange={onPriceChange} maxLength={10}/>
+                                <Input onChange={e => {onPriceChange(e, form)}} maxLength={10}/>
                             </Form.Item>
                         </div>
 
@@ -394,7 +299,7 @@ const AddEditProduct = () => {
                                     }
                             ]}>
                                 <Select placeholder="Select a category">
-                                    {/*categories*/}
+                                    {selectCategories}
                                 </Select>
                             </Form.Item>
                         </div>
