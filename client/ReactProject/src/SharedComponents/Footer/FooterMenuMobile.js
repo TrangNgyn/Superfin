@@ -1,5 +1,6 @@
 import { Menu } from 'antd';
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function FooterMenuMobile(){
     const[currentMenuItem, setMenuItem] = useState('');
@@ -14,7 +15,7 @@ export default function FooterMenuMobile(){
             </Menu.Item >
 
             <Menu.Item key="Terms" className="item">
-              Terms and Conditions
+              <Link to="/termsAndConditions"> Terms and Conditions </Link>
             </Menu.Item >
 
             <Menu.Item key="Support" className="item">
@@ -22,8 +23,8 @@ export default function FooterMenuMobile(){
             </Menu.Item >
 
             <Menu.Item key="Contact" className="item">
-              Contact Us
-            </Menu.Item >
+              <Link to="/contactUs"> Contact Us </Link>
+            </Menu.Item>
         </Menu>
     );
   }

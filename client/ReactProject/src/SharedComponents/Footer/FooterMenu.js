@@ -19,7 +19,7 @@ export default function FooterMenu(){
               Support
             </Menu.Item >
 
-            <Menu.Item key="Contact" style = {{marginLeft: "30px", marginRight: "30px"}}>
+            <Menu.Item key="Contact" className="item">
               <Link to="/contactUs"> Contact Us </Link>
             </Menu.Item>
         </Menu>
