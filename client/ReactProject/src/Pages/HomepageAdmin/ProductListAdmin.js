@@ -8,10 +8,7 @@ import { Spin } from 'antd';
 import { getCategoryName } from '../../_services/SharedFunctions';
 
 const ProductList = props => {
-
     const categories = useSelector(state => state.categoryState.categories);
-
-    console.log("cats", categories);
 
     useEffect(() => {             
         if(!categories.length) props.dispatch(getAllCategories());
@@ -20,12 +17,9 @@ const ProductList = props => {
     let rederableProducts;
     
     
-
     if(!props.productsList.length) rederableProducts = [];
     else{
         rederableProducts = props.productsList.map(p => {
-            
-
             const productProps = {
                 product: p,
                 dispatch: props.dispatch,

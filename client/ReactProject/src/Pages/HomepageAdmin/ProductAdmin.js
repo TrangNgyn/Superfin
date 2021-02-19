@@ -17,6 +17,7 @@ const Product = props => {
 
 
 
+    
     const viewCategory = () => {
         console.log("View product info for " + product.name);
         //This will link to product info page
