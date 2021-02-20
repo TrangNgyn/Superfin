@@ -1,5 +1,5 @@
 import './App.less';
-//import Homepage from '../Pages/Homepage/Homepage';
+import HomepageAdmin from '../Pages/HomepageAdmin/HomepageAdmin';
 import AddEditProduct from '../Pages/AddEditProduct/AddEditProduct';
 import '../_assets/CSS/style.scss'
 import Navbar from '../SharedComponents/Navbar/Navbar';
@@ -8,12 +8,12 @@ import { history } from '../_helpers/history';
 import { Router, Route, Switch, useParams } from 'react-router-dom';
 import Login from '../Pages/Login/Login';
 import Homepage from '../Pages/Homepage/Homepage';
-import Cart from '../Pages/Cart/Cart';
 import ContactUs from '../Pages/ContactUs/ContactUs';
 import DeliveryDispatch from '../Pages/DeliveryDispatch/DeliveryDispatch';
 import AboutUS from '../Pages/AboutUs/AboutUs';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ResetPasswordConfirmation from '../Pages/ResetPasswordConfirmation/ResetPasswordConfirmation';
+import Order from '../Pages/Order/Order';
 import ReenterPassword from '../Pages/ReenterPassword/ReenterPassword'
 import CurrentOrders from '../Pages/CurrentOrders/CurrentOrders';
 import ProcessedOrders from '../Pages/ProcessedOrders/ProcessedOrders';
@@ -45,49 +45,57 @@ const Products = () => {
 }
 
 const App = () => (
-   <Router history = {history}>
-      <div className="Website-Header">
-         <Navbar />
-      </div>
+   <div>
+      <Router history = {history}>
+         <div className="Website-Header">
+            <Navbar />
+         </div>
 
-      <div className="Website-Body" >
-         <Switch>
-        
-            <Route exact path="/"><Homepage /></Route>
-            <Route exact path="/products"> <Products /></Route>
-            <Route exact path="/products/:browseBy"><Products /></Route> 
-            <Route path="/products/:browseBy/:browseByGroup"><Products /></Route> 
-            <Route path="/deliveryDispatch"> <DeliveryDispatch /></Route>
-            <Route path="/contactUs"> <ContactUs /></Route>
-            <Route path="/aboutUs"><AboutUS /></Route>  
-            <Route path="/TermsConditions"><TermsConditions /></Route>
+         <div className="Website-Body" >
+            <Switch>
+           
+               <Route exact path="/"><Homepage /></Route>
+               <Route exact path="/admin"><HomepageAdmin /></Route>
 
-            <Route path="/login"><Login /></Route>
-            <Route path="/emailRequest"><EmailRequest /></Route>
-            <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
-            <Route path="/reenterPassword"><ReenterPassword /></Route>
+               <Route exact path="/products"> <Products /></Route>
+               <Route exact path="/products/:browseBy"><Products /></Route> 
+               <Route path="/products/:browseBy/:browseByGroup"><Products /></Route> 
 
-            <Route path="/myAccount"><MyAccount/></Route>
-            <Route path="/currentOrders"><CurrentOrders /></Route>
-            <Route path="/processedOrders"><ProcessedOrders /></Route>
-            
-            <Route path="/editCompanyInformation"><EditCompanyInfo /></Route>                 
-            <Route path="/manageProducts"><ManageProducts /></Route>
+               <Route path="/deliveryDispatch"> <DeliveryDispatch /></Route>
+               <Route path="/contactUs"> <ContactUs /></Route>
+               <Route path="/aboutUs"><AboutUS /></Route>  
+               <Route path="/TermsConditions"><TermsConditions /></Route>
 
-            <Route exact path="/editAddProducts"><AddEditProduct /></Route>
-            <Route path="/editAddProducts/:_id"><AddEditProduct /></Route>
+               <Route path="/login"><Login /></Route>
+               <Route path="/emailRequest"><EmailRequest /></Route>
+               <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
+               <Route path="/reenterPassword"><ReenterPassword /></Route>
+              
+               <Route exact path="/order"><Order /></Route>
+               <Route path="/order/:po_number"><Order /></Route>
 
-            <Route path="/CheckoutShipping"><CheckoutShipping /></Route>
-            <Route path="/CheckoutSecurePayment"><CheckoutSecurePayment /></Route>
-            <Route path="/CheckoutReviewOrder"><CheckoutReviewOrder /></Route>
-            <Route path="/CheckoutOrderComplete"><CheckoutOrderComplete /></Route>
-         </Switch>
-      </div>
-      <div className="Website-Footer box-shadow">
-         <FooterMain />
-      </div>
-   </Router>
 
+               <Route path="/myAccount"><MyAccount/></Route>
+               <Route path="/currentOrders"><CurrentOrders /></Route>
+               <Route path="/processedOrders"><ProcessedOrders /></Route>
+               
+               <Route path="/editCompanyInformation"><EditCompanyInfo /></Route>                 
+               <Route path="/manageProducts"><ManageProducts /></Route>
+
+               <Route exact path="/editAddProducts"><AddEditProduct /></Route>
+               <Route path="/editAddProducts/:_id"><AddEditProduct /></Route>
+
+               <Route path="/CheckoutShipping"><CheckoutShipping /></Route>
+               <Route path="/CheckoutSecurePayment"><CheckoutSecurePayment /></Route>
+               <Route path="/CheckoutReviewOrder"><CheckoutReviewOrder /></Route>
+               <Route path="/CheckoutOrderComplete"><CheckoutOrderComplete /></Route>
+            </Switch>
+         </div>
+         <div className="Website-Footer">
+            <FooterMain />
+         </div>
+      </Router>
+   </div>
 );
 
 export default App;
