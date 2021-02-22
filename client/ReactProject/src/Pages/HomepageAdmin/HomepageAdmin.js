@@ -14,8 +14,6 @@ import { useState , useEffect } from 'react';
 
 /*
     Tasks left
-    Loading circle for products     **
-    Error message for failed load   **
     Make Images work for products.
     Hook up Orders API
 */

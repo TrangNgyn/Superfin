@@ -12,7 +12,8 @@ const productReducer = (state = initState, {type, payload}) => {
             return {
                 ...state,
                 products: payload.sort((a,b) => (a.p_code > b.p_code) ? 1 : ((b.p_code > a.p_code) ? -1 : 0)),
-                isLoading: false
+                isLoading: false,
+                error: false
             }
         case DEFAULT_ORDER:
             return {

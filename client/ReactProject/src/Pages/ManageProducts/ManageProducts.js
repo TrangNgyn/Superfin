@@ -38,6 +38,7 @@ const ManageProducts = () => {
     const productsList = useSelector(state => state.productState.products);                 //Redux store product list
     const errorLoading = useSelector(state => state.productState.error);
     const loading = useSelector(state => state.productState.isLoading);
+    const categories = useSelector(state => state.categoryState.categories);
      
     const [page, setPage] = useState(0);
     const itemsPerPage = 10;
@@ -46,13 +47,21 @@ const ManageProducts = () => {
     const productTableRowsProps = {                                                         //props for the product table rows
         productsList: productsList,
         page: page,
-        dispatch: dispatch
+        dispatch: dispatch,
+        categories: categories
     }
 
     useEffect(() => {                                                     //checks if the store is empty. If so, do an API request
         if(!productsList.length) dispatch(getAllProducts());
         else dispatch(setDefaultOrder());
     }, []);
+
+    let selectCategories = <></>;
+    if(categories.length !== 0){
+        selectCategories = categories.map(p => {
+            return <Option key={p.c_name} value={p.c_name}>{p.c_name}</Option>
+        })
+    }
 
     return (
         <div >
@@ -67,16 +76,8 @@ const ManageProducts = () => {
                             </td>
                             <td>
                                 <Select placeholder="Filter by" style={{ width: "300px" }} onChange={handleFilter}>
-                                    <OptGroup label="Stock Level">
-                                        <Option value="in_stock">In Stock</Option>
-                                        <Option value="out_stock">Out of Stock</Option>
-                                    </OptGroup>
-
                                     <OptGroup label="Category">
-                                        <Option value="category_1">category 1</Option>
-                                        <Option value="category_2">category 2</Option>
-                                        <Option value="category_3">category 3</Option>
-                                        <Option value="category_4">category 4</Option>
+                                        {selectCategories}
                                     </OptGroup>    
                                 </Select>
                             </td>

@@ -7,13 +7,7 @@ import { EDIT, ADD } from './PageStates';
 import { history } from '../../_helpers/history'; 
 import { getProduct, _getProduct, onPriceChange, onPreview, beforeUpload, onRemove } from './Functions';
 import { getAllCategories } from '../../_actions/categoryActions';
-
-
-
-
-
-
-
+import { onlyNumbers } from '../../_services/SharedFunctions';
 
 
 const AddEditProduct = () => {
@@ -60,7 +54,6 @@ const AddEditProduct = () => {
 
 
     const onFinish = info => {                      //handles form submission
-        console.log("info", info);
         console.log(info);
     };
 
@@ -125,10 +118,26 @@ const AddEditProduct = () => {
                                     {
                                         required: true,
                                         message: 'Please input the name of the product',
-                                        validateTrigger: "onSubmit"
+                                        validateTrigger: "onSubmit",
+                                        whitespace: true
                                     }
                             ]}>
                                 <Input style ={{width:"500px"}}/>
+                            </Form.Item>
+                        </div>
+
+                        <div> Units Sold
+                            <Form.Item 
+                                name="p_units_sold"
+                                rules={[
+                                    {
+    
+                                        message: 'No white spaces',
+                                        validateTrigger: "onSubmit",
+                                        whitespace: true
+                                    }
+                            ]}>
+                                <Input onChange={e => {onlyNumbers(e, form, 'p_units_sold')}} maxLength={4} style ={{width:"60px"}}/>
                             </Form.Item>
                         </div>
                         
@@ -159,7 +168,8 @@ const AddEditProduct = () => {
                                         {
                                             required: true,
                                             message: 'Please input the product code',
-                                            whitespace: true
+                                            whitespace: true,
+                                            validateTrigger: "onSubmit"
                                         }
                                 ]}>
                                     <Input style ={{width:"500px"}}/>
@@ -173,6 +183,8 @@ const AddEditProduct = () => {
                                     {
                                         required: true,
                                         message: 'Please input the price of the product',
+                                        validateTrigger: "onSubmit",
+                                        whitespace:true
                                     },
 
                                     {
@@ -194,6 +206,7 @@ const AddEditProduct = () => {
                                     {
                                         required: true,
                                         message: 'Please input the product category',
+                                        validateTrigger: "onSubmit"
                                     }
                             ]}>
                                 <Select placeholder="Select a category">
@@ -203,7 +216,16 @@ const AddEditProduct = () => {
                         </div>
                      
                         <div> Product Description
-                            <Form.Item name="p_description">
+                            
+                            <Form.Item 
+                                name="p_description"
+                                rules={[
+                                    {
+                                        whitespace: true,
+                                        message: 'No white spaces',
+                                        validateTrigger: "onSubmit"
+                                    }]}
+                            >
                                 <Input.TextArea style ={{width:"500px", height: "125px"}}/>
                             </Form.Item>
                         </div>

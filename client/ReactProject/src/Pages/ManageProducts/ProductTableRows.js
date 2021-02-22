@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 //All rows for the Product table
 
 const ProductTableRows = props => {
-    const categories = useSelector(state => state.categoryState.categories);
+    const categories = props.categories;
 
     useEffect(() => {             
         if(!categories.length) dispatch(getAllCategories());
@@ -27,6 +27,7 @@ const ProductTableRows = props => {
     else{
         renderableProducts = productsList.slice( page * itemsPerPage, 
             ((page + 1) * itemsPerPage) > productsList.length ? productsList.length : ((page + 1) * itemsPerPage));
+            
 
         row = renderableProducts.map((p, i) => {
             return (
