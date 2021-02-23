@@ -26,17 +26,23 @@ import CheckoutReviewOrder from '../Pages/Checkout/CheckoutReviewOrder';
 import CheckoutOrderComplete from '../Pages/Checkout/CheckoutOrderComplete';
 
 
-import axios from 'axios';
-const addProducts = () => {
+//import axios from 'axios';
 
+
+        
+
+      
+/*
+const addProd = () => {
+    console.log('adding a product');
+
+    for(let i = 0; i < 10; i++){
         const obj = {
-            p_code: `prod_1564564`,
-            p_name: `product_1`,
-            p_categories: "5fe199a450975047d0e11c12",
-            p_price: "10"
+            p_code: `prod_b_${i}`,
+            p_name: `product_abc${i}`,
+            p_categories: "5fe199a450975047d0e11c14",
+            p_price: `${i}`
         }
-
-        console.log('adding a product');
 
         axios.post('api/products/add-product', obj)
         .then(res => {
@@ -45,13 +51,16 @@ const addProducts = () => {
         .catch(err => {
             console.log(err);
         })
+    }
 }
+
+addProd();*/
+
     
 //'5fe199a450975047d0e11c12'
 //'5fe199a450975047d0e11c13'
 //'5fe199a450975047d0e11c14'
 
-addProducts();
 
 
 

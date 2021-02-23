@@ -5,9 +5,10 @@ import '../../_assets/CSS/pages/AddEditProduct/AddEditProduct.css';
 import { useParams } from 'react-router-dom';
 import { EDIT, ADD } from './PageStates';
 import { history } from '../../_helpers/history'; 
-import { getProduct, _getProduct, onPriceChange, onPreview, beforeUpload, onRemove } from './Functions';
+import { getProduct, _getProduct, onPriceChange, onPreview, beforeUpload, onRemove, setFormValues, checkProductsEqual, _editProduct, getProductId } from './Functions';
 import { getAllCategories } from '../../_actions/categoryActions';
 import { onlyNumbers } from '../../_services/SharedFunctions';
+import { editProduct } from '../../_actions/productActions'; 
 
 
 const AddEditProduct = () => {
@@ -18,10 +19,11 @@ const AddEditProduct = () => {
     const productsList = useSelector(state => state.productState.products);
     const categories = useSelector(state => state.categoryState.categories);
 
+    
+
     const [pageState, setPageState] = useState(null);
     const [product, setProduct] = useState(null);
     const [fileList, updateFileList] = useState([]);
-
 
     const [form] = Form.useForm();
 
@@ -43,25 +45,76 @@ const AddEditProduct = () => {
         else setPageState(ADD);
 
         if(!categories.length) dispatch(getAllCategories());
-    }, []);
+    }, [categories.length, dispatch, p_code, productsList]);
+
+    useEffect(() => {
+        if(pageState === EDIT) setFormValues(form, product, categories);
+    }, [categories, product, form, pageState]);
 
     let selectCategories = <></>;
     if(categories.length !== 0){
         selectCategories = categories.map(p => {
-            return <Select.Option key={p.c_name} value={p.c_name}>{p.c_name}</Select.Option>
+            return <Select.Option key={p.c_name} value={p.p_categories}>{p.c_name}</Select.Option>
         })
     }
 
 
-    const onFinish = info => {                      //handles form submission
-        console.log(info);
+
+
+
+
+
+
+
+    const onFinish = newProduct => {                      //handles form submission
+
+        newProduct.p_categories = getProductId(newProduct.p_categories, categories);
+        newProduct.p_code = product.p_code;
+
+        if(!checkProductsEqual(newProduct, product) && pageState === EDIT){
+         
+            if(productsList.length !== 0){
+                dispatch(editProduct(newProduct))
+                .then(res => {
+                    if(res.data.success) setProduct(newProduct); //merge with develop and test this condition
+                    else {
+                        
+                        //something went wrong please try again
+                    }
+                })
+                .catch(err => {
+                    //someing went wrong, please try again.
+                });
+                
+            }
+            else{
+                _editProduct(newProduct)
+                .then(res => {
+                    if(res.data.success) setProduct(newProduct); //product edit successful
+                    else{
+                        //something went wrong please try again
+                    }
+                    
+                })
+                .catch(err => {
+                    //something went wrong, please try again
+                });
+            }
+            
+        }
+        if(pageState === ADD){
+            //add the product
+        }
+    
+
+  
+
+        
+
     };
 
-    const onFinishFailed = errorInfo => {                     //handles form submission fail
-        console.log('Submission Failed:', errorInfo);
-    }
 
-
+ 
     /*
     const handleEditOk = () => {
         const values = form.getFieldsValue();
@@ -98,7 +151,7 @@ const AddEditProduct = () => {
 
 
     
-      return (
+    return (
         <div>
             {pageState === EDIT ? <h1 id="ae-product-header-title">Editing Product: {product.p_code}</h1> : <></>}
             {pageState === ADD ? <h1 id="ae-product-header-title">Add Product</h1> : <></>}
@@ -106,8 +159,7 @@ const AddEditProduct = () => {
             <Form
                 form = {form}
                 onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-             
+                onFinishFailed={err => { console.log("Failed submit", err) }}
             >
                 <div id="ae-product-form-wrapper">
                     <div className="ae-product-form">
@@ -125,6 +177,26 @@ const AddEditProduct = () => {
                                 <Input style ={{width:"500px"}}/>
                             </Form.Item>
                         </div>
+                        
+                        {
+                            pageState === ADD
+                            ?   <div> Product Code
+                                    <Form.Item 
+                                        name="p_code"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Please input the product code',
+                                                whitespace: true,
+                                                validateTrigger: "onSubmit",
+                                                
+                                            }
+                                    ]}>
+                                        <Input style ={{width:"500px"}}/>
+                                    </Form.Item>
+                                </div>
+                            :   <></>
+                        }
 
                         <div> Units Sold
                             <Form.Item 
@@ -137,7 +209,7 @@ const AddEditProduct = () => {
                                         whitespace: true
                                     }
                             ]}>
-                                <Input onChange={e => {onlyNumbers(e, form, 'p_units_sold')}} maxLength={4} style ={{width:"60px"}}/>
+                                <Input onChange={e => {onlyNumbers(e, form, 'p_units_sold')}} maxLength={10} style ={{width:"500px"}}/>
                             </Form.Item>
                         </div>
                         
@@ -161,22 +233,7 @@ const AddEditProduct = () => {
                     </div>
 
                     <div className="ae-product-form">
-                        <div className="ae-product-input"> Product Code
-                                <Form.Item 
-                                    name="p_code"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Please input the product code',
-                                            whitespace: true,
-                                            validateTrigger: "onSubmit"
-                                        }
-                                ]}>
-                                    <Input style ={{width:"500px"}}/>
-                                </Form.Item>
-                         </div>
-
-                        <div> Unit Price
+                        <div className="ae-product-input"> Unit Price
                             <Form.Item 
                                 name="p_price"
                                 rules={[
@@ -237,7 +294,7 @@ const AddEditProduct = () => {
                 </div> 
             </Form>   
         </div>
-      );
-    }
+    );
+}
    
 export default AddEditProduct;

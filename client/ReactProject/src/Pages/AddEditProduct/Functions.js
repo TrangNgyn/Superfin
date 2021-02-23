@@ -3,6 +3,7 @@ import { EDIT } from './PageStates';
 import { history } from '../../_helpers/history';
 import { imageModal } from './Modals';
 import { message } from 'antd';
+import { getCategoryName } from '../../_services/SharedFunctions';
 
 export const getProduct = (p_code, setProduct, setPageState) => {
     console.log("getting product " + p_code);
@@ -27,6 +28,16 @@ export const getProduct = (p_code, setProduct, setPageState) => {
         window.location.reload();
     })
 }
+
+export const _editProduct = product => {
+    return axios.post('/api/products/edit-product', product)
+        .then(res => {
+            console.log(res);
+            return res;
+        });
+}
+
+
 
 export const _getProduct = (p_code, productsList) => {
     return productsList.find(product => {
@@ -77,4 +88,37 @@ export const onRemove = (file, fileList, updateFileList) => {
     const newFileList = fileList.slice();
     newFileList.splice(fileList.indexOf(file), 1);
     updateFileList(newFileList);
+}
+
+export const setFormValues = (form, product, categories) => {
+    form.setFieldsValue({
+        p_name: product.p_name,
+        p_code: product.p_code,
+        p_units_sold: product.p_units_sold.toString(),
+        p_price: product.p_price.toString(),
+        p_categories: getCategoryName(product.p_categories, categories),
+        p_description: product.p_description,
+        p_image_uri: []
+    });
+}
+
+export const checkProductsEqual = (product_a, product_b) => {
+        if(product_a.p_code === product_b.p_code && 
+            product_a.p_categories === product_b.p_categories && 
+            product_a.p_name === product_b.p_name &&
+            product_a.p_description === product_b.p_description &&
+            // JSON.stringify(product_a.p_image_uri) === JSON.stringify(product_b.p_image_uri) &&            //need to come back to this when images are ready
+            product_a.p_price === product_b.p_price.toString() && 
+            product_a.p_units_sold === product_b.p_units_sold.toString()){
+                return true
+            }
+            return false;   
+}
+
+export const getProductId = (c_name, categories) => {
+    const category = categories.find(category => {
+        return category.c_name === c_name;
+    });
+
+    return category._id;
 }

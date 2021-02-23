@@ -20,6 +20,7 @@ const ProductTableRows = props => {
     const page = props.page;
     const itemsPerPage = 10;
 
+
     let renderableProducts;
     let row;
     
@@ -27,8 +28,7 @@ const ProductTableRows = props => {
     else{
         renderableProducts = productsList.slice( page * itemsPerPage, 
             ((page + 1) * itemsPerPage) > productsList.length ? productsList.length : ((page + 1) * itemsPerPage));
-            
-
+        
         row = renderableProducts.map((p, i) => {
             return (
                 <tr key = {p._id} className="manage-products-table-row">

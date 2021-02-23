@@ -1,4 +1,4 @@
-import { GET_PRODUCTS, DEFAULT_ORDER, LOADING_PRODUCTS, DELETE_PRODUCT, ORDER_BY, ERROR } from './actionTypes';
+import { GET_PRODUCTS, DEFAULT_ORDER, LOADING_PRODUCTS, DELETE_PRODUCT, ERROR, EDIT_PRODUCT } from './actionTypes';
 import axios from 'axios';
 
 export const getAllProducts = () => dispatch  => {
@@ -27,7 +27,7 @@ export const setDefaultOrder = () => {
 }
 
 export const deleteProduct = p_code => dispatch => {
-    axios.post('api/products/delete-product', {
+    return axios.post('api/products/delete-product', {
         p_code: p_code
     })
     .then(res => {
@@ -43,46 +43,22 @@ export const deleteProduct = p_code => dispatch => {
     });
 }
 
+export const editProduct = product => dispatch => {
+    return axios.post('/api/products/edit-product', product)
+        .then(res => {
+            if(res.data.success){
+                dispatch({
+                    type: EDIT_PRODUCT,
+                    payload: product
+                })
+            }
+            return res;
+        });
+}
+
 export const setIsLoading = val => {
     return {
         type: LOADING_PRODUCTS,
         payload: val
     }
 }
-
-export const price_a = () => {
-    return {
-        type: ORDER_BY.PRICE_A
-    }
-}
-
-export const price_d = () => {
-    return {
-        type: ORDER_BY.PRICE_D
-    }
-}
-
-export const name_a = () => {
-    return {
-        type: ORDER_BY.NAME_A
-    }
-}
-
-export const name_d = () => {
-    return {
-        type: ORDER_BY.NAME_D
-    }
-}
-
-export const code_a = () => {
-    return {
-        type: ORDER_BY.CODE_A
-    }
-}
-
-export const code_d = () => {
-    return {
-        type: ORDER_BY.CODE_D
-    }
-}
-
