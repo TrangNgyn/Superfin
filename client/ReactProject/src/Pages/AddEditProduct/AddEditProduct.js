@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Upload, Button, Form, Input, Select } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
-import '../../_assets/CSS/pages/AddEditProduct/AddEditProduct.css';
 import { useParams } from 'react-router-dom';
+
+import '../../_assets/CSS/pages/AddEditProduct/AddEditProduct.css';
 import { EDIT, ADD } from './PageStates';
 import { history } from '../../_helpers/history'; 
 import { getProduct, _getProduct, onPriceChange, onPreview, beforeUpload, onRemove, setFormValues, checkProductsEqual, _editProduct, getProductId } from './Functions';
 import { getAllCategories } from '../../_actions/categoryActions';
 import { onlyNumbers } from '../../_services/SharedFunctions';
-import { editProduct } from '../../_actions/productActions'; 
+import { confirmEdit} from './Modals'; 
 
 
 const AddEditProduct = () => {
@@ -19,15 +20,13 @@ const AddEditProduct = () => {
     const productsList = useSelector(state => state.productState.products);
     const categories = useSelector(state => state.categoryState.categories);
 
-    
-
     const [pageState, setPageState] = useState(null);
     const [product, setProduct] = useState(null);
     const [fileList, updateFileList] = useState([]);
 
     const [form] = Form.useForm();
 
-    useEffect(() => {
+    useEffect(() => {                                                   //Changes the page state to edit or Add. Will also determine if API call necessary
         if(p_code){
             if(productsList.length !== 0){
                 const product = _getProduct(p_code, productsList);
@@ -47,11 +46,11 @@ const AddEditProduct = () => {
         if(!categories.length) dispatch(getAllCategories());
     }, [categories.length, dispatch, p_code, productsList]);
 
-    useEffect(() => {
+    useEffect(() => {                                                       //sets the form values if in edit mode
         if(pageState === EDIT) setFormValues(form, product, categories);
     }, [categories, product, form, pageState]);
 
-    let selectCategories = <></>;
+    let selectCategories = <></>;                                           //dynamically displays the category choices
     if(categories.length !== 0){
         selectCategories = categories.map(p => {
             return <Select.Option key={p.c_name} value={p.p_categories}>{p.c_name}</Select.Option>
@@ -62,55 +61,17 @@ const AddEditProduct = () => {
 
 
 
-
-
-
-
-    const onFinish = newProduct => {                      //handles form submission
-
+    const onFinish = newProduct => {                                                    //handles form submission
         newProduct.p_categories = getProductId(newProduct.p_categories, categories);
         newProduct.p_code = product.p_code;
-
+        
         if(!checkProductsEqual(newProduct, product) && pageState === EDIT){
-         
-            if(productsList.length !== 0){
-                dispatch(editProduct(newProduct))
-                .then(res => {
-                    if(res.data.success) setProduct(newProduct); //merge with develop and test this condition
-                    else {
-                        
-                        //something went wrong please try again
-                    }
-                })
-                .catch(err => {
-                    //someing went wrong, please try again.
-                });
-                
-            }
-            else{
-                _editProduct(newProduct)
-                .then(res => {
-                    if(res.data.success) setProduct(newProduct); //product edit successful
-                    else{
-                        //something went wrong please try again
-                    }
-                    
-                })
-                .catch(err => {
-                    //something went wrong, please try again
-                });
-            }
-            
+            if(productsList.length !== 0) confirmEdit(newProduct, dispatch);    //if the Store contains the products, need to update this as well as do API call                                                                                    
+            else confirmEdit(newProduct);    //if the Store does not contain products, just need to do API call. do not need to update store   
         }
         if(pageState === ADD){
             //add the product
         }
-    
-
-  
-
-        
-
     };
 
 
@@ -288,7 +249,13 @@ const AddEditProduct = () => {
                         </div>
 
                         <Form.Item>
-                            <Button type="primary" htmlType="submit" ><b>Add/Edit Product</b></Button>
+                            <Button type="primary" htmlType="submit" >
+                                <b>
+                                    {pageState === EDIT ? <>Edit </> : <></> }
+                                    {pageState === ADD ? <>Add </> : <></> }
+                                    Product
+                                </b>
+                            </Button>
                         </Form.Item>
                     </div>
                 </div> 

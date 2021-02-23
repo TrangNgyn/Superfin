@@ -5,9 +5,7 @@ import { imageModal } from './Modals';
 import { message } from 'antd';
 import { getCategoryName } from '../../_services/SharedFunctions';
 
-export const getProduct = (p_code, setProduct, setPageState) => {
-    console.log("getting product " + p_code);
-    
+export const getProduct = (p_code, setProduct, setPageState) => {               //returns an individual product
     axios.post('/api/products/product-by-id', { 
         p_code: p_code
     })
@@ -29,7 +27,7 @@ export const getProduct = (p_code, setProduct, setPageState) => {
     })
 }
 
-export const _editProduct = product => {
+export const _editProduct = product => {                                //edits a product
     return axios.post('/api/products/edit-product', product)
         .then(res => {
             console.log(res);
@@ -37,9 +35,7 @@ export const _editProduct = product => {
         });
 }
 
-
-
-export const _getProduct = (p_code, productsList) => {
+export const _getProduct = (p_code, productsList) => {                  //gets product from the Store
     return productsList.find(product => {
         return product.p_code === p_code;
     });
@@ -57,7 +53,7 @@ export const onPriceChange = (e, form) => {                            //control
     }  
 }
 
-export const onPreview = async (file, fileList, updateFileList) => {
+export const onPreview = async (file, fileList, updateFileList) => {        //handles image preview
     let src = file.url;
     if(!src){
         src = await new Promise(resolve => {
@@ -69,7 +65,7 @@ export const onPreview = async (file, fileList, updateFileList) => {
     }  
 }
 
-export const beforeUpload = (file, fileList) => {
+export const beforeUpload = (file, fileList) => {                                       //handles image upload
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
     if(!isJpgOrPng) message.error('You can only upload JPG/PNG file!');
 
@@ -84,13 +80,13 @@ export const beforeUpload = (file, fileList) => {
     return false;
 }
 
-export const onRemove = (file, fileList, updateFileList) => {
+export const onRemove = (file, fileList, updateFileList) => {               //handles image removal
     const newFileList = fileList.slice();
     newFileList.splice(fileList.indexOf(file), 1);
     updateFileList(newFileList);
 }
 
-export const setFormValues = (form, product, categories) => {
+export const setFormValues = (form, product, categories) => {                 //sets the values of the form to appropriate product values
     form.setFieldsValue({
         p_name: product.p_name,
         p_code: product.p_code,
@@ -102,7 +98,7 @@ export const setFormValues = (form, product, categories) => {
     });
 }
 
-export const checkProductsEqual = (product_a, product_b) => {
+export const checkProductsEqual = (product_a, product_b) => {                   //checks if the product has been edited or not
         if(product_a.p_code === product_b.p_code && 
             product_a.p_categories === product_b.p_categories && 
             product_a.p_name === product_b.p_name &&
