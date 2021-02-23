@@ -30,6 +30,7 @@ for(i = 0; i < 9; i++){
 
 
 
+
 //gets completed orders from order list
 const getCompleteOrders = (orders) => {
     let completeOrders = [];
@@ -64,7 +65,7 @@ const HomepageAdminOrderList = (props) => {
 
     const renderableOrders = orders.map((o) => {
       return <div key={o.id}><HomepageAdminOrder {...o}/></div>
-    });
+    }); 
 
     return (
       <>
