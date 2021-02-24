@@ -1,8 +1,7 @@
-import { GET_PRODUCTS, DEFAULT_ORDER, LOADING_PRODUCTS, DELETE_PRODUCT, ERROR, EDIT_PRODUCT } from './actionTypes';
+import { GET_PRODUCTS, DEFAULT_ORDER, LOADING_PRODUCTS, DELETE_PRODUCT, ERROR, EDIT_PRODUCT, ADD_PRODUCT } from './actionTypes';
 import axios from 'axios';
 
 export const getAllProducts = () => dispatch  => {
-    console.log("get products...");
     dispatch(setIsLoading(true));
 
     axios.get('api/products/all-product')
@@ -49,6 +48,19 @@ export const editProduct = product => dispatch => {
             if(res.data.success){
                 dispatch({
                     type: EDIT_PRODUCT,
+                    payload: product
+                })
+            }
+            return res;
+        });
+}
+
+export const addProduct = product => dispatch => {
+    return axios.post('/api/products/add-product', product)
+        .then(res => {
+            if(res.data.success){
+                dispatch({
+                    type: ADD_PRODUCT,
                     payload: product
                 })
             }

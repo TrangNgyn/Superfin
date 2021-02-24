@@ -130,11 +130,11 @@ import image_11 from '../../_assets/Images/Temp_Images/product_image_11.jpg';
 ];
 
 export function fetchProducts(){
-    console.log("fetching products from mock product list...");
+
     return products;
 }
 
 export const getNumberOfproducts = () => {
-    console.log("fetching number of products from product list...");
+ 
     return products.length;
 }

@@ -9,10 +9,10 @@ import { getCategoryName } from '../../_services/SharedFunctions';
 
 const ProductList = props => {
     const categories = useSelector(state => state.categoryState.categories);
-
+    const dispatch = props.dispatch;
     useEffect(() => {             
-        if(!categories.length) props.dispatch(getAllCategories());
-    }, []);
+        if(!categories.length) dispatch(getAllCategories());
+    }, [categories.length, dispatch]);
 
     let rederableProducts;
     

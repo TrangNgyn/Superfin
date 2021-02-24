@@ -63,8 +63,8 @@ const HomepageAdminOrderList = (props) => {
     let orders = [];
     props.complete ? orders = getCompleteOrders(mockOrders) : orders = getIncompleteOrders(mockOrders);
 
-    const renderableOrders = orders.map((o) => {
-      return <div key={o.id}><HomepageAdminOrder {...o}/></div>
+    const renderableOrders = orders.map((o, i) => {
+      return <div key={i}><HomepageAdminOrder {...o}/></div>
     }); 
 
     return (

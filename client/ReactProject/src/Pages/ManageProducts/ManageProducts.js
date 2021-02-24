@@ -62,7 +62,7 @@ const ManageProducts = () => {
     useEffect(() => {                                                     //checks if the store is empty. If so, do an API request
         if(!productsList.length) dispatch(getAllProducts());
         else dispatch(setDefaultOrder());
-    }, []);
+    }, [productsList.length, dispatch]);
 
     let selectCategories = <></>;                                           //dynamically loading categories to filter products in select bar
     if(categories.length !== 0){
@@ -125,7 +125,6 @@ const ManageProducts = () => {
                             <th>Price</th>
                             <th>Units Sold</th>
                             <th>Category</th> 
-                            <th>Number in Stock</th>
                             <th className="manage-products-icon" style ={{fontSize: "30px"}} onClick={() => {
                                 history.push('/editAddProducts');
                             }}>+</th>

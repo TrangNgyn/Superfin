@@ -3,22 +3,22 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { history } from '../../_helpers/history';
 import { getCategoryName } from '../../_services/SharedFunctions';
 import { getAllCategories } from '../../_actions/categoryActions';
-import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 
 //All rows for the Product table
 
 const ProductTableRows = props => {
     const categories = props.categories;
-
-    useEffect(() => {             
-        if(!categories.length) dispatch(getAllCategories());
-    }, []);
-
     const productsList = props.productsList;
     const dispatch = props.dispatch;
     const page = props.page;
     const itemsPerPage = 10;
+
+    useEffect(() => {             
+        if(!categories.length) dispatch(getAllCategories());
+    }, [categories.length, dispatch]);
+
+    
 
 
     let renderableProducts;
@@ -35,9 +35,8 @@ const ProductTableRows = props => {
                     <td>{p.p_name}</td>
                     <td>{p.p_code}</td>
                     <td>${p.p_price}</td>
-                    <td>{i}</td>
+                    <td>{p.p_units_sold}</td>
                     <td>{ getCategoryName(p.p_categories, categories) }</td>
-                    <td>{10}</td>
                     <td>
                         <EditOutlined props={p.p_code} className="manage-products-icon" onClick={() => {
                             history.push(`/editAddProducts/${p.p_code}`);

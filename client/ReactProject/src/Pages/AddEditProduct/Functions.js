@@ -28,12 +28,13 @@ export const getProduct = (p_code, setProduct, setPageState) => {               
 }
 
 export const _editProduct = product => {                                //edits a product
-    return axios.post('/api/products/edit-product', product)
-        .then(res => {
-            console.log(res);
-            return res;
-        });
+    return axios.post('/api/products/edit-product', product);
 }
+
+export const _addProduct = product => {
+    return axios.post('api/products/add-product', product);
+}
+
 
 export const _getProduct = (p_code, productsList) => {                  //gets product from the Store
     return productsList.find(product => {

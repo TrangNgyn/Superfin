@@ -46,7 +46,8 @@ const productReducer = (state = initState, {type, payload}) => {
             }
         case ADD_PRODUCT: 
             return {
-                
+                ...state,
+                products: [...state.products, payload]
             }
         case ERROR: 
             return {

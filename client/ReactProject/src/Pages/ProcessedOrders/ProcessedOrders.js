@@ -66,8 +66,8 @@ const fetchPastOrders = () => {
 const ProcessedOrders = () => {
     const mockOrders = fetchPastOrders();
 
-    const [ordersList, setOrdersList] = useState(mockOrders);
-    const [searchList, setSearchList] = useState([]);
+    const [ordersList] = useState(mockOrders);
+    const [searchList] = useState([]);
     const [page, setPage] = useState(0);
     
     //Handles ordering select input

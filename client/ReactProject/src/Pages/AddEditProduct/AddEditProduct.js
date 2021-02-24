@@ -6,10 +6,14 @@ import { useParams } from 'react-router-dom';
 import '../../_assets/CSS/pages/AddEditProduct/AddEditProduct.css';
 import { EDIT, ADD } from './PageStates';
 import { history } from '../../_helpers/history'; 
-import { getProduct, _getProduct, onPriceChange, onPreview, beforeUpload, onRemove, setFormValues, checkProductsEqual, _editProduct, getProductId } from './Functions';
+import { getProduct, _getProduct, onPriceChange, onPreview, beforeUpload, onRemove, setFormValues, checkProductsEqual, getProductId } from './Functions';
 import { getAllCategories } from '../../_actions/categoryActions';
 import { onlyNumbers } from '../../_services/SharedFunctions';
-import { confirmEdit} from './Modals'; 
+import { confirmEdit, confirmAdd } from './Modals'; 
+
+
+
+
 
 
 const AddEditProduct = () => {
@@ -19,6 +23,7 @@ const AddEditProduct = () => {
 
     const productsList = useSelector(state => state.productState.products);
     const categories = useSelector(state => state.categoryState.categories);
+    
 
     const [pageState, setPageState] = useState(null);
     const [product, setProduct] = useState(null);
@@ -63,49 +68,23 @@ const AddEditProduct = () => {
 
     const onFinish = newProduct => {                                                    //handles form submission
         newProduct.p_categories = getProductId(newProduct.p_categories, categories);
-        newProduct.p_code = product.p_code;
-        
-        if(!checkProductsEqual(newProduct, product) && pageState === EDIT){
-            if(productsList.length !== 0) confirmEdit(newProduct, dispatch);    //if the Store contains the products, need to update this as well as do API call                                                                                    
-            else confirmEdit(newProduct);    //if the Store does not contain products, just need to do API call. do not need to update store   
+        newProduct.p_image_uri = [];                                                        //IMPORTANT remove this later
+
+        if(pageState === EDIT){
+            newProduct.p_code = product.p_code;
+
+            if(!checkProductsEqual(newProduct, product)){
+                if(productsList.length !== 0) confirmEdit(newProduct, dispatch);    //if the Store contains the products, need to update this as well as do API call                                                                                    
+                else confirmEdit(newProduct);    //if the Store does not contain products, just need to do API call. do not need to update store   
+            }
         }
+        
         if(pageState === ADD){
-            //add the product
+
+            if(productsList.length !== 0) confirmAdd(newProduct, dispatch);
+            else confirmAdd(newProduct);
         }
     };
-
-
- 
-    /*
-    const handleEditOk = () => {
-        const values = form.getFieldsValue();
-        console.log('Success:', values);
-
-        console.log("clearing form fields...");
-        form.resetFields();
-        updateFileList([]);
-    }
-
-
-    const handleSubmitOk = () => {                         
-        //submit the form here
-        const values = form.getFieldsValue();
-        console.log('Success:', values);
-
-        console.log("clearing form fields...");
-        form.resetFields();
-        updateFileList([]);
-
-    };*/
-
-   
-
-
-    
-
-
-
-
 
 
 
@@ -124,7 +103,9 @@ const AddEditProduct = () => {
             >
                 <div id="ae-product-form-wrapper">
                     <div className="ae-product-form">
-                        <div className="ae-product-input"> Product Name
+                        <div className="ae-product-input">
+                            <div><i style = {{color: 'red'}}>*</i> Product Name</div> 
+
                             <Form.Item 
                                 name="p_name"
                                 rules={[
@@ -141,7 +122,8 @@ const AddEditProduct = () => {
                         
                         {
                             pageState === ADD
-                            ?   <div> Product Code
+                            ?   <div>  
+                                    <div><i style = {{color: 'red'}}>*</i> Product Code</div> 
                                     <Form.Item 
                                         name="p_code"
                                         rules={[
@@ -194,7 +176,9 @@ const AddEditProduct = () => {
                     </div>
 
                     <div className="ae-product-form">
-                        <div className="ae-product-input"> Unit Price
+                        <div className="ae-product-input">
+                            <div><i style = {{color: 'red'}}>*</i> Unit Price</div> 
+
                             <Form.Item 
                                 name="p_price"
                                 rules={[
@@ -217,7 +201,9 @@ const AddEditProduct = () => {
                             </Form.Item>
                         </div>
 
-                        <div> Product Category
+                        <div>
+                            <div><i style = {{color: 'red'}}>*</i> Category</div>
+
                             <Form.Item 
                                 name="p_categories"
                                 rules={[
