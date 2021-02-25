@@ -3,7 +3,9 @@ import FooterMenuMobile from './FooterMenuMobile';
 import FooterContent from './FooterContent';
 
 
+
 export default function FooterMain(){
+
     return (
         <div>
             <FooterMenu />

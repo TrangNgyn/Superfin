@@ -24,6 +24,7 @@ import CheckoutShipping from '../Pages/Checkout/CheckoutShipping';
 import CheckoutSecurePayment from '../Pages/Checkout/CheckoutSecurePayment';
 import CheckoutReviewOrder from '../Pages/Checkout/CheckoutReviewOrder';
 import CheckoutOrderComplete from '../Pages/Checkout/CheckoutOrderComplete';
+import Footer from '../SharedComponents/Footer/FooterMain';
 
 
 //import axios from 'axios';
@@ -124,7 +125,7 @@ const App = () => (
             </Switch>
          </div>
          <div className="Website-Footer">
-       
+            <Footer />
          </div>
       </Router>
    </div>

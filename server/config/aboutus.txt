@@ -1,1 +1,1 @@
-{"c_number":"Company Phone Number","c_address":"Company Address","c_email":"Company Email","c_TandC":"Company Terms and conditions","c_about":"Company About Text","c_delivery":"Company delivery and dispatch information","c_blog":"Place holder text"}
+{"c_number":"Hello","c_address":"Company Address","c_email":"Company Email","c_TandC":"Company Terms and conditions","c_about":"Company About Text","c_delivery":"Company delivery and dispatch information","c_blog":"Company blog"}

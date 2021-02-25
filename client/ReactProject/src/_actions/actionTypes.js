@@ -9,3 +9,8 @@ export const ERROR = "ERROR";
 
 //Category Action Types
 export const GET_CATEGORIES = "GET_CATEGORIES";
+
+//Company Info Action Types
+export const GET_COMPANY_INFO = "GET_COMPANY_INFO";
+export const SET_COMPANY_INFO = "SET_COMPANY_INFO";
+export const LOADING_COMPANY_INFO = "LOADING_COMPANY_INFO";
