@@ -9,7 +9,11 @@ import { setFormValues } from './Functions';
 import { errorLoading, confirmEdit } from './Modals';
 
 
-
+/*
+    IMORTANT
+    if client wants to have footer in the admin view,
+    this page should be changed to receive its data from redux.
+*/
 
 
 const EditCompanyInfo = () => {
