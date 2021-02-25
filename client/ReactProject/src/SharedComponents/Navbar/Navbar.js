@@ -31,7 +31,7 @@ export default function Navbar(){
         if(!categories.length) dispatch(getAllCategories());
     }, [categories.length, dispatch]);
 
-    console.log(categories);
+
 
     
 
@@ -105,7 +105,7 @@ export default function Navbar(){
 
     let categoriesMenu = <></>
 
-    if(categories.length != 0){
+    if(categories.length !== 0){
         categoriesMenu = categories.map(c => {
             return ( <Menu.Item key={c._id}> 
                         <Link to={`/products/${c._id}`}> {c.c_name} </Link>
