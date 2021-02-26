@@ -1,7 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import ReactDOM from 'react-dom';
+import React, {useState} from 'react';
 import '../../_assets/CSS/pages/ContactUs.css';
-import {Button, Form, Input,Typography} from 'antd';
+import {Button, Input,Typography} from 'antd';
 import {PhoneFilled,EnvironmentFilled} from '@ant-design/icons';
 const { TextArea } = Input;
 const { Title } = Typography;

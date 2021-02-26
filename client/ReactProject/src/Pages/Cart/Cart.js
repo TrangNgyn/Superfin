@@ -34,7 +34,7 @@ const Cart = () =>{
           </Row>
           <Row justify="space-around" align="middle">
             <Col span={4}>
-              <Row><img src={img1} width="100%" height="100%"/></Row>
+              <Row><img src={img1}  alt="a product" width="100%" height="100%"/></Row>
               <Row>Brown Bag with Handles</Row>
               <Row>Unit:100</Row>
             </Col>
@@ -67,9 +67,9 @@ const Cart = () =>{
         <Button type="primary"><Link to="/CheckoutShipping">CHECKOUT</Link></Button>
         </Row>
         <Row justify="space-around" align="middle">
-        <img src={visa} width="30%"/>
-        <img src={mastercard} width="30%" />
-        <img src={paypal} width="30%"/>
+        <img src={visa}  alt="visa" width="30%"/>
+        <img src={mastercard}  alt="mastercard" width="30%" />
+        <img src={paypal}  alt="paypal" width="30%"/>
         </Row>
         </Sider>
         </Layout>

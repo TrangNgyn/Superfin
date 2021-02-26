@@ -53,15 +53,15 @@ const App = () => (
 
          <div className="Website-Body" >
             <Switch>
-           
+
                <Route exact path="/"><Homepage /></Route>
                <Route exact path="/products"> <Products /></Route>
-               <Route exact path="/products/:browseBy"><Products /></Route> 
-               <Route path="/products/:browseBy/:browseByGroup"><Products /></Route> 
+               <Route exact path="/products/:browseBy"><Products /></Route>
+               <Route path="/products/:browseBy/:browseByGroup"><Products /></Route>
 
                <Route path="/deliveryDispatch"> <DeliveryDispatch /></Route>
                <Route path="/contactUs"> <ContactUs /></Route>
-               <Route path="/aboutUs"><AboutUS /></Route>  
+               <Route path="/aboutUs"><AboutUS /></Route>
                <Route path="/TermsConditions"><TermsConditions /></Route>
 
                <Route path="/login"><Login /></Route>
@@ -72,12 +72,14 @@ const App = () => (
                <Route path="/myAccount"><MyAccount/></Route>
                <Route path="/currentOrders"><CurrentOrders /></Route>
                <Route path="/processedOrders"><ProcessedOrders /></Route>
-               
-               <Route path="/editCompanyInformation"><EditCompanyInfo /></Route>                 
+
+               <Route path="/editCompanyInformation"><EditCompanyInfo /></Route>
                <Route path="/manageProducts"><ManageProducts /></Route>
 
                <Route exact path="/editAddProducts"><AddEditProduct /></Route>
                <Route path="/editAddProducts/:_id"><AddEditProduct /></Route>
+
+               <Route path="/Cart"><Cart /></Route>
 
                <Route path="/CheckoutShipping"><CheckoutShipping /></Route>
                <Route path="/CheckoutSecurePayment"><CheckoutSecurePayment /></Route>
