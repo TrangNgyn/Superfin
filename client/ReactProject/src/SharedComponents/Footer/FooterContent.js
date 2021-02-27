@@ -2,7 +2,7 @@ import {
     FacebookFilled, 
     InstagramFilled, 
     TwitterSquareFilled,
-    YoutubeFilled 
+    YoutubeFilled
 } from '@ant-design/icons';
 
 import { useEffect } from 'react';

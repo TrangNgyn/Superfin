@@ -9,6 +9,7 @@ import Login from '../Pages/Login/Login';
 import Homepage from '../Pages/Homepage/Homepage';
 import ContactUs from '../Pages/ContactUs/ContactUs';
 import DeliveryDispatch from '../Pages/DeliveryDispatch/DeliveryDispatch';
+import Blog from '../Pages/Blog/Blog';
 import AboutUS from '../Pages/AboutUs/AboutUs';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ResetPasswordConfirmation from '../Pages/ResetPasswordConfirmation/ResetPasswordConfirmation';
@@ -26,41 +27,8 @@ import CheckoutReviewOrder from '../Pages/Checkout/CheckoutReviewOrder';
 import CheckoutOrderComplete from '../Pages/Checkout/CheckoutOrderComplete';
 import Footer from '../SharedComponents/Footer/FooterMain';
 
+import { HomepageCarousel } from '../Pages/Homepage/HomepageCarousel';
 
-//import axios from 'axios';
-
-
-        
-
-      
-/*
-const addProd = () => {
-    console.log('adding a product');
-
-    for(let i = 0; i < 10; i++){
-        const obj = {
-            p_code: `prod_b_${i}`,
-            p_name: `product_abc${i}`,
-            p_categories: "5fe199a450975047d0e11c14",
-            p_price: `${i}`
-        }
-
-        axios.post('api/products/add-product', obj)
-        .then(res => {
-            console.log(res);
-        })
-        .catch(err => {
-            console.log(err);
-        })
-    }
-}
-
-addProd();*/
-
-    
-//'5fe199a450975047d0e11c12'
-//'5fe199a450975047d0e11c13'
-//'5fe199a450975047d0e11c14'
 
 
 
@@ -82,6 +50,7 @@ const App = () => (
       <Router history = {history}>
          <div className="Website-Header">
             <Navbar />
+            <HomepageCarousel />
          </div>
 
          <div className="Website-Body" >
@@ -97,7 +66,8 @@ const App = () => (
                <Route path="/deliveryDispatch"> <DeliveryDispatch /></Route>
                <Route path="/contactUs"> <ContactUs /></Route>
                <Route path="/aboutUs"><AboutUS /></Route>  
-               <Route path="/TermsConditions"><TermsConditions /></Route>
+               <Route path="/termsConditions"><TermsConditions /></Route>
+               <Route path="/blog"><Blog /></Route>
 
                <Route path="/login"><Login /></Route>
                <Route path="/emailRequest"><EmailRequest /></Route>
