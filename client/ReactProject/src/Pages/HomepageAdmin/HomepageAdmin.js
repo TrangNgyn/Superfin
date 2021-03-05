@@ -2,20 +2,22 @@ import '../../_assets/CSS/pages/HomepageAdmin/HomepageAdmin.css';
 import HomepageAdminOrderList from './HomepageAdminOrderList';
 import ProductListAdmin from './ProductListAdmin';
 import { getAllProducts, setDefaultOrder } from '../../_actions/productActions';
+import { getCompleteOrders } from '../../_actions/completeOrderActions';
+import { getIncompleteOrders } from '../../_actions/incompleteOrderActions'; 
 import { history } from '../../_helpers/history';
+import { navigateAddOrder, navigateFullList } from './Functions';
 
 import { Button, Radio } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState , useEffect } from 'react';
 
 
-
-
-
 /*
     Tasks left
     Make Images work for products.
     Hook up Orders API
+    sort orders by issue date in the order reducer
+    impliment delete order functionality 
 */
 
 /*
@@ -23,25 +25,53 @@ import { useState , useEffect } from 'react';
     Modal after successful delete
     Modal after unsuccessful delete
     Loading circle for delete process
+    
 */
-
-
-
 
 
 const HomepageAdmin = () => {
     const [radioState, setRadioState] = useState(false);            //false is 'Current Orders'
 
+    const dispatch = useDispatch();
+
     const productsList = useSelector(state => state.productState.products);
     const errorLoading = useSelector(state => state.productState.error);
     const loading = useSelector(state => state.productState.isLoading);
-    const dispatch = useDispatch();
+
+    const completeOrders = useSelector(state => state.completeOrdersState.completeOrders);
+    const errorLoadingCompleteOrders = useSelector(state => state.completeOrdersState.error);
+    const loadingCompleteOrders = useSelector(state => state.completeOrdersState.loading);
+
+    const incompleteOrders = useSelector(state => state.incompleteOrdersState.incompleteOrders);
+    const errorLoadingIncompleteOrders = useSelector(state => state.incompleteOrdersState.error);
+    const loadingIncompleteOrders = useSelector(state => state.incompleteOrdersState.loading);
 
     const productListProps = {
         dispatch: dispatch,
         productsList: productsList,
         errorLoading: errorLoading,
         loading:loading
+    }
+
+    let orders = [];
+    let errorLoadingOrders = false;
+    let loadingOrders = false;
+
+    if(radioState){
+        orders = completeOrders
+        errorLoadingOrders = errorLoadingCompleteOrders;
+        loadingOrders = loadingCompleteOrders;
+    }
+    else{
+        orders = incompleteOrders;
+        errorLoadingOrders = errorLoadingIncompleteOrders;
+        loadingOrders = loadingIncompleteOrders;
+    }
+
+    const ordersListProps = {
+        orders: orders,
+        errorLoadingOrders: errorLoadingOrders,
+        loadingOrders: loadingOrders
     }
 
 
@@ -51,13 +81,17 @@ const HomepageAdmin = () => {
     useEffect(() => {                                                              //checks if the store is empty. If so, do an API request. If data is already there, set it to default ordering
         if(!productsList.length) dispatch(getAllProducts());      
         else dispatch(setDefaultOrder());
-    }, [productsList.length, dispatch]);
+
+        if(!completeOrders.length && radioState) dispatch(getCompleteOrders());
+
+        if(!incompleteOrders.length && !radioState) dispatch(getIncompleteOrders());
+
+    }, [productsList.length, completeOrders.length, incompleteOrders.length, radioState, dispatch]);
     
     const radioToggle = () => {
         radioState ? setRadioState(false) : setRadioState(true);
     }
    
-
 
 
 
@@ -89,17 +123,13 @@ const HomepageAdmin = () => {
             }}>View Full List</Button>
 
             <div style  = {{height:"50px"}}></div>
-  
 
 
-            
-            
-        
 
 
 
             <div style = {{textAlign: "center"}}>
-                <div className="Homepage-Admin-Products-Orders-Plus" onClick = { () => console.log("Navigate to add products page")}>Orders +</div>
+                <div className="Homepage-Admin-Products-Orders-Plus" onClick = {navigateAddOrder}>Orders +</div>
             </div>
 
             <div style  = {{height:"20px"}}></div>
@@ -118,12 +148,15 @@ const HomepageAdmin = () => {
             <div>
                 <div className="Homepage-Admin-Scrollbox-Container">
                     <div className="Homepage-Admin-Scrollbox" style = {{height:"500px"}}>
-                        <HomepageAdminOrderList complete = {radioState}/>
+                        {<HomepageAdminOrderList {...ordersListProps}/>} 
                     </div>
                 </div>
             </div>
+
             <div style  = {{height:"50px"}}></div>
-            <Button id="homepage-admin-button-1" type="primary">View Full List</Button>
+
+            <Button id="homepage-admin-button-1" type="primary" onClick={() => {navigateFullList(radioState)}}>View Full List</Button>
+
             <div style = {{height: "50px"}}></div> 
         </>
     );
