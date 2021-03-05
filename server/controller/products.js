@@ -219,19 +219,19 @@ class Product {
 
             // ensure all the required fields are present 
             if( !p_code | !p_name | !p_categories | !p_price ){
-                Product.delete_images(images)
+                //Product.delete_images(images)
                 return res.json(empty_field)
             }
 
             // ensure that some fields are not too long or short 
             if( p_code.length > 255 || p_name.length > 255) {
-                Product.delete_images(images)
+                //Product.delete_images(images)
                 return res.json({ error: "Name and Code cannot be longer than 255 characters."})
             }
 
             // price must be greater than 0
             if(p_price <= 0){
-                Product.delete_images(images)
+                //Product.delete_images(images)
                 return res.json({ sucess: false,
                                   message: "Price must be greater than 0"})
             }
@@ -314,7 +314,7 @@ class Product {
                 var delete_product = await product_model.findOne({ p_code: p_code })
                 if(delete_product) {
                     if(delete_product.p_image_uri){
-                        Product.delete_images(delete_product.p_image_uri);
+                        //Product.delete_images(delete_product.p_image_uri);
                     }
                     product_model.deleteOne({ p_code: p_code }, (err,result) => {
                         if(err){

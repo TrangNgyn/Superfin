@@ -82,6 +82,38 @@ class Purchased_Order {
             console.log(err);
         }
     }
+
+    // @route   GET api/orders/all-complete
+    // @desc    get all orders that are complete
+    // @access  Public 
+
+    async all_complete(req,res) {
+        try {
+            order_model
+                .find({ status: "COMPLETE" })
+                .sort({ po_number: 1 })
+                .then(order_model => res.json(order_model));
+
+        }
+        
+        catch(err) {
+            console.log(err)
+        }
+    }
+
+    async all_uncomplete(req,res) {
+        try {
+            order_model
+                .find({ status : { $ne: "COMPLETE"}})
+                .sort({ po_number: 1 })
+                .then(order_model => res.json(order_model));
+        }
+        
+        catch(err){
+            console.log(err)
+        }
+    }
+
 }
 
 module.exports = new Purchased_Order;
