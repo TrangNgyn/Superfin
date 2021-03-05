@@ -47,7 +47,7 @@ const mockOrders = fetchPastOrders();
 
 const CurrentOrders = () => {
     const [ordersList, setOrdersList] = useState(mockOrders);
-    const [searchList, setSearchList] = useState([]);
+    const [searchList] = useState([]);
     const [indexs, setIndex] = useState([]);                
     const [page, setPage] = useState(0);
     

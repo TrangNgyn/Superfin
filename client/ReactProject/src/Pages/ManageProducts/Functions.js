@@ -1,59 +1,31 @@
 //Filter and sort functions
 
-import { code_a, code_d, name_a, name_d, price_a, price_d } from '../../_actions/productActions';
-
-export const handleFilter = value => {
-    switch(value){
-        case "in_stock": {
-            //fetch from db all products in stock
-            break;
-        }
-        case "out_stock": {
-            break;
-        }
-        case "category_1": {
-            break;
-        }
-        case "category_2": {
-            break;
-        }
-        case "i_ascending": {
-            break;
-        }
-        case "category_4": {
-            break;
-        }
-        default:{
-            //return all products
-        }
-    }
+export const handleFilter = (products, filter) => {
+    return products.filter(product => {
+        return product.p_categories === filter;
+    });
 }
 
-export const handleOrder = (value, dispatch) => {
-    switch(value){
+
+export const handleOrder = (products, order) => {
+    switch(order){
         case "p_decending": {
-            dispatch(price_d());
-            break;
+            return products.sort((a,b) => (Number(a.p_price) < Number(b.p_price)) ? 1 : ((Number(b.p_price) < Number(a.p_price)) ? -1 : 0));
         }
         case "p_ascending": {
-            dispatch(price_a());
-            break;
+            return products.sort((a,b) => (Number(a.p_price) > Number(b.p_price)) ? 1 : ((Number(b.p_price) > Number(a.p_price)) ? -1 : 0));
         }
         case "n_ascending": {
-            dispatch(name_a());
-            break;
+            return products.sort((a,b) => (a.p_name > b.p_name) ? 1 : ((b.p_name > a.p_name) ? -1 : 0));
         }
         case "n_decending": {
-            dispatch(name_d());
-            break;
+            return products.sort((a,b) => (a.p_name < b.p_name) ? 1 : ((b.p_name < a.p_name) ? -1 : 0));
         }
         case "i_ascending": {
-            dispatch(code_a());
-            break;
+            return products.sort((a,b) => (a.p_code > b.p_code) ? 1 : ((b.p_code > a.p_code) ? -1 : 0));
         }
         case "i_decending": {
-            dispatch(code_d());
-            break;
+            return products.sort((a,b) => (a.p_code < b.p_code) ? 1 : ((b.p_code < a.p_code) ? -1 : 0));
         }
         default: return;
     }

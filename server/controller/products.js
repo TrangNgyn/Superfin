@@ -239,7 +239,6 @@ class Product {
             var found_product = await product_model.findOne({ p_code: p_code })
 
             if(!found_product){
-                res.status(404)
                 return res.json({ sucess: false,
                                   message: `No product with code ${p_code} was found`})
             }

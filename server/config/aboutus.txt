@@ -1,1 +1,1 @@
-{"c_number":"1234567892","c_address":"21 Happy Street, NSW QLD","c_email":"superfin@gmail.com","c_TandC":"this is a very large amount of text","c_about":"I'm all about this large amount of text","c_delivery":"Delivery me: Qutbe by Parkway Drive. Also a large piece of text","c_blog":"The large nonexistent blog"}
+{"c_number":"Hello","c_address":"Company Address","c_email":"Company Email","c_TandC":"Company Terms and conditions","c_about":"Hello","c_delivery":"Company delivery and dispatch information","c_blog":"Company blog"}

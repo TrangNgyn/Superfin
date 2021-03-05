@@ -3,13 +3,13 @@ import HomepageAdmin from '../Pages/HomepageAdmin/HomepageAdmin';
 import AddEditProduct from '../Pages/AddEditProduct/AddEditProduct';
 import '../_assets/CSS/style.scss'
 import Navbar from '../SharedComponents/Navbar/Navbar';
-import FooterMain from '../SharedComponents/Footer/FooterMain';
 import { history } from '../_helpers/history';
 import { Router, Route, Switch, useParams } from 'react-router-dom';
 import Login from '../Pages/Login/Login';
 import Homepage from '../Pages/Homepage/Homepage';
 import ContactUs from '../Pages/ContactUs/ContactUs';
 import DeliveryDispatch from '../Pages/DeliveryDispatch/DeliveryDispatch';
+import Blog from '../Pages/Blog/Blog';
 import AboutUS from '../Pages/AboutUs/AboutUs';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ResetPasswordConfirmation from '../Pages/ResetPasswordConfirmation/ResetPasswordConfirmation';
@@ -25,8 +25,7 @@ import CheckoutShipping from '../Pages/Checkout/CheckoutShipping';
 import CheckoutSecurePayment from '../Pages/Checkout/CheckoutSecurePayment';
 import CheckoutReviewOrder from '../Pages/Checkout/CheckoutReviewOrder';
 import CheckoutOrderComplete from '../Pages/Checkout/CheckoutOrderComplete';
-
-
+import Footer from '../SharedComponents/Footer/FooterMain';
 
 
 
@@ -64,7 +63,8 @@ const App = () => (
                <Route path="/deliveryDispatch"> <DeliveryDispatch /></Route>
                <Route path="/contactUs"> <ContactUs /></Route>
                <Route path="/aboutUs"><AboutUS /></Route>  
-               <Route path="/TermsConditions"><TermsConditions /></Route>
+               <Route path="/termsConditions"><TermsConditions /></Route>
+               <Route path="/blog"><Blog /></Route>
 
                <Route path="/login"><Login /></Route>
                <Route path="/emailRequest"><EmailRequest /></Route>
@@ -83,7 +83,7 @@ const App = () => (
                <Route path="/manageProducts"><ManageProducts /></Route>
 
                <Route exact path="/editAddProducts"><AddEditProduct /></Route>
-               <Route path="/editAddProducts/:_id"><AddEditProduct /></Route>
+               <Route path="/editAddProducts/:p_code"><AddEditProduct /></Route>
 
                <Route path="/CheckoutShipping"><CheckoutShipping /></Route>
                <Route path="/CheckoutSecurePayment"><CheckoutSecurePayment /></Route>
@@ -92,7 +92,7 @@ const App = () => (
             </Switch>
          </div>
          <div className="Website-Footer">
-            <FooterMain />
+            <Footer />
          </div>
       </Router>
    </div>

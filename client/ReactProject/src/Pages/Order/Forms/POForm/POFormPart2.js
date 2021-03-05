@@ -1,7 +1,7 @@
 import MODE from '../../Helpers/PageConstants';
 import { Form, Input } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
-import { onlyNumbers } from '../../Helpers/NumberOnlyFunctions';
+import { onlyNumbers } from '../../../../_services/SharedFunctions';
 import { showDeleteConfirm } from '../../Helpers/Modals';
 
 const POFormPart2 = props => {

@@ -1,5 +1,5 @@
 import { Form, Input } from 'antd';
-import { onlyNumbers } from '../../Helpers/NumberOnlyFunctions';
+import { onlyNumbers } from '../../../../_services/SharedFunctions';
 
 const NewItemForm = (props) => {
     return(

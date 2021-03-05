@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import ReactDOM from 'react-dom';
-import {Button, Form, Input,Typography} from 'antd';
+import {Button, Input,Typography} from 'antd';
 import {PhoneFilled,EnvironmentFilled} from '@ant-design/icons';
+import { useSelector, useDispatch } from 'react-redux';
+import { getCompanyInfo } from '../../_actions/companyInfoActions';
+
 const { TextArea } = Input;
 const { Title } = Typography;
 
@@ -23,11 +25,19 @@ const useContactUs = (callback) => {
     handleInputChange,
     inputs
   };
-
 }
 
 const ContactUs = () =>{
   const {inputs, handleInputChange, handleSubmit} = useContactUs();
+
+  const companyInfo = useSelector(state => state.companyInfoState.companyInfo);
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+      if(Object.keys(companyInfo).length === 0 && companyInfo.constructor === Object){
+          dispatch(getCompanyInfo());
+      }
+  }, [dispatch, companyInfo]);
   return (
       <>
         <div className="page-title-holder fill center-text">
@@ -54,15 +64,13 @@ const ContactUs = () =>{
             </form>
           </div>
 
-          <div className="box-item-lg-6 box-item-md-6 box-item-sm-12 box-item-xs-12">
-            <Title level={3}>You can contact us via:</Title>
-            <Title level={3}><PhoneFilled />: (02) 9681 6075</Title>
-            <Title level={3}><EnvironmentFilled />: 3/34-36 Fairfield St, Fairfield East NSW 2165</Title>
-          </div>
+        <div className="box-item-lg-6 box-item-md-6 box-item-sm-12 box-item-xs-12">
+          <Title level={3}>You can contact us via:</Title>
+          <Title level={3}><PhoneFilled />: (02) 9681 6075</Title>
+          <Title level={3}><EnvironmentFilled />: 3/34-36 Fairfield St, Fairfield East NSW 2165</Title>
         </div>
-      </>
+      </div>
+    </>
   );
 }
-
-
 export default ContactUs

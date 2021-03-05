@@ -1,10 +1,14 @@
 import { Menu, Dropdown } from 'antd';
-import { history } from '../../_helpers/history';
 import { UserOutlined, ShoppingCartOutlined, MenuOutlined } from '@ant-design/icons';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch  } from 'react-redux';
+
+import { getAllCategories } from '../../_actions/categoryActions';
+import { history } from '../../_helpers/history';
 import image from '../../_assets/Images/new_logo.jpg'
 const { SubMenu } = Menu;
+
 
 //fake user and login check
 const userDetails = {
@@ -13,20 +17,19 @@ const userDetails = {
   userType: "GUEST"
 }
 
-//fake getCategories API function
-const getCategories = () => {
-  return [
-    {c_name: "Bags"},
-    {c_name: "Clams"},
-    {c_name: "Cups"},
-    {c_name: "Food Wrappings"},
-    {c_name: "Boxes"}
-  ];
-}
+
+
+
+
 
 export default function Navbar(props){
+    const [userType, setUserType] = useState(userDetails.userType);
+    const categories = useSelector(state => state.categoryState.categories);
+    const dispatch = useDispatch();
 
-  const [userType, setUserType] = useState(userDetails.userType);
+    useEffect(() => {             
+        if(!categories.length) dispatch(getAllCategories());
+    }, [categories.length, dispatch]);
 
   const logout = () => {          //fake login logout functions
     setUserType("GUEST");
@@ -42,6 +45,7 @@ export default function Navbar(props){
     setUserType("ADMIN");
     history.push('/admin');
   }
+
 
   const customerMenu = (
     <>
@@ -93,27 +97,24 @@ export default function Navbar(props){
       </Menu.Item>
     </SubMenu>
   );
-  
-  //Fake categories API call
-  const categories = getCategories();   
+  let categoriesMenu = <></>
+
+  if(categories.length !== 0){
+      categoriesMenu = categories.map(c => {
+          return ( <Menu.Item key={c._id}> 
+                      <Link to={`/products/${c._id}`}> {c.c_name} </Link>
+                  </Menu.Item>)
+      });
+  }
 
   const ourProductsDropdown = ( //Our Products dropdown
     <Menu>
       <Menu.Item>
-        <Link to="/products/categories">
+        <Link to="/">
           <b>Shop By Category</b>
         </Link>
       </Menu.Item>
-
-      {
-        categories.map((cat) => {
-          return  <Menu.Item key={cat.c_name}> 
-                    <Link to={"/products/categories/" + cat.c_name}> {cat.c_name} </Link>
-                  </Menu.Item>
-                }
-              )
-      }
-
+      {categoriesMenu}
       <Menu.Item>
         <Link to="/products">
           <b>{"View all Products  >"}</b>
@@ -129,16 +130,7 @@ export default function Navbar(props){
           <b>Shop By Category</b>
         </Link>
       </Menu.Item>
-
-      {
-        categories.map((cat) => {
-          return  <Menu.Item key={cat.c_name}> 
-                    <Link to={"/products/categories/" + cat.c_name}> {cat.c_name} </Link>
-                  </Menu.Item>
-                }
-              )
-      }
-
+      {categoriesMenu}
       <Menu.Item>
         <Link to="/products">
           <b>{"View all Products  >"}</b>

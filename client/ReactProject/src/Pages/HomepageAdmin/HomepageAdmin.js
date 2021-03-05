@@ -14,8 +14,6 @@ import { useState , useEffect } from 'react';
 
 /*
     Tasks left
-    Loading circle for products     **
-    Error message for failed load   **
     Make Images work for products.
     Hook up Orders API
 */
@@ -53,7 +51,7 @@ const HomepageAdmin = () => {
     useEffect(() => {                                                              //checks if the store is empty. If so, do an API request. If data is already there, set it to default ordering
         if(!productsList.length) dispatch(getAllProducts());      
         else dispatch(setDefaultOrder());
-    }, []);
+    }, [productsList.length, dispatch]);
     
     const radioToggle = () => {
         radioState ? setRadioState(false) : setRadioState(true);

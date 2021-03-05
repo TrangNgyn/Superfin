@@ -1,4 +1,4 @@
-import { onlyNumbers } from '../../Helpers/NumberOnlyFunctions';
+import { onlyNumbers } from '../../../../_services/SharedFunctions';
 import { Form, Input, Tooltip } from 'antd';
 
 const CustomerForm = props => {

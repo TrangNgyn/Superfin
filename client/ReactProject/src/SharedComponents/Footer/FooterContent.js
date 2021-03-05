@@ -2,10 +2,26 @@ import {
     FacebookFilled, 
     InstagramFilled, 
     TwitterSquareFilled,
-    YoutubeFilled 
+    YoutubeFilled
 } from '@ant-design/icons';
+
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getCompanyInfo } from '../../_actions/companyInfoActions';
+
 import FooterEmailInput from './FooterEmailInput';
-export default function FooterMain(){
+
+export default function FooterContent(){
+
+    const companyInfo = useSelector(state => state.companyInfoState.companyInfo);
+    const dispatch = useDispatch();
+    
+    useEffect(() => {
+        if(Object.keys(companyInfo).length === 0 && companyInfo.constructor === Object){
+            dispatch(getCompanyInfo());
+        }
+    }, [dispatch, companyInfo]);
+
     return (
         <div className="footer-content-container">
             <div id="footer-email-input">
@@ -27,8 +43,8 @@ export default function FooterMain(){
                 </a>
             </div>
             <div id="footer-support-details">
-                <div>Email: support@supergfin.com</div>
-                <div>Phone: 1800xxxx</div>
+                <div>Email: {companyInfo.c_email}</div>
+                <div>Phone: {companyInfo.c_number}</div>
             </div>
         </div>
     );
