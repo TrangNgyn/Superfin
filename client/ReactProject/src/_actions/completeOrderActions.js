@@ -4,7 +4,7 @@ import axios from 'axios';
 export const getCompleteOrders = () => dispatch => {
     dispatch(setCompleteOrdersLoading(true));
 
-    axios.get('api/orders/all-complete')
+    return axios.get('api/orders/all-complete')
     .then(res => {
         dispatch({
             type: GET_COMPLETE_ORDERS,

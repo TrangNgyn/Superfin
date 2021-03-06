@@ -11,6 +11,8 @@ const HomepageAdminOrderList = props => {
     const loading = props.loadingOrders;
     const error = props.errorLoadingOrders;
 
+    console.log("ORDERS", orders);
+
 
     let renderableOrders = [];
     if(orders.length !== 0){

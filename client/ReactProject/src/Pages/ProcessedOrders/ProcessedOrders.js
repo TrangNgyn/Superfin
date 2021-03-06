@@ -1,152 +1,86 @@
 import '../../_assets/CSS/pages/ProcessedOrders/ProcessedOrders.css';
-import { Select, Pagination, Input, Button } from 'antd';
+import { Select, Pagination, Input, Button, Spin } from 'antd';
 import { history } from '../../_helpers/history';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getCompleteOrders } from '../../_actions/completeOrderActions';
+import { filterEmail, setOrder } from './Functions'; 
 
 const { Option, OptGroup } = Select;
 
+const itemsPerPage = 10;
 
 
 
 
 
-//mock API call
-const fetchPastOrders = () => {
-    let pastOrders = [];
+/*
+    Tasks left
+    Check filters work with larger amounts of data
+*/
 
-    for(let i = 0; i < 1000; i++){
-        const order = {
-            po_number: "abc" + i,
-            c_email: "email@email.com",
-            issued_date: new Date(),
-            status: "complete",
-            items: [{itemName: "box"}, {itemName: "bag"}, {itemName: "cup"}, {itemName: "clam"}],
-            trackingNumber: "123abc",
-            carrier: "generic carrier"
-        }
-        pastOrders.push(order);
-    }
-
-    const order2 = {
-        po_number: "abc",
-        c_email: "searchemail@email.com",
-        issued_date: new Date(),
-        status: "complete",
-        items: [{itemName: "box"}, {itemName: "bag"}, {itemName: "cup"}, {itemName: "clam"}],
-        trackingNumber: "123abc",
-        carrier: "generic carrier"
-    }
-
-    const order3 = {
-        po_number: "abc",
-        c_email: "searchemail@email.com",
-        issued_date: new Date(),
-        status: "complete",
-        items: [{itemName: "box"}, {itemName: "bag"}, {itemName: "cup"}, {itemName: "clam"}],
-        trackingNumber: "123abc",
-        carrier: "generic carrier"
-    }
-
-    pastOrders.push(order2);
-    pastOrders.push(order3);
-
-    return pastOrders;
-}
-
-
-
-
-
-
+/*
+    If time
+    Could use some optimization
+*/
 
 
 
 
 
 const ProcessedOrders = () => {
-    const mockOrders = fetchPastOrders();
+    const dispatch = useDispatch();
 
-    const [ordersList] = useState(mockOrders);
-    const [searchList] = useState([]);
+    const orders = useSelector(state => state.completeOrdersState.completeOrders);
+    const error = useSelector(state => state.completeOrdersState.error);
+    const loading = useSelector(state => state.completeOrdersState.loading);
+
     const [page, setPage] = useState(0);
+    const [ordersList, setOrdersList] = useState([]);
+
+    const maxNumberOfPages = (Math.ceil(orders.length/itemsPerPage) - 1);
+
+    let renderableProducts = [];
+    let row = <></>
+
+
+
+
+
+    useEffect(() => {
+        if(!orders.length) dispatch(getCompleteOrders());
+        else setOrdersList(orders);      
+    }, [orders.length]);
     
-    //Handles ordering select input
-    const handleOrder = value => {
-        console.log(`selected ${value}`);
-
-        switch(value){
-            case "d_decending": {
-                //re order state array
-                break;
-            }
-            case "d_ascending": {
-                break;
-            }
-            case "c_ascending": {
-                break;
-            }
-            case "c_decending": {
-                break;
-            }
-            case "cn_ascending": {
-                break;
-            }
-            case "cn_decending": {
-                break;
-            }
-            default: return;
-        }
-    }
-
-
-
-    //search email functions
-    const customerEmailSearch = email => {
-        console.log(email);
-    }
-
-    const clearSearch = () => {
-        console.log("clearing search");
-    }   
-
-    const clearSearchButton = <div style = {{textAlign: "center", marginTop: "5px"}}>
-        <Button type="primary" onClick={clearSearch}>Clear Search</Button>
-    </div>
-
-
-
-
-
-    //renderable items 
     const onChange = p => { setPage(p - 1) };
-    const itemsPerPage = 10;
-   
-    
-    const maxNumberOfPages = (Math.ceil(ordersList.length/itemsPerPage) - 1);
 
-    const renderableProducts = ordersList.slice( page * itemsPerPage, 
-        ((page + 1) * itemsPerPage) > ordersList.length ? ordersList.length : ((page + 1) * itemsPerPage));
-    
-    const row = renderableProducts.map((o, i) => {
-        return (
-            <tr key = {o.po_number + i} className="processed-orders-table-row">
-                <td>{o.po_number}</td>
-                <td>{o.c_email}</td>
-                <td>{o.issued_date.toString()}</td>
-                <td>{o.trackingNumber}</td>
-                <td>{o.carrier}</td>
-                <td><b className="processed-orders-view" onClick={() => {
-                    history.push('/order/' + o.po_number);
-                }}>View</b></td>
-            </tr>
-        );
-    });
- 
-    
 
-    
 
-    
+
+
+    if(ordersList.length !== 0){
+        renderableProducts = ordersList.slice( page * itemsPerPage, 
+            ((page + 1) * itemsPerPage) > ordersList.length ? ordersList.length : ((page + 1) * itemsPerPage));
+        
+            row = renderableProducts.map((o, i) => {
+                return (
+                    <tr key = {o.po_number + i} className="processed-orders-table-row">
+                        <td>{o.po_number}</td>
+                        <td>{o.c_email}</td>
+                        <td>{o.issued_date.toString()}</td>
+                        <td>{o.trackingNumber}</td>
+                        <td>{o.carrier}</td>
+                        <td><b className="processed-orders-view" onClick={() => {
+                            history.push('/order/' + o.po_number);
+                        }}>View</b></td>
+                    </tr>
+                );
+            });
+    }
+
+
+
+
 
     return (
         <div>
@@ -161,12 +95,12 @@ const ProcessedOrders = () => {
                             </td>
 
                             <td>
-                                <Select placeholder="Order By" style = {{width:"300px"}} onChange={handleOrder}>
+                                <Select allowClear placeholder="Order By" style = {{width:"300px"}} onSelect={v => {setOrder(v, ordersList, setOrdersList)}}>
                                     <OptGroup label="Data Issued">
                                         <Option value="d_decending">Latest</Option>
                                         <Option value="d_ascending">Earliest</Option>
                                     </OptGroup>
-                                    <OptGroup label="Customer ID">
+                                    <OptGroup label="Customer Email">
                                         <Option value="c_ascending">A-Z</Option>
                                         <Option value="c_decending">Z-A</Option>
                                     </OptGroup>
@@ -179,11 +113,21 @@ const ProcessedOrders = () => {
 
                             <td>
                                 <Input.Search
+                                    id='processed-orders-email-filter'
                                     style = {{width:"300px"}}
                                     placeholder="Search Customer Email"
                                     enterButton="Search"
-                                    onSearch={customerEmailSearch}
+                                    onSearch = { c_email => { 
+                                        if(c_email !== "") filterEmail(ordersList, c_email, setOrdersList);
+                                    }}
                                 />
+                            </td>
+
+                            <td>
+                                <Button onClick = { () => {
+                                    setOrdersList(orders);
+                                    document.getElementById('processed-orders-email-filter').value = "";
+                                }}>Reset Filters</Button>
                             </td>
                         </tr>
                     </tbody>
@@ -201,16 +145,19 @@ const ProcessedOrders = () => {
                             <th>Carrier</th>
                             <th>View Order</th>
                         </tr>
+                            
                         {row}
                     </tbody>
                 </table>  
+
+                {loading ? <div style = {{textAlign: 'center'}}><Spin size='large'/></div> : <></>}
+
+                {error ? <h1 style = {{textAlign: 'center', color: 'red'}}>Could not load data, please try refreshing page</h1> : <></>}
             </div>
 
             <div style = {{textAlign: "center"}}>
                 <Pagination  defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange = {onChange}/>
             </div>
-
-            {searchList.length > 0 ? clearSearchButton : <></>}
         </div>
     );
 }
