@@ -17,3 +17,7 @@ Password: Password123
 I have only set HomepageAdmin to private so if you want to test the feature with other pages,
 simply add the routes to _auth_lib/Config/routes.js
 It should redirect you to /login when you are not authenticated and trying to access HomepageAdmin
+
+# To-do (for Trang)
+- Add SignUp, Confirm SignUp, and ResetPassword
+- Reset/Fix the error message problem in context
