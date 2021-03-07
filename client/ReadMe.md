@@ -1,7 +1,7 @@
 # Configure Amplify
 In terminal: ``amplify configure``
   Enter the username, accessKeyId and secretKey if prompted
-  The keys are stored on OneDrive in helpers/AWS/rootkeys.csv
+  The keys are stored on OneDrive in Helpers/AWS/new_user_credentials.csv
   Make sure your aws-exports.js is there at the root directory of your React project
 
 # Run the React Project
