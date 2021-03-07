@@ -11,6 +11,8 @@ import { Button, Radio } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState , useEffect } from 'react';
 
+import {Auth} from 'aws-amplify';
+import {useAuthDispatch, useAuthState, logout} from '../../auth_lib/Context';
 
 /*
     Tasks left
@@ -28,8 +30,20 @@ import { useState , useEffect } from 'react';
     
 */
 
+const HomepageAdmin = (props) => {
+    // Auth state
+    const authDispatch = useAuthDispatch(); // read dispatch method from context
+    const [currentUser, setCurrentUser] = useState(false);
+    //read user details from context
+    useEffect(() => {
+        Auth.currentAuthenticatedUser().then(user => {setCurrentUser(user)});
+    }, [])
 
-const HomepageAdmin = () => {
+    const handleLogout = async () => {
+        await logout(authDispatch) //call the logout action
+        props.history.push('/login') //navigate to logout page on logout
+    }
+
     const [radioState, setRadioState] = useState(false);            //false is 'Current Orders'
 
     const dispatch = useDispatch();
@@ -99,6 +113,14 @@ const HomepageAdmin = () => {
     return(
         <>
             <div id="homepage-admin-header">Admin Station</div>
+            
+            {/* Testing Log-in */}
+            {/* Make sure user details is loaded before displaying */}
+            { currentUser &&
+                <div>Welcome {currentUser.attributes.email}</div>
+            }
+
+            <button onClick={handleLogout}>Logout</button>
 
             <div style  = {{height:"20px"}}></div>
 

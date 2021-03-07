@@ -1,8 +1,10 @@
 import { Form, Input, Button } from 'antd';
-import { history } from '../../_helpers/history';
+// import { history } from '../../_helpers/history';
 
+import React, {useState} from 'react';
+import { loginUser, useAuthState, useAuthDispatch } from '../../auth_lib/Context' 
 
-
+import {Auth} from 'aws-amplify';
 
 //Layout stuff//
 const layout = {
@@ -22,7 +24,26 @@ const actionButtonsLayout = {
 
 
 
-const Login = () => {
+const Login = (props) => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const authDispatch = useAuthDispatch(); //get the dispatch method from the useDispatch custom hook
+    const { loading, errorMessage } = useAuthState(); //read the values of loading and errorMessage from context
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        let payload = {email, password};
+        try {
+            await loginUser(authDispatch, payload)
+                .then(res => {
+                    props.history.push('/admin'); //navigate to dashboard on success
+                });
+            
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const onFinish = values => {
         console.log('Success:', values);
@@ -33,7 +54,7 @@ const Login = () => {
     };
 
     const navigateForgotPasswordPage = () => {
-        history.push('/emailRequest');
+        props.history.push('/emailRequest');
     }
 
     const navigateRegisterPage = () => {
@@ -45,6 +66,9 @@ const Login = () => {
             <div className="page-title-holder with-divider center-page">
                 <h1>Login</h1>
             </div>
+            {
+                errorMessage ? <p style={{color: 'red'}}>{errorMessage}</p> : null
+            }
 
             <Form
                 {...layout}
@@ -54,13 +78,14 @@ const Login = () => {
                 onFinishFailed={onFinishFailed}>
                 
                 <Form.Item
-                    label="User ID/Email"
+                    label="Email"
                     name="username"
                     rules={[{
                         required: true,
-                        message: 'Please input your username!',
+                        message: 'Please input your email!',
                     },]}>
-                    <Input />
+                    <Input value={email} onChange={(e) => setEmail(e.target.value)}
+                        disabled={loading} />
                 </Form.Item>
 
                 <Form.Item
@@ -70,7 +95,8 @@ const Login = () => {
                         required: true,
                         message: 'Please input your password!',
                     },]}>
-                    <Input.Password />   
+                    <Input.Password value={password} onChange={(e) => setPassword(e.target.value)}
+                        disabled={loading} />   
                 </Form.Item >
 
                 <Form.Item {...actionButtonsLayout}>
@@ -78,7 +104,10 @@ const Login = () => {
                 </Form.Item>
 
                 <Form.Item {...actionButtonsLayout}>
-                    <Button type="primary" htmlType="submit">Login</Button>
+                    <Button type="primary" htmlType="submit"
+                        onClick={handleLogin} disabled={loading} >
+                            Login
+                    </Button>
                 </Form.Item>
 
                 <Form.Item {...actionButtonsLayout}>
