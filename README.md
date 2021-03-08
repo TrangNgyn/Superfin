@@ -1,8 +1,34 @@
 # Superfin
 A website for purchasing paperbags
 
-# DO NOT DELETE
 ## Connect to MongoDB
 Use the info provided in mongoConfig.json for connecting to the database.
 
-Connect to Atlas through Compass: https://downloads.mongodb.com/compass/mongodb-compass-1.22.1-win32-x64.exe 
+## Run the server
+Open the Terminal and redirect to the server folder.
+In terminal, run ``node server`` if you have node installed, or ``nodemon server`` if you have nodemon installed.
+Run the server and the React project concurrently to simulate the API calls
+
+## Configure Amplify
+In terminal: ``amplify configure``
+  Enter the username, accessKeyId and secretKey if prompted
+  The keys are stored on OneDrive in Helpers/AWS/new_user_credentials.csv
+  Make sure your aws-exports.js is there at the root directory of your React project
+
+## Run the React Project
+In Terminal run: ``npm install`` to install all dependencies
+Run ``npm start`` to run the project
+
+## Logging in into Superfin
+I haven't worked on the SignUp page yet so use these credentials to test the signing up feature:
+Email: tttn941@uowmail.edu.au
+Password: Password123
+
+# Private Route
+I have only set HomepageAdmin to private so if you want to test the feature with other pages,
+simply add the routes to _auth_lib/Config/routes.js
+It should redirect you to /login when you are not authenticated and trying to access HomepageAdmin
+
+# To-do (for Trang)
+- Add SignUp, Confirm SignUp, and ResetPassword
+- Reset/Fix the error message problem in context
