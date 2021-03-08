@@ -27,7 +27,7 @@ const Login = () => {
     const onFinish = values => {
         console.log('Success:', values);
     };
-    
+
     const onFinishFailed = errorInfo => {
         console.log('Failed:', errorInfo);
     };
@@ -37,7 +37,7 @@ const Login = () => {
     }
 
     const navigateRegisterPage = () => {
-    
+        history.push('/signup');
     }
 
     return(
@@ -52,7 +52,7 @@ const Login = () => {
                 initialValues={{remember: true,}}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}>
-                
+
                 <Form.Item
                     label="User ID/Email"
                     name="username"
@@ -70,7 +70,7 @@ const Login = () => {
                         required: true,
                         message: 'Please input your password!',
                     },]}>
-                    <Input.Password />   
+                    <Input.Password />
                 </Form.Item >
 
                 <Form.Item {...actionButtonsLayout}>

@@ -1,9 +1,8 @@
 import '../../_assets/CSS/pages/CheckoutSecurePayment.css';
-import { Typography, Form, Input, Button, Row, Col, Steps, Radio, DatePicker, InputNumber  } from 'antd';
+import { Typography, Form,  Button, Row, Col, Steps, Radio, DatePicker, InputNumber  } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const { RangePicker } = DatePicker;
 const { Title } = Typography;
 const { Step } = Steps;
 const monthFormat = 'MM/YY';

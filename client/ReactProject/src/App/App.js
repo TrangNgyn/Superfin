@@ -20,11 +20,15 @@ import ProcessedOrders from '../Pages/ProcessedOrders/ProcessedOrders';
 import EditCompanyInfo from '../Pages/EditCompanyInfo/EditCompanyInfo';
 import ManageProducts from '../Pages/ManageProducts/ManageProducts';
 import MyAccount from '../Pages/MyAccount/MyAccount';
+import Signup from '../Pages/Signup/Signup';
 import TermsConditions from '../Pages/TermsConditions/TermsConditions';
+import Cart from '../Pages/Cart/Cart';
 import CheckoutShipping from '../Pages/Checkout/CheckoutShipping';
 import CheckoutSecurePayment from '../Pages/Checkout/CheckoutSecurePayment';
 import CheckoutReviewOrder from '../Pages/Checkout/CheckoutReviewOrder';
 import CheckoutOrderComplete from '../Pages/Checkout/CheckoutOrderComplete';
+import ViewProductInfo from '../Pages/ViewProductInfo/ViewProductInfo';
+import Promocode from '../Pages/Promocode/Promocode';
 import Footer from '../SharedComponents/Footer/FooterMain';
 
 
@@ -52,17 +56,17 @@ const App = () => (
 
          <div className="Website-Body" >
             <Switch>
-           
+
                <Route exact path="/"><Homepage /></Route>
                <Route exact path="/admin"><HomepageAdmin /></Route>
 
                <Route exact path="/products"> <Products /></Route>
-               <Route exact path="/products/:browseBy"><Products /></Route> 
-               <Route path="/products/:browseBy/:browseByGroup"><Products /></Route> 
+               <Route exact path="/products/:browseBy"><Products /></Route>
+               <Route path="/products/:browseBy/:browseByGroup"><Products /></Route>
 
                <Route path="/deliveryDispatch"> <DeliveryDispatch /></Route>
                <Route path="/contactUs"> <ContactUs /></Route>
-               <Route path="/aboutUs"><AboutUS /></Route>  
+               <Route path="/aboutUs"><AboutUS /></Route>
                <Route path="/termsConditions"><TermsConditions /></Route>
                <Route path="/blog"><Blog /></Route>
 
@@ -70,25 +74,28 @@ const App = () => (
                <Route path="/emailRequest"><EmailRequest /></Route>
                <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
                <Route path="/reenterPassword"><ReenterPassword /></Route>
-              
+
                <Route exact path="/order"><Order /></Route>
                <Route path="/order/:po_number"><Order /></Route>
 
 
                <Route path="/myAccount"><MyAccount/></Route>
+               <Route path="/signup"><Signup/></Route>
                <Route path="/currentOrders"><CurrentOrders /></Route>
                <Route path="/processedOrders"><ProcessedOrders /></Route>
-               
-               <Route path="/editCompanyInformation"><EditCompanyInfo /></Route>                 
+
+               <Route path="/editCompanyInformation"><EditCompanyInfo /></Route>
                <Route path="/manageProducts"><ManageProducts /></Route>
 
                <Route exact path="/editAddProducts"><AddEditProduct /></Route>
                <Route path="/editAddProducts/:p_code"><AddEditProduct /></Route>
-
+               <Route path="/Cart"><Cart /></Route>
                <Route path="/CheckoutShipping"><CheckoutShipping /></Route>
                <Route path="/CheckoutSecurePayment"><CheckoutSecurePayment /></Route>
                <Route path="/CheckoutReviewOrder"><CheckoutReviewOrder /></Route>
                <Route path="/CheckoutOrderComplete"><CheckoutOrderComplete /></Route>
+               <Route path="/ViewProductInfo"><ViewProductInfo /></Route>
+               <Route path="/Promocode"><Promocode /></Route>
             </Switch>
          </div>
          <div className="Website-Footer">
