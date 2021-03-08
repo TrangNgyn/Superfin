@@ -101,6 +101,10 @@ class Purchased_Order {
         }
     }
 
+    // @route   GET api/orders/all-uncomplete
+    // @desc    get all orders that are not COMPLETE
+    // @access  Public
+
     async all_uncomplete(req,res) {
         try {
             order_model
@@ -111,6 +115,19 @@ class Purchased_Order {
         
         catch(err){
             console.log(err)
+        }
+    }
+
+    // @route   POST api/orders/create-order
+    // @desc    create a new order
+    // @access  Public
+
+    async create_order(req,res) {
+        try {
+
+        }
+        catch(error){
+            console.log(error)
         }
     }
 
