@@ -30,10 +30,10 @@ const Signup = () =>{
 
       return(
         <body>
-        <div id="edit-profile-head">
+        <div id="signup-head">
         <Title level={3}>Sign Up</Title>
         </div>
-        <div id="edit-profile-content">
+        <div id="signup-content">
         <Form
               labelCol={{
                 span: 9,
