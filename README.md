@@ -15,10 +15,10 @@ In the root directory of your React Project (i.e.ReactProject), run ``npm instal
 
 ## Configure Amplify
 In the root directory of your React Project (i.e. ReactProject), run ``amplify init`` to initialise your amplify app.
-Then configure your applify app to achieve the aws-exports.js by running: ``amplify configure``
+Then configure your applify app to retrieve the config file called ``aws-exports.js`` by running: ``amplify configure``
   Enter the username, accessKeyId and secretKey if prompted
   The keys are stored on OneDrive in Helpers/AWS/new_user_credentials.csv
-  Make sure your aws-exports.js is there at the root directory of your React project
+  Make sure your ``aws-exports.js`` is there at the root directory of your React project
 
 ## Run the React Project
 Run ``npm start`` to run the project
