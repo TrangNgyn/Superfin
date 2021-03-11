@@ -309,7 +309,7 @@ class Product {
                 return res.json(empty_field)
             }
 
-            //could use findOneAndDelete here
+            //should use findOneAndDelete here -> prevent other commands changing the document
             else {
                 var delete_product = await product_model.findOne({ p_code: p_code })
                 if(delete_product) {
