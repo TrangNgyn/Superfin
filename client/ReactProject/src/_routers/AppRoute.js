@@ -1,21 +1,23 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
  
-import { useAuthState } from '../Context'
- 
+import {store} from "../_helpers/store";
+
+
 const AppRoutes = ({ component: Component, path, isPrivate, ...rest }) => {
- 
-    const userDetails = useAuthState();
+    // check if user is authenticated
+    const {isAuthenticated} = store.getState().authReducer;
+    
     return (
     <>
-        {console.log(userDetails.isAuthenticated)}
+        {console.log({AppRoute: isAuthenticated})}
         <Route
             path={path}
             render={props =>
                 // Make sure user is authenticated before accessing private routes
-                isPrivate && !Boolean(userDetails.isAuthenticated) ? (
+                !Boolean(isAuthenticated) ? (
                     <Redirect
-                        to={{ pathname: "/login" }}
+                        to={{ pathname: "/login", state: {from: props.location} }}
                     />
                 ) : (
                         <Component {...props} />

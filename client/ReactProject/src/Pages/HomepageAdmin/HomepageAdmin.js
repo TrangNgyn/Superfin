@@ -12,7 +12,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState , useEffect } from 'react';
 
 import {Auth} from 'aws-amplify';
-import {useAuthDispatch, useAuthState, logout} from '../../auth_lib/Context';
+import {logout} from '../../_actions/authActions';
+import {store} from '../../_helpers/store';
 
 /*
     Tasks left
@@ -31,22 +32,22 @@ import {useAuthDispatch, useAuthState, logout} from '../../auth_lib/Context';
 */
 
 const HomepageAdmin = (props) => {
+    const dispatch = useDispatch();
+    const {isAuthenticated} = store.getState().authReducer;
     // Auth state
-    const authDispatch = useAuthDispatch(); // read dispatch method from context
     const [currentUser, setCurrentUser] = useState(false);
     //read user details from context
     useEffect(() => {
+        console.log(isAuthenticated)
         Auth.currentAuthenticatedUser().then(user => {setCurrentUser(user)});
     }, [])
 
     const handleLogout = async () => {
-        await logout(authDispatch) //call the logout action
-        props.history.push('/login') //navigate to logout page on logout
+        await dispatch(logout()); //call the logout action
+        history.push('/login') //navigate to logout page on logout
     }
 
     const [radioState, setRadioState] = useState(false);            //false is 'Current Orders'
-
-    const dispatch = useDispatch();
 
     const productsList = useSelector(state => state.productState.products);
     const errorLoading = useSelector(state => state.productState.error);

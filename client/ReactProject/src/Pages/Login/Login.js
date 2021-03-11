@@ -1,10 +1,11 @@
 import { Form, Input, Button } from 'antd';
-// import { history } from '../../_helpers/history';
+import { history } from '../../_helpers/history';
 
 import React, {useState} from 'react';
-import { loginUser, useAuthState, useAuthDispatch } from '../../auth_lib/Context' 
-
 import {Auth} from 'aws-amplify';
+import { useDispatch } from 'react-redux';
+import {login} from '../../_actions/authActions';
+import {store} from '../../_helpers/store';
 
 //Layout stuff//
 const layout = {
@@ -27,22 +28,20 @@ const actionButtonsLayout = {
 const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const authDispatch = useAuthDispatch(); //get the dispatch method from the useDispatch custom hook
-    const { loading, errorMessage } = useAuthState(); //read the values of loading and errorMessage from context
+    const [errorMessage, setErrorMessage] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        let payload = {email, password};
-        try {
-            await loginUser(authDispatch, payload)
-                .then(res => {
-                    props.history.push('/admin'); //navigate to dashboard on success
-                });
-            
-        } catch (error) {
-            console.log(error);
+        try{
+            if (email && password) {
+                await dispatch(login(email, password))
+            }
+        }catch(error){
+            setErrorMessage(store.getState().authReducer.errorMessage);
         }
+        
     }
 
     const onFinish = values => {

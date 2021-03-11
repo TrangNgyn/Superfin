@@ -1,25 +1,19 @@
 import './App.less';
 import '../_assets/CSS/style.scss'
 import Navbar from '../SharedComponents/Navbar/Navbar';
-// import { history } from '../_helpers/history';
+import { history } from '../_helpers/history';
 
 // import { Router, Route, Switch, useParams } from 'react-router-dom';
 import {
-   BrowserRouter as Router,
+   Router,
    Redirect,
    Route,
    Switch,
 } from 'react-router-dom';
-import routes from '../auth_lib/Config/routes';
-import {AuthProvider} from '../auth_lib/Context';
-import AppRoute from '../auth_lib/AppRoute/AppRoute';
+
+import AppRoute from '../_routers/AppRoute';
 import Login from '../Pages/Login/Login';
 import HomepageAdmin from '../Pages/HomepageAdmin/HomepageAdmin';
-
-import Amplify, {Auth} from 'aws-amplify';
-import awsconfig from '../aws-exports';
-Amplify.configure(awsconfig);
-Auth.configure(awsconfig);
 
 // import Homepage from '../Pages/Homepage/Homepage';
 // import ContactUs from '../Pages/ContactUs/ContactUs';
@@ -40,10 +34,12 @@ Auth.configure(awsconfig);
 // import CheckoutSecurePayment from '../Pages/Checkout/CheckoutSecurePayment';
 // import CheckoutReviewOrder from '../Pages/Checkout/CheckoutReviewOrder';
 // import CheckoutOrderComplete from '../Pages/Checkout/CheckoutOrderComplete';
-// import Footer from '../SharedComponents/Footer/FooterMain';
+import Footer from '../SharedComponents/Footer/FooterMain';
 
-
-
+import Amplify, {Auth} from 'aws-amplify';
+import awsconfig from '../aws-exports';
+Amplify.configure(awsconfig);
+Auth.configure(awsconfig);
 
 
 //This is a demo Component to demonstrate Dynmaic Routing
@@ -60,9 +56,7 @@ Auth.configure(awsconfig);
 
 const App = () => (
    <div>
-      {/* <Router history = {history}> */}
-      <AuthProvider>
-      <Router>
+      <Router history = {history}>
          <div className="Website-Header">
             <Navbar />
          </div>
@@ -107,21 +101,16 @@ const App = () => (
                <Route path="/CheckoutReviewOrder"><CheckoutReviewOrder /></Route>
                <Route path="/CheckoutOrderComplete"><CheckoutOrderComplete /></Route> */}
 
-               {routes.map((route) => (
-                  <AppRoute
-                     key={route.path}
-                     path={route.path}
-                     component={route.component}
-                     isPrivate={route.isPrivate}
-                  />
-               ))}
+               <div>
+                  <AppRoute exact path="/admin" component={HomepageAdmin} />
+                  <Route path="/login" component={Login} />
+               </div>
             </Switch>
          </div>
-         {/* <div className="Website-Footer">
+         <div className="Website-Footer">
             <Footer />
-         </div> */}
+         </div>
       </Router>
-      </AuthProvider>
    </div>
 );
 

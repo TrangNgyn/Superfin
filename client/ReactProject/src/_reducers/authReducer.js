@@ -1,5 +1,6 @@
 import React, { useReducer } from "react";
 import {Auth} from 'aws-amplify';
+import {authConstants} from '../_constants/auth.constants';
 
 export const initialState = {
   isAuthenticated: false,
@@ -7,27 +8,27 @@ export const initialState = {
   errorMessage: null
 };
  
-export const AuthReducer = (initialState, action) => {
+export const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "REQUEST_LOGIN":
+    case authConstants.LOGIN_REQUEST:
       return {
         ...initialState,
         isAuthenticated: false,
         loading: true
       };
-    case "LOGIN_SUCCESS":
+    case authConstants.LOGIN_SUCCESS:
       return {
         ...initialState,
         isAuthenticated: true,
         loading: false
       };
-    case "LOGOUT":
+    case authConstants.LOGOUT:
       return {
         ...initialState,
         isAuthenticated: false,
       };
  
-    case "LOGIN_ERROR":
+    case authConstants.LOGIN_ERROR:
       return {
         ...initialState,
         isAuthenticated: false,
@@ -36,6 +37,6 @@ export const AuthReducer = (initialState, action) => {
       };
  
     default:
-      throw new Error(`Unhandled action type: ${action.type}`);
+      return state;
   }
 };
