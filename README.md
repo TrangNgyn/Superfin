@@ -6,17 +6,21 @@ Use the info provided in mongoConfig.json for connecting to the database.
 
 ## Run the server
 Open the Terminal and redirect to the server folder.
+To install the dependencies, run: ``npm install`` in the server folder.
 In terminal, run ``node server`` if you have node installed, or ``nodemon server`` if you have nodemon installed.
 Run the server and the React project concurrently to simulate the API calls
 
+## Install dependencies for the React project
+In the root directory of your React Project (i.e.ReactProject), run ``npm install``.
+
 ## Configure Amplify
-In terminal: ``amplify configure``
+In the root directory of your React Project (i.e. ReactProject), run ``amplify init`` to initialise your amplify app.
+Then configure your applify app to achieve the aws-exports.js by running: ``amplify configure``
   Enter the username, accessKeyId and secretKey if prompted
   The keys are stored on OneDrive in Helpers/AWS/new_user_credentials.csv
   Make sure your aws-exports.js is there at the root directory of your React project
 
 ## Run the React Project
-In Terminal run: ``npm install`` to install all dependencies
 Run ``npm start`` to run the project
 
 ## Logging in into Superfin
