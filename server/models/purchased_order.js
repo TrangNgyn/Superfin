@@ -49,10 +49,12 @@ const order_schema = new Schema({
         default: [],   
     },
     tracking_number: {
-        type: String
+        type: String,
+        default: ""
     },
     carrier: {
-        type: String
+        type: String,
+        default: ""
     }
 },
 {
