@@ -11,6 +11,7 @@ const Signup = () =>{
       const [form] = Form.useForm();
       const onFinish = (values) => {
         console.log('Success:', values);
+        alert("Account created");
       };
       const onFinishFailed = (errorInfo) => {
           console.log('Failed:', errorInfo);
