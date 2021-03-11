@@ -2,7 +2,6 @@ import '../../_assets/CSS/pages/Promocode.css';
 import {Typography } from 'antd';
 import { Row, Col } from 'antd';
 import { DatePicker, Form, Input, InputNumber, Button, Select } from 'antd';
-import {EditFilled} from '@ant-design/icons';
 
 
 
@@ -20,7 +19,6 @@ const Promocode = () =>{
     const validateMessages = {
       required: '${label} is required',
       types: {
-        email: '${label} is not a valid email',
         number: '${label} is not a valid number!',
       },
       number: {

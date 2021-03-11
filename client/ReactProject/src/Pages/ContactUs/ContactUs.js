@@ -12,7 +12,7 @@ const useContactUs = (callback) => {
   const handleSubmit = (event) => {
     if (event) {
       event.preventDefault();
-      alert("Thank you for your reponse");
+      alert("Thank you for your response");
     }
   }
   const handleInputChange = (event) => {
@@ -32,7 +32,7 @@ const ContactUs = () =>{
 
   const companyInfo = useSelector(state => state.companyInfoState.companyInfo);
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
       if(Object.keys(companyInfo).length === 0 && companyInfo.constructor === Object){
           dispatch(getCompanyInfo());
