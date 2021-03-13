@@ -102,7 +102,7 @@ const App = () => (
                <Route path="/CheckoutOrderComplete"><CheckoutOrderComplete /></Route> */}
 
                <div>
-                  <AppRoute exact path="/admin" component={HomepageAdmin} />
+                  <AppRoute path="/admin" component={HomepageAdmin} />
                   <Route path="/login" component={Login} />
                </div>
             </Switch>

@@ -38,7 +38,6 @@ const HomepageAdmin = (props) => {
     const [currentUser, setCurrentUser] = useState(false);
     //read user details from context
     useEffect(() => {
-        console.log(isAuthenticated)
         Auth.currentAuthenticatedUser().then(user => {setCurrentUser(user)});
     }, [])
 

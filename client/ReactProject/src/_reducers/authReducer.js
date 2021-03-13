@@ -1,5 +1,4 @@
 import React, { useReducer } from "react";
-import {Auth} from 'aws-amplify';
 import {authConstants} from '../_constants/auth.constants';
 
 export const initialState = {
