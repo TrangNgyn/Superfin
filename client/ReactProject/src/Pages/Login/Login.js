@@ -47,7 +47,7 @@ const Login = (props) => {
     const onFinish = values => {
         console.log('Success:', values);
     };
-    
+
     const onFinishFailed = errorInfo => {
         console.log('Failed:', errorInfo);
     };
@@ -57,7 +57,7 @@ const Login = (props) => {
     }
 
     const navigateRegisterPage = () => {
-    
+        history.push('/signup');
     }
 
     return(
@@ -71,11 +71,11 @@ const Login = (props) => {
 
             <Form
                 {...layout}
-                name="login-form"
+                name="authentication-form"
                 initialValues={{remember: true,}}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}>
-                
+
                 <Form.Item
                     label="Email"
                     name="username"

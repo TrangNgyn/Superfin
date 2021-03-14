@@ -5,6 +5,8 @@ import '../../_assets/CSS/layouts/ProductList.css';
 import '../../_constants';
 import { pageConstants } from "../../_constants";
 import { Pagination } from 'antd';
+import { Link } from 'react-router-dom';
+
 
 
 
@@ -17,8 +19,8 @@ const currentPage = pageConstants.HOMEPAGE_CUSTOMER; //currentPage will get init
 const prods = fetchProducts();
 
 function onlyCategories(value, index, self){
-  return self.map(function(e) { 
-    return e.category; 
+  return self.map(function(e) {
+    return e.category;
   }).indexOf(value.category) === index;
 }
 
@@ -39,17 +41,17 @@ const ProductList = () => {
 
 
 
-    
+
     if(currentPage === pageConstants.HOMEPAGE_CUSTOMER) productsArray = prods.filter(onlyCategories);
     else productsArray = prods
 
     const maxNumberOfPages = (Math.ceil(productsArray.length/itemsPerPage) - 1);
 
-    let renderableArray = productsArray.slice( page * itemsPerPage, 
+    let renderableArray = productsArray.slice( page * itemsPerPage,
       ((page + 1) * itemsPerPage) > productsArray.length ? productsArray.length : ((page + 1) * itemsPerPage));
 
     const rederableProducts = renderableArray.map((p) => {
-      return <div key={p.id}><Product {...p}/></div>
+      return <div key={p.id}><Link to="/ViewProductInfo"><Product {...p}/></Link></div>
     });
 
 
@@ -62,6 +64,7 @@ const ProductList = () => {
       <>
         <div className="Product-List-Container">
           {rederableProducts}
+
         </div>
         <Pagination defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange = {onChange}/>
       </>

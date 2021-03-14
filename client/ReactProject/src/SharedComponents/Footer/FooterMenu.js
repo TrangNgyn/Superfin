@@ -7,12 +7,12 @@ export default function FooterMenu(){
     const[currentMenuItem, setMenuItem] = useState('');
       console.log(currentMenuItem);
       return (
-        <Menu className="footer-menubar" 
-              onClick={(menu) => setMenuItem(menu.key)}  
+        <Menu className="footer-menubar"
+              onClick={(menu) => setMenuItem(menu.key)}
               mode="horizontal" >
 
             <Menu.Item key="Terms" className="item">
-              <Link to="/termsAndConditions"> Terms and Conditions </Link>
+              <Link to="/termsConditions"> Terms and Conditions </Link>
             </Menu.Item >
 
             <Menu.Item key="Support" className="item">

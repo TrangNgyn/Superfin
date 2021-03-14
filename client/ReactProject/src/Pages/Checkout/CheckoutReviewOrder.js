@@ -51,7 +51,7 @@ const CheckoutReviewOrder = () =>{
         <Col span={5}><div style={{textAlign: "right",paddingRight: "10px",fontWeight:"bold"}}>Total</div></Col>
         </Row>
         <Row justify="space-around" align="middle">
-        <Col span={4}><img src={img} width="100%" height="100%"/></Col>
+        <Col span={4}><img src={img} alt="product" width="100%" height="100%"/></Col>
         <Col span={5}>Brown Bag with Handles</Col>
         <Col span={5}><div style={{textAlign: "center"}}>100.00</div></Col>
         <Col span={5}><div style={{textAlign: "center"}}>1</div></Col>
