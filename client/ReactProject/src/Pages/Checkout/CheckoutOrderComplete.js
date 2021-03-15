@@ -95,7 +95,6 @@ const CheckoutOrderComplete = () =>{
         <Col span={24}>Delivery Address: Address: 23 Denison Rd, New South Wales 2500 Australia</Col>
         </Row>
         </div>
-
         </div>
         </body>
       );

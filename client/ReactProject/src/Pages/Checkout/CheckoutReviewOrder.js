@@ -79,7 +79,15 @@ const CheckoutReviewOrder = () =>{
         </div>
 
         <div id="checkout-review-order-button">
+        <Row>
+        <Col  offset={8} span={6}>
+        <Button type="primary"><Link to="/CheckoutSecurePayment">Back</Link></Button>
+        </Col>
+        <Col  span={6}>
         <Button type="primary"><Link to="/CheckoutOrderComplete">Place Order</Link></Button>
+        </Col>
+        </Row>
+
         </div>
 
         </div>

@@ -81,11 +81,17 @@ const CheckoutSecurePayment = () =>{
 
             </Row>
             <Row gutter={16}>
-              <Col span={12} offset={7}>
-              <Form.Item >
-              <Button type="primary" htmlType="submit"><Link to="/CheckoutReviewOrder">Continue</Link></Button>
-              </Form.Item>
-              </Col>
+            <Col span={2} offset={7}>
+            <Form.Item >
+            <Button type="primary"><Link to="/CheckoutShipping">Back</Link></Button>
+            </Form.Item>
+            </Col>
+            <Col >
+            <Form.Item >
+            <Button type="primary" htmlType="submit"><Link to="/CheckoutReviewOrder">Continue</Link></Button>
+            </Form.Item>
+            </Col>
+
             </Row>
         </Form>
         </div>
