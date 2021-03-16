@@ -1,4 +1,4 @@
-import '../../_assets/CSS/pages/CheckoutShipping.css';
+import '../../_assets/CSS/pages/Checkout/CheckoutShipping.css';
 import { Typography, Form, Input, Button, Row, Col, Steps, Select, InputNumber } from 'antd';
 import {CaretLeftOutlined} from '@ant-design/icons';
 import { Link } from 'react-router-dom';

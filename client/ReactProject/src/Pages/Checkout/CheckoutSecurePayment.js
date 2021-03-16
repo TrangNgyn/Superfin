@@ -1,4 +1,4 @@
-import '../../_assets/CSS/pages/CheckoutSecurePayment.css';
+import '../../_assets/CSS/pages/Checkout/CheckoutSecurePayment.css';
 import { Typography, Form,  Button, Row, Col, Steps, Radio, DatePicker, InputNumber  } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';

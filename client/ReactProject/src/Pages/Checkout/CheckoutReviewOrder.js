@@ -1,4 +1,4 @@
-import '../../_assets/CSS/pages/CheckoutReviewOrder.css';
+import '../../_assets/CSS/pages/Checkout/CheckoutReviewOrder.css';
 import { Typography, Button, Row, Col, Steps } from 'antd';
 import {EditFilled} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
