@@ -1,6 +1,7 @@
 const product_model = require('../models/product');
 const categories_model = require('../models/categories')
 const fs = require('fs');
+const path = require('path');
 
 var empty_field = { error: "All fields must be filled" }
 class Product {
@@ -126,13 +127,7 @@ class Product {
             
             var { p_code, p_name, p_price, p_units_sold, p_categories, p_description } =  req.body
 
-            //var images = req.files
-
-            // if(images.length <= 0) {
-            //     Product.delete_images(images)
-            //     return res.json({ success: false,
-            //                       message: "An image must be supplied"})
-            // }
+            var images = req.files
 
             // validate that input was recieved
             if( !p_code | !p_name | !p_categories | !p_price){
