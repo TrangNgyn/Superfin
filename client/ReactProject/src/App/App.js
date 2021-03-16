@@ -4,12 +4,12 @@ import Navbar from '../SharedComponents/Navbar/Navbar';
 import { history } from '../_helpers/history';
 import {
    Router,
-   Redirect,
    Route,
    Switch,
 } from 'react-router-dom';
 
-import AppRoute from '../_routers/AppRoute';
+//import AppRoute from '../_routers/AppRoute';
+import AddEditProduct from '../Pages/AddEditProduct/AddEditProduct';
 import Login from '../Pages/Login/Login';
 import HomepageAdmin from '../Pages/HomepageAdmin/HomepageAdmin';
 import Homepage from '../Pages/Homepage/Homepage';
@@ -66,7 +66,7 @@ const App = () => (
             <Switch>
            
                <Route exact path="/"><Homepage /></Route>
-               <Route exact path="/admin"><HomepageAdmin /></Route> 
+               <Route exact path="/admin"><HomepageAdmin /></Route>
 
                {/* <Route exact path="/products"> <Products /></Route>
                <Route exact path="/products/:browseBy"><Products /></Route> 
@@ -95,8 +95,8 @@ const App = () => (
                <Route path="/editCompanyInformation"><EditCompanyInfo /></Route>
                <Route path="/manageProducts"><ManageProducts /></Route>
 
-               {/* <Route exact path="/editAddProducts"><AddEditProduct /></Route>
-               <Route path="/editAddProducts/:p_code"><AddEditProduct /></Route> */}
+                <Route exact path="/editAddProducts"><AddEditProduct /></Route>
+               <Route path="/editAddProducts/:p_code"><AddEditProduct /></Route>
                <Route path="/Cart"><Cart /></Route>
                <Route path="/CheckoutShipping"><CheckoutShipping /></Route>
                <Route path="/CheckoutSecurePayment"><CheckoutSecurePayment /></Route>

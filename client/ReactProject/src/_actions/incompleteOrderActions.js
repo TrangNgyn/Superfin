@@ -1,4 +1,4 @@
-import {GET_INCOMPLETE_ORDERS, LOADING_INCOMPLETE_ORDERS, ERROR_INCOMPLETE_ORDERS} from './actionTypes';
+import {GET_INCOMPLETE_ORDERS, LOADING_INCOMPLETE_ORDERS, ERROR_INCOMPLETE_ORDERS, DELETE_INCOMPLETE_ORDERS, ADD_TRACKING} from './actionTypes';
 import axios from 'axios';
 
 export const getIncompleteOrders = () => dispatch => {
@@ -6,7 +6,6 @@ export const getIncompleteOrders = () => dispatch => {
 
     axios.get('api/orders/all-uncomplete')
     .then(res => {
-        console.log(res);
         dispatch({
             type: GET_INCOMPLETE_ORDERS,
             payload: res.data
@@ -26,4 +25,47 @@ export const setIncompleteOrdersLoading = val => {
         payload: val
     }
 }
+
+export const deleteIncompleteOrder = po_number => dispatch => {
+    return axios.post('api/orders/delete-order', {po_number: po_number})
+    .then(res => {
+        if(res.data.success){
+            dispatch({
+                type: DELETE_INCOMPLETE_ORDERS,
+                payload: po_number
+            });
+            return res;
+        }
+        else{
+            console.log(res);
+            return res;
+        } 
+    })
+    .catch(err => {
+        console.log(err);
+        return err;
+    });
+}
+
+export const addTracking = trackingDetails => dispatch => {
+    return axios.post('api/orders/add-tracking', trackingDetails)
+    .then(res => {
+        if(res.data.success){
+            dispatch({
+                type: ADD_TRACKING,
+                payload: trackingDetails
+            });
+            return res;
+        }
+        else {
+            console.log(res);
+            return res;
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        return err;
+    })
+}
+
 

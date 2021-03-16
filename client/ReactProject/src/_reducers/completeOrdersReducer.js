@@ -1,4 +1,4 @@
-import { GET_COMPLETE_ORDERS, ERROR_COMPLETE_ORDERS, LOADING_COMPLETE_ORDERS } from '../_actions/actionTypes';
+import { GET_COMPLETE_ORDERS, ERROR_COMPLETE_ORDERS, LOADING_COMPLETE_ORDERS, DELETE_COMPLETE_ORDER } from '../_actions/actionTypes';
 
 const initState = {
     completeOrders: [],
@@ -11,7 +11,7 @@ const completeOrdersReducer = (state = initState, {type, payload}) => {
         case GET_COMPLETE_ORDERS:
             return {
                 ...state,
-                completeOrders: payload,
+                completeOrders: payload.sort((a,b) => { return new Date(b.issued_date) - new Date(a.issued_date)}),
                 loading: false,
                 error: false
             }
@@ -25,6 +25,11 @@ const completeOrdersReducer = (state = initState, {type, payload}) => {
             return {
                 ...state,
                 loading: payload
+            }
+        case DELETE_COMPLETE_ORDER:
+            return{
+                ...state,
+                completeOrders: state.completeOrders.filter(o => o.po_number !== payload)
             }
         default:
             return state
