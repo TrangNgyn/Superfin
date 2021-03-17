@@ -23,6 +23,8 @@ const AddEditProduct = () => {
 
     const productsList = useSelector(state => state.productState.products);
     const categories = useSelector(state => state.categoryState.categories);
+
+    console.log('cats!', categories);
     
 
     const [pageState, setPageState] = useState(null);
