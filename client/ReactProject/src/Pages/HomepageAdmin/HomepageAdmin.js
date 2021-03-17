@@ -3,7 +3,7 @@ import HomepageAdminOrderList from './HomepageAdminOrderList';
 import ProductListAdmin from './ProductListAdmin';
 import { getAllProducts, setDefaultOrder } from '../../_actions/productActions';
 import { getCompleteOrders } from '../../_actions/completeOrderActions';
-import { getIncompleteOrders } from '../../_actions/incompleteOrderActions'; 
+import { getIncompleteOrders, deleteIncompleteOrder } from '../../_actions/incompleteOrderActions'; 
 import { history } from '../../_helpers/history';
 import { navigateAddOrder, navigateFullList } from './Functions';
 
@@ -11,16 +11,16 @@ import { Button, Radio } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState , useEffect } from 'react';
 
+import axios from 'axios';
+
+/*
 import {Auth} from 'aws-amplify';
 import {logout} from '../../_actions/authActions';
-import {store} from '../../_helpers/store';
+import {store} from '../../_helpers/store';*/
 
 /*
     Tasks left
     Make Images work for products.
-    Hook up Orders API
-    sort orders by issue date in the order reducer
-    impliment delete order functionality 
 */
 
 /*
@@ -31,20 +31,24 @@ import {store} from '../../_helpers/store';
     
 */
 
+
+
+
+
 const HomepageAdmin = (props) => {
     const dispatch = useDispatch();
-    const {isAuthenticated} = store.getState().authReducer;
+    //const {isAuthenticated} = store.getState().authReducer;
     // Auth state
-    const [currentUser, setCurrentUser] = useState(false);
+    //const [currentUser, setCurrentUser] = useState(false);
     //read user details from context
-    useEffect(() => {
+   /* useEffect(() => {
         Auth.currentAuthenticatedUser().then(user => {setCurrentUser(user)});
-    }, [])
+    }, [])*/
 
-    const handleLogout = async () => {
+   /* const handleLogout = async () => {
         await dispatch(logout()); //call the logout action
         history.push('/login') //navigate to logout page on logout
-    }
+    }*/
 
     const [radioState, setRadioState] = useState(false);            //false is 'Current Orders'
 
@@ -83,6 +87,7 @@ const HomepageAdmin = (props) => {
     }
 
     const ordersListProps = {
+        dispatch: dispatch,
         orders: orders,
         errorLoadingOrders: errorLoadingOrders,
         loadingOrders: loadingOrders
@@ -91,8 +96,7 @@ const HomepageAdmin = (props) => {
 
 
 
-
-    useEffect(() => {                                                              //checks if the store is empty. If so, do an API request. If data is already there, set it to default ordering
+    useEffect(() => {                                                           //checks if the store is empty. If so, do an API request. If data is already there, set it to default ordering
         if(!productsList.length) dispatch(getAllProducts());      
         else dispatch(setDefaultOrder());
 
@@ -105,6 +109,11 @@ const HomepageAdmin = (props) => {
     const radioToggle = () => {
         radioState ? setRadioState(false) : setRadioState(true);
     }
+
+
+
+
+   
    
 
 
@@ -113,14 +122,15 @@ const HomepageAdmin = (props) => {
     return(
         <>
             <div id="homepage-admin-header">Admin Station</div>
-            
+
+
             {/* Testing Log-in */}
             {/* Make sure user details is loaded before displaying */}
-            { currentUser &&
+            {/*{ currentUser &&
                 <div>Welcome {currentUser.attributes.email}</div>
-            }
+            }*/}
 
-            <button onClick={handleLogout}>Logout</button>
+            {/*<button onClick={handleLogout}>Logout</button>*/}
 
             <div style  = {{height:"20px"}}></div>
 

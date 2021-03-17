@@ -10,14 +10,18 @@ const HomepageAdminOrderList = props => {
     const orders = props.orders;
     const loading = props.loadingOrders;
     const error = props.errorLoadingOrders;
+    const dispatch = props.dispatch;
 
-    console.log("ORDERS", orders);
 
 
     let renderableOrders = [];
     if(orders.length !== 0){
         renderableOrders = orders.map(o => {
-            return <div key={o._id}><HomepageAdminOrder {...o}/></div>
+            const orderProps = {
+                order: o,
+                dispatch: dispatch
+            }
+            return <div key={o._id}><HomepageAdminOrder {...orderProps}/></div>
         }); 
     }
     

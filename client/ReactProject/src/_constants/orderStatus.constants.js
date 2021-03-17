@@ -1,5 +1,5 @@
 export const orderStatusConstants = {
     NEW: "NEW",
-    SENT: "SENT",
+    SHIPPED: "SHIPPED",
     COMPLETE: "COMPLETE"
 };
