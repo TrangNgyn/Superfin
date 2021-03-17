@@ -62,12 +62,15 @@ const ProcessedOrders = () => {
         renderableProducts = ordersList.slice( page * itemsPerPage, 
             ((page + 1) * itemsPerPage) > ordersList.length ? ordersList.length : ((page + 1) * itemsPerPage));
         
-            row = renderableProducts.map((o, i) => {
+            row = renderableProducts.map(o => {
+                const date = new Date(o.issued_date);
+                const dateString = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+                
                 return (
-                    <tr key = {o.po_number + i} className="processed-orders-table-row">
+                    <tr key = {o.po_number} className="processed-orders-table-row">
                         <td>{o.po_number}</td>
                         <td>{o.c_email}</td>
-                        <td>{o.issued_date.toString()}</td>
+                        <td>{dateString}</td>
                         <td>{o.trackingNumber}</td>
                         <td>{o.carrier}</td>
                         <td><b className="processed-orders-view" onClick={() => {
@@ -118,7 +121,10 @@ const ProcessedOrders = () => {
                                     placeholder="Search Customer Email"
                                     enterButton="Search"
                                     onSearch = { c_email => { 
-                                        if(c_email !== "") filterEmail(ordersList, c_email, setOrdersList);
+                                        if(c_email !== ""){
+                                            filterEmail(ordersList, c_email, setOrdersList);
+                                            setPage(0);
+                                        } 
                                     }}
                                 />
                             </td>
@@ -156,7 +162,7 @@ const ProcessedOrders = () => {
             </div>
 
             <div style = {{textAlign: "center"}}>
-                <Pagination  defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange = {onChange}/>
+                <Pagination current={page+1} defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange = {onChange}/>
             </div>
         </div>
     );

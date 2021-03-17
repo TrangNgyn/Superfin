@@ -20,7 +20,7 @@ export const deleteConfirm = (p_code, dispatch) => {
 const deleteOrderSuccess = po_number => {
     Modal.info({
         title: 'Success',
-        content: `Deleted product: ${po_number}`,
+        content: `Deleted order: ${po_number}`,
         okText: 'Ok',
     });
 }
