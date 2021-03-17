@@ -11,12 +11,16 @@ export const filterEmail = (orders, c_email, setOrdersList) => {
 
 export const setOrder = (order, orderList, setOrdersList) => {
     switch(order){
-        case 'd_decending':
-            
+        case 'd_decending':{
+            const newList = [...orderList].sort((a,b) => { return new Date(b.issued_date) - new Date(a.issued_date)});
+            setOrdersList(newList);
             break;
-        case 'd_ascending':
-            //
+        }
+        case 'd_ascending':{
+            const newList = [...orderList].sort((a,b) => { return new Date(a.issued_date) - new Date(b.issued_date)});
+            setOrdersList(newList);
             break;
+        }
         case 'c_ascending':{
             const newList = [...orderList].sort((a,b) => (a.c_email > b.c_email) ? 1 : ((b.c_email > a.c_email) ? -1 : 0));
             setOrdersList(newList);
