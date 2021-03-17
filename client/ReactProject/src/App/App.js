@@ -27,6 +27,7 @@ import EditCompanyInfo from '../Pages/EditCompanyInfo/EditCompanyInfo';
 import ManageProducts from '../Pages/ManageProducts/ManageProducts';
 import MyAccount from '../Pages/MyAccount/MyAccount';
 import Signup from '../Pages/Signup/Signup';
+import ConfirmSignup from '../Pages/Signup/ConfirmSignup';
 import TermsConditions from '../Pages/TermsConditions/TermsConditions';
 import Cart from '../Pages/Cart/Cart';
 import CheckoutShipping from '../Pages/Checkout/CheckoutShipping';
@@ -64,12 +65,12 @@ const App = () => (
 
          <div className="Website-Body" >
             <Switch>
-           
+
                <Route exact path="/"><Homepage /></Route>
-               <Route exact path="/admin"><HomepageAdmin /></Route> 
+               <Route exact path="/admin"><HomepageAdmin /></Route>
 
                {/* <Route exact path="/products"> <Products /></Route>
-               <Route exact path="/products/:browseBy"><Products /></Route> 
+               <Route exact path="/products/:browseBy"><Products /></Route>
                <Route path="/products/:browseBy/:browseByGroup"><Products /></Route>  */}
 
                <Route path="/deliveryDispatch"> <DeliveryDispatch /></Route>
@@ -89,6 +90,7 @@ const App = () => (
 
                <Route path="/myAccount"><MyAccount/></Route>
                <Route path="/signup"><Signup/></Route>
+               <Route path="/ConfirmSignup"><ConfirmSignup/></Route>
                <Route path="/currentOrders"><CurrentOrders /></Route>
                <Route path="/processedOrders"><ProcessedOrders /></Route>
 
@@ -101,14 +103,14 @@ const App = () => (
                <Route path="/CheckoutShipping"><CheckoutShipping /></Route>
                <Route path="/CheckoutSecurePayment"><CheckoutSecurePayment /></Route>
                <Route path="/CheckoutReviewOrder"><CheckoutReviewOrder /></Route>
-               <Route path="/CheckoutOrderComplete"><CheckoutOrderComplete /></Route> 
+               <Route path="/CheckoutOrderComplete"><CheckoutOrderComplete /></Route>
                <Route path="/ViewProductInfo"><ViewProductInfo /></Route>
                <Route path="/Promocode"><Promocode /></Route>
                {/* <div>
                    <AppRoute path="/admin" component={HomepageAdmin} />
                   <Route path="/login" component={Login} />
                 </div> */}
-               
+
             </Switch>
          </div>
          <div className="Website-Footer">
