@@ -3,13 +3,13 @@ import {Typography, Button, Row, Col, InputNumber, Input } from 'antd';
 import { Link } from 'react-router-dom';
 import img from "../../_assets/Images/Temp_Images/product_image_1.jpg"
 
-
-
 const { Title } = Typography;
 const { TextArea } = Input;
 
 
-const CheckoutReviewOrder = () =>{
+
+
+const ViewProductInfo = () =>{
       return(
         <body>
         <div id="view-product-info">
@@ -50,4 +50,4 @@ const CheckoutReviewOrder = () =>{
 
 }
 
-export default CheckoutReviewOrder
+export default ViewProductInfo
