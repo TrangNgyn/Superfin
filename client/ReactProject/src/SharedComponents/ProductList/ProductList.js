@@ -63,8 +63,9 @@ const ProductList = () => {
     return (
       <>
         <div className="Product-List-Container">
-          {rederableProducts}
+        
 
+          {rederableProducts}
         </div>
         <Pagination defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange = {onChange}/>
       </>

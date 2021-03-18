@@ -37,6 +37,7 @@ import CheckoutOrderComplete from '../Pages/Checkout/CheckoutOrderComplete';
 import ViewProductInfo from '../Pages/ViewProductInfo/ViewProductInfo';
 import Promocode from '../Pages/Promocode/Promocode';
 import Footer from '../SharedComponents/Footer/FooterMain';
+import AllProducts from '../Pages/AllProducts/AllProducts';
 
 import Amplify, {Auth} from 'aws-amplify';
 import awsconfig from '../aws-exports';
@@ -69,6 +70,7 @@ const App = () => (
                <Route exact path="/"><Homepage /></Route>
                <Route exact path="/admin"><HomepageAdmin /></Route>
 
+               <Route path="/allProducts"><AllProducts/></Route>
                {/* <Route exact path="/products"> <Products /></Route>
                <Route exact path="/products/:browseBy"><Products /></Route>
                <Route path="/products/:browseBy/:browseByGroup"><Products /></Route>  */}
