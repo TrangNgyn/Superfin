@@ -1,3 +1,5 @@
+import { emailNotFound } from './SharedModals'; 
+
 export const getCategoryName = (id, categories) => {
     const category = categories.find(category => {
         return category._id === id;
@@ -38,4 +40,14 @@ export const makeNumber = str => {
         }
     }
     return str;
+}
+
+//filters orders by email for current and previous orders pages
+export const filterEmail = (orders, c_email, setOrdersList) => {
+    const filteredOrders =  orders.filter(order => {
+        return order.c_email === c_email;
+    });
+
+    if(filteredOrders.length !== 0) setOrdersList(filteredOrders);
+    else emailNotFound();
 }

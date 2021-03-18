@@ -1,26 +1,17 @@
-import { emailNotFound } from './Modals';
-
-export const filterEmail = (orders, c_email, setOrdersList) => {
-    const filteredOrders =  orders.filter(order => {
-        return order.c_email === c_email;
-    });
-
-    if(filteredOrders.length !== 0) setOrdersList(filteredOrders);
-    else emailNotFound();
-}
-
-export const setOrder = (order, orderList, setOrdersList) => {
+ //Handles ordering select input
+ export const handleOrder = (order, orderList, setOrdersList) => {
     switch(order){
-        case 'd_decending':{
-            const newList = [...orderList].sort((a,b) => { return new Date(b.issued_date) - new Date(a.issued_date)});
+        case 'no_tracking':
+            var status = 'NEW';
+            const newList = [...orderList].sort((a,b) => (a.status === status) ? -1 : ((b.status === status) ? 1 : 0));
             setOrdersList(newList);
             break;
-        }
-        case 'd_ascending':{
-            const newList = [...orderList].sort((a,b) => { return new Date(a.issued_date) - new Date(b.issued_date)});
-            setOrdersList(newList);
+        case 'd_decending':
+            
             break;
-        }
+        case 'd_ascending':
+            //
+            break;
         case 'c_ascending':{
             const newList = [...orderList].sort((a,b) => (a.c_email > b.c_email) ? 1 : ((b.c_email > a.c_email) ? -1 : 0));
             setOrdersList(newList);
