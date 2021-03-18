@@ -1,4 +1,4 @@
-import '../../_assets/CSS/pages/CheckoutReviewOrder.css';
+import '../../_assets/CSS/pages/Checkout/CheckoutReviewOrder.css';
 import { Typography, Button, Row, Col, Steps } from 'antd';
 import {EditFilled} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
@@ -79,7 +79,15 @@ const CheckoutReviewOrder = () =>{
         </div>
 
         <div id="checkout-review-order-button">
+        <Row>
+        <Col  offset={8} span={6}>
+        <Button type="primary"><Link to="/CheckoutSecurePayment">Back</Link></Button>
+        </Col>
+        <Col  span={6}>
         <Button type="primary"><Link to="/CheckoutOrderComplete">Place Order</Link></Button>
+        </Col>
+        </Row>
+
         </div>
 
         </div>

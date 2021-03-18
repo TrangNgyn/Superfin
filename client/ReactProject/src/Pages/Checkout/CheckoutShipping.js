@@ -1,4 +1,4 @@
-import '../../_assets/CSS/pages/CheckoutShipping.css';
+import '../../_assets/CSS/pages/Checkout/CheckoutShipping.css';
 import { Typography, Form, Input, Button, Row, Col, Steps, Select, InputNumber } from 'antd';
 import {CaretLeftOutlined} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
@@ -40,7 +40,7 @@ const CheckoutShipping = () =>{
         <div>
         <Steps current={0}>
             <Step title="Shipping Address"/>
-            <Step title="Secure Payment"/>
+            <Step title="Secure Payment" />
             <Step title="Review Order"/>
             <Step title="Order Complete"/>
           </Steps>,
@@ -126,7 +126,7 @@ const CheckoutShipping = () =>{
             <Row gutter={16}>
               <Col span={10}>
               <Form.Item>
-              <Button type="text" htmlType="submit" ><CaretLeftOutlined />Return to cart</Button>
+              <Button type="text"><Link to="/Cart"><CaretLeftOutlined />Return to cart</Link></Button>
               </Form.Item>
               </Col>
               <Col span={12}>

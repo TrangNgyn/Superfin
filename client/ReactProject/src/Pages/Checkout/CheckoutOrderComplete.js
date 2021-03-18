@@ -1,4 +1,4 @@
-import '../../_assets/CSS/pages/CheckoutOrderComplete.css';
+import '../../_assets/CSS/pages/Checkout/CheckoutOrderComplete.css';
 import { Typography, Button, Row, Col, Steps } from 'antd';
 import img1 from "../../_assets/Images/Temp_Images/product_image_1.jpg"
 import img2 from "../../_assets/Images/visa.png"
@@ -95,7 +95,6 @@ const CheckoutOrderComplete = () =>{
         <Col span={24}>Delivery Address: Address: 23 Denison Rd, New South Wales 2500 Australia</Col>
         </Row>
         </div>
-
         </div>
         </body>
       );
