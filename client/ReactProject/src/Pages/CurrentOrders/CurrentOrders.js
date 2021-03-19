@@ -1,12 +1,13 @@
 import '../../_assets/CSS/pages/CurrentOrders/CurrentOrders.css';
-import { Select, Pagination, Input, Button, Form, Spin } from 'antd';
-import { CheckCircleOutlined } from '@ant-design/icons';
+import { Select, Pagination, Input, Button, Spin } from 'antd';
+//import { CheckCircleOutlined } from '@ant-design/icons';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { history } from '../../_helpers/history';
 import { getIncompleteOrders } from '../../_actions/incompleteOrderActions';
 import { handleOrder } from './Functions';
 import { filterEmail } from '../../_services/SharedFunctions';
+//import { orderStatusConstants } from '../../_constants/orderStatus.constants';
+import OrderRow from './OrderRow';
 
 const itemsPerPage = 10;
 const { Option, OptGroup } = Select;
@@ -31,15 +32,14 @@ const CurrentOrders = () => {
     const orders = useSelector(state => state.incompleteOrdersState.incompleteOrders);
     const error = useSelector(state => state.incompleteOrdersState.error);
     const loading = useSelector(state => state.incompleteOrdersState.loading);
-
     const [ordersList, setOrdersList] = useState([]);
-    const [indexs, setIndex] = useState([]);                
+    //const [indexs, setIndex] = useState([]);                
     const [page, setPage] = useState(0);
-
     const maxNumberOfPages = (Math.ceil(ordersList.length/itemsPerPage) - 1);
-
     let renderableProducts = [];
     let row = <></>
+
+    
 
 
 
@@ -48,7 +48,7 @@ const CurrentOrders = () => {
     useEffect(() => {
         if(!orders.length) dispatch(getIncompleteOrders());
         else setOrdersList(orders);      
-    }, [orders.length]);
+    }, [orders.length, orders, dispatch]);
     
     const onChange = p => { setPage(p - 1) };
 
@@ -61,72 +61,8 @@ const CurrentOrders = () => {
             ((page + 1) * itemsPerPage) > ordersList.length ? ordersList.length : ((page + 1) * itemsPerPage));
         
         row = renderableProducts.map((o) => {
-            const formRef = React.createRef();
-    
-            const onFinish = values => {
-               /* const formValues = {
-                    trackingNumber: values.trackingNumber,
-                    order: o
-                }
-                confirmTracking(formValues);
-                formRef.current.resetFields();*/
-            }
-    
-            const onFinishFail = () => {
-               /* setTimeout(() => {
-                    if(formRef.current) formRef.current.resetFields();          //checking if the form still exists 
-                }, 3000)*/
-            }
-            
-            let trackingNumber;
-          
-            if(o.trackingNumber){
-                const tickIndex = ordersList.indexOf(o); //This is for setting the green tick next to an item
-                indexs.indexOf(tickIndex) > -1 
-                ? trackingNumber = <div> {o.trackingNumber} <CheckCircleOutlined style = {{color: "green"}}/></div>
-                : trackingNumber = o.trackingNumber;   
-            } 
-            else{
-               trackingNumber = <div>
-                    <Form onFinish={onFinish} onFinishFailed={onFinishFail} ref={formRef}>
-                        <div style={{display: 'inline-block'}}>
-                            <Form.Item
-                                style = {{marginBottom: 0}}
-                                name="trackingNumber"
-                                rules={[
-                                    { required: true, 
-                                        message: 'Invalid Input', 
-                                        whitespace: true, 
-                                        validateTrigger: 'onSubmit',
-                                        max: 100,
-                                    }
-                                ]}>
-                                <Input id={o.po_number}/>
-                            </Form.Item>
-                        </div>
-    
-                        <div style={{display: 'inline-block'}}>
-                            <Form.Item style = {{marginBottom: 0}}>  
-                                <Button type="primary" htmlType="submit">Send</Button>
-                            </Form.Item>
-                        </div>
-                    </Form>
-                </div>
-            }
-    
             return (
-                <tr className="current-orders-table-row" key = {o.po_number}>
-                 
-                    <td>{o.po_number}</td>
-                    <td>{o.c_email}</td>
-                    <td>{o.status}</td>
-                    <td>{o.issued_date.toString()}</td>
-                    <td>{trackingNumber}</td>
-                    <td>{o.carrier}</td>
-                    <td><b className="current-orders-view" onClick={() => {
-                        history.push('/order/' + o.po_number);
-                    }}>View</b></td>
-                </tr>
+               <OrderRow key={o.po_number} order={o} dispatch={dispatch}/>
             );
         });
     }
@@ -151,14 +87,11 @@ const CurrentOrders = () => {
                                 <Select placeholder="Order By" style = {{width:"300px"}} onChange={v => {
                                     handleOrder(v, ordersList, setOrdersList);
                                 }}>
-                                    <OptGroup label="Tracking Number">
-                                        <Option value="no_tracking">New</Option>
-                                    </OptGroup>
                                     <OptGroup label="Data Issued">
                                         <Option value="d_decending">Latest</Option>
                                         <Option value="d_ascending">Earliest</Option>
                                     </OptGroup>
-                                    <OptGroup label="Customer ID">
+                                    <OptGroup label="Customer Email">
                                         <Option value="c_ascending">A-Z</Option>
                                         <Option value="c_decending">Z-A</Option>
                                     </OptGroup>
@@ -201,6 +134,7 @@ const CurrentOrders = () => {
                             <th>Date Issued</th>
                             <th>Tracking Number</th> 
                             <th>Carrier</th>
+                            <th>Send Tracking Details</th>
                             <th>View Order</th>
                         </tr>
                         {row}
