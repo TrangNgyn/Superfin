@@ -2,25 +2,46 @@ import '../../_assets/CSS/pages/ViewProductInfo.css';
 import {Typography, Button, Row, Col, InputNumber, Input } from 'antd';
 import { Link } from 'react-router-dom';
 import img from "../../_assets/Images/Temp_Images/product_image_1.jpg"
+import { createBrowserHistory } from 'history';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 
+const history = createBrowserHistory();
 const { Title } = Typography;
 const { TextArea } = Input;
 
 
+const getProducts = setProducts => {
+    axios.post('api/products/product-by-id',{
+      "p_code":"product_38"
+    })
+    .then(res => {
+        console.log(res);
+        setProducts(res.data);
+    })
+    .catch(err => {
+        console.log(err);
+    })
 
+}
 
 const ViewProductInfo = () =>{
+
+    const [product, setProducts] = useState([]);
+    useEffect(() => {
+        getProducts(setProducts);
+    }, []);
       return(
         <body>
         <div id="view-product-info">
         <Row justify="space-around" align="top" >
         <Col span={8}><img src={img} alt="product" width="100%" height="100%"/></Col>
         <Col span={8} style={{textAlign: "left",paddingTop: "5%"}}>
-          <Row><Title level={3} >Brown Bag with Handles</Title></Row>
-          <Row><Title level={3}>$5.00</Title></Row>
-          <Row><Title level={5}>Product Code: G397</Title></Row>
+          <Row><Title level={3} >{JSON.stringify(product.p_name)}</Title></Row>
+          <Row><Title level={3}>{JSON.stringify(product.p_price)}$</Title></Row>
+          <Row><Title level={5}>Product Code: {JSON.stringify(product.p_code)}</Title></Row>
           <Row><Title level={5}>Description</Title></Row>
-          <Row gutter={[0,24]}>Brown paper bag with handles. Comes in small, medium and large sizes. Sold individually. Please enquire for details on custom prints. Perfect for catering events, gifts and small business needs. Strurdy and hard to break. Do not get wet, and please recycle.</Row>
+          <Row gutter={[0,24]}>{JSON.stringify(product.p_description)}</Row>
           <Row><Button type="primary"><Link to="/ContactUs">Enquire</Link></Button> Click here to enquire for more information</Row>
 
         </Col>
@@ -36,7 +57,7 @@ const ViewProductInfo = () =>{
           </Row>
           <Row>
             <Col offset={12}>
-              <Button type="primary"><Link to="/Cart">Add to cart</Link></Button>
+              <Button type="primary"><Link to={{pathname:"/Cart",state:"hihi"}}>Add to cart</Link></Button>
             </Col>
           </Row>
           </div>

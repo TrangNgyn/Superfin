@@ -7,7 +7,7 @@ export default function Homepage(){
     	<>
 	        <div className="homepage-product-list-outer-container-0">
                 <HomepageCarousel />
-                <h3>SHOWN BY CATEGORY</h3>
+                <h3>ALL PRODUCTS</h3>
 
                 <div id="homepage-product-list-outer-container-1">
                     <ProductList />
