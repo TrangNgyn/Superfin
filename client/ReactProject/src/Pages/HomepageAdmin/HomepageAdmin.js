@@ -3,7 +3,7 @@ import HomepageAdminOrderList from './HomepageAdminOrderList';
 import ProductListAdmin from './ProductListAdmin';
 import { getAllProducts, setDefaultOrder } from '../../_actions/productActions';
 import { getCompleteOrders } from '../../_actions/completeOrderActions';
-import { getIncompleteOrders, deleteIncompleteOrder } from '../../_actions/incompleteOrderActions'; 
+import { getIncompleteOrders } from '../../_actions/incompleteOrderActions'; 
 import { history } from '../../_helpers/history';
 import { navigateAddOrder, navigateFullList } from './Functions';
 
@@ -11,7 +11,6 @@ import { Button, Radio } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState , useEffect } from 'react';
 
-import axios from 'axios';
 
 /*
 import {Auth} from 'aws-amplify';
@@ -159,7 +158,7 @@ const HomepageAdmin = (props) => {
 
 
 
-
+           
             <div style = {{textAlign: "center"}}>
                 <div className="Homepage-Admin-Products-Orders-Plus" onClick = {navigateAddOrder}>Orders +</div>
             </div>
@@ -177,7 +176,7 @@ const HomepageAdmin = (props) => {
 
             <div style  = {{height:"20px"}}></div>
            
-            <div>
+             <div>
                 <div className="Homepage-Admin-Scrollbox-Container">
                     <div className="Homepage-Admin-Scrollbox" style = {{height:"500px"}}>
                         {<HomepageAdminOrderList {...ordersListProps}/>} 
@@ -190,6 +189,7 @@ const HomepageAdmin = (props) => {
             <Button id="homepage-admin-button-1" type="primary" onClick={() => {navigateFullList(radioState)}}>View Full List</Button>
 
             <div style = {{height: "50px"}}></div> 
+            
         </>
     );
 }

@@ -41,5 +41,8 @@ export const setOrder = (order, orderList, setOrdersList) => {
             setOrdersList(newList);
             break;
         }
+        default: {
+            setOrdersList(orderList);
+        }
     }
 }

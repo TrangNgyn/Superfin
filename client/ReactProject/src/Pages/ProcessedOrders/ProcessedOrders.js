@@ -50,7 +50,7 @@ const ProcessedOrders = () => {
     useEffect(() => {
         if(!orders.length) dispatch(getCompleteOrders());
         else setOrdersList(orders);      
-    }, [orders.length]);
+    }, [orders.length, orders, dispatch]);
     
     const onChange = p => { setPage(p - 1) };
 

@@ -1,15 +1,10 @@
 import { Menu } from 'antd';
-import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function FooterMenuMobile(){
-    const[currentMenuItem, setMenuItem] = useState('');
-      console.log(currentMenuItem);
+
       return (
-        <Menu className="footer-menubar-mobile" 
-              onClick={(menu) => setMenuItem(menu.key)}  
-              mode="vertical" >
-  
+        <Menu className="footer-menubar-mobile" mode="vertical" >
             <Menu.Item key="Home" className="item">
               Home
             </Menu.Item >

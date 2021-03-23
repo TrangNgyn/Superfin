@@ -1,4 +1,4 @@
-.Product-List-Container {
+.Category-List-Container {
     display: grid;
     grid-template-columns: 250px 250px 250px;
     grid-column-gap: 250px;

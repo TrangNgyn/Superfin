@@ -6,6 +6,7 @@ import { Button, Input, Form } from 'antd';
 import { navigateEditOrder } from './Functions';
 import { deleteOrderConfirm } from '../../SharedComponents/Modals/Modals';
 import { confirmSubmitTracking } from './Modals';
+import { useForm } from "antd/lib/form/Form";
 
 
 
@@ -13,25 +14,29 @@ import { confirmSubmitTracking } from './Modals';
 const HomepageAdminOrder = props => {
     const order = props.order;
     const dispatch = props.dispatch;
+    const [form] = useForm();
 
     const date = new Date(order.issued_date);
     const dateString = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
   
-    const onFinishOrder = values => {
-        values.po_number = order.po_number;
-        confirmSubmitTracking(values, dispatch);
+    const onFinishOrder = () => {
+        form.validateFields()
+        .then(values => {
+            values.po_number = order.po_number;
+            confirmSubmitTracking(values, dispatch);
+        });  
     }
 
     const onFinishFailedOrder = err => {
         console.log(err);
     }
-    
-    let trackingNumberDiv = <div>
+
+    let trackingNumberDiv =  <div>
                                 <Form
+                                form={form}
                                 name="submit-tracking-form"
                                 onFinish={onFinishOrder}
                                 onFinishFailed={onFinishFailedOrder}
-                                validateTrigger={onFinishOrder}
                                 >
                                     <div className="Homepage-Admin-Order-Text"><b>Enter Tracking Number</b></div>
 
@@ -74,6 +79,7 @@ const HomepageAdminOrder = props => {
                                     </div>
                                 </Form>
                             </div>
+
 
     //if the order is complete it will contain the tracking number 
     if(order.status === orderStatusConstants.COMPLETE || order.status === orderStatusConstants.SHIPPED){

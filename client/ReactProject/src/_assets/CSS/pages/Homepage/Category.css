@@ -1,19 +1,19 @@
-.Product-Container {
+.Category-Container {
     text-align: center;
     width: 250px;
 }
 
-.Product-Container  img {
+.Category-Container  img {
     display: block;
     margin: 0 auto;
     width: 250px;
     height: 250px;
 }
 
-.Product-Container b {
+.Category-Container b {
     color: black;
 }
 
-.Product-Image-Text {
+.Category-Image-Text {
     cursor: pointer;
 }

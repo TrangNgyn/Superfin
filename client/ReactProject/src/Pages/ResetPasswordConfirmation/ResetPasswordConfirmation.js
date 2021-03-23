@@ -1,15 +1,14 @@
 import { history } from  '../../_helpers/history';
-import { Form } from 'antd';
 
 //Layout stuff//
-const layout = {
+/*const layout = {
     labelCol: {
       span: 10
     },
     wrapperCol: {
       span: 14
     }
-};
+};*/
 
 const ResetPasswordConfirmation = () => {
 
