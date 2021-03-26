@@ -2,3 +2,4 @@
 node_modules
 client/ReactProject/.eslintcache
 client/ReactProject/debug.log
+server/uploads

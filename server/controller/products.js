@@ -2,6 +2,7 @@ const product_model = require('../models/product');
 const categories_model = require('../models/categories')
 const fs = require('fs');
 const path = require('path');
+const upload = require('../middleware/upload');
 
 var empty_field = { error: "All fields must be filled" }
 class Product {
@@ -124,10 +125,22 @@ class Product {
 
     async post_add_product(req,res) {
         try {
+
             
-            var { p_code, p_name, p_price, p_units_sold, p_categories, p_description } =  req.body
+            var { p_code, p_name, p_price, p_units_sold, p_categories, p_description } =  req.body  
 
             var images = req.files
+
+            if(images.length <= 1)
+            {
+                return res.json({
+                    messsage: 'there are no files'
+                })
+            }
+
+            return res.json({
+                message: "It made it here"
+            });
 
             // validate that input was recieved
             if( !p_code | !p_name | !p_categories | !p_price){
