@@ -6,12 +6,24 @@ import { onlyNumbers } from '../../_services/SharedFunctions';
 import { Input, Form, Button } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 
+
+
+
+
 const EditCustomer = () => {
     const [form] = useForm();
+
+
+
+    
 
     const onFinish = values => {
         console.log(values);
     }
+
+
+
+
 
     return(
         <div>
@@ -53,104 +65,6 @@ const EditCustomer = () => {
                                 whitespace: true,
                                 required: true, 
                                 message: 'Please input customers last name!' 
-                            }
-                        ]}
-                    >
-                        <Input style={{width: '500px'}}/>
-                    </Form.Item>
-
-                    <Form.Item
-                        label="PO Attention To"
-                        name="po_attention_to"
-                        rules={[
-                            {
-                                whitespace: true,
-                                required: true, 
-                                message: 'Please input PO Attentiion To!' 
-                            }
-                        ]}
-                    >
-                        <Input.TextArea rows={3} style={{width: '500px'}}/>
-                    </Form.Item>
-
-                    <Form.Item
-                        label="PO Address Line 1"
-                        name="po_address_line1"
-                        rules={[
-                            {
-                                whitespace: true,
-                                required: true, 
-                                message: 'Please input PO Address Line 1' 
-                            }
-                        ]}
-                    >
-                        <Input style={{width: '500px'}}/>
-                    </Form.Item>
-
-                    <Form.Item
-                        label="PO Address Line 2"
-                        name="po_address_line2"
-                        rules={[
-                            {
-                                whitespace: true,
-                                required: true, 
-                                message: 'Please input PO Address Line 2' 
-                            }
-                        ]}
-                    >
-                        <Input style={{width: '500px'}}/>
-                    </Form.Item>
-
-                    <Form.Item
-                        label="PO Suburb"
-                        name="po_suburb"
-                        rules={[
-                            {
-                                whitespace: true,
-                                required: true, 
-                                message: 'Please input PO Suburb' 
-                            }
-                        ]}
-                    >
-                        <Input style={{width: '500px'}}/>
-                    </Form.Item>
-
-                    <Form.Item
-                        label="PO State"
-                        name="po_state"
-                        rules={[
-                            {
-                                whitespace: true,
-                                required: true, 
-                                message: 'Please input PO State' 
-                            }
-                        ]}
-                    >
-                        <Input style={{width: '500px'}}/>
-                    </Form.Item>
-
-                    <Form.Item
-                        label="PO Postal Code"
-                        name="po_postal_code"
-                        rules={[
-                            {
-                                whitespace: true,
-                                required: true, 
-                                message: 'Please input PO Postal Code' 
-                            }
-                        ]}
-                    >
-                        <Input style={{width: '500px'}}/>
-                    </Form.Item>
-
-                    <Form.Item
-                        label="PO Country"
-                        name="po_country"
-                        rules={[
-                            {
-                                whitespace: true,
-                                required: true, 
-                                message: 'Please input PO Postal Code' 
                             }
                         ]}
                     >
