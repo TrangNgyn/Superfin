@@ -254,6 +254,10 @@ export default function Navbar(props){
           </Dropdown>
         </Menu.Item>
 
+        <Menu.Item key="EditCustomer">
+            <Link to="/editCustomer">Edit Customer Information</Link>
+        </Menu.Item>
+
         <Menu.Item key="EditCompany">
             <Link to="/editCompanyInformation">Edit Company Information</Link>
         </Menu.Item>

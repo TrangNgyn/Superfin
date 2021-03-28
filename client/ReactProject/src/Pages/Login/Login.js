@@ -2,7 +2,7 @@ import { Form, Input, Button } from 'antd';
 import { history } from '../../_helpers/history';
 
 import React, {useState} from 'react';
-import {Auth} from 'aws-amplify';
+//import {Auth} from 'aws-amplify';
 import { useDispatch } from 'react-redux';
 import {login} from '../../_actions/authActions';
 import {store} from '../../_helpers/store';
@@ -29,7 +29,7 @@ const Login = (props) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [loading] = useState(false);
     const dispatch = useDispatch();
 
     const handleLogin = async (e) => {
@@ -99,7 +99,7 @@ const Login = (props) => {
                 </Form.Item >
 
                 <Form.Item {...actionButtonsLayout}>
-                    <a onClick = {navigateForgotPasswordPage}>Forgot Password ?</a>
+                    <div onClick = {navigateForgotPasswordPage} style = {{cursor: 'pointer', color: '#EB6E00'}}>Forgot Password ?</div>
                 </Form.Item>
 
                 <Form.Item {...actionButtonsLayout}>

@@ -1,7 +1,9 @@
-import { GET_CATEGORIES } from '../_actions/actionTypes';
+import { GET_CATEGORIES, LOADING_CATEGORIES, ERROR_CATEGORIES } from '../_actions/actionTypes';
 
 const initState = {
-    categories: []
+    categories: [],
+    loading: false,
+    error: false
 }
 
 const categoryReducer = (state = initState, {type, payload}) => {
@@ -9,7 +11,19 @@ const categoryReducer = (state = initState, {type, payload}) => {
         case GET_CATEGORIES:
             return {
                 ...state,
-                categories: payload
+                categories: payload,
+                loading: false
+            }
+        case LOADING_CATEGORIES:
+            return {
+                ...state,
+                loading: true
+            }
+        case ERROR_CATEGORIES:
+            return {
+                ...state,
+                loading: false,
+                error: true
             }
         default:
             return state

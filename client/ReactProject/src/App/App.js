@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 
 //import AppRoute from '../_routers/AppRoute';
+import EditCustomer from '../Pages/EditCustomer/EditCustomer';
 import AddEditProduct from '../Pages/AddEditProduct/AddEditProduct';
 import Login from '../Pages/Login/Login';
 import HomepageAdmin from '../Pages/HomepageAdmin/HomepageAdmin';
@@ -69,6 +70,7 @@ const App = () => (
 
                <Route exact path="/"><Homepage /></Route>
                <Route exact path="/admin"><HomepageAdmin /></Route>
+               <Route path="/editCustomer"><EditCustomer /></Route>
 
                <Route path="/allProducts"><AllProducts/></Route>
                {/* <Route exact path="/products"> <Products /></Route>
