@@ -2,22 +2,17 @@ const product_model = require('../models/product');
 const categories_model = require('../models/categories')
 const fs = require('fs');
 const path = require('path');
-const upload = require('../middleware/upload');
+const delete_object = require('../middleware/delete');
 
-var empty_field = { error: "All fields must be filled" }
+var empty_field = { 
+    succes: false,
+    message: "All fields must be filled" }
 class Product {
 
     // delete images referenced by product
     static delete_images(images) {
         for (var i = 0; i < images.length; i++) {
-            var file_path = `../public/uploads/products/${images[i].filename}`
-            fs.unlink(file_path, (err) => {
-                if(err) { 
-                    console.log(err)
-                    // do we break here? i feel like you should just log the error and continue to try
-                    // and delete all of the files associated with the path
-                }
-            })  
+            delete_object(images[i])
         }
     }
     
@@ -33,7 +28,10 @@ class Product {
             }
         }
         catch(err) {
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err.message
+            })
         }
     }
 
@@ -58,7 +56,10 @@ class Product {
             }
         }
         catch (err) {
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err.message
+            })
         }
     }
 
@@ -85,7 +86,10 @@ class Product {
             }
         }
         catch (err) {
-            console.log(err);
+            return res.json({
+                success: false,
+                message: err.message
+            })
         }
     }
 
@@ -112,7 +116,10 @@ class Product {
             }
         }
         catch (err) {
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err.message
+            })
         }
     }
 
@@ -123,40 +130,34 @@ class Product {
 
     // need to add category to this - and implement categories across the database
 
-    async post_add_product(req,res) {
+    async post_add_product(req,res,images) {
         try {
 
-            
             var { p_code, p_name, p_price, p_units_sold, p_categories, p_description } =  req.body  
 
-            var images = req.files
-
-            if(images.length <= 1)
-            {
+            if(images.length <= 0) {
+                Product.delete_images(images)
                 return res.json({
-                    messsage: 'there are no files'
+                    succes: false,
+                    message: "At least one image needs to be included"
                 })
             }
-
-            return res.json({
-                message: "It made it here"
-            });
-
+            
             // validate that input was recieved
             if( !p_code | !p_name | !p_categories | !p_price){
-                //Product.delete_images(images)
+                Product.delete_images(images)
                 return res.json(empty_field)
             }
             // validate that name and code
-            else if( p_code.length > 255 || p_name.length > 255 || p_description > 511) {
-                //Product.delete_images(images)
+            if( p_code.length > 255 || p_name.length > 255 || p_description > 511) {
+                Product.delete_images(images)
                 return res.json({ error: "Name and Code cannot be longer than 255 characters and description cannot be larger than 511 "})
             }
 
             var found_category = await categories_model.findOne({ _id: p_categories })
 
             if(!found_category){
-                //Product.delete_images(images)
+                Product.delete_images(images)
                 return res.json({ success: false,
                                   message: `Product was not added - the category ${p_categories} is not valid`})
             }
@@ -164,43 +165,36 @@ class Product {
             var matching_code = await product_model.findOne({ p_code: p_code })
 
             if(matching_code){
-                //Product.delete_images(images)
+                Product.delete_images(images)
                 return res.json({ success: false,
                                   message: `Product was not added, the p_code ${p_code} is already in use` })
             }
-
-            else {
             
             // need too clean input here potentially to ensure that product addition is not corrupting the database
 
-                var all_images = []
+            /*for (const image of images) {
+                all_images.push(image.filename)
+            } */
 
-                // this does work :)
+            const new_product = new product_model({
+                p_image_uri: images,
+                p_code,
+                p_name,
+                p_price,
+                p_units_sold,
+                p_categories,
+                p_description
+            })
 
-                /*for (const image of images) {
-                    all_images.push(image.filename)
-                } */
-
-                const new_product = new product_model({
-                    //p_image_uri: all_images,
-                    p_code,
-                    p_name,
-                    p_price,
-                    p_units_sold,
-                    p_categories,
-                    p_description
-                })
-
-                var saved_product = await new_product.save()
-                if (saved_product) {
-                    return res.json({ success: true,
-                                      message: `The product with code ${p_code} was added.` })
-                }
-                else {
-                    //Product.delete_images(images)
-                    return res.json({ success: false,
-                                      message: "Product was not added"})
-                }
+            var saved_product = await new_product.save()
+            if (saved_product) {
+                return res.json({ success: true,
+                                    message: `The product with code ${p_code} was added.` })
+            }
+            else {
+                Product.delete_images(images)
+                return res.json({ success: false,
+                                    message: "Product was not added"})
             }
         }
         catch (err) {
