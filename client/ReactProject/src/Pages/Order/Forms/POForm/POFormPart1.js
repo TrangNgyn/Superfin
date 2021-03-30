@@ -49,6 +49,8 @@ const POFormPart1 = props => {
         items: props.orderOriginal.items 
     }
 
+
+
     //First section of the form if in edit mode
     const section_1_a = (
         <>

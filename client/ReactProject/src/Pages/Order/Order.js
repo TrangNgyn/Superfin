@@ -1,16 +1,17 @@
 import '../../_assets/CSS/pages/Order/Order.css';
 import { Form, Button } from 'antd';
-import { getItemName, getMockOrder, getCustomer } from './APIFunctions/MockAPIFunctions'; //These functions will need to be real in future
+import { getItemName, getCustomer } from './APIFunctions/MockAPIFunctions'; //These functions will need to be real in future
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { history } from '../../_helpers/history';
 import MODE from './Helpers/PageConstants';
 import { showNoItemsPresent, showEditConfirmation, AddItemModal} from './Helpers/Modals';
-import CustomerForm from './Forms/CustomerForm/CustomerForm';
-import CustomerFormViewMode from './Forms/CustomerForm/CustomerFormViewMode';
+import POFormPart3 from './Forms/POForm/POFormPart3';
+import POFormPart3ViewMode from './Forms/POForm/POFormPart3ViewMode';
 import POFormPart1 from './Forms/POForm/POFormPart1';
 import POFormPart1ViewMode from './Forms/POForm/POFormPart1ViewMode';
 import POFormPart2 from './Forms/POForm/POFormPart2';
+import moment from 'moment';
 
 //IMPORTANT
 /*
@@ -20,6 +21,46 @@ import POFormPart2 from './Forms/POForm/POFormPart2';
     When adding an item, will need to check if item exists first
     Add limit to number of items allowed in order?
 */
+
+const mockOrder = {
+    po_number: "123abc",
+    c_email: "isaac@hotmail.com",
+    issued_date: new Date(),
+    status: "NEW",
+    items:[
+        {
+            item_code:"123456",
+            quantity:4,
+            special_requirements:"Leave by the door"
+        },
+        {
+            item_code:"98dnf9",
+            quantity:2,
+            special_requirements:"Beware of the dog"
+        }
+    ],
+    tracking_number: "djfb2387423ijb",
+    carrier: "Fastway",
+    po_attention_to:"Next to the grey building",
+    po_address_line1:"4 happy street",
+    po_address_line2:"unit 7",
+    po_suburb:"Redfern",
+    po_state:"NSW",
+    po_postal_code:"2000",
+    po_country: "Australia",
+
+}
+
+mockOrder.issued_date = moment(mockOrder.issued_date);
+
+
+
+
+
+
+
+
+
 
 const Order = () => {
 
@@ -31,12 +72,13 @@ const Order = () => {
 
     const { po_number } = useParams();      
 
-    const [order, setOrder] = useState(getMockOrder(po_number));
+    const [order, setOrder] = useState(mockOrder);
     const [orderOriginal, setOrderOriginal] = useState(order);
-    const [customer, setCustomer] = useState(getCustomer(order.c_email));
-    const [customerOriginal, setCustomerOriginal] = useState(customer);
+    //const [customer, setCustomer] = useState(getCustomer(order.c_email));
+    //const [customerOriginal, setCustomerOriginal] = useState(customer);
     const [mode, setMode] = useState(getMode());
     const [newItemFormVisible, setNewItemFormVisible] = useState(false);
+
     
     const [form_1] = Form.useForm();
     const [form_2] = Form.useForm();
@@ -66,17 +108,10 @@ const Order = () => {
 
     //after validating fields, this function submits the forms
     const confirmSubmit = (values) => {
-        const editedCustomer = JSON.stringify(customer) !== JSON.stringify(customerOriginal);
         const editedOrder = JSON.stringify(order) !== JSON.stringify(orderOriginal);
 
         if(mode===MODE.ADD){
             console.log("submitting order details in add mode", values[0]);
-       
-            if(editedCustomer){
-                values[1].email = values[0].c_email;
-                console.log("submitting customer details in add mode", values[1]);
-            } 
-
             history.push(`/order/${values[0].po_number}`);             //relocate to edit page
             window.location.reload();
         }
@@ -94,12 +129,6 @@ const Order = () => {
                 setOrderOriginal(newObj);
    
             }
-            if(editedCustomer){
-                console.log("submitting customer details in edit mode", values[1]);
-
-                setCustomer(values[1]);
-                setCustomerOriginal(values[1]);
-            }
         }
     }
 
@@ -111,9 +140,6 @@ const Order = () => {
 
     //resets the fields to original values
     const resetForms = () => {
-        if(JSON.stringify(customer) !== JSON.stringify(customerOriginal)){
-            form_2.resetFields();
-        }
         if(JSON.stringify(order) !== JSON.stringify(orderOriginal)){
             form_1.resetFields();
             setOrder(orderOriginal);
@@ -129,10 +155,10 @@ const Order = () => {
         form: form_3
     }
 
-    const customerForm_props = {
-        customerOriginal: customerOriginal,
-        customer: customer,
-        setCustomer: setCustomer,
+    const poFormPart3props = {
+        customerOriginal: orderOriginal,
+        customer: order,
+        setOrder: setOrder,
         form: form_2,
     }
 
@@ -166,7 +192,7 @@ const Order = () => {
         <div style={{textAlign: "center"}}>
             <div>  
                 <Button type="primary" onClick={() => {
-                    if(JSON.stringify(customer) !== JSON.stringify(customerOriginal) || JSON.stringify(order) !== JSON.stringify(orderOriginal)) handleSubmit();
+                    if(JSON.stringify(order) !== JSON.stringify(orderOriginal)) handleSubmit();
                 }} style={{width: "500px", fontWeight: "bold"}}>Submit Details</Button>
             </div>
             
@@ -194,8 +220,8 @@ const Order = () => {
                     
                     <div className="view-order-column">
                         {mode===MODE.VIEW
-                            ?   <CustomerFormViewMode customer = {customer}/>
-                            :   <CustomerForm {...customerForm_props}/>
+                            ?   <POFormPart3ViewMode order = {order}/>
+                            :   <POFormPart3 {...poFormPart3props}/>
                         }
                     </div>
 

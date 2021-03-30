@@ -1,22 +1,18 @@
-import { onlyNumbers } from '../../../../_services/SharedFunctions';
-import { Form, Input, Tooltip } from 'antd';
+import { Form, Input } from 'antd';
 
-const CustomerForm = props => {
+const POFormPart3 = props => {
 
     //updates the customer state when ever edits are made
-    const updateCustomer = e => {
+    const updateOrder = e => {
         const field = e.target.id;
         if(props.customer[field] !== e.target.value){
             const temp_customer = {...props.customer};
             temp_customer[field] = e.target.value;
-            props.setCustomer(temp_customer); 
+            props.setOrder(temp_customer); 
         }      
     }
 
     const initialValues = {
-        email: props.customerOriginal.email,
-        first_name: props.customerOriginal.first_name,
-        last_name: props.customerOriginal.last_name,
         po_attention_to: props.customerOriginal.po_attention_to,
         po_address_line1: props.customerOriginal.po_address_line1,
         po_address_line2: props.customerOriginal.po_address_line2,
@@ -28,41 +24,7 @@ const CustomerForm = props => {
     }
 
     return(
-        <Tooltip
-            trigger={['focus']}
-            title="Please be aware that when applied to an existing customer email, editing the right hand fields will edit that customer's actual profile"
-            placement="topRight"
-        >
-            <Form onBlur={updateCustomer} initialValues={initialValues} form={props.form} >
-                    <Form.Item hidden name="email"><Input/></Form.Item>  
-
-                    <div className="view-order-field-header">First Name</div>
-                    <Form.Item 
-                        name="first_name"
-                        rules={[
-                            {
-                                required: true,
-                                validateTrigger: 'onSubmit',
-                                message: 'Please input a first name',
-                            }
-                        ]}
-                    >
-                        <Input maxLength={100} style={{width: "500px"}} />
-                    </Form.Item>
-        
-                    <div className="view-order-field-header">Last Name</div>
-                    <Form.Item 
-                        name="last_name"
-                        rules={[
-                            {
-                                required: true,
-                                validateTrigger: 'onSubmit',
-                                message: 'Please input a last name',
-                            }
-                        ]}
-                    >
-                        <Input maxLength={100} style={{width: "500px"}} />
-                    </Form.Item>  
+            <Form onBlur={updateOrder} initialValues={initialValues} form={props.form} >
 
                     <div className="view-order-field-header">Attention to</div>
                     <Form.Item name="po_attention_to">
@@ -146,26 +108,8 @@ const CustomerForm = props => {
                     >
                         <Input maxLength={100} style={{width: "500px"}} />
                     </Form.Item>
-
-                     <div className="view-order-field-header">Phone Number</div>
-                    <Form.Item 
-                        name="mobile_number"
-                        rules={[
-                            {
-                                validateTrigger: 'onSubmit',
-                                validator: async (_, value) => {
-                                    if (isNaN(value)){
-                                        return Promise.reject(new Error("Must be a number"));
-                                    } 
-                                }
-                            }
-                        ]}
-                    >
-                        <Input maxLength={100} onChange={e => onlyNumbers(e, props.form, "mobile_number")} style={{width: "500px"}} />
-                    </Form.Item>
                 </Form>
-        </Tooltip>
     );
 }
 
-export default CustomerForm;
+export default POFormPart3;

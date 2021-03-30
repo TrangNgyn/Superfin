@@ -40,8 +40,6 @@ const POFormPart2 = props => {
     const itemRow = props.order.items.map((item, index) => {
         return (
             <tr key = {item.item_code} className="view-order-table-row">
-                <td>{item.item_name}</td>
-            
                 <td>
                     {item.item_code}
                     <Form.Item hidden name={['items', index, 'item_code']} initialValue="hello"><Input /></Form.Item>
@@ -94,7 +92,6 @@ const POFormPart2 = props => {
             <table id="view-order-table-wrapper">
                 <tbody>
                     <tr style = {{border: "solid black 1px"}}>
-                        <th>Product Name</th>
                         <th>Item Code</th> 
                         <th>Quantity</th>
                         <th>Special Requirements</th>
