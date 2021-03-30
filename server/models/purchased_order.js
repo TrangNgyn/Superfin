@@ -58,7 +58,9 @@ const order_schema = new Schema({
     }
 },
 {
-    collection: 'purchased_order'
+    collection: 'purchased_order',
+    versionKey: false
+
 });
 
 module.exports = purchased_order = mongoose.model('purchased_order',order_schema);
