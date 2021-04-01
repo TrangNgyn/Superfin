@@ -5,8 +5,8 @@ const multerS3 = require('multer-s3');
 const s3 = new aws.S3();
 
 aws.config.update({
-    secretAccessKey: require('../config/keys').AWS_SECRET_ACCESS_KEY,
-    accessKeyId: require('../config/keys').AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     region: 'ap-southeast-2'
 })
 
@@ -19,19 +19,6 @@ var storage = multer.diskStorage({
       cb(null, uniqueSuffix);
     }
   })
-  
-// var upload = multer({ 
-//     storage: storage,
-//     fileFilter: function (req, file, cb) {
-//         if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-//             cb(null, true);
-//         }
-//         else {
-//             console.log('invlid');
-//             cb(new Error("Invalid File Type"), false);
-//         }
-//     }
-// })
 
 var upload = multer({
     fileFilter: function (req, file, cb) {
@@ -46,7 +33,7 @@ var upload = multer({
     storage: multerS3({
         acl: "public-read",
         s3,
-        bucket: require('../config/keys').S3_BUCKET,
+        bucket: process.env.S3_BUCKET,
         key: function(req, file, cb) {
             const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
             cb(null, uniqueSuffix.toString());
