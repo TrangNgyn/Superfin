@@ -135,9 +135,9 @@ class Purchased_Order {
     async create_order(req,res) {
         try {
 
-            let { po_number, c_email, status, items} = req.body
+            let { po_number, c_email, status, items, address } = req.body
 
-            if( !po_number | !c_email | !status | !items) {
+            if( !po_number | !c_email | !status | !items | !address) {
                 return res.json(empty_field)
             }
 
@@ -148,8 +148,10 @@ class Purchased_Order {
                 c_email,
                 issued_date,
                 status,
-                items
+                items,
+                address
             })
+
             var saved_order = await new_order.save()
             if(saved_order){
                 return res.json({ success: true,
@@ -172,7 +174,11 @@ class Purchased_Order {
 
     async edit_order(req, res){
         try{
-            let { po_number, c_email, status, items, tracking_number, carrier} = req.body
+            let { po_number, c_email, status, items, tracking_number, carrier, address} = req.body
+
+            if( !po_number | !c_email | !status | !items | !address) {
+                return res.json(empty_field)
+            }
 
             if(stat.indexOf(status) === -1){
                 return res.json(incorrect_status)
@@ -183,7 +189,8 @@ class Purchased_Order {
                 status,
                 items,
                 tracking_number,
-                carrier
+                carrier,
+                address
             })
             .orFail( new Error(`Order ${po_number} not found`))
             .then(() => {
@@ -242,11 +249,12 @@ class Purchased_Order {
                 return res.json(empty_field)
             }
 
-            var found_order = await order_model.findOne({ po_number: po_number})
+            var found_order = await order_model.findOne({ po_number: po_number })
 
             if(!found_order){
-                return res.json({ success: false,
-                                message: `There was no order with po_number ${po_number}`})
+                return res.json({ 
+                    success: false,
+                    message: `There was no order with po_number ${po_number}`})
             }
 
             return res.json(found_order)
