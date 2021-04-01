@@ -221,16 +221,16 @@ class Purchased_Order {
                 return res.json(empty_field)
             }
 
-            var deleted = await order_model.findOneAndDelete({ po_number: po_number })
-
-            if(!deleted){
-                res.json({ success: false,
-                                message: `No order with po_number ${po_number} was found`})
-            }
-            else{ 
+            order_model.findOneAndRemove({ po_number: po_number })
+            .orFail(new Error(`Order ${po_number} not found`))
+            .then(() => {
                 res.json({ success: true,
-                           message: `Order with po_number ${po_number} was deleted`})
-            }
+                           message: `Order ${po_number} was deleted`})
+            })
+            .catch(error => {
+                res.json({ success: false,
+                           message: error.message })
+            })
         }
         catch(err){
             console.log(err)

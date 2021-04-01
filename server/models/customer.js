@@ -85,7 +85,9 @@ const customer_schema = new Schema({
     
 },
 {
-    collection: 'customer'
+    collection: 'customer',
+    versionKey: false
+
 });
 
 // function for comparing input password against hashed password
