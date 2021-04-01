@@ -55,6 +55,36 @@ const order_schema = new Schema({
     carrier: {
         type: String,
         default: ""
+    },
+    address: {
+        po_attention_to: {
+            type: String,
+            required: true
+        },
+        po_address_line1: {
+            type: String,
+            required: true
+        },
+        po_address_line2: {
+            type: String,
+            required: true
+        },
+        po_suburb: {
+            type: String,
+            required: true
+        },
+        po_state: {
+            type: String,
+            required: true
+        },
+        po_postal_code: {
+            type: Number,
+            required: true
+        },
+        po_country: {
+            type: String,
+            required: true
+        }
     }
 },
 {
