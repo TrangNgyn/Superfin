@@ -105,7 +105,7 @@ const OrderRow = props => {
                 }
                 
                 <td><b className="current-orders-view" onClick={() => {
-                        history.push('/order/' + o.po_number);
+                        history.push(`/order/${o.po_number}/${o.status}`);
                     }}>View</b>
                 </td>
              </tr>

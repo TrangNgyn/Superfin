@@ -1,7 +1,10 @@
 import { ExclamationCircleOutlined} from '@ant-design/icons';
 import NewItemForm from '../Forms/NewItemForm/NewItemForm';
-import { getItemName } from '../APIFunctions/MockAPIFunctions';
 import { Modal } from 'antd';
+
+
+
+
 
 //Appears when confirming a delete on a PO item
 export const showDeleteConfirm = (index, deleteOrderItem) => {
@@ -52,13 +55,12 @@ export const emailDoesNotExist = () => {
 
 //Modal/form for adding new items to the PO
 export const AddItemModal = props => {
-
     //adds an item after validating and updates the state
     const addItem = () => {
         props.form.validateFields()
-            .then((new_item) => {
+            .then(new_item => {
 
-                new_item.item_name = getItemName(new_item.item_code);
+               // new_item.item_name = getItemName(new_item.item_code);
                 const new_items = [...props.order.items];
                 new_items.unshift(new_item);
 
@@ -81,8 +83,8 @@ export const AddItemModal = props => {
     }
 
     return(
-            <Modal title="Add Item" visible={props.visible} onOk={addItem} onCancel={cancelAddItem}>
-                <NewItemForm form={props.form} />
-            </Modal>
+        <Modal title="Add Item" visible={props.visible} onOk={addItem} onCancel={cancelAddItem}>
+            <NewItemForm form={props.form} />
+        </Modal>
     );
 }   

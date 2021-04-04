@@ -1,24 +1,22 @@
 import '../../_assets/CSS/pages/Order/Order.css';
 import { Form, Button } from 'antd';
-import { getItemName, getCustomer } from './APIFunctions/MockAPIFunctions'; //These functions will need to be real in future
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { setUndefinedValues } from './Helpers/Functions';
 import { useState, useEffect } from 'react';
-import { history } from '../../_helpers/history';
+import { orderStatusConstants } from '../../_constants/orderStatus.constants';
+//import { history } from '../../_helpers/history';
 import MODE from './Helpers/PageConstants';
 import { showNoItemsPresent, showEditConfirmation, AddItemModal} from './Helpers/Modals';
-import POFormPart3 from './Forms/POForm/POFormPart3';
-import POFormPart3ViewMode from './Forms/POForm/POFormPart3ViewMode';
-import POFormPart1 from './Forms/POForm/POFormPart1';
-import POFormPart1ViewMode from './Forms/POForm/POFormPart1ViewMode';
-import POFormPart2 from './Forms/POForm/POFormPart2';
+import POForm2 from './Forms/POForm/POForm2';
 import moment from 'moment';
+import POForm1 from './Forms/POForm/POForm1';
+import POForm1View from './Forms/POForm/POForm1View';
+import axios from 'axios';
 
 //IMPORTANT
 /*
-    Convert issued_date into correct format before submission?
-    Select.Options may need to be changed. The values there are just palceholders
     Postcode may need to only except numbers. Waiting on backends response
-    When adding an item, will need to check if item exists first
     Add limit to number of items allowed in order?
 */
 
@@ -63,71 +61,142 @@ mockOrder.issued_date = moment(mockOrder.issued_date);
 
 
 const Order = () => {
-
-    //determines the initial MODE of the page
-    const getMode = () => {
-        if(order.hasOwnProperty('po_number')) return MODE.VIEW;
-        return MODE.ADD;
-    }
-
-    const { po_number } = useParams();      
-
-    const [order, setOrder] = useState(mockOrder);
+    const { po_number, status } = useParams();
+    const incompleteOrders = useSelector(state => state.incompleteOrdersState.incompleteOrders);
+    const compeletOrders = useSelector(state => state.completeOrdersState.completeOrders);
+    const [order, setOrder] = useState({items: []});
     const [orderOriginal, setOrderOriginal] = useState(order);
-    //const [customer, setCustomer] = useState(getCustomer(order.c_email));
-    //const [customerOriginal, setCustomerOriginal] = useState(customer);
-    const [mode, setMode] = useState(getMode());
+    const [mode, setMode] = useState(MODE.ADD);
     const [newItemFormVisible, setNewItemFormVisible] = useState(false);
-
-    
     const [form_1] = Form.useForm();
     const [form_2] = Form.useForm();
-    const [form_3] = Form.useForm();
+
+
+
 
     //for refreshing the item list
     useEffect(() => {     
         form_1.setFieldsValue({items: [...order.items]}); 
-    })
+    });
+
+    useEffect(() => {
+        if(status === orderStatusConstants.COMPLETE){
+            if(!incompleteOrders.length){
+                axios.post('/api/orders/single-order', { po_number: po_number })
+                .then(res => {
+                    if(res.data.success !== false){
+                        let order = setUndefinedValues(res.data);
+                        setOrder(order);
+                        setOrderOriginal(order);
+                        form_1.setFieldsValue(order);
+                        setMode(MODE.VIEW);
+                    }
+                    else console.log(res);
+                })
+                .catch(err => console.log(err) );
+            }
+            else{
+                let order = compeletOrders.filter(o => {
+                    return o.po_number === po_number;
+                });
+                if(order !== undefined){
+                    order = setUndefinedValues(order);
+                    setOrder(order);
+                    setOrderOriginal(order);
+                    form_1.setFieldsValue(order);
+                    setMode(MODE.VIEW);
+                }
+            }
+        }
+        else if(status === orderStatusConstants.NEW || status === orderStatusConstants.SHIPPED){
+            if(!incompleteOrders.length){
+                axios.post('/api/orders/single-order', { po_number: po_number })
+                .then(res => {
+                    if(res.data.success !== false){
+                        let order = setUndefinedValues(res.data);
+                        setOrder(order);
+                        setOrderOriginal(order);
+                        form_1.setFieldsValue(order);
+                        setMode(MODE.VIEW);
+                    }
+                    else console.log(res);
+                })
+                .catch(err => console.log(err) );
+            }
+            else{
+                let order = incompleteOrders.filter(o => {
+                    return o.po_number === po_number;
+                });
+                if(order !== undefined){
+                    order = setUndefinedValues(order);
+                    setOrder(order);
+                    setOrderOriginal(order);
+                    form_1.setFieldsValue(order);
+                    setMode(MODE.VIEW);
+                }
+            }
+        }
+        
+    }, [compeletOrders, form_1, incompleteOrders, po_number, status]);
+
+    
+    
 
     //validates all of the form fields
     const handleSubmit = () => {                    
-            if(order.items.length > 0){
-                const promise_1 = form_1.validateFields();
-                const promise_2 = form_2.validateFields();
-
-                Promise.all([promise_1, promise_2])
-                .then(values => {
-                    showEditConfirmation(values, confirmSubmit);
-                })
-                .catch(errorInfo => {
-                    console.log(errorInfo);
-                })
-            }
-            else showNoItemsPresent(setNewItemFormVisible);
+        if(order.items.length > 0){
+            form_1.validateFields()
+            .then(values => {
+                showEditConfirmation(values, confirmSubmit);
+            })
+            .catch(errorInfo => {
+                console.log(errorInfo);
+            });
+        }
+        else showNoItemsPresent(setNewItemFormVisible);
     }
 
     //after validating fields, this function submits the forms
     const confirmSubmit = (values) => {
         const editedOrder = JSON.stringify(order) !== JSON.stringify(orderOriginal);
 
+        let address = {};
+                address.po_address_line1 = values.po_address_line1;
+                address.po_address_line2 = values.po_address_line2;
+                address.po_attention_to = values.po_attention_to;
+                address.po_country = values.po_country;
+                address.po_postal_code = values.po_postal_code;
+                address.po_state = values.po_state;
+                address.po_suburb = values.po_suburb;
+
         if(mode===MODE.ADD){
-            console.log("submitting order details in add mode", values[0]);
-            history.push(`/order/${values[0].po_number}`);             //relocate to edit page
-            window.location.reload();
+            let order = {};
+                order.c_email = values.c_email;
+                order.carrier = values.carrier;
+                order.items = [...values.items];
+                order.status = values.status;
+                order.tracking_number = values.tracking_number;
+                order.address = address;
+
+                console.log("submitting order details in add mode", order);
+
+                //go to what ever list that order status belongs to  
         }
         else if(mode===MODE.EDIT){
             if(editedOrder){
-                console.log("submitting order details in edit mode", values[0]);
+                                            //This code is so the item names are not posted
+                let order = {};
+                    order.po_number = values.po_number;
+                    order.c_email = values.c_email;
+                    order.carrier = values.carrier;
+                    order.items = [...values.items];
+                    order.status = values.status;
+                    order.tracking_number = values.tracking_number;
+                    order.address = address;
 
-                const newObj = {...values[0]};                                  //This code is so the item names are not posted
-                let tempArray = JSON.parse(JSON.stringify(values[0].items));
-
-                tempArray.forEach(i => { i.item_name = getItemName(i.item_code) });
-                newObj.items = tempArray;   
-        
-                setOrder(newObj);
-                setOrderOriginal(newObj);
-   
+                console.log("submitting order details in edit mode", order);
+                setOrder(order);
+                setOrderOriginal(order);
             }
         }
     }
@@ -138,13 +207,9 @@ const Order = () => {
         else setMode(MODE.VIEW);
     }
 
-    //resets the fields to original values
-    const resetForms = () => {
-        if(JSON.stringify(order) !== JSON.stringify(orderOriginal)){
-            form_1.resetFields();
-            setOrder(orderOriginal);
-        }  
-    }
+
+
+
 
     //props for child components 
     const addItemModal_props = {
@@ -152,26 +217,18 @@ const Order = () => {
         setOrder: setOrder,
         visible: newItemFormVisible,
         setNewItemFormVisible: setNewItemFormVisible,
-        form: form_3
+        form: form_2
     }
 
-    const poFormPart3props = {
-        customerOriginal: orderOriginal,
-        customer: order,
-        setOrder: setOrder,
-        form: form_2,
-    }
-
-    const poFormPart1props = {
+    const form_1_props = {
         order: order,
         orderOriginal: orderOriginal,
-        setOrder: setOrder,
         mode: mode,
         form: form_1,
-        form_2: form_2
+        setOrder: setOrder
     }
 
-    const poFormPart_2_props = {
+    const form_2_props = {
         order: order,
         orderOriginal: orderOriginal,
         mode: mode,
@@ -179,6 +236,12 @@ const Order = () => {
         onClick: setNewItemFormVisible,
         setOrder: setOrder
     }
+
+    
+
+
+
+
 
     //button for toggling edit mode
     const toggleButton = (
@@ -197,11 +260,18 @@ const Order = () => {
             </div>
             
             <div style={{ paddingTop: "30px", paddingBottom: "30px"}}>
-                <Button onClick={resetForms} style={{width: "500px", fontWeight: "bold"}}>Undo Changes</Button>
+                <Button onClick={() => { 
+                    form_1.setFieldsValue(orderOriginal);
+                    setOrder(orderOriginal); 
+                }} style={{width: "500px", fontWeight: "bold"}}>Undo Changes</Button>
             </div>
         </div>
     );
     
+
+
+
+
     //HTML Main
     return (
         <div>
@@ -211,30 +281,17 @@ const Order = () => {
 
             <div>
                 <div id="view-order-row">
-                    <div className="view-order-column">
-                        {mode===MODE.EDIT || mode===MODE.ADD
-                            ?   <POFormPart1 {...poFormPart1props}/>
-                            :   <POFormPart1ViewMode order = {order} />
-                        }  
-                    </div>
-                    
-                    <div className="view-order-column">
-                        {mode===MODE.VIEW
-                            ?   <POFormPart3ViewMode order = {order}/>
-                            :   <POFormPart3 {...poFormPart3props}/>
-                        }
-                    </div>
-
-                    {mode===MODE.EDIT || mode===MODE.ADD
-                        ?   submitUndoButtons
-                        : <></>
+                    {
+                        mode===MODE.EDIT || mode===MODE.ADD
+                        ? <><POForm1 {...form_1_props}/> {submitUndoButtons}</>
+                        : <POForm1View order={order}/>
                     }
                 </div>
 
                 <h1 className="view-order-text">Ordered Products</h1>
 
                 <div style = {{height: "400px", display: "table"}}>
-                    <POFormPart2 {...poFormPart_2_props}/>
+                   <POForm2 {...form_2_props}/>
                 </div>
             </div>
 

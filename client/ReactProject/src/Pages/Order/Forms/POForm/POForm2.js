@@ -4,7 +4,28 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { onlyNumbers } from '../../../../_services/SharedFunctions';
 import { showDeleteConfirm } from '../../Helpers/Modals';
 
-const POFormPart2 = props => {
+const POForm2 = props => {
+    /*const initialValues_form1 = {
+        po_number: props.orderOriginal.po_number,
+        c_email:  props.orderOriginal.c_email,
+        issued_date:  props.orderOriginal.issued_date,
+        status:  props.orderOriginal.status,
+        tracking_number:  props.orderOriginal.tracking_number,
+        carrier:  props.orderOriginal.carrier,
+        items: props.orderOriginal.items,
+        po_attention_to: props.orderOriginal.po_attention_to,
+        po_address_line1: props.orderOriginal.po_address_line1,
+        po_address_line2: props.orderOriginal.po_address_line2,
+        po_suburb: props.orderOriginal.po_suburb,
+        po_state: props.orderOriginal.po_state,
+        po_postal_code: props.orderOriginal.po_postal_code,
+        po_country: props.orderOriginal.po_country,
+        mobile_number: props.orderOriginal.mobile_number
+    }*/
+
+
+
+
 
     //updates the order state when changes are made
     const updateOrder = () => {
@@ -26,15 +47,9 @@ const POFormPart2 = props => {
         props.setOrder(new_order);
     }
 
-    const initialValues = {
-        po_number: props.orderOriginal.po_number,
-        c_email:  props.orderOriginal.c_email,
-        issued_date:  props.orderOriginal.issued_date,
-        status:  props.orderOriginal.status,
-        tracking_number:  props.orderOriginal.tracking_number,
-        carrier:  props.orderOriginal.carrier,  
-        items: props.orderOriginal.items 
-    }
+
+
+
 
     //Dynamic production of item forms
     const itemRow = props.order.items.map((item, index) => {
@@ -42,7 +57,7 @@ const POFormPart2 = props => {
             <tr key = {item.item_code} className="view-order-table-row">
                 <td>
                     {item.item_code}
-                    <Form.Item hidden name={['items', index, 'item_code']} initialValue="hello"><Input /></Form.Item>
+                    <Form.Item hidden name={['items', index, 'item_code']} ><Input /></Form.Item>
                 </td>
 
                 <td>
@@ -51,15 +66,10 @@ const POFormPart2 = props => {
                                 name={['items', index, 'quantity']}
                                 rules={[
                                     {
-                                        required: true,
-                                        validateTrigger: 'onSubmit',
-                                        message: 'Please input a required quantity',
-                                    },
-                                    {
                                         validateTrigger: 'onSubmit',
                                         validator: async (_, value) => {
                                             if (Number(value) === 0){
-                                                return Promise.reject(new Error("Cannot have value of 0"));
+                                                return Promise.reject(new Error("Please enter a value greater than 0"));
                                             } 
                                         }
                                     }
@@ -87,8 +97,12 @@ const POFormPart2 = props => {
         ); 
     })
 
+
+
+
+
     return(
-        <Form initialValues={initialValues} onBlur={updateOrder} form={props.form}>
+        <Form onBlur={updateOrder} form={props.form}>
             <table id="view-order-table-wrapper">
                 <tbody>
                     <tr style = {{border: "solid black 1px"}}>
@@ -100,7 +114,7 @@ const POFormPart2 = props => {
                             : <></>
                         }
                     </tr>
-                
+                    
                    {itemRow}  
                 </tbody>
             </table>
@@ -108,4 +122,4 @@ const POFormPart2 = props => {
     )
 }
 
-export default POFormPart2;
+export default POForm2;

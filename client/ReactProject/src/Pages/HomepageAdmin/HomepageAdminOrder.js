@@ -109,7 +109,7 @@ const HomepageAdminOrder = props => {
                 {trackingNumberDiv}
             <div id="homepage-admin-order-icon-container">
                 <DeleteOutlined className="homepage-admin-order-icon" onClick={() => { deleteOrderConfirm(order.po_number, order.status, dispatch) }}/>
-                <EditOutlined className="homepage-admin-order-icon" onClick={() => { navigateEditOrder(order.po_number)}}/>
+                <EditOutlined className="homepage-admin-order-icon" onClick={() => { navigateEditOrder(order.po_number, order.status)}}/>
             </div>  
         </div>
     );

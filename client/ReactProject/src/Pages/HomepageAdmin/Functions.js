@@ -1,7 +1,7 @@
 import { history } from '../../_helpers/history';
 
-export const navigateEditOrder = po_number => {
-    history.push(`/order/${po_number}`);
+export const navigateEditOrder = (po_number, status) => {
+    history.push(`/order/${po_number}/${status}`);
     window.scrollTo(0, 0);
 }
 
