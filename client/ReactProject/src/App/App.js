@@ -87,7 +87,8 @@ const App = () => (
                <Route path="/reenterPassword"><ReenterPassword /></Route>
 
                <Route exact path="/order"><Order /></Route>
-               <Route path="/order/:po_number"><Order /></Route>
+               <Route exact path="/order/:po_number"><Order /></Route>
+               <Route path="/order/:po_number/:status"><Order /></Route>
 
 
                <Route path="/myAccount"><MyAccount/></Route>
