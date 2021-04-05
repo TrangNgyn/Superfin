@@ -15,14 +15,12 @@ const Product = props => {
     }
     return (<Card className="card-shadow-hoverable"
         tabIndex={0}
-        cover={<img className="cover-img fixed-size" alt={productDetails.p_code} src={placeholderImg} />}
+        cover={<img className="cover-img fixed-size" style={{cursor: 'pointer'}} alt={productDetails.p_code} src={placeholderImg} onClick={() => { history.push(`products/${productDetails.p_code}`) }}/>}
         actions={[
-            <ShoppingOutlined key="addToCart" onClick={event => { alert('added to cart'); }} />,
+            <ShoppingOutlined key="addToCart" />,
             <EditOutlined key="customizeBag" />
-        ]}
-        onClick={() => { history.push(`products/${productDetails.p_code}`) }}
-    >
-        <Meta title={productDetails.p_name} description={descriptionWithPrice} />
+        ]}>
+        <Meta title={<a onClick={() => { history.push(`products/${productDetails.p_code}`) }}>productDetails.p_name</a>} description={descriptionWithPrice} />
     </Card>);
 };
 
