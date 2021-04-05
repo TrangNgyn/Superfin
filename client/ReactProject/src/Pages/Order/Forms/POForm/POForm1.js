@@ -1,5 +1,10 @@
 import MODE from '../../Helpers/PageConstants';
 import { Form, Input, Select } from 'antd';
+import { onlyNumbers } from '../../../../_services/SharedFunctions';
+
+
+
+
 
 const POForm1 = props => {
     const date = new Date(props.orderOriginal.issued_date);
@@ -192,7 +197,7 @@ const POForm1 = props => {
                             }
                         ]}
                     >                                                   
-                        <Input maxLength={100} style={{width: "500px"}} />
+                        <Input onChange={e => onlyNumbers(e, props.form, "po_postal_code",)} maxLength={100} style={{width: "500px"}} />
                     </Form.Item>
 
                     <div className="view-order-field-header">Country</div>

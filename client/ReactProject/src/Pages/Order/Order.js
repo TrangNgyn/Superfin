@@ -7,19 +7,15 @@ import { useState, useEffect } from 'react';
 import { orderStatusConstants } from '../../_constants/orderStatus.constants';
 //import { history } from '../../_helpers/history';
 import MODE from './Helpers/PageConstants';
-import { showNoItemsPresent, showEditConfirmation, AddItemModal} from './Helpers/Modals';
+import { showNoItemsPresent, showEditConfirmation, AddItemModal, showUndo} from './Helpers/Modals';
 import POForm2 from './Forms/POForm/POForm2';
-import moment from 'moment';
+//import moment from 'moment';
 import POForm1 from './Forms/POForm/POForm1';
 import POForm1View from './Forms/POForm/POForm1View';
 import axios from 'axios';
 
-//IMPORTANT
-/*
-    Postcode may need to only except numbers. Waiting on backends response
-    Add limit to number of items allowed in order?
-*/
 
+/*
 const mockOrder = {
     po_number: "123abc",
     c_email: "isaac@hotmail.com",
@@ -49,7 +45,7 @@ const mockOrder = {
 
 }
 
-mockOrder.issued_date = moment(mockOrder.issued_date);
+mockOrder.issued_date = moment(mockOrder.issued_date);*/
 
 
 
@@ -70,8 +66,6 @@ const Order = () => {
     const [newItemFormVisible, setNewItemFormVisible] = useState(false);
     const [form_1] = Form.useForm();
     const [form_2] = Form.useForm();
-
-
 
 
     //for refreshing the item list
@@ -124,9 +118,10 @@ const Order = () => {
                 .catch(err => console.log(err) );
             }
             else{
-                let order = incompleteOrders.filter(o => {
+                let order = incompleteOrders.find(o => {
                     return o.po_number === po_number;
                 });
+       
                 if(order !== undefined){
                     order = setUndefinedValues(order);
                     setOrder(order);
@@ -261,8 +256,7 @@ const Order = () => {
             
             <div style={{ paddingTop: "30px", paddingBottom: "30px"}}>
                 <Button onClick={() => { 
-                    form_1.setFieldsValue(orderOriginal);
-                    setOrder(orderOriginal); 
+                    showUndo(form_1, orderOriginal, setOrder);
                 }} style={{width: "500px", fontWeight: "bold"}}>Undo Changes</Button>
             </div>
         </div>

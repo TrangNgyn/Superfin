@@ -19,6 +19,22 @@ export const showDeleteConfirm = (index, deleteOrderItem) => {
     });
 }
 
+//Appears when confirming a delete on a PO item
+export const showUndo = (form, orderOriginal, setOrder) => {
+    Modal.confirm({
+        title: 'Warning!',
+        icon: <ExclamationCircleOutlined />,
+        content: 'Are you sure you want to undo these edits',
+        okText: 'Yes',
+        cancelText: 'No',
+
+        onOk() { 
+            form.setFieldsValue(orderOriginal);
+            setOrder(orderOriginal); 
+        }
+    });
+}
+
 //Appears if user tries to submit order with no items
 export const showNoItemsPresent = setNewItemFormVisible => {
     Modal.confirm({

@@ -30,7 +30,7 @@ const Product = props => {
     return (
         <div id="admin-product-container">
             <img id="admin-product-image"
-                src= {product.p_image_uri}
+                src= {product.p_image_uri[0]}
                 alt={altImage}
                 onClick={viewCategory}
                 style={{height: '310px', width:'310px'}}
