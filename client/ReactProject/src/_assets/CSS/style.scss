@@ -764,6 +764,16 @@ form#authentication-form > div:nth-last-child(1) {
 /* =========== End Card Styling ========= */
 /* ====================================== */
 
+/* ====================================== */
+/* ============= List Styling =========== */
+/* ====================================== */
+.ant-list-pagination {
+	margin-bottom: 16px;
+}
+/* ====================================== */
+/* =========== End List Styling ========= */
+/* ====================================== */
+
 main.ant-layout-content > div.ant-row.my-account-username-avatar {
 	display: flex;
 	flex-flow: column wrap;

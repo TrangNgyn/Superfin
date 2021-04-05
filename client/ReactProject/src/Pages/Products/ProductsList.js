@@ -14,6 +14,7 @@ const ProductsList = props => {
                 }}
                 pagination={{
                     showSizeChanger: true,
+                    position: 'both',
                     onChange: page => { setPage(page - 1) }
                 }}
                 dataSource={Object.values(props)}
