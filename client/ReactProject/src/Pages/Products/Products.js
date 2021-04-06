@@ -63,7 +63,7 @@ const Products = () => {
             { error ? <div class="container"><h1 style={{ textAlign: 'center', color: 'red'}}>Could not load data, please try refreshing page!</h1></div> :
             (loading ? <Spin size='large' /> : <>
                 <div className="container flex-horizontal-box-container">
-                        <Select className="box-item-xs-2 box-item-sm-3 box-item-md-3 box-item-lg-3 box-item-xl-4" defaultValue="allCategories" onChange={e => { setFilter(e); }}>
+                    <Select className="box-item-xs-2 box-item-sm-3 box-item-md-3 box-item-lg-3 box-item-xl-4" defaultValue="allCategories" onChange={e => { setFilter(e); }}>
                         <Option value="noCategory" disabled>Filter By Category</Option>
                         <Option value="allCategories" >All Category</Option>
                         {categories.map((category, index) => {
