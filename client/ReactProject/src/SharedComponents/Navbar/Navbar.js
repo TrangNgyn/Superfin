@@ -1,8 +1,9 @@
 import { Menu, Dropdown } from 'antd';
 import { UserOutlined, ShoppingCartOutlined, MenuOutlined } from '@ant-design/icons';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch  } from 'react-redux';
+import { CartContext } from '../../contexts/CartContext';
 
 import { getAllCategories } from '../../_actions/categoryActions';
 import { history } from '../../_helpers/history';
@@ -23,18 +24,19 @@ const userDetails = {
 
 
 export default function Navbar(props){
+    const {itemCount} = useContext(CartContext);
     const [userType, setUserType] = useState(userDetails.userType);
     const categories = useSelector(state => state.categoryState.categories);
     const dispatch = useDispatch();
 
-    useEffect(() => {             
+    useEffect(() => {
         if(!categories.length) dispatch(getAllCategories());
     }, [categories.length, dispatch]);
 
   const logout = () => {          //fake login logout functions
     setUserType("GUEST");
   }
-  
+
   //delete these login functions
   const loginUserCustomer = () => {
     setUserType("CUSTOMER");
@@ -101,7 +103,7 @@ export default function Navbar(props){
 
   if(categories.length !== 0){
       categoriesMenu = categories.map(c => {
-          return ( <Menu.Item key={c._id}> 
+          return ( <Menu.Item key={c._id}>
                       <Link to={`/products/${c._id}`}> {c.c_name} </Link>
                   </Menu.Item>)
       });
@@ -138,11 +140,11 @@ export default function Navbar(props){
       </Menu.Item>
     </SubMenu>
   );
-  
+
   //Login/Welcome, User menu item that changes based on whether user is logged in or not
 
   let login = ( <Menu.Item key = "Login" onContextMenu={loginUserCustomer} onDoubleClick={loginUserAdmin} icon={<UserOutlined />}>
-      <Link to="/login"> Login/Sign up </Link>       
+      <Link to="/login"> Login/Sign up </Link>
     </Menu.Item>
   );
   let loginMobile = login;
@@ -217,9 +219,9 @@ export default function Navbar(props){
       </Menu.Item>
 
       <Menu.Item key="Cart" icon = {<ShoppingCartOutlined />}>
-        <Link to="/cart"> Cart </Link>
+        <Link to="/cart"> Cart ({itemCount}) </Link>
       </Menu.Item>
-    </>       
+    </>
   );
 
   let mainMenuMobile = (

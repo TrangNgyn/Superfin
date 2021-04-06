@@ -30,7 +30,6 @@ import MyAccount from '../Pages/MyAccount/MyAccount';
 import Signup from '../Pages/Signup/Signup';
 import ConfirmSignup from '../Pages/Signup/ConfirmSignup';
 import TermsConditions from '../Pages/TermsConditions/TermsConditions';
-import Cart from '../Pages/Cart/Cart';
 import CheckoutShipping from '../Pages/Checkout/CheckoutShipping';
 import CheckoutSecurePayment from '../Pages/Checkout/CheckoutSecurePayment';
 import CheckoutReviewOrder from '../Pages/Checkout/CheckoutReviewOrder';
@@ -38,6 +37,8 @@ import CheckoutOrderComplete from '../Pages/Checkout/CheckoutOrderComplete';
 import ViewProductInfo from '../Pages/ViewProductInfo/ViewProductInfo';
 import Promocode from '../Pages/Promocode/Promocode';
 import Footer from '../SharedComponents/Footer/FooterMain';
+import Store from '../Pages/Homepage/products';
+import Cart from '../Pages/Cart/index';
 
 import Amplify, {Auth} from 'aws-amplify';
 import awsconfig from '../aws-exports';
@@ -101,13 +102,15 @@ const App = () => (
 
                 <Route exact path="/editAddProducts"><AddEditProduct /></Route>
                <Route path="/editAddProducts/:p_code"><AddEditProduct /></Route>
-               <Route path="/Cart"><Cart /></Route>
+               <Route exact path="/products" component={Store}/>
+               <Route path="/cart"><Cart /></Route>
                <Route path="/CheckoutShipping"><CheckoutShipping /></Route>
                <Route path="/CheckoutSecurePayment"><CheckoutSecurePayment /></Route>
                <Route path="/CheckoutReviewOrder"><CheckoutReviewOrder /></Route>
                <Route path="/CheckoutOrderComplete"><CheckoutOrderComplete /></Route>
                <Route path="/ViewProductInfo"><ViewProductInfo /></Route>
                <Route path="/Promocode"><Promocode /></Route>
+
                {/* <div>
                    <AppRoute path="/admin" component={HomepageAdmin} />
                   <Route path="/login" component={Login} />

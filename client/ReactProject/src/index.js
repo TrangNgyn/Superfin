@@ -5,15 +5,24 @@ import App from './App/App';
 import reportWebVitals from './Misc/reportWebVitals';
 import { Provider } from 'react-redux';
 import { store } from './_helpers/store';
+import { HelmetProvider } from 'react-helmet-async';
+import ProductsContextProvider from './contexts/ProductsContext';
+import CartContextProvider from './contexts/CartContext';
 
 
 
 
 ReactDOM.render(
   <Provider store = {store}>
-    <React.StrictMode>
+    <HelmetProvider>
+      <ProductsContextProvider>
+        <CartContextProvider>
+
       <App />
-    </React.StrictMode>
+      </CartContextProvider>
+    </ProductsContextProvider>
+  </HelmetProvider>,
+
   </Provider>,
   document.getElementById('root')
 );
