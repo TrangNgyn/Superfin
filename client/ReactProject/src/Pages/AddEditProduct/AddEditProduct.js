@@ -11,6 +11,8 @@ import { getAllCategories } from '../../_actions/categoryActions';
 import { onlyNumbers } from '../../_services/SharedFunctions';
 import { confirmEdit, confirmAdd } from './Modals'; 
 
+import axios from 'axios';
+
 
 
 
@@ -24,7 +26,6 @@ const AddEditProduct = () => {
     const productsList = useSelector(state => state.productState.products);
     const categories = useSelector(state => state.categoryState.categories);
 
-    console.log('cats!', categories);
     
 
     const [pageState, setPageState] = useState(null);
@@ -70,7 +71,7 @@ const AddEditProduct = () => {
 
     const onFinish = newProduct => {                                                    //handles form submission
         newProduct.p_categories = getProductId(newProduct.p_categories, categories);
-        newProduct.p_image_uri = [];                                                        //IMPORTANT remove this later
+       // newProduct.p_image_uri = [];                                                        //IMPORTANT remove this later
 
         if(pageState === EDIT){
             newProduct.p_code = product.p_code;
@@ -82,9 +83,33 @@ const AddEditProduct = () => {
         }
         
         if(pageState === ADD){
+            let formData = new FormData();
+            formData.append("p_image_uri", fileList[0].originFileObj);
+            formData.append("p_name", newProduct.p_name);
+            formData.append("p_code", newProduct.p_code);
+            formData.append("p_units_sold", newProduct.p_units_sold);
+            formData.append("p_price", newProduct.p_price);
+            formData.append("p_categories", newProduct.p_categories);
+            formData.append("p_description", newProduct.p_description);
 
-            if(productsList.length !== 0) confirmAdd(newProduct, dispatch);
-            else confirmAdd(newProduct);
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            }
+            
+            console.log("adding product");
+            //if(productsList.length !== 0) confirmAdd(formData, dispatch);
+            //else confirmAdd(formData);
+            axios.post('api/products/add-product', formData, config)
+            .then(res => {
+                console.log('res', res);
+            })
+            .catch(err => {
+                console.log('err', err);
+            });
+            
+      
         }
     };
 
@@ -99,6 +124,7 @@ const AddEditProduct = () => {
             {pageState === ADD ? <h1 id="ae-product-header-title">Add Product</h1> : <></>}
 
             <Form
+                encType='multipart/form-data'
                 form = {form}
                 onFinish={onFinish}
                 onFinishFailed={err => { console.log("Failed submit", err) }}
