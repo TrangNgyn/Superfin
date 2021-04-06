@@ -1,4 +1,4 @@
-import { GET_PRODUCTS, LOADING_PRODUCTS, DELETE_PRODUCT, EDIT_PRODUCT, ADD_PRODUCT, ERROR, DEFAULT_ORDER } from '../_actions/actionTypes';
+import { GET_PRODUCTS, GET_PRODUCT, LOADING_PRODUCTS, DELETE_PRODUCT, EDIT_PRODUCT, ADD_PRODUCT, ERROR, DEFAULT_ORDER } from '../_actions/actionTypes';
 
 const initState = {
     products: [],
@@ -12,6 +12,13 @@ const productReducer = (state = initState, {type, payload}) => {
             return {
                 ...state,
                 products: payload.sort((a,b) => (a.p_code > b.p_code) ? 1 : ((b.p_code > a.p_code) ? -1 : 0)),
+                isLoading: false,
+                error: false
+            }
+        case GET_PRODUCT:
+            return {
+                ...state,
+                products: payload,
                 isLoading: false,
                 error: false
             }

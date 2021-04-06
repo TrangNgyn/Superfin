@@ -25,6 +25,7 @@ import ReenterPassword from '../Pages/ReenterPassword/ReenterPassword'
 import CurrentOrders from '../Pages/CurrentOrders/CurrentOrders';
 import ProcessedOrders from '../Pages/ProcessedOrders/ProcessedOrders';
 import Products from '../Pages/Products/Products';
+import ProductDetails from '../Pages/Products/ProductDetails';
 import EditCompanyInfo from '../Pages/EditCompanyInfo/EditCompanyInfo';
 import ManageProducts from '../Pages/ManageProducts/ManageProducts';
 import MyAccount from '../Pages/MyAccount/MyAccount';
@@ -77,6 +78,7 @@ const App = () => (
                <Route exact path="/products/:browseBy"><Products /></Route>
                <Route path="/products/:browseBy/:browseByGroup"><Products /></Route>  */}
                <Route exact path="/products"> <Products /></Route>
+               <Route exact path="/productDetails"> <ProductDetails /></Route>
 
                <Route path="/deliveryDispatch"> <DeliveryDispatch /></Route>
                <Route path="/contactUs"> <ContactUs /></Route>

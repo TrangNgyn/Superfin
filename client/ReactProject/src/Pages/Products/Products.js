@@ -8,6 +8,7 @@ import { getAllProducts } from '../../_actions/productActions';
 const { Option } = Select;
 
 const Products = () => {
+    
     const dispatch = useDispatch();
     const [filteredAndSorted, setFilterAndSorted] = useState(0);
     const [filter, setFilter] = useState(0);
@@ -51,25 +52,25 @@ const Products = () => {
 
     // For handling filtering and sorting
     useEffect(() => {
-        if(filter != 0 && sorted != 0)
+        if(filter !== 0 && sorted !== 0)
             setFilterAndSorted(products.filter(e => { return filterProduct(e); }).sort((a, b) => { return sortProduct(a, b, sorted); }));
     }, [filter, sorted, categories, products, dispatch]);
 
     return (
-        <>  <div className="page-title-holder fill">
+            <><div className="page-title-holder fill">
                 <h2>Our product range</h2>
             </div>
             { error ? <div class="container"><h1 style={{ textAlign: 'center', color: 'red'}}>Could not load data, please try refreshing page!</h1></div> :
             (loading ? <Spin size='large' /> : <>
                 <div className="container flex-horizontal-box-container">
-                    <Select className="box-item-sm-4" defaultValue="allCategories" onChange={e => { setFilter(e); }}>
+                        <Select className="box-item-xs-2 box-item-sm-3 box-item-md-3 box-item-lg-3 box-item-xl-4" defaultValue="allCategories" onChange={e => { setFilter(e); }}>
                         <Option value="noCategory" disabled>Filter By Category</Option>
                         <Option value="allCategories" >All Category</Option>
                         {categories.map((category, index) => {
                             return (<Option value={category._id} key={index}>{category.c_name}</Option>);
                         })}
                     </Select>
-                    <Select className="box-item-sm-4" defaultValue="priceAsc" onChange={e => { setSorted(e); }}>
+                        <Select className="box-item-xs-2 box-item-sm-3 box-item-md-2 box-item-lg-3 box-item-xl-4" defaultValue="priceAsc" onChange={e => { setSorted(e); }}>
                         <Option value="noSort" disabled><SortAscendingOutlined />Sort By</Option>
                         <Option value="alphaAsc"><SortAscendingOutlined />Sort By: Alphabetically Ascending</Option>
                         <Option value="alphaDesc"><SortDescendingOutlined />AscendingSort By: Alphabetically Descending</Option>

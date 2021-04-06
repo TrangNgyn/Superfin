@@ -1,4 +1,4 @@
-import { GET_PRODUCTS, DEFAULT_ORDER, LOADING_PRODUCTS, DELETE_PRODUCT, ERROR, EDIT_PRODUCT, ADD_PRODUCT } from './actionTypes';
+import { GET_PRODUCTS, GET_PRODUCT, DEFAULT_ORDER, LOADING_PRODUCTS, DELETE_PRODUCT, ERROR, EDIT_PRODUCT, ADD_PRODUCT } from './actionTypes';
 import axios from 'axios';
 
 export const getAllProducts = () => dispatch  => {
@@ -9,6 +9,24 @@ export const getAllProducts = () => dispatch  => {
         dispatch({
             type: GET_PRODUCTS,
             payload: res.data.products
+        })
+    })
+    .catch(() => {
+        dispatch(setIsLoading(false));
+        dispatch({
+            type: ERROR
+        })
+    });
+};
+
+export const getProductDetails = p_code => dispatch => {
+    dispatch(setIsLoading(true));
+    axios.post('api/products/product-by-id', {
+        p_code: p_code
+    }).then(res => {
+        dispatch({
+            type: GET_PRODUCT,
+            payload: [res.data]
         })
     })
     .catch(() => {
