@@ -359,10 +359,6 @@ div.footer-content-container > div#footer-social-media-links > a {
 	margin: 10px;
 }
 
-div.footer-content-container > div#footer-social-media-links > a:hover {
-	color: $orange;
-}
-
 div.footer-content-container > div#footer-support-details {
 	display: flex;
 	flex-flow: column wrap; // Make the email and phone div flow in column
@@ -544,6 +540,9 @@ div#copyright-background{
 	}
 
 	div.Website-Footer {
+            /*position: fixed;
+            bottom: 0;*/
+            background: grey;
 		width: 100%;
 	}
 
