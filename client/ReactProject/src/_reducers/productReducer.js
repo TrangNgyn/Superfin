@@ -15,13 +15,6 @@ const productReducer = (state = initState, {type, payload}) => {
                 isLoading: false,
                 error: false
             }
-        case GET_PRODUCT:
-            return {
-                ...state,
-                products: payload,
-                isLoading: false,
-                error: false
-            }
         case DEFAULT_ORDER:
             return {
                 ...state,

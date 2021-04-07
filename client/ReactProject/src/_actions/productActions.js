@@ -26,7 +26,7 @@ export const getProductDetails = p_code => dispatch => {
     }).then(res => {
         dispatch({
             type: GET_PRODUCT,
-            payload: [res.data]
+            payload: res.data
         })
     })
     .catch(() => {
