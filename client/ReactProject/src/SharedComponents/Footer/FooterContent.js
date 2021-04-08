@@ -12,13 +12,5 @@ export default function FooterContent(){
             dispatch(getCompanyInfo());
         }
     }, [dispatch, companyInfo]);
-
-    return (
-        <div className="footer-content-container">
-            <div id="footer-support-details">
-                <div>Email: {companyInfo.c_email}</div>
-                <div>Phone: {companyInfo.c_number}</div>
-            </div>
-        </div>
-    );
+    return <></>;
 }
