@@ -24,6 +24,8 @@ import Order from '../Pages/Order/Order';
 import ReenterPassword from '../Pages/ReenterPassword/ReenterPassword'
 import CurrentOrders from '../Pages/CurrentOrders/CurrentOrders';
 import ProcessedOrders from '../Pages/ProcessedOrders/ProcessedOrders';
+import Products from '../Pages/Products/Products';
+import ProductDetails from '../Pages/Products/ProductDetails';
 import EditCompanyInfo from '../Pages/EditCompanyInfo/EditCompanyInfo';
 import ManageProducts from '../Pages/ManageProducts/ManageProducts';
 import MyAccount from '../Pages/MyAccount/MyAccount';
@@ -39,10 +41,12 @@ import ViewProductInfo from '../Pages/ViewProductInfo/ViewProductInfo';
 import Promocode from '../Pages/Promocode/Promocode';
 import Footer from '../SharedComponents/Footer/FooterMain';
 
+
 import Amplify, {Auth} from 'aws-amplify';
 import awsconfig from '../aws-exports';
 Amplify.configure(awsconfig);
 Auth.configure(awsconfig);
+
 
 
 //This is a demo Component to demonstrate Dynmaic Routing
@@ -58,12 +62,11 @@ Auth.configure(awsconfig);
 // }
 
 const App = () => (
-   <div>
+   <>
       <Router history = {history}>
          <div className="Website-Header">
             <Navbar />
          </div>
-
          <div className="Website-Body" >
             <Switch>
 
@@ -74,6 +77,8 @@ const App = () => (
                {/* <Route exact path="/products"> <Products /></Route>
                <Route exact path="/products/:browseBy"><Products /></Route>
                <Route path="/products/:browseBy/:browseByGroup"><Products /></Route>  */}
+               <Route exact path="/products"> <Products /></Route>
+               <Route exact path="/productDetails"> <ProductDetails /></Route>
 
                <Route path="/deliveryDispatch"> <DeliveryDispatch /></Route>
                <Route path="/contactUs"> <ContactUs /></Route>
@@ -116,11 +121,11 @@ const App = () => (
 
             </Switch>
          </div>
-         <div className="Website-Footer">
+         <footer className="Website-Footer">
             <Footer />
-         </div>
+         </footer>
       </Router>
-   </div>
+   </>
 );
 
 export default App;

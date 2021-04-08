@@ -1,5 +1,4 @@
 @import 'layouts/_all';
-@import 'pages/_all';
 @import 'utilities/_all';
 
 /* ====================================== */
@@ -8,6 +7,8 @@
 // Set base font size and line height as belows
 $base-font-size: 16px;
 $base-line-height: 16px;
+$margin-between-flex-col: 8px;
+$margin-between-flex-row: 8px;
 
 /* Any sizes apart from body will use em to ensure the consistency between different places where fonts are used
 
@@ -192,6 +193,10 @@ h6 {
 /* ====================================== */
 /* ========== Additional Style ========== */
 /* ====================================== */
+.container.with-top-padding {
+	padding-top: 24px;
+}
+
 .box-shadow {
 	-webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
 				0 3px 1px -2px rgba(0, 0, 0, 0.12),
@@ -199,6 +204,33 @@ h6 {
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
 				0 3px 1px -2px rgba(0, 0, 0, 0.12),
 				0 1px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card-shadow-hoverable {
+	-webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+				0 3px 1px -2px rgba(0, 0, 0, 0.12),
+				0 1px 5px 0 rgba(0, 0, 0, 0.2);
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+				0 3px 1px -2px rgba(0, 0, 0, 0.12),
+				0 1px 5px 0 rgba(0, 0, 0, 0.2);
+	transition: -webkit-box-shadow ease-in-out .1s,
+				box-shadow ease-in-out .1s,
+				transform ease-in-out .15s,
+				z-index linear .15s;
+}
+
+.card-shadow-hoverable:hover,
+.card-shadow-hoverable:focus,
+.card-shadow-hoverable:active {
+	transform: scale(1.045);
+	-webkit-box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.14),
+				0 3px 15px -2px rgba(0, 0, 0, 0.12),
+				0 1px 19px 0 rgba(0, 0, 0, 0.2);
+	box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.14),
+				0 3px 15px -2px rgba(0, 0, 0, 0.12),
+				0 1px 19px 0 rgba(0, 0, 0, 0.2);
+	outline: none;
+	z-index: 99;
 }
 /* ====================================== */
 /* ======== End Additional Style ======== */
@@ -216,7 +248,7 @@ ul.Navbar {
 	top: 0;
 	left: 0;
 	width: 100%;
-	z-index: 99;
+	z-index: 100;
 }
 
 ul.Navbar-Mobile {
@@ -266,6 +298,12 @@ ul.Navbar > li:nth-last-child(4) {
 
 .flex-vertical-box-container {
 	flex-direction: column;
+}
+
+.flex-horizontal-box-container > [class*="box-item"] {
+	flex: 1 1 auto;
+	margin-right: $margin-between-flex-col;
+	margin-bottom: $margin-between-flex-row;
 }
 
 // Flex horizontal will be in 12 columns and calculated in _variables.scss
@@ -392,14 +430,11 @@ div#copyright-background{
 
 .page-title-holder {
 	height: 150px;
+	text-align: center;
 }
 
 .page-title-holder.fill {
 	background-color: $orange-light;
-}
-
-.page-title-holder.center-text {
-	text-align: center;
 }
 
 .page-title-holder.with-divider {
@@ -480,8 +515,10 @@ div#copyright-background{
 		display: block;
 	}
 
-	div.Website-Body {
-		margin-top: -16px;
+	.card-shadow-hoverable:hover,
+	.card-shadow-hoverable:focus
+	 {
+		transform: scale(1);
 	}
 
 	.container {
@@ -509,7 +546,8 @@ div#copyright-background{
 	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
 	@for $flex-grow-width from 1 through 12 {
 		.flex-horizontal-box-container > .box-item-xs-#{$flex-grow-width} {
-			flex: $flex-grow-width 1 percentage($flex-grow-width / 12);
+			width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+			max-width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
 		}
 	}
 }
@@ -560,7 +598,8 @@ div#copyright-background{
 	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
 	@for $flex-grow-width from 1 through 12 {
 		.flex-horizontal-box-container > .box-item-sm-#{$flex-grow-width} {
-			flex: $flex-grow-width 1 percentage($flex-grow-width / 12);
+			width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+			max-width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
 		}
 	}
 }
@@ -584,7 +623,8 @@ div#copyright-background{
 	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
 	@for $flex-grow-width from 1 through 12 {
 		.flex-horizontal-box-container > .box-item-md-#{$flex-grow-width} {
-			flex: $flex-grow-width 1 percentage($flex-grow-width / 12);
+			width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+			max-width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
 		}
 	}
 }
@@ -596,7 +636,18 @@ div#copyright-background{
 	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
 	@for $flex-grow-width from 1 through 12 {
 		.flex-horizontal-box-container > .box-item-lg-#{$flex-grow-width} {
-			flex: $flex-grow-width 1 percentage($flex-grow-width / 12);
+			width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+			max-width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+		}
+	}
+}
+
+@include screen-size('xl', $breakpoints) {
+	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
+	@for $flex-grow-width from 1 through 12 {
+		.flex-horizontal-box-container > .box-item-xl-#{$flex-grow-width} {
+			width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+			max-width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
 		}
 	}
 }
@@ -654,3 +705,148 @@ form#authentication-form > div:nth-last-child(1) {
 /* ========== End Authentication ======== */
 /* ====================================== */
 
+/* ====================================== */
+/* =========== Product Details  ========= */
+/* ====================================== */
+
+.product-details-main-title {
+	width: 100%;
+	padding: 0 16px 8px 16px;
+}
+
+.product-details-main-title > h1#product-name,
+.product-details-main-title > h2#product-name,
+.product-details-main-title > h3#product-name,
+.product-details-main-title > h4#product-name,
+.product-details-main-title > h5#product-name,
+.product-details-main-title > h6#product-name {
+	width: 100%;
+	overflow-wrap: break-word;
+}
+
+.product-details-main-title > div#quantity-selection,
+.product-details-main-title > div#quantity-selection > span,
+.product-details-main-title > div#special-requirements {
+	margin-top: 8px;
+}
+
+.product-details-main-title > div#quantity-selection > span {
+	margin-left: 8px;
+}
+
+.product-details-main-title > div#special-requirements > textarea#specialRequirementsField{
+	width: 100%;
+	height: 100%;
+}
+
+.product-details-main-title > button {
+	margin: 4px 4px 4px 0;
+}
+
+.product-details-description {
+	padding: 16px;
+}
+
+.product-details-description > span {
+	display: block;
+	margin-top: 8px;
+}
+
+/* ====================================== */
+/* ======== End Product Details  ======== */
+/* ====================================== */
+
+/* ====================================== */
+/* ============ Card Styling  =========== */
+/* ====================================== */
+
+.ant-card {
+	border-radius: 5px;
+}
+
+.ant-card > .ant-card-cover > img.cover-img {
+	object-fit: cover;
+}
+
+.ant-card > .ant-card-cover > img.cover-img.fixed-size {
+	height: 256px;
+}
+
+.ant-card > .ant-card-body > .ant-card-meta > .ant-card-meta-detail > .ant-card-meta-description > p {
+	width: inherit;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.ant-card > .ant-card-actions {
+	border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.ant-card > .ant-card-actions > li:first-child {
+	border-bottom-left-radius: 5px !important;
+}
+
+.ant-card > .ant-card-actions > li:last-child {
+	border-bottom-right-radius: 5px !important;
+}
+
+.ant-card > .ant-card-actions > li {
+	margin: 0 !important;
+	height: 48px;
+	transition: background-color ease-in-out .1s;
+}
+
+.ant-card > .ant-card-actions > li:hover,
+.ant-card > .ant-card-actions > li:focus {
+	background-color: rgba(0, 0, 0, 0.15);
+}
+
+.ant-card > .ant-card-actions > li > span {
+	height: 100%;
+}
+
+.ant-card > .ant-card-actions > li > span > * {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+/* ====================================== */
+/* =========== End Card Styling ========= */
+/* ====================================== */
+
+/* ====================================== */
+/* ============= List Styling =========== */
+/* ====================================== */
+.ant-list-pagination {
+	margin-bottom: 16px;
+}
+/* ====================================== */
+/* =========== End List Styling ========= */
+/* ====================================== */
+
+main.ant-layout-content > div.ant-row.my-account-username-avatar {
+	display: flex;
+	flex-flow: column wrap;
+	align-content: center;
+}
+
+main.ant-layout-content > div.ant-row.my-account-username-avatar > * {
+	margin: .25em 0 0 0;
+	text-align: center;
+	flex: 1 0;
+}
+
+main.ant-layout-content > div.ant-row.my-account-details > form {
+	margin-top: 1.5em;
+	padding: 1em;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+main.ant-layout-content > div.ant-row.my-account-details > form > * {
+	flex: 0 45%;
+	margin: .5em;
+}

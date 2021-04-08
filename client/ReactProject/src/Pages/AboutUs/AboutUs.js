@@ -16,7 +16,7 @@ const AboutUs = () =>{
 
     return (
       <>
-        <div className="page-title-holder fill center-text">
+        <div className="page-title-holder fill">
           <h2>About Our Company</h2>
         </div>
         <div id="about-us-text" className="container">

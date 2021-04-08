@@ -1,5 +1,6 @@
 //Product Action Types
 export const GET_PRODUCTS = "GET_PRODUCTS";
+export const GET_PRODUCT = "GET_PRODUCT";
 export const DEFAULT_ORDER = "DEFAULT_ORDER";
 export const LOADING_PRODUCTS = "LOADING_PRODUCTS";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
