@@ -149,7 +149,7 @@ class Product {
                 return res.json(empty_field)
             }
             // validate that name and code
-            if( p_code.length > 255 || p_name.length > 255 || p_description > 511) {
+            if( p_code.length > 255 || p_name.length > 255 || p_description.length > 512) {
                 Product.delete_images(images)
                 return res.json({ error: "Name and Code cannot be longer than 255 characters and description cannot be larger than 511 "})
             }
