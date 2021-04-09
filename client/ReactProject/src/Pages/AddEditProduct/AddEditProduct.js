@@ -11,7 +11,7 @@ import { getAllCategories } from '../../_actions/categoryActions';
 import { onlyNumbers } from '../../_services/SharedFunctions';
 import { confirmEdit, confirmAdd } from './Modals'; 
 
-import axios from 'axios';
+import { createFormData } from './Functions';
 
 
 
@@ -26,15 +26,14 @@ const AddEditProduct = () => {
     const productsList = useSelector(state => state.productState.products);
     const categories = useSelector(state => state.categoryState.categories);
 
-    
-
     const [pageState, setPageState] = useState(null);
     const [product, setProduct] = useState(null);
     const [fileList, updateFileList] = useState([]);
+    
 
     const [form] = Form.useForm();
 
-    useEffect(() => {                                                   //Changes the page state to edit or Add. Will also determine if API call necessary
+    useEffect(() => {                                                //Changes the page state to edit or Add. Will also determine if API call necessary
         if(p_code){
             if(productsList.length !== 0){
                 const product = _getProduct(p_code, productsList);
@@ -48,6 +47,7 @@ const AddEditProduct = () => {
                 }                                
             }
             else getProduct(p_code, setProduct, setPageState);
+
         }
         else setPageState(ADD);
 
@@ -71,45 +71,25 @@ const AddEditProduct = () => {
 
     const onFinish = newProduct => {                                                    //handles form submission
         newProduct.p_categories = getProductId(newProduct.p_categories, categories);
-       // newProduct.p_image_uri = [];                                                        //IMPORTANT remove this later
 
-        if(pageState === EDIT){
+       /* if(pageState === EDIT){
             newProduct.p_code = product.p_code;
 
             if(!checkProductsEqual(newProduct, product)){
                 if(productsList.length !== 0) confirmEdit(newProduct, dispatch);    //if the Store contains the products, need to update this as well as do API call                                                                                    
                 else confirmEdit(newProduct);    //if the Store does not contain products, just need to do API call. do not need to update store   
             }
-        }
+        }*/
         
         if(pageState === ADD){
-            let formData = new FormData();
-            formData.append("p_image_uri", fileList[0].originFileObj);
-            formData.append("p_name", newProduct.p_name);
-            formData.append("p_code", newProduct.p_code);
-            formData.append("p_units_sold", newProduct.p_units_sold);
-            formData.append("p_price", newProduct.p_price);
-            formData.append("p_categories", newProduct.p_categories);
-            formData.append("p_description", newProduct.p_description);
-
-            const config = {
-                headers: {
-                    'content-type': 'multipart/form-data'
-                }
+            let formData = createFormData(newProduct, fileList);
+            
+            for(let i = 0; i < fileList.length; i++){
+                newProduct.p_image_uri[i] = URL.createObjectURL(fileList[i].originFileObj);
             }
-            
-            console.log("adding product");
-            //if(productsList.length !== 0) confirmAdd(formData, dispatch);
-            //else confirmAdd(formData);
-            axios.post('api/products/add-product', formData, config)
-            .then(res => {
-                console.log('res', res);
-            })
-            .catch(err => {
-                console.log('err', err);
-            });
-            
-      
+           
+            if(productsList.length !== 0) confirmAdd(newProduct, formData, dispatch);
+            else confirmAdd(newProduct, formData);
         }
     };
 

@@ -5,6 +5,12 @@ import { imageModal } from './Modals';
 import { message } from 'antd';
 import { getCategoryName } from '../../_services/SharedFunctions';
 
+const config = {
+    headers: {
+        'content-type': 'multipart/form-data'
+    }
+}
+
 export const getProduct = (p_code, setProduct, setPageState) => {               //returns an individual product
     axios.post('/api/products/product-by-id', { 
         p_code: p_code
@@ -31,8 +37,8 @@ export const _editProduct = product => {                                //edits 
     return axios.post('/api/products/edit-product', product);
 }
 
-export const _addProduct = product => {
-    return axios.post('api/products/add-product', product);
+export const _addProduct = formData => {
+    return axios.post('api/products/add-product', formData, config);
 }
 
 
@@ -118,4 +124,21 @@ export const getProductId = (c_name, categories) => {
     });
 
     return category._id;
+}
+
+export const createFormData = (newProduct, fileList) => {
+    let formData = new FormData();
+
+    [...fileList].forEach(image => {
+        formData.append("p_image_uri", image.originFileObj);
+    });
+    
+    formData.append("p_name", newProduct.p_name);
+    formData.append("p_code", newProduct.p_code);
+    formData.append("p_units_sold", newProduct.p_units_sold);
+    formData.append("p_price", newProduct.p_price);
+    formData.append("p_categories", newProduct.p_categories);
+    formData.append("p_description", newProduct.p_description);
+
+    return formData;
 }
