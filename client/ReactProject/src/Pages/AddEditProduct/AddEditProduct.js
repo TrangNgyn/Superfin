@@ -168,6 +168,16 @@ const AddEditProduct = () => {
                             <Form.Item 
                                 name="p_image_uri"
                                 getValueFromEvent={info => { return info.fileList }}                                      //this name is subject to change
+                                rules={[
+                                    {
+                                        validateTrigger: 'onSubmit',
+                                        validator: async (_) => {
+                                            if (fileList.length <= 0){
+                                                return Promise.reject(new Error("You must have at least one image uploaded"));
+                                            } 
+                                        }
+                                    }
+                                ]}  
                             >
                                 <Upload 
                                     fileList={fileList}
