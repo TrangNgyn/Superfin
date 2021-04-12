@@ -151,7 +151,7 @@ class Product {
             // validate that name and code
             if( p_code.length > 255 || p_name.length > 255 || p_description.length > 512) {
                 Product.delete_images(images)
-                return res.json({ error: "Name and Code cannot be longer than 255 characters and description cannot be larger than 511 "})
+                return res.json({ error: "Name and Code cannot be longer than 255 characters and description cannot be larger than 512 "})
             }
 
             var found_category = await categories_model.findOne({ _id: p_categories })
@@ -216,6 +216,8 @@ class Product {
 
             var images = req.files
 
+            const array = [];
+
             if(typeof p_image_uri === 'undefined') {
                 return res.json(empty_field)
             }
@@ -225,6 +227,17 @@ class Product {
                     success: false,
                     message: `An image must be present in the edited product`
                 })
+            }
+
+            if(typeof p_image_uri === 'string') {
+                if(p_image_uri !== "")
+                    array[0] = p_image_uri
+            }
+            else {
+                for(var i = 0; i < p_image_uri.length; i++){
+                    if(p_image_uri[i] !== "")
+                        array.push(p_image_uri[i])
+                }
             }
 
             // ensure all the required fields are present 
@@ -262,14 +275,14 @@ class Product {
             }
 
             // unlink images from the array as they are read in 
-            if(p_image_uri != 0){
+            if(array.length != 0){
                 for(var i = 0; i < found_product.p_image_uri.length; i++){
                     var image = found_product.p_image_uri[i];
                     var found = false;
 
                     // loop through all sent images with the url of the saved images
                     // if found break otherwise delete it from the array
-                    for(var s_image in p_image_uri){
+                    for(var s_image in array){
                         if(image === s_image){
                             found = true
                             break
@@ -280,7 +293,7 @@ class Product {
                             delete_object(image)
                         }
                         catch(err) {
-                            delete_object(locations)
+                            Product.delete_images(locations)
                             return res.json({
                                 succes: false,
                                 message: err.message
@@ -306,11 +319,13 @@ class Product {
             }
 
 
-            p_image_uri += locations;
+            for(var i = 0;i < locations.length; i++) {
+                array.push(locations[i])
+            }
 
             var edited_product = product_model.findByIdAndUpdate(found_product._id, {
                 p_code,
-                p_image_uri,
+                p_image_uri: array,
                 p_name,
                 p_price,
                 p_units_sold,
