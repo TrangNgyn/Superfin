@@ -1,4 +1,4 @@
-import { GET_COMPLETE_ORDERS, ERROR_COMPLETE_ORDERS, LOADING_COMPLETE_ORDERS, DELETE_COMPLETE_ORDER } from '../_actions/actionTypes';
+import { GET_COMPLETE_ORDERS, ERROR_COMPLETE_ORDERS, LOADING_COMPLETE_ORDERS, DELETE_COMPLETE_ORDER, ADD_COMPLETE_ORDER } from '../_actions/actionTypes';
 
 const initState = {
     completeOrders: [],
@@ -31,6 +31,12 @@ const completeOrdersReducer = (state = initState, {type, payload}) => {
                 ...state,
                 completeOrders: state.completeOrders.filter(o => o.po_number !== payload)
             }
+        case ADD_COMPLETE_ORDER: {
+            return {
+                ...state,
+                completeOrders: [...state.completeOrders, payload]
+            }
+        }
         default:
             return state
     }

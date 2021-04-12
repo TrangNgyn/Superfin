@@ -1,4 +1,4 @@
-import { GET_INCOMPLETE_ORDERS, ERROR_INCOMPLETE_ORDERS, LOADING_INCOMPLETE_ORDERS, DELETE_INCOMPLETE_ORDERS, ADD_TRACKING } from '../_actions/actionTypes';
+import { GET_INCOMPLETE_ORDERS, ERROR_INCOMPLETE_ORDERS, LOADING_INCOMPLETE_ORDERS, DELETE_INCOMPLETE_ORDERS, ADD_TRACKING, ADD_INCOMPLETE_ORDER } from '../_actions/actionTypes';
 import { orderStatusConstants } from '../_constants/orderStatus.constants'; 
 
 const initState = {
@@ -32,7 +32,7 @@ const incompleteOrdersReducer = (state = initState, {type, payload}) => {
                 ...state,
                 incompleteOrders: state.incompleteOrders.filter(o => o.po_number !== payload)
             }
-        case ADD_TRACKING:
+        case ADD_TRACKING:{
             const index = state.incompleteOrders.findIndex(o => { return o.po_number === payload.po_number });
             const tempArr = state.incompleteOrders;
             let tempObj = tempArr[index];
@@ -45,6 +45,14 @@ const incompleteOrdersReducer = (state = initState, {type, payload}) => {
                 ...state,
                 incompleteOrders: [...tempArr]
             }
+        }
+        
+        case ADD_INCOMPLETE_ORDER: {
+            return {
+                ...state,
+                incompleteOrders: [...state.incompleteOrders, payload]
+            }
+        }
         default:
             return state
     }

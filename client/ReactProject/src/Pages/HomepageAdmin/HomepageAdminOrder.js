@@ -82,7 +82,7 @@ const HomepageAdminOrder = props => {
 
 
     //if the order is complete it will contain the tracking number 
-    if(order.status === orderStatusConstants.COMPLETE || order.status === orderStatusConstants.SHIPPED){
+    if(order.status !== undefined || order.status === orderStatusConstants.SHIPPED){
         trackingNumberDiv = <div>
                                 <div>
                                     <div className="Homepage-Admin-Order-Text">Tracking Number: {order.tracking_number}</div>    

@@ -1,7 +1,11 @@
 import { ExclamationCircleOutlined} from '@ant-design/icons';
 import NewItemForm from '../Forms/NewItemForm/NewItemForm';
+import { orderStatusConstants } from '../../../_constants/orderStatus.constants';
 import { Modal } from 'antd';
-
+import MODE from './PageConstants';
+import { addCompleteOrder } from '../../../_actions/completeOrderActions'; 
+import { addIncompleteOrder } from '../../../_actions/incompleteOrderActions';
+import { history } from '../../../_helpers/history';
 
 
 
@@ -20,17 +24,25 @@ export const showDeleteConfirm = (index, deleteOrderItem) => {
 }
 
 //Appears when confirming a delete on a PO item
-export const showUndo = (form, orderOriginal, setOrder) => {
+export const showUndo = (form, orderOriginal, setOrder, mode) => {
+
     Modal.confirm({
         title: 'Warning!',
         icon: <ExclamationCircleOutlined />,
-        content: 'Are you sure you want to undo these edits',
+        content: 'Are you sure you want to undo changes',
         okText: 'Yes',
         cancelText: 'No',
 
         onOk() { 
-            form.setFieldsValue(orderOriginal);
-            setOrder(orderOriginal); 
+            if(mode === MODE.ADD){
+                form.resetFields();
+                setOrder(orderOriginal); 
+            } 
+            else{
+                form.setFieldsValue(orderOriginal);
+                form.setFieldsValue(orderOriginal.address);
+                setOrder(orderOriginal); 
+            }
         }
     });
 }
@@ -104,3 +116,69 @@ export const AddItemModal = props => {
         </Modal>
     );
 }   
+
+export const addOrder = (order, dispatch) => {
+    Modal.confirm({
+        title: 'Add Order?',
+        icon: <ExclamationCircleOutlined />,
+        content: 'Are you sure you want to add this order?',
+        okText: 'Yes',
+        cancelText: 'No',
+
+        onOk() { 
+            if(dispatch !== undefined){
+                if(order.status === orderStatusConstants.COMPLETE){
+                    return dispatch(addCompleteOrder(order))
+                    .then(res => {
+                        if(res.data.success) addSuccess();
+                        else addFail();
+                    })
+                    .catch(() => {
+                        addFail();
+                    });
+                }
+                else{
+                    return dispatch(addIncompleteOrder(order))
+                    .then(res => {
+                        if(res.data.success) addSuccess();
+                        else addFail();
+                    })
+                    .catch(() => {
+                        addFail();
+                    })
+                }
+            }
+            else{
+                if(order.status === orderStatusConstants.COMPLETE){
+
+                }
+                else{
+
+                }
+            }
+        }
+    });
+}
+
+
+const addSuccess = () => {
+    Modal.info({
+        title: "Add Successful",
+        content: 'Successfully added order',
+        okText: "Ok",
+        onOk(){ history.push('/admin') }
+    });
+}
+
+
+const addFail = () => {
+    Modal.info({
+        title: "ERROR",
+        content: 'There was a problem adding this order. Please try again or contact support.',
+        okText: "Ok",
+        onOk(){ 
+           // history.push('/order');
+           // window.location.reload();
+        }
+    });
+}

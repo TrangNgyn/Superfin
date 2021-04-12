@@ -1,7 +1,7 @@
 import MODE from '../../Helpers/PageConstants';
 import { Form, Input, Select } from 'antd';
 import { onlyNumbers } from '../../../../_services/SharedFunctions';
-
+import { orderStatusConstants } from '../../../../_constants/orderStatus.constants';
 
 
 
@@ -117,12 +117,42 @@ const POForm1 = props => {
                     </Form.Item>
                     
                     <div className="view-order-field-header">Carrier</div>
-                    <Form.Item name="carrier">
+                    <Form.Item 
+                        name="carrier"
+                        rules={[
+                            {
+                                whitespace: true,
+                                validateTrigger: 'onSubmit',
+                                message: 'Cannot contain white spaces',
+                            },
+                            {
+                                validator: async (_, value) => {
+                                    if (props.order.status !== orderStatusConstants.NEW && (value === undefined || value === "")){
+                                        return Promise.reject(new Error('Only New orders can have empty carrier fields'));
+                                    } 
+                                }
+                            }
+                    ]}>
                         <Input onBlur={updateOrderText} maxLength={100} style={{width: "500px"}}/>
                         </Form.Item>  
 
                     <div className="view-order-field-header">Tracking Number</div>
-                    <Form.Item name="tracking_number">
+                    <Form.Item 
+                        name="tracking_number"
+                        rules={[
+                            {
+                                whitespace: true,
+                                validateTrigger: 'onSubmit',
+                                message: 'Cannot contain white spaces',
+                            },
+                            {
+                                validator: async (_, value) => {
+                                    if (props.order.status !== orderStatusConstants.NEW && (value === undefined || value === "")){
+                                        return Promise.reject(new Error('Only New orders can have empty tracking number fields'));
+                                    } 
+                                }
+                            }
+                    ]}>
                         <Input onBlur={updateOrderText} maxLength={100} style={{width: "500px"}}/>
                     </Form.Item>    
                 </Form>

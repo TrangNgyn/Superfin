@@ -1,6 +1,6 @@
 import '../../_assets/CSS/pages/Order/Order.css';
 import { Form, Button } from 'antd';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { setUndefinedValues } from './Helpers/Functions';
 import { useState, useEffect } from 'react';
@@ -13,6 +13,7 @@ import POForm2 from './Forms/POForm/POForm2';
 import POForm1 from './Forms/POForm/POForm1';
 import POForm1View from './Forms/POForm/POForm1View';
 import axios from 'axios';
+import { addOrder } from './Helpers/Modals';
 
 
 /*
@@ -57,6 +58,7 @@ mockOrder.issued_date = moment(mockOrder.issued_date);*/
 
 
 const Order = () => {
+    const dispatch = useDispatch();
     const { po_number, status } = useParams();
     const incompleteOrders = useSelector(state => state.incompleteOrdersState.incompleteOrders);
     const compeletOrders = useSelector(state => state.completeOrdersState.completeOrders);
@@ -67,6 +69,7 @@ const Order = () => {
     const [form_1] = Form.useForm();
     const [form_2] = Form.useForm();
 
+    console.log('current order', order);
 
     //for refreshing the item list
     useEffect(() => {     
@@ -82,7 +85,9 @@ const Order = () => {
                         let order = setUndefinedValues(res.data);
                         setOrder(order);
                         setOrderOriginal(order);
-                        form_1.setFieldsValue(order);
+                        //form_1.setFieldsValue(order);
+                       // form_1.setFieldsValue(order.address);
+                        console.log(order.address);
                         setMode(MODE.VIEW);
                     }
                     else console.log(res);
@@ -97,12 +102,14 @@ const Order = () => {
                     order = setUndefinedValues(order);
                     setOrder(order);
                     setOrderOriginal(order);
-                    form_1.setFieldsValue(order);
+                    //form_1.setFieldsValue(order);
+                    //form_1.setFieldsValue(order.address);
                     setMode(MODE.VIEW);
                 }
             }
         }
         else if(status === orderStatusConstants.NEW || status === orderStatusConstants.SHIPPED){
+
             if(!incompleteOrders.length){
                 axios.post('/api/orders/single-order', { po_number: po_number })
                 .then(res => {
@@ -110,7 +117,8 @@ const Order = () => {
                         let order = setUndefinedValues(res.data);
                         setOrder(order);
                         setOrderOriginal(order);
-                        form_1.setFieldsValue(order);
+                       // form_1.setFieldsValue(order);
+                        //form_1.setFieldsValue(order.address);
                         setMode(MODE.VIEW);
                     }
                     else console.log(res);
@@ -126,7 +134,8 @@ const Order = () => {
                     order = setUndefinedValues(order);
                     setOrder(order);
                     setOrderOriginal(order);
-                    form_1.setFieldsValue(order);
+                    //form_1.setFieldsValue(order);
+                    //form_1.setFieldsValue(order.address);
                     setMode(MODE.VIEW);
                 }
             }
@@ -138,11 +147,12 @@ const Order = () => {
     
 
     //validates all of the form fields
-    const handleSubmit = () => {                    
+    const handleSubmit = () => {                  
         if(order.items.length > 0){
             form_1.validateFields()
             .then(values => {
-                showEditConfirmation(values, confirmSubmit);
+                //showEditConfirmation(values, confirmSubmit);
+                confirmSubmit(values);
             })
             .catch(errorInfo => {
                 console.log(errorInfo);
@@ -174,6 +184,8 @@ const Order = () => {
                 order.address = address;
 
                 console.log("submitting order details in add mode", order);
+                addOrder(order, dispatch);
+
 
                 //go to what ever list that order status belongs to  
         }
@@ -198,7 +210,12 @@ const Order = () => {
 
     //toggles the edit view
     const toggleView = () => {
-        if(mode===MODE.VIEW) setMode(MODE.EDIT);
+        if(mode===MODE.VIEW){
+            setMode(MODE.EDIT);
+            form_1.setFieldsValue(order);
+            form_1.setFieldsValue(order.address);
+
+        } 
         else setMode(MODE.VIEW);
     }
 
@@ -256,7 +273,7 @@ const Order = () => {
             
             <div style={{ paddingTop: "30px", paddingBottom: "30px"}}>
                 <Button onClick={() => { 
-                    showUndo(form_1, orderOriginal, setOrder);
+                    if(JSON.stringify(order) !== JSON.stringify(orderOriginal)) showUndo(form_1, orderOriginal, setOrder, mode);
                 }} style={{width: "500px", fontWeight: "bold"}}>Undo Changes</Button>
             </div>
         </div>
@@ -269,6 +286,9 @@ const Order = () => {
     //HTML Main
     return (
         <div>
+            <button onClick = {() => {
+                console.log('redux', incompleteOrders);
+            }}>view state </button>
             {mode===MODE.EDIT || mode===MODE.VIEW   ?   toggleButton    :   <></>}
 
             <h1 className="view-order-text">Order Details</h1>
