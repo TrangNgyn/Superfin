@@ -50,7 +50,10 @@ class Purchased_Order {
                 }
                 return res.json(order)
             })
-            .catch(err => res.json(err))
+            .catch(err => res.json({
+                success: false,
+                message: err._message
+            }))
     } 
 
     // @route   POST api/orders/add-tracking
@@ -89,7 +92,10 @@ class Purchased_Order {
             })
         }
         catch (err) {
-            console.log(err);
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 
@@ -107,7 +113,10 @@ class Purchased_Order {
         }
         
         catch(err) {
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 
@@ -124,7 +133,10 @@ class Purchased_Order {
         }
         
         catch(err){
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 
@@ -135,16 +147,15 @@ class Purchased_Order {
     async create_order(req,res) {
         try {
 
-            let { po_number, c_email, status, items, address } = req.body
+            let { c_email, status, items, address } = req.body
 
-            if( !po_number | !c_email | !status | !items | !address) {
+            if( !c_email | !status | !items | !address) {
                 return res.json(empty_field)
             }
 
             var issued_date = new Date()
 
             const new_order = new order_model({
-                po_number,
                 c_email,
                 issued_date,
                 status,
@@ -163,8 +174,11 @@ class Purchased_Order {
             }
         
         }
-        catch(error){
-            console.log(error)
+        catch(err){
+            return res.json({
+                success: false,
+                message: err
+            })
         }
     }
 
@@ -205,7 +219,10 @@ class Purchased_Order {
 
         }
         catch(err){
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 
@@ -233,7 +250,10 @@ class Purchased_Order {
             })
         }
         catch(err){
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 
@@ -260,7 +280,10 @@ class Purchased_Order {
             return res.json(found_order)
         }
         catch(err){
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 }
