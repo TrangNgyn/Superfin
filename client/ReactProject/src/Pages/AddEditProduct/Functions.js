@@ -16,7 +16,6 @@ export const getProduct = (p_code, setProduct, setPageState) => {               
         p_code: p_code
     })
     .then(res => {
-        console.log(res);
         if(res.data.p_code === p_code){
             setProduct(res.data);
             setPageState(EDIT);
@@ -94,10 +93,13 @@ export const onRemove = (file, fileList, updateFileList) => {               //ha
 }
 
 export const setFormValues = (form, product, categories) => {                 //sets the values of the form to appropriate product values
+    let p_units_sold = "";
+    if(product.p_units_sold !== null) p_units_sold = product.p_units_sold.toString();
+
     form.setFieldsValue({
         p_name: product.p_name,
         p_code: product.p_code,
-        p_units_sold: product.p_units_sold.toString(),
+        p_units_sold: p_units_sold,
         p_price: product.p_price.toString(),
         p_categories: getCategoryName(product.p_categories, categories),
         p_description: product.p_description,
@@ -130,7 +132,7 @@ export const createFormData = (newProduct, fileList) => {
     let formData = new FormData();
 
     [...fileList].forEach(image => {
-        formData.append("p_image_uri", image.originFileObj);
+        formData.append("images", image.originFileObj);
     });
     
     formData.append("p_name", newProduct.p_name);
