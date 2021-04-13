@@ -32,9 +32,12 @@ const completeOrdersReducer = (state = initState, {type, payload}) => {
                 completeOrders: state.completeOrders.filter(o => o.po_number !== payload)
             }
         case ADD_COMPLETE_ORDER: {
+            const newArray = [...state.completeOrders, payload];
+            newArray.sort((a,b) => { return new Date(b.issued_date) - new Date(a.issued_date)});
+            
             return {
                 ...state,
-                completeOrders: [...state.completeOrders, payload]
+                completeOrders: newArray
             }
         }
         default:

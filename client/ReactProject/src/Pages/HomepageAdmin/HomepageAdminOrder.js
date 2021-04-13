@@ -17,7 +17,7 @@ const HomepageAdminOrder = props => {
     const [form] = useForm();
 
     const date = new Date(order.issued_date);
-    const dateString = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+    const dateString = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   
     const onFinishOrder = () => {
         form.validateFields()
@@ -82,7 +82,7 @@ const HomepageAdminOrder = props => {
 
 
     //if the order is complete it will contain the tracking number 
-    if(order.status !== undefined || order.status === orderStatusConstants.SHIPPED){
+    if(order.status === orderStatusConstants.COMPLETE || order.status === orderStatusConstants.SHIPPED){
         trackingNumberDiv = <div>
                                 <div>
                                     <div className="Homepage-Admin-Order-Text">Tracking Number: {order.tracking_number}</div>    

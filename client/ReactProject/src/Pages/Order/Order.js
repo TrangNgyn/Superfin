@@ -9,45 +9,11 @@ import { orderStatusConstants } from '../../_constants/orderStatus.constants';
 import MODE from './Helpers/PageConstants';
 import { showNoItemsPresent, showEditConfirmation, AddItemModal, showUndo} from './Helpers/Modals';
 import POForm2 from './Forms/POForm/POForm2';
-//import moment from 'moment';
 import POForm1 from './Forms/POForm/POForm1';
 import POForm1View from './Forms/POForm/POForm1View';
 import axios from 'axios';
-import { addOrder } from './Helpers/Modals';
-
-
-/*
-const mockOrder = {
-    po_number: "123abc",
-    c_email: "isaac@hotmail.com",
-    issued_date: new Date(),
-    status: "NEW",
-    items:[
-        {
-            item_code:"123456",
-            quantity:4,
-            special_requirements:"Leave by the door"
-        },
-        {
-            item_code:"98dnf9",
-            quantity:2,
-            special_requirements:"Beware of the dog"
-        }
-    ],
-    tracking_number: "djfb2387423ijb",
-    carrier: "Fastway",
-    po_attention_to:"Next to the grey building",
-    po_address_line1:"4 happy street",
-    po_address_line2:"unit 7",
-    po_suburb:"Redfern",
-    po_state:"NSW",
-    po_postal_code:"2000",
-    po_country: "Australia",
-
-}
-
-mockOrder.issued_date = moment(mockOrder.issued_date);*/
-
+import { _addCompleteOrder, _addIncompleteOrder } from './Helpers/Modals';
+import { createAddress, createOrderAdd } from './Helpers/Functions';
 
 
 
@@ -69,7 +35,8 @@ const Order = () => {
     const [form_1] = Form.useForm();
     const [form_2] = Form.useForm();
 
-    console.log('current order', order);
+
+
 
     //for refreshing the item list
     useEffect(() => {     
@@ -151,7 +118,6 @@ const Order = () => {
         if(order.items.length > 0){
             form_1.validateFields()
             .then(values => {
-                //showEditConfirmation(values, confirmSubmit);
                 confirmSubmit(values);
             })
             .catch(errorInfo => {
@@ -162,32 +128,29 @@ const Order = () => {
     }
 
     //after validating fields, this function submits the forms
-    const confirmSubmit = (values) => {
+    const confirmSubmit = values => {
         const editedOrder = JSON.stringify(order) !== JSON.stringify(orderOriginal);
 
-        let address = {};
-                address.po_address_line1 = values.po_address_line1;
-                address.po_address_line2 = values.po_address_line2;
-                address.po_attention_to = values.po_attention_to;
-                address.po_country = values.po_country;
-                address.po_postal_code = values.po_postal_code;
-                address.po_state = values.po_state;
-                address.po_suburb = values.po_suburb;
+        let address = createAddress(values);
 
         if(mode===MODE.ADD){
-            let order = {};
-                order.c_email = values.c_email;
-                order.carrier = values.carrier;
-                order.items = [...values.items];
-                order.status = values.status;
-                order.tracking_number = values.tracking_number;
-                order.address = address;
-
-                console.log("submitting order details in add mode", order);
-                addOrder(order, dispatch);
-
-
-                //go to what ever list that order status belongs to  
+            let order = createOrderAdd(values, address);
+            if(order.status === orderStatusConstants.COMPLETE){
+                if(compeletOrders.length > 0){
+                    order.issued_date = new Date();
+                    _addCompleteOrder(order, dispatch);
+                }
+                else _addCompleteOrder(order);
+            }
+            else{
+                if(incompleteOrders.length > 0){
+                    order.issued_date = new Date();
+                    _addIncompleteOrder(order, dispatch);
+                }
+                else {
+                    _addIncompleteOrder(order);
+                }
+            }
         }
         else if(mode===MODE.EDIT){
             if(editedOrder){
@@ -288,7 +251,10 @@ const Order = () => {
         <div>
             <button onClick = {() => {
                 console.log('redux', incompleteOrders);
-            }}>view state </button>
+            }}>view incomplete </button>
+            <button onClick = {() => {
+                console.log('redux', compeletOrders);
+            }}>view complete </button>
             {mode===MODE.EDIT || mode===MODE.VIEW   ?   toggleButton    :   <></>}
 
             <h1 className="view-order-text">Order Details</h1>

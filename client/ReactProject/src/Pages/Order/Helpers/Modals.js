@@ -6,6 +6,7 @@ import MODE from './PageConstants';
 import { addCompleteOrder } from '../../../_actions/completeOrderActions'; 
 import { addIncompleteOrder } from '../../../_actions/incompleteOrderActions';
 import { history } from '../../../_helpers/history';
+import axios from 'axios';
 
 
 
@@ -117,7 +118,43 @@ export const AddItemModal = props => {
     );
 }   
 
-export const addOrder = (order, dispatch) => {
+export const _addCompleteOrder = (order, dispatch) => {
+    Modal.confirm({
+        title: 'Add Order?',
+        icon: <ExclamationCircleOutlined />,
+        content: 'Are you sure you want to add this order?',
+        okText: 'Yes',
+        cancelText: 'No',
+        onOk() { 
+            if(dispatch !== undefined){
+                    return dispatch(addCompleteOrder(order))
+                    .then(res => {
+                        if(res.data.success) addSuccess();
+                        else addFail();
+                    })
+                    .catch(() => {
+                        addFail();
+                    });
+            }
+            else{
+                axios.post('/api/orders/create-order', order)
+                .then(res => {
+                    if(res.data.success) addSuccess();
+                    else{
+                        console.log(res);
+                        addFail();
+                    } 
+                })
+                .catch(err => {
+                    console.log(err);
+                    addFail();
+                });
+            }
+        }
+    });
+}
+
+export const _addIncompleteOrder = (order, dispatch) => {
     Modal.confirm({
         title: 'Add Order?',
         icon: <ExclamationCircleOutlined />,
@@ -127,39 +164,32 @@ export const addOrder = (order, dispatch) => {
 
         onOk() { 
             if(dispatch !== undefined){
-                if(order.status === orderStatusConstants.COMPLETE){
-                    return dispatch(addCompleteOrder(order))
-                    .then(res => {
-                        if(res.data.success) addSuccess();
-                        else addFail();
-                    })
-                    .catch(() => {
-                        addFail();
-                    });
-                }
-                else{
-                    return dispatch(addIncompleteOrder(order))
-                    .then(res => {
-                        if(res.data.success) addSuccess();
-                        else addFail();
-                    })
-                    .catch(() => {
-                        addFail();
-                    })
-                }
+                return dispatch(addIncompleteOrder(order))
+                .then(res => {
+                    if(res.data.success) addSuccess();
+                    else addFail();
+                })
+                .catch(() => {
+                    addFail();
+                })
             }
             else{
-                if(order.status === orderStatusConstants.COMPLETE){
-
-                }
-                else{
-
-                }
+                axios.post('/api/orders/create-order', order)
+                .then(res => {
+                    if(res.data.success) addSuccess();
+                    else{
+                        console.log(res);
+                        addFail();
+                    } 
+                })
+                .catch(err => {
+                    console.log(err);
+                    addFail();
+                });
             }
         }
     });
 }
-
 
 const addSuccess = () => {
     Modal.info({
@@ -177,8 +207,8 @@ const addFail = () => {
         content: 'There was a problem adding this order. Please try again or contact support.',
         okText: "Ok",
         onOk(){ 
-           // history.push('/order');
-           // window.location.reload();
+            history.push('/order');
+            window.location.reload();
         }
     });
 }

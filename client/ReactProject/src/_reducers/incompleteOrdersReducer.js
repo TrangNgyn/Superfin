@@ -46,11 +46,13 @@ const incompleteOrdersReducer = (state = initState, {type, payload}) => {
                 incompleteOrders: [...tempArr]
             }
         }
-        
         case ADD_INCOMPLETE_ORDER: {
+            const newArray = [...state.incompleteOrders, payload];
+            newArray.sort((a,b) => { return new Date(b.issued_date) - new Date(a.issued_date)});
+
             return {
                 ...state,
-                incompleteOrders: [...state.incompleteOrders, payload]
+                incompleteOrders: newArray
             }
         }
         default:

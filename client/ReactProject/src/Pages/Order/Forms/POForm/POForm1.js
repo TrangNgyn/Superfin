@@ -131,6 +131,13 @@ const POForm1 = props => {
                                         return Promise.reject(new Error('Only New orders can have empty carrier fields'));
                                     } 
                                 }
+                            },
+                            {
+                                validator: async (_, value) => {
+                                    if (props.order.status === orderStatusConstants.NEW && (value !== undefined && value !== "")){
+                                        return Promise.reject(new Error('Set status to "Shipped" or "Complete" if you wish to add carrier values'));
+                                    } 
+                                }
                             }
                     ]}>
                         <Input onBlur={updateOrderText} maxLength={100} style={{width: "500px"}}/>
@@ -149,6 +156,13 @@ const POForm1 = props => {
                                 validator: async (_, value) => {
                                     if (props.order.status !== orderStatusConstants.NEW && (value === undefined || value === "")){
                                         return Promise.reject(new Error('Only New orders can have empty tracking number fields'));
+                                    } 
+                                }
+                            },
+                            {
+                                validator: async (_, value) => {
+                                    if (props.order.status === orderStatusConstants.NEW && (value !== undefined && value !== "")){
+                                        return Promise.reject(new Error('Set status to "Shipped" or "Complete" if you wish to add tracking values'));
                                     } 
                                 }
                             }
