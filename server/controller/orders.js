@@ -5,7 +5,7 @@ const order_model = require('../models/purchased_order');
 
 var empty_field = { error: "All fields must be filled" }
 var incorrect_status = { error: "Status must be one of, NEW, SENT, or COMPLETE" }
-var stat = ['SENT','COMPLETE','NEW'];
+var stat = ['SHIPPED','COMPLETE','NEW'];
 
 mongoose.set('useFindAndModify', false);
 
@@ -155,30 +155,36 @@ class Purchased_Order {
 
             var issued_date = new Date()
 
-            const new_order = new order_model({
-                c_email,
-                issued_date,
-                status,
-                items,
-                address
-            })
+            try {
+                const doc = await order_model.create({
+                    c_email,
+                    issued_date,
+                    status,
+                    items,
+                    address
+                })
 
-            var saved_order = await new_order.save()
-            if(saved_order){
-                return res.json({ success: true,
-                                  message: "Order was saved" })
+                return res.json({
+                    success:true,
+                    message: "Order was added",
+                    po_number: doc.po_number
+                })
             }
-            else {
-                return res.json({ success: false,
-                                  message: "Order was not saved" })
-            }
+            catch(err) {
+                return res.json({
+                    success: false,
+                    message: "Order was not saved",
+                    error: err._message
+                })
+            }     
         
         }
         catch(err){
             return res.json({
                 success: false,
-                message: err
+                message: err._message
             })
+            
         }
     }
 
