@@ -51,6 +51,7 @@ export const addCompleteOrder = order => dispatch => {
     return axios.post('/api/orders/create-order', order)
     .then(res => {
         if(res.data.success){
+            order.po_number = res.data.po_number;
             dispatch({
                 type: ADD_COMPLETE_ORDER,
                 payload: order

@@ -232,12 +232,6 @@ const Order = () => {
     //HTML Main
     return (
         <div>
-            <button onClick = {() => {
-                console.log('redux', incompleteOrders);
-            }}>view incomplete </button>
-            <button onClick = {() => {
-                console.log('redux', compeletOrders);
-            }}>view complete </button>
             {mode===MODE.EDIT || mode===MODE.VIEW   ?   toggleButton    :   <></>}
 
             <h1 className="view-order-text">Order Details</h1>
