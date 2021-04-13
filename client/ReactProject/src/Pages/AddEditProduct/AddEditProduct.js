@@ -11,7 +11,7 @@ import { getAllCategories } from '../../_actions/categoryActions';
 import { onlyNumbers } from '../../_services/SharedFunctions';
 import { confirmEdit, confirmAdd } from './Modals'; 
 
-import { createFormData } from './Functions';
+import { createFormData, checkBlob } from './Functions';
 import axios from 'axios';
 
 const config = {
@@ -19,7 +19,6 @@ const config = {
         'content-type': 'multipart/form-data'
     }
 }
-
 
 const AddEditProduct = () => {
     
@@ -33,7 +32,7 @@ const AddEditProduct = () => {
     const [product, setProduct] = useState(null);
     const [fileList, updateFileList] = useState([]);
 
-    if(product !== null) console.log('product iamges', product.p_image_uri);
+    if(product !== null) console.log('p_image_uri', product.p_image_uri);
     
 
     const [form] = Form.useForm();
@@ -42,6 +41,9 @@ const AddEditProduct = () => {
         if(p_code){
             if(productsList.length !== 0){
                 const product = _getProduct(p_code, productsList);
+
+                checkBlob(product.p_image_uri);
+
                 if(product !== undefined){
                     setProduct(product);
                     setPageState(EDIT);
@@ -57,6 +59,7 @@ const AddEditProduct = () => {
         else setPageState(ADD);
 
         if(!categories.length) dispatch(getAllCategories());
+
 
     }, [categories.length, dispatch, p_code, productsList]);
 
@@ -82,6 +85,8 @@ const AddEditProduct = () => {
         if(pageState === EDIT){
             newProduct.p_code = product.p_code;
             newProduct.p_image_uri = product.p_image_uri;
+
+            console.log('p_image_uri', newProduct.p_image_uri );
 
             let formData = new FormData();
 

@@ -144,3 +144,12 @@ export const createFormData = (newProduct, fileList) => {
 
     return formData;
 }
+
+export const checkBlob = (p_image_uri) => {
+    for(let i = 0; i < p_image_uri.length; i++){
+        if(p_image_uri[i].includes("blob")){
+            window.location.reload();
+            break;
+        }
+    }
+}   
