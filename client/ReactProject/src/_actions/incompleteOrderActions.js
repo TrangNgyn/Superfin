@@ -69,6 +69,7 @@ export const addTracking = trackingDetails => dispatch => {
 }
 
 export const addIncompleteOrder = order => dispatch => {
+    console.log('got here to the actions');
     return axios.post('/api/orders/create-order', order)
     .then(res => {
         if(res.data.success){

@@ -35,3 +35,16 @@ export const createOrderAdd = (values, address) => {
     order.address = address;
     return order;
 }
+
+export const createOrderEdit = (values, address, orderOriginal) => {
+    let order = {};
+    order.po_number = values.po_number;
+    order.c_email = values.c_email;
+    order.carrier = values.carrier;
+    order.items = [...values.items];
+    order.status = values.status;
+    order.tracking_number = values.tracking_number;
+    order.address = address;
+    order.issued_date = orderOriginal.issued_date;
+    return order;
+}

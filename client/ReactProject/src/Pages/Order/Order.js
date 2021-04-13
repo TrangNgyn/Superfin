@@ -7,13 +7,14 @@ import { useState, useEffect } from 'react';
 import { orderStatusConstants } from '../../_constants/orderStatus.constants';
 //import { history } from '../../_helpers/history';
 import MODE from './Helpers/PageConstants';
-import { showNoItemsPresent, showEditConfirmation, AddItemModal, showUndo} from './Helpers/Modals';
+import { showNoItemsPresent, AddItemModal, showUndo} from './Helpers/Modals';
 import POForm2 from './Forms/POForm/POForm2';
 import POForm1 from './Forms/POForm/POForm1';
 import POForm1View from './Forms/POForm/POForm1View';
 import axios from 'axios';
-import { _addCompleteOrder, _addIncompleteOrder } from './Helpers/Modals';
-import { createAddress, createOrderAdd } from './Helpers/Functions';
+import { _addCompleteOrder, _addIncompleteOrder, _editOrder } from './Helpers/Modals';
+import { createAddress, createOrderAdd, createOrderEdit } from './Helpers/Functions';
+
 
 
 
@@ -52,9 +53,6 @@ const Order = () => {
                         let order = setUndefinedValues(res.data);
                         setOrder(order);
                         setOrderOriginal(order);
-                        //form_1.setFieldsValue(order);
-                       // form_1.setFieldsValue(order.address);
-                        console.log(order.address);
                         setMode(MODE.VIEW);
                     }
                     else console.log(res);
@@ -62,15 +60,13 @@ const Order = () => {
                 .catch(err => console.log(err) );
             }
             else{
-                let order = compeletOrders.filter(o => {
+                let order = compeletOrders.find(o => {
                     return o.po_number === po_number;
                 });
                 if(order !== undefined){
                     order = setUndefinedValues(order);
                     setOrder(order);
                     setOrderOriginal(order);
-                    //form_1.setFieldsValue(order);
-                    //form_1.setFieldsValue(order.address);
                     setMode(MODE.VIEW);
                 }
             }
@@ -84,8 +80,6 @@ const Order = () => {
                         let order = setUndefinedValues(res.data);
                         setOrder(order);
                         setOrderOriginal(order);
-                       // form_1.setFieldsValue(order);
-                        //form_1.setFieldsValue(order.address);
                         setMode(MODE.VIEW);
                     }
                     else console.log(res);
@@ -101,8 +95,6 @@ const Order = () => {
                     order = setUndefinedValues(order);
                     setOrder(order);
                     setOrderOriginal(order);
-                    //form_1.setFieldsValue(order);
-                    //form_1.setFieldsValue(order.address);
                     setMode(MODE.VIEW);
                 }
             }
@@ -154,19 +146,10 @@ const Order = () => {
         }
         else if(mode===MODE.EDIT){
             if(editedOrder){
-                                            //This code is so the item names are not posted
-                let order = {};
-                    order.po_number = values.po_number;
-                    order.c_email = values.c_email;
-                    order.carrier = values.carrier;
-                    order.items = [...values.items];
-                    order.status = values.status;
-                    order.tracking_number = values.tracking_number;
-                    order.address = address;
-
-                console.log("submitting order details in edit mode", order);
-                setOrder(order);
-                setOrderOriginal(order);
+                let order = createOrderEdit(values, address, orderOriginal);
+                const prev = orderOriginal.status;
+                const curr = values.status;
+                _editOrder(order, dispatch, prev, curr, compeletOrders.length, incompleteOrders.length, setOrder, setOrderOriginal, setMode);
             }
         }
     }
