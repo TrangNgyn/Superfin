@@ -1,5 +1,5 @@
 import { Form, Input } from 'antd';
-import { onlyNumbers } from '../../Helpers/NumberOnlyFunctions';
+import { onlyNumbers } from '../../../../_services/SharedFunctions';
 
 const NewItemForm = (props) => {
     return(
@@ -9,6 +9,7 @@ const NewItemForm = (props) => {
                 label="Product Code"
                 rules={[
                     {
+                        whitespace: true,
                         required: true,
                         validateTrigger: 'onSubmit',
                         message: 'Please input a product code',

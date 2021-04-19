@@ -1,9 +1,0 @@
-.Product-List-Container {
-    display: grid;
-    grid-template-columns: 250px 250px 250px;
-    grid-column-gap: 250px;
-    grid-row-gap: 50px;
-    padding: 10px;
-    width: 1270px;
-    height: 610px;
-  }

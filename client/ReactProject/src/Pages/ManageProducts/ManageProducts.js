@@ -24,7 +24,6 @@ const { Option, OptGroup } = Select;
 
 /*
     Tasks that still need to be done
-    Implement filtering
     Upadate spelling error in 'productActions.js'. (Check the comments in that file)
 */
 
@@ -33,25 +32,44 @@ const { Option, OptGroup } = Select;
 
 
 const ManageProducts = () => {
+    
     const dispatch = useDispatch();
+
     const productsList = useSelector(state => state.productState.products);                 //Redux store product list
     const errorLoading = useSelector(state => state.productState.error);
     const loading = useSelector(state => state.productState.isLoading);
-     
+    const categories = useSelector(state => state.categoryState.categories);
+    
+    const [filter, setFilter] = useState(null);             //filtering and current page number
+    const [order, setOrder] = useState(null);
     const [page, setPage] = useState(0);
+
+    let processedProductsList = [...productsList];         
+
+    if(filter !== null && filter !== 'default') processedProductsList = handleFilter(processedProductsList, filter);        //filtering and ordering the product list
+    if(order !== null) processedProductsList = handleOrder(processedProductsList, order);
+
     const itemsPerPage = 10;
-    const maxNumberOfPages = (Math.ceil(productsList.length/itemsPerPage) - 1);             //pagination stuff
+    const maxNumberOfPages = (Math.ceil(processedProductsList.length/itemsPerPage) - 1);             //pagination stuff
 
     const productTableRowsProps = {                                                         //props for the product table rows
-        productsList: productsList,
+        productsList: processedProductsList,
         page: page,
-        dispatch: dispatch
+        dispatch: dispatch,
+        categories: categories,
     }
 
     useEffect(() => {                                                     //checks if the store is empty. If so, do an API request
         if(!productsList.length) dispatch(getAllProducts());
         else dispatch(setDefaultOrder());
-    }, []);
+    }, [productsList.length, dispatch]);
+
+    let selectCategories = <></>;                                           //dynamically loading categories to filter products in select bar
+    if(categories.length !== 0){
+        selectCategories = categories.map(p => {
+            return <Option key={p._id} value={p._id}>{p.c_name}</Option>
+        })
+    }
 
     return (
         <div >
@@ -65,23 +83,17 @@ const ManageProducts = () => {
                                 <div style={{fontSize: "30px", fontWeight: "bold"}}>Products</div>
                             </td>
                             <td>
-                                <Select placeholder="Filter by" style={{ width: "300px" }} onChange={handleFilter}>
-                                    <OptGroup label="Stock Level">
-                                        <Option value="in_stock">In Stock</Option>
-                                        <Option value="out_stock">Out of Stock</Option>
-                                    </OptGroup>
-
+                                <Select placeholder="Filter by" style={{ width: "300px" }} onChange={e => {setFilter(e); setPage(0)}}>
+                                    <Option key={'default'} value={'default'}>{'Remove Filter'}</Option>
+                                    
                                     <OptGroup label="Category">
-                                        <Option value="category_1">category 1</Option>
-                                        <Option value="category_2">category 2</Option>
-                                        <Option value="category_3">category 3</Option>
-                                        <Option value="category_4">category 4</Option>
+                                        {selectCategories}
                                     </OptGroup>    
                                 </Select>
                             </td>
                             
                             <td>
-                                <Select placeholder="Order By" style = {{width:"300px"}} onChange={v => handleOrder(v, dispatch)}>
+                                <Select placeholder="Order By" style = {{width:"300px"}} onChange={v => setOrder(v)}>
                                     <OptGroup label="Price">
                                         <Option value="p_decending">high to low</Option>
                                         <Option value="p_ascending">low to high</Option>
@@ -113,7 +125,6 @@ const ManageProducts = () => {
                             <th>Price</th>
                             <th>Units Sold</th>
                             <th>Category</th> 
-                            <th>Number in Stock</th>
                             <th className="manage-products-icon" style ={{fontSize: "30px"}} onClick={() => {
                                 history.push('/editAddProducts');
                             }}>+</th>
@@ -125,7 +136,7 @@ const ManageProducts = () => {
             </div>
             
             <div style = {{textAlign: "center"}}>
-                <Pagination  defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange = {p => {setPage(p - 1)}}/>
+                <Pagination current={page + 1} total={(maxNumberOfPages + 1) * 10} onChange = {p => {setPage(p - 1)}}/>
             </div>
         </div>
     );

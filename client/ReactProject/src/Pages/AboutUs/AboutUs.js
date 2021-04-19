@@ -1,14 +1,28 @@
-import '../../_assets/CSS/pages/AboutUs.css';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getCompanyInfo } from '../../_actions/companyInfoActions';
+
 const AboutUs = () =>{
+
+    const companyInfo = useSelector(state => state.companyInfoState.companyInfo);
+    const dispatch = useDispatch();
+    
+    useEffect(() => {
+        if(Object.keys(companyInfo).length === 0 && companyInfo.constructor === Object){
+            dispatch(getCompanyInfo());
+        }
+    }, [dispatch, companyInfo]);
+
+
     return (
-      <body>
-      <div id="about-us-window">
-        About our company
-      </div>
-      <div id="about-us-text">
-        Placeholder text
-      </div>
-      </body>
+      <>
+        <div className="page-title-holder fill">
+          <h2>About Our Company</h2>
+        </div>
+        <div id="about-us-text" className="container">
+          <p>{companyInfo.c_about}</p>
+        </div>
+      </>
     )
 }
 

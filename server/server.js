@@ -1,6 +1,11 @@
+
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+
 
 // Imported routers
 //
@@ -15,12 +20,9 @@ const app = express();
 // bodyparser middleware
 app.use(bodyParser.json());
 
-// DB config
-const db = require('./config/keys').mongoURI;
-
 // connect to mongo
 mongoose
-    .connect(db, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true})
+    .connect(process.env.mongoURI, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true})
     .then(() => console.log('MongoDB connected...'))
     .catch(err => console.log(err));
 
@@ -36,7 +38,7 @@ app.use('/api/products', product);
 app.use('/api/categories', categories);
 app.use('/api/customers', customer);
 app.use('/api/orders', order);
-app.use('/api/aboutus', about)
+app.use('/api/aboutus', about);
 
 // Run Server
 const port = process.env.PORT || 5000;

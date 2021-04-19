@@ -5,19 +5,6 @@ var empty_field = { error: "All fields must be filled" }
 
 class Category {
 
-    static delete_images(images) {
-        for(i = 0; i < images.length; i++) {
-            var file_path = `../public/uploads/categories/${images[i].filename}`
-            fs.unlink(file_path, (err) => {
-                if(err) {
-                    console.log(err)
-                    // do we break here? i feel like you should just log the error and continue to try
-                    // and delete all of the files associated with the path
-                }
-            })
-        }
-    }
-
     // @route   GET api/categories/all-categories
     // @desc    Get all categories
     // @access  Public

@@ -1,35 +1,16 @@
-import { 
-    FacebookFilled, 
-    InstagramFilled, 
-    TwitterSquareFilled,
-    YoutubeFilled 
-} from '@ant-design/icons';
-import FooterEmailInput from './FooterEmailInput';
-export default function FooterMain(){
-    return (
-        <div className="footer-content-container">
-            <div id="footer-email-input">
-                <FooterEmailInput />
-            </div>
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getCompanyInfo } from '../../_actions/companyInfoActions';
 
-            <div id="footer-social-media-links">
-                <a className = "SocialMediaIcon" href="https://www.facebook.com/" title="Facebook Link">
-                    <FacebookFilled />
-                </a>
-                <a className = "SocialMediaIcon" href="https://www.instagram.com/" title="Instagram Link">
-                    <InstagramFilled />
-                </a>
-                <a className = "SocialMediaIcon" href="https://www.twitter.com/" title="Twitter Link">
-                    <TwitterSquareFilled /> 
-                </a>
-                <a className = "SocialMediaIcon" href="https://www.youtube.com/" title="Youtube Link">
-                    <YoutubeFilled />
-                </a>
-            </div>
-            <div id="footer-support-details">
-                <div>Email: support@supergfin.com</div>
-                <div>Phone: 1800xxxx</div>
-            </div>
-        </div>
-    );
+export default function FooterContent(){
+
+    const companyInfo = useSelector(state => state.companyInfoState.companyInfo);
+    const dispatch = useDispatch();
+    
+    useEffect(() => {
+        if(Object.keys(companyInfo).length === 0 && companyInfo.constructor === Object){
+            dispatch(getCompanyInfo());
+        }
+    }, [dispatch, companyInfo]);
+    return <></>;
 }

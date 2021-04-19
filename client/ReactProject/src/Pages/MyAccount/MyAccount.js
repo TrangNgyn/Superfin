@@ -1,11 +1,11 @@
-import { Layout, Row, Col, Avatar, Button, Divider, Form } from 'antd';
+import { Layout, Row, Avatar, Button, Form } from 'antd';
 import React, { useState } from 'react';
-import MyAccountSideMenu from '../MyAccount/MyAccountSideMenu'
+// import MyAccountSideMenu from '../MyAccount/MyAccountSideMenu'
 import GenerateFormItem from '../../SharedComponents/Form/FormItem' // This will be in charge of creating the Form.Item for each of the elements below
 import { UserOutlined, EditOutlined, SaveOutlined } from '@ant-design/icons';
 
 
-const { Header, Content, Sider } = Layout;
+const { Content } = Layout;
 const isAuthenticated = 1;
 
 const formElements = [

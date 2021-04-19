@@ -1,21 +1,19 @@
-import '../../_assets/CSS/pages/ReenterPassword/ReenterPassword.css';
 import { Form, Input, Button, Modal} from 'antd';
 
 //Layout stuff//
 const layout = {
     labelCol: {
-      span: 8,
+      span: 8
     },
     wrapperCol: {
-      span: 7,
-    },
+      span: 14
+    }
 };
 
-const tailLayout = {
+const actionButtonsLayout = {
     wrapperCol: {
-      offset: 8,
-      span: 16,
-    },
+        span: 22
+    }
 };
 
 const ReenterPassword = () => {
@@ -47,18 +45,14 @@ const ReenterPassword = () => {
     };
   
     return (
-        <div>
-            <div style = {{height: "5px"}}/>
-
-            <div id="reenter-header-title-wrapper">
-                <h1 id="reenter-header-title">Re-Enter Password</h1>
+        <>
+            <div className="page-title-holder with-divider center-page">
+                <h1>Re-enter Password</h1>
             </div>
-
-            <div id="reenter-devider-1"/>
 
             <Form
                 {...layout}
-                name="reenter-password"
+                name="authentication-form"
                 initialValues={{
                     remember: true,
                 }}
@@ -86,12 +80,12 @@ const ReenterPassword = () => {
                 >
                     <Input.Password />   
                 </Form.Item >
-                   
-                <Form.Item {...tailLayout}>
-                    <Button style = {{left:"28%", width:"150px"}} type="primary" htmlType="submit"> Reset Password</Button>
+                
+                <Form.Item {...actionButtonsLayout}>
+                    <Button type="primary" htmlType="submit">Reset</Button>
                 </Form.Item>
             </Form>
-        </div>
+        </>
     );
 }
 
