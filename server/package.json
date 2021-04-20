@@ -6,8 +6,10 @@
   "scripts": {
     "client-install": "npm install --prefix ../client/ReactProject",
     "server": "nodemon server.js",
+    "start-server": "node server",
     "client": "npm start --prefix ../client/ReactProject",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "production": "npm run build --prefix ../client/ReactProject && npm run start-server"
   },
   "author": "",
   "license": "MIT",

@@ -39,6 +39,16 @@ app.use(function(req, res, next) {
     next(); 
 });
 
+
+
+app.use(express.static(path.join(__dirname,'..','client','ReactProject','build')))
+
+if(process.env.NODE_ENV === 'production') {
+    app.get('/*', function(req,res) {
+        app.use(express.static(path.json(__dirname, '..','client','ReactProject','build','index.js')))
+    })
+}
+
 // Routes
 app.use('/api/products', product);
 app.use('/api/categories', categories);
