@@ -5,7 +5,7 @@ const order_model = require('../models/purchased_order');
 
 var empty_field = { error: "All fields must be filled" }
 var incorrect_status = { error: "Status must be one of, NEW, SENT, or COMPLETE" }
-var stat = ['SENT','COMPLETE','NEW'];
+var stat = ['SHIPPED','COMPLETE','NEW'];
 
 mongoose.set('useFindAndModify', false);
 
@@ -50,7 +50,10 @@ class Purchased_Order {
                 }
                 return res.json(order)
             })
-            .catch(err => res.json(err))
+            .catch(err => res.json({
+                success: false,
+                message: err._message
+            }))
     } 
 
     // @route   POST api/orders/add-tracking
@@ -89,7 +92,10 @@ class Purchased_Order {
             })
         }
         catch (err) {
-            console.log(err);
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 
@@ -107,7 +113,10 @@ class Purchased_Order {
         }
         
         catch(err) {
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 
@@ -124,7 +133,10 @@ class Purchased_Order {
         }
         
         catch(err){
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 
@@ -135,36 +147,44 @@ class Purchased_Order {
     async create_order(req,res) {
         try {
 
-            let { po_number, c_email, status, items, address } = req.body
+            let { c_email, status, items, address } = req.body
 
-            if( !po_number | !c_email | !status | !items | !address) {
+            if( !c_email | !status | !items | !address) {
                 return res.json(empty_field)
             }
 
             var issued_date = new Date()
 
-            const new_order = new order_model({
-                po_number,
-                c_email,
-                issued_date,
-                status,
-                items,
-                address
-            })
+            try {
+                const doc = await order_model.create({
+                    c_email,
+                    issued_date,
+                    status,
+                    items,
+                    address
+                })
 
-            var saved_order = await new_order.save()
-            if(saved_order){
-                return res.json({ success: true,
-                                  message: "Order was saved" })
+                return res.json({
+                    success:true,
+                    message: "Order was added",
+                    po_number: doc.po_number
+                })
             }
-            else {
-                return res.json({ success: false,
-                                  message: "Order was not saved" })
-            }
+            catch(err) {
+                return res.json({
+                    success: false,
+                    message: "Order was not saved",
+                    error: err._message
+                })
+            }     
         
         }
-        catch(error){
-            console.log(error)
+        catch(err){
+            return res.json({
+                success: false,
+                message: err._message
+            })
+            
         }
     }
 
@@ -205,7 +225,10 @@ class Purchased_Order {
 
         }
         catch(err){
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 
@@ -233,7 +256,10 @@ class Purchased_Order {
             })
         }
         catch(err){
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 
@@ -260,7 +286,10 @@ class Purchased_Order {
             return res.json(found_order)
         }
         catch(err){
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 }

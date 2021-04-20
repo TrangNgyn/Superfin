@@ -106,8 +106,8 @@ const POForm2 = props => {
             <table id="view-order-table-wrapper">
                 <tbody>
                     <tr style = {{border: "solid black 1px"}}>
-                        <th>Item Code</th> 
-                        <th>Quantity</th>
+                        <th><span style={{color: 'red'}}>*</span>Item Code</th> 
+                        <th><span style={{color: 'red'}}>*</span>Quantity</th>
                         <th>Special Requirements</th>
                         {props.mode===MODE.EDIT || props.mode===MODE.ADD 
                             ?   <th onClick = {() => {props.onClick(true)}} className="view-order-icon" style ={{fontSize: "30px"}}>+</th>

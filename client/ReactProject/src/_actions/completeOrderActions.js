@@ -1,4 +1,4 @@
-import { GET_COMPLETE_ORDERS, LOADING_COMPLETE_ORDERS, ERROR_COMPLETE_ORDERS, DELETE_COMPLETE_ORDER} from './actionTypes';
+import { GET_COMPLETE_ORDERS, LOADING_COMPLETE_ORDERS, ERROR_COMPLETE_ORDERS, DELETE_COMPLETE_ORDER, ADD_COMPLETE_ORDER } from './actionTypes';
 import axios from 'axios';
 
 export const getCompleteOrders = () => dispatch => {
@@ -47,3 +47,23 @@ export const deleteCompleteOrder = po_number => dispatch => {
     });
 }
 
+export const addCompleteOrder = order => dispatch => {
+    return axios.post('/api/orders/create-order', order)
+    .then(res => {
+        if(res.data.success){
+            order.po_number = res.data.po_number;
+            dispatch({
+                type: ADD_COMPLETE_ORDER,
+                payload: order
+            })
+        }
+        else console.log(res);
+        return res;
+        
+    })
+    .catch(err => {
+        console.log(err);
+        return err;
+    });
+}
+ 

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const counters = require('./counters');
 const Schema = mongoose.Schema;
 
 var validateEmail = function(email) {
@@ -10,7 +11,6 @@ var validateEmail = function(email) {
 const order_schema = new Schema({
     po_number:{
         type: String,
-        required: true,
         index:{
 			unique:true,
 		}
@@ -78,7 +78,7 @@ const order_schema = new Schema({
             required: true
         },
         po_postal_code: {
-            type: Number,
+            type: String,
             required: true
         },
         po_country: {
@@ -92,6 +92,20 @@ const order_schema = new Schema({
     versionKey: false
 
 });
+
+order_schema.pre("save", function(next) {
+    var doc = this;
+    counters.findByIdAndUpdate(
+        {"_id": "order_id"},
+        { "$inc": { "seq": 1 }},
+        function(error, counters) {
+            if(error) 
+                return next(error)
+            doc.po_number = counters.seq.toString();
+            next();
+        }
+    )
+})
 
 module.exports = purchased_order = mongoose.model('purchased_order',order_schema);
 

@@ -1,51 +1,19 @@
 import '../../_assets/CSS/pages/Order/Order.css';
 import { Form, Button } from 'antd';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { setUndefinedValues } from './Helpers/Functions';
 import { useState, useEffect } from 'react';
 import { orderStatusConstants } from '../../_constants/orderStatus.constants';
 //import { history } from '../../_helpers/history';
 import MODE from './Helpers/PageConstants';
-import { showNoItemsPresent, showEditConfirmation, AddItemModal, showUndo} from './Helpers/Modals';
+import { showNoItemsPresent, AddItemModal, showUndo} from './Helpers/Modals';
 import POForm2 from './Forms/POForm/POForm2';
-//import moment from 'moment';
 import POForm1 from './Forms/POForm/POForm1';
 import POForm1View from './Forms/POForm/POForm1View';
 import axios from 'axios';
-
-
-/*
-const mockOrder = {
-    po_number: "123abc",
-    c_email: "isaac@hotmail.com",
-    issued_date: new Date(),
-    status: "NEW",
-    items:[
-        {
-            item_code:"123456",
-            quantity:4,
-            special_requirements:"Leave by the door"
-        },
-        {
-            item_code:"98dnf9",
-            quantity:2,
-            special_requirements:"Beware of the dog"
-        }
-    ],
-    tracking_number: "djfb2387423ijb",
-    carrier: "Fastway",
-    po_attention_to:"Next to the grey building",
-    po_address_line1:"4 happy street",
-    po_address_line2:"unit 7",
-    po_suburb:"Redfern",
-    po_state:"NSW",
-    po_postal_code:"2000",
-    po_country: "Australia",
-
-}
-
-mockOrder.issued_date = moment(mockOrder.issued_date);*/
+import { _addCompleteOrder, _addIncompleteOrder, _editOrder } from './Helpers/Modals';
+import { createAddress, createOrderAdd, createOrderEdit } from './Helpers/Functions';
 
 
 
@@ -57,6 +25,7 @@ mockOrder.issued_date = moment(mockOrder.issued_date);*/
 
 
 const Order = () => {
+    const dispatch = useDispatch();
     const { po_number, status } = useParams();
     const incompleteOrders = useSelector(state => state.incompleteOrdersState.incompleteOrders);
     const compeletOrders = useSelector(state => state.completeOrdersState.completeOrders);
@@ -66,6 +35,8 @@ const Order = () => {
     const [newItemFormVisible, setNewItemFormVisible] = useState(false);
     const [form_1] = Form.useForm();
     const [form_2] = Form.useForm();
+
+
 
 
     //for refreshing the item list
@@ -82,7 +53,6 @@ const Order = () => {
                         let order = setUndefinedValues(res.data);
                         setOrder(order);
                         setOrderOriginal(order);
-                        form_1.setFieldsValue(order);
                         setMode(MODE.VIEW);
                     }
                     else console.log(res);
@@ -90,19 +60,19 @@ const Order = () => {
                 .catch(err => console.log(err) );
             }
             else{
-                let order = compeletOrders.filter(o => {
+                let order = compeletOrders.find(o => {
                     return o.po_number === po_number;
                 });
                 if(order !== undefined){
                     order = setUndefinedValues(order);
                     setOrder(order);
                     setOrderOriginal(order);
-                    form_1.setFieldsValue(order);
                     setMode(MODE.VIEW);
                 }
             }
         }
         else if(status === orderStatusConstants.NEW || status === orderStatusConstants.SHIPPED){
+
             if(!incompleteOrders.length){
                 axios.post('/api/orders/single-order', { po_number: po_number })
                 .then(res => {
@@ -110,7 +80,6 @@ const Order = () => {
                         let order = setUndefinedValues(res.data);
                         setOrder(order);
                         setOrderOriginal(order);
-                        form_1.setFieldsValue(order);
                         setMode(MODE.VIEW);
                     }
                     else console.log(res);
@@ -126,7 +95,6 @@ const Order = () => {
                     order = setUndefinedValues(order);
                     setOrder(order);
                     setOrderOriginal(order);
-                    form_1.setFieldsValue(order);
                     setMode(MODE.VIEW);
                 }
             }
@@ -138,11 +106,11 @@ const Order = () => {
     
 
     //validates all of the form fields
-    const handleSubmit = () => {                    
+    const handleSubmit = () => {                  
         if(order.items.length > 0){
             form_1.validateFields()
             .then(values => {
-                showEditConfirmation(values, confirmSubmit);
+                confirmSubmit(values);
             })
             .catch(errorInfo => {
                 console.log(errorInfo);
@@ -152,53 +120,48 @@ const Order = () => {
     }
 
     //after validating fields, this function submits the forms
-    const confirmSubmit = (values) => {
+    const confirmSubmit = values => {
         const editedOrder = JSON.stringify(order) !== JSON.stringify(orderOriginal);
 
-        let address = {};
-                address.po_address_line1 = values.po_address_line1;
-                address.po_address_line2 = values.po_address_line2;
-                address.po_attention_to = values.po_attention_to;
-                address.po_country = values.po_country;
-                address.po_postal_code = values.po_postal_code;
-                address.po_state = values.po_state;
-                address.po_suburb = values.po_suburb;
+        let address = createAddress(values);
 
         if(mode===MODE.ADD){
-            let order = {};
-                order.c_email = values.c_email;
-                order.carrier = values.carrier;
-                order.items = [...values.items];
-                order.status = values.status;
-                order.tracking_number = values.tracking_number;
-                order.address = address;
-
-                console.log("submitting order details in add mode", order);
-
-                //go to what ever list that order status belongs to  
+            let order = createOrderAdd(values, address);
+            if(order.status === orderStatusConstants.COMPLETE){
+                if(compeletOrders.length > 0){
+                    order.issued_date = new Date();
+                    _addCompleteOrder(order, dispatch);
+                }
+                else _addCompleteOrder(order);
+            }
+            else{
+                if(incompleteOrders.length > 0){
+                    order.issued_date = new Date();
+                    _addIncompleteOrder(order, dispatch);
+                }
+                else {
+                    _addIncompleteOrder(order);
+                }
+            }
         }
         else if(mode===MODE.EDIT){
             if(editedOrder){
-                                            //This code is so the item names are not posted
-                let order = {};
-                    order.po_number = values.po_number;
-                    order.c_email = values.c_email;
-                    order.carrier = values.carrier;
-                    order.items = [...values.items];
-                    order.status = values.status;
-                    order.tracking_number = values.tracking_number;
-                    order.address = address;
-
-                console.log("submitting order details in edit mode", order);
-                setOrder(order);
-                setOrderOriginal(order);
+                let order = createOrderEdit(values, address, orderOriginal);
+                const prev = orderOriginal.status;
+                const curr = values.status;
+                _editOrder(order, dispatch, prev, curr, compeletOrders.length, incompleteOrders.length, setOrder, setOrderOriginal, setMode);
             }
         }
     }
 
     //toggles the edit view
     const toggleView = () => {
-        if(mode===MODE.VIEW) setMode(MODE.EDIT);
+        if(mode===MODE.VIEW){
+            setMode(MODE.EDIT);
+            form_1.setFieldsValue(order);
+            form_1.setFieldsValue(order.address);
+
+        } 
         else setMode(MODE.VIEW);
     }
 
@@ -256,7 +219,7 @@ const Order = () => {
             
             <div style={{ paddingTop: "30px", paddingBottom: "30px"}}>
                 <Button onClick={() => { 
-                    showUndo(form_1, orderOriginal, setOrder);
+                    if(JSON.stringify(order) !== JSON.stringify(orderOriginal)) showUndo(form_1, orderOriginal, setOrder, mode);
                 }} style={{width: "500px", fontWeight: "bold"}}>Undo Changes</Button>
             </div>
         </div>

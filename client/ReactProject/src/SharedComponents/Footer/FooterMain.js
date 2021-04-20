@@ -9,7 +9,7 @@ export default function FooterMain(){
         <>
             <FooterMenu />
             <FooterMenuMobile />
-            <FooterContent />
+            {/* <FooterContent /> */}
             <div id="copyright-background">©Copyright ©2020 Sungent Packaging | All rights reserved</div>
         </>
     );
