@@ -15,6 +15,10 @@ const productSchema = new Schema({
         type: Number,
         required: true
     },
+    p_price_id: {
+        type: String,
+        default: "",
+    },
     p_units_sold: {
         type: Number,
         default: 0

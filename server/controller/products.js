@@ -3,6 +3,7 @@ const categories_model = require('../models/categories')
 const fs = require('fs');
 const path = require('path');
 const delete_object = require('../middleware/delete');
+const stripe_add_product = require('../middleware/stripe_funcs');
 
 var empty_field = { 
     succes: false,
@@ -185,8 +186,28 @@ class Product {
 
             var saved_product = await new_product.save()
             if (saved_product) {
-                return res.json({ success: true,
+
+                /////////////////////////////////////////
+                //          Stripe functions           //
+                /////////////////////////////////////////
+
+                // // add product to stripe
+                // const stripe_product = await stripe.products.create({
+                //     id: p_code,
+                //     name: p_name,
+                //     images: p_image_uri,
+                // });
+
+                var stripe_product = await stripe_add_product(p_code, p_name, p_image_uri, p_price);
+                if(stripe_product.success){
+                    product_model.findByIdAndUpdate(p_code, {p_price_id: stripe_product.price_id});
+                    return res.json({ success: true,
                                     message: `The product with code ${p_code} was added.` })
+                }else{
+                    Product.delete_images(images)
+                    return res.json({ success: false,
+                                    message: "Product was not added"})
+                }               
             }
             else {
                 Product.delete_images(images)
