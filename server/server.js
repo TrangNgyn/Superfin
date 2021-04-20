@@ -21,14 +21,20 @@ const app = express();
 app.use(bodyParser.json());
 
 // connect to mongo
-mongoose
-    .connect(process.env.mongoURI, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true})
+mongoose.connect(process.env.mongoURI, 
+    {
+        useNewUrlParser: true, 
+        useCreateIndex: true, 
+        useUnifiedTopology: true
+    }
+)
     .then(() => console.log('MongoDB connected...'))
     .catch(err => console.log(err));
 
+
 // allow Cross origin 
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000"); 
+    res.header("Access-Control-Allow-Origin", "http://localhost:5000"); 
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next(); 
 });
