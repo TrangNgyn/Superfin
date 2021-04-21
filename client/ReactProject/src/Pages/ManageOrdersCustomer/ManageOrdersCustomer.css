@@ -1,0 +1,14 @@
+#manage-orders-header {
+    height: 150px;
+    background-color: #F5AE85;
+    text-align: center;
+    line-height: 150px;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+#manage-orders-table-row>td {
+    padding-bottom: 12px;
+}

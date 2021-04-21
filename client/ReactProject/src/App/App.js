@@ -40,6 +40,7 @@ import CheckoutOrderComplete from '../Pages/Checkout/CheckoutOrderComplete';
 import ViewProductInfo from '../Pages/ViewProductInfo/ViewProductInfo';
 import Promocode from '../Pages/Promocode/Promocode';
 import Footer from '../SharedComponents/Footer/FooterMain';
+import ManageOrdersCustomer from '../Pages/ManageOrdersCustomer/ManageOrdersCustomer';
 
 
 import Amplify, {Auth} from 'aws-amplify';
@@ -114,6 +115,7 @@ const App = () => (
                <Route path="/CheckoutOrderComplete"><CheckoutOrderComplete /></Route>
                <Route path="/ViewProductInfo"><ViewProductInfo /></Route>
                <Route path="/Promocode"><Promocode /></Route>
+               <Route path="/manageOrders"> <ManageOrdersCustomer /> </Route>
                {/* <div>
                    <AppRoute path="/admin" component={HomepageAdmin} />
                   <Route path="/login" component={Login} />
