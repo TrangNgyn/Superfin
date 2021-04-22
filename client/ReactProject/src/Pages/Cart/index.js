@@ -1,6 +1,9 @@
+import React, { useContext } from 'react';
+import CartProducts from './CartProducts';
+import { CartContext } from '../../contexts/CartContext';
+import { formatNumber } from '../../_helpers/utils';
 import '../../_assets/CSS/pages/Cart.css';
 import { Typography, Button, Row, Col, InputNumber,Layout  } from 'antd';
-import {DeleteFilled} from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import img1 from "../../_assets/Images/Temp_Images/product_image_1.jpg"
 import visa from "../../_assets/Images/visa.png"
@@ -8,20 +11,18 @@ import mastercard from "../../_assets/Images/mastercard.jpg"
 import paypal from "../../_assets/Images/paypal.jpg"
 
 
-
 const { Title } = Typography;
 const { Sider, Content } = Layout;
 
-const Cart = () =>{
+const Cart1 = () =>{
+      const { total, cartItems, itemCount, clearCart, checkout, handleCheckout } = useContext(CartContext);
       return(
         <body>
 
         <div id="cart-head">
         <Title level={3}>Shopping Cart</Title>
         </div>
-
         <div id="cart-content">
-
         <Layout>
         <Content style={{ background: '#fff',paddingRight: '2%'}}>
         <div id="cart-summary">
@@ -32,24 +33,19 @@ const Cart = () =>{
             <Col span={5}><div style={{textAlign: "center",fontWeight:"bold"}}>Quantity</div></Col>
             <Col span={4}><div style={{textAlign: "right",paddingRight: "10px",fontWeight:"bold"}}>Total</div></Col>
           </Row>
-          <Row justify="space-around" align="middle">
-            <Col span={4}>
-              <Row><img src={img1} alt="product" width="100%" height="100%"/></Row>
-              <Row>Brown Bag with Handles</Row>
-              <Row>Unit:100</Row>
-            </Col>
-            <Col span={5}>Print cats on the bags</Col>
-            <Col span={5}><div style={{textAlign: "center"}}>70.25</div></Col>
-            <Col span={5}><div style={{textAlign: "center"}}><InputNumber defaultValue={1} size="small"/></div></Col>
-            <Col span={4}><div style={{textAlign: "right",paddingRight: "10px"}}>225.30</div></Col>
-            <Col span={1}><div style={{textAlign: "right"}}><Button type="text"><DeleteFilled /></Button></div></Col>
-          </Row>
+          {
+              cartItems.length > 0 ?
+              <CartProducts/> :
+              <div >
+                  Your cart is empty
+              </div>
+          }
         </div>
         </Content>
         <Sider  width={300} style={{ background: 'lightgrey', padding:"10px",fontWeight:"bold" }} >
         <Row>
         <Col span={12}><div style={{textAlign: "left"}}>Subtotal:</div></Col>
-        <Col span={12}><div style={{textAlign: "right"}}>$225.30</div></Col>
+        <Col span={12}><div style={{textAlign: "right"}}>{formatNumber(total)}</div></Col>
         </Row>
         <Row>
         <Col span={12}><div style={{textAlign: "left"}}>Freight charge:</div></Col>
@@ -83,4 +79,4 @@ const Cart = () =>{
 
 }
 
-export default Cart
+export default Cart1;
