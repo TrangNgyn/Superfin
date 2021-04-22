@@ -12,3 +12,47 @@
 #manage-orders-table-row>td {
     padding-bottom: 12px;
 }
+
+.manage-orders-view:hover {
+    color: #EB6E00;
+}
+
+.manage-orders-view {
+    cursor: pointer;
+    transition-duration: 0.2s;
+    font-weight: bold;
+}
+
+#manage-order-row {
+    width: 70%;
+    margin: auto;
+    
+}
+
+#manage-order-row:after {
+    content: "";
+    display: table;
+    clear: both;
+
+}
+
+.manage-order-column {
+    float: left;
+    width: 50%;
+    padding: 15px;
+}
+
+
+@media screen and (max-width:1500px) {
+    .manage-order-column {
+        width: 100%;
+    }
+}
+
+
+.manage-order-field-header {
+    width: 500px; 
+    margin: auto; 
+    text-align: left;
+    font-weight: bold;
+}

@@ -113,42 +113,6 @@ export const AddItemModal = props => {
     );
 }   
 
-export const _addCompleteOrder = (order, dispatch) => {
-    Modal.confirm({
-        title: 'Add Order?',
-        icon: <ExclamationCircleOutlined />,
-        content: 'Are you sure you want to add this order?',
-        okText: 'Yes',
-        cancelText: 'No',
-        onOk() { 
-            if(dispatch !== undefined){
-                    return dispatch(addCompleteOrder(order))
-                    .then(res => {
-                        if(res.data.success) addSuccess();
-                        else addFail();
-                    })
-                    .catch(() => {
-                        addFail();
-                    });
-            }
-            else{
-                axios.post('/api/orders/create-order', order)
-                .then(res => {
-                    if(res.data.success) addSuccess();
-                    else{
-                        console.log(res);
-                        addFail();
-                    } 
-                })
-                .catch(err => {
-                    console.log(err);
-                    addFail();
-                });
-            }
-        }
-    });
-}
-
 export const _addIncompleteOrder = (order, dispatch) => {
     Modal.confirm({
         title: 'Add Order?',

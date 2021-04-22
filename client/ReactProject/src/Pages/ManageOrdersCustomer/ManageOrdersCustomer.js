@@ -2,133 +2,168 @@ import { useEffect, useState } from "react";
 import './ManageOrdersCustomer.css';
 import { Select, Button, Pagination, Spin } from 'antd';
 import axios from 'axios';
+import { filterOrders, sortOrders } from './Functions';
+import { orderStatusConstants } from '../../_constants/orderStatus.constants';
+import OrderView from './OrderView';
 
 const {OptGroup, Option} = Select;
+const itemsPerPage = 10;
 
 
 
-
-
-
-const mockdata = [];
-
-for(let i = 0; i < 10; i++){
-    const order = {
-        po_number: i + "_ponumber",
-        status: "NEW",
-        date: "14/11/1993",
-        tracking: "fjsda8734rljwebfao98sdf",
-        carrier: "AUSTRALIA POST",
-    }
-    mockdata[i] = order;
-}
-
-
-
-
-
-
-axios.post('api/orders/order-by-email', { email: "its488@uowmail.edu.au" })
-.then(res => {
-    console.log('all good',res);
-})
-.catch(err => {
-    console.log('all bad', err);
-});
 
 const ManageOrdersCustomer = () => {
 
-    const [orders, setOrders] = useState(mockdata);
-    const [ordersOriginal] = useState([]);
-
+    const [orders, setOrders] = useState([]);
+    const [ordersOriginal, setOrdersOriginal] = useState([]);
+    const [currentOrder, setCurrentOrder] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
+    const [noOrders, setNoOrders] = useState(false);
     const [page, setPage] = useState(0);
 
-    const maxNumberOfPages = 0;
-    let renderableProducts = [];
+    const maxNumberOfPages = (Math.ceil(orders.length/itemsPerPage) - 1);
     let row = <></>;
+    let renderableProducts = []
+
+
+
+
 
     const onPageChange = p => { setPage(p - 1) };
 
-    row = orders.map((p, i) => {
-        return (
-            <tr id="manage-orders-table-row" key = {i}>
-                <td>{p.po_number}</td>
-                <td>{p.status}</td>
-                <td>{p.date}</td>
-                <td>{p.tracking}</td>
-                <td>{p.carrier}</td>
-                <td>view</td>
-            </tr>
-        );
-    });
-
     useEffect(() => {
+        if(!orders.length){
+            setLoading(true);
+
+            axios.post('api/orders/order-by-email', { email: "its488@uowmail.edu.au" })
+            .then(res => {
+                if(res.data.hasOwnProperty('success')){
+                    console.log(res);
+                    setNoOrders(true);
+                    setLoading(false);
+                } 
+                else{
+                    const sortedOrders = res.data.sort((a,b) => { return new Date(b.issued_date) - new Date(a.issued_date)});
+                    setOrders(sortedOrders);
+                    setOrdersOriginal(sortedOrders);
+                    setLoading(false);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                setError(true);
+                setLoading(false);
+            });
+        }
 
     }, [])
 
-    return (
-        <div >
-            <div id="manage-orders-header">Manage Orders</div>
-    
-            <div>
-                <div style={{display: 'inline-block', paddingLeft: "1%", paddingTop: "2%"}}>
-                    <div style={{fontSize: "30px", fontWeight: "bold"}}>Orders</div>
-                </div>
 
-                <div style={{display: 'inline-block', paddingLeft: "2%", paddingTop: "2%"}}>
-                    <Select style={{width: "300px"}} placeholder="Filter By" >
-                            <Option value="new">New</Option>
-                            <Option value="shipped">Shipped</Option>
-                            <Option value="complete">Complete</Option>
-                    </Select>
-                </div>
 
-                <div style={{display: 'inline-block', paddingLeft: "2%", paddingTop: "2%"}}>
-                    <Select style={{width: "300px"}} placeholder="Order By">
-                        <OptGroup label="Data Issued">
-                            <Option value="d_decending">Latest</Option>
-                            <Option value="d_ascending">Earliest</Option>
-                        </OptGroup>
-                    </Select>
-                </div >
+    if(orders.length !== 0){
+        renderableProducts = orders.slice( page * itemsPerPage, 
+            ((page + 1) * itemsPerPage) > orders.length ? orders.length : ((page + 1) * itemsPerPage));
+        
+        row = renderableProducts.map(o => {
+            const date = new Date(o.issued_date);
+            const dateString = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
 
-                <div style={{display: 'inline-block', paddingLeft: "2%", paddingTop: "2%"}}>
-                    <Button>Reset Filters</Button>
-                </div>
-            </div>
+            return (
+                <tr id="manage-orders-table-row" key = {o._id}>
+                    <td>{o.po_number}</td>
+                    <td><b>{o.status}</b></td>
+                    <td>{dateString}</td>
+                    <td><b>{o.tracking_number}</b></td>
+                    <td>{o.carrier}</td>
+                    <td>
+                        <span className="manage-orders-view" onClick={() => {
+                            setCurrentOrder(o);
+                        }}>view</span>
+                    </td>
+                </tr>
+            );
+        });
+    }
+
 
 
 
 
    
-            <div style={{overflowX: 'auto', paddingTop: "2%", height: "500px"}}>
-                {
-                    loading 
-                    ? <div style = {{textAlign: 'center'}}><Spin size='large'/></div> 
-                    : error
-                    ? <h1 style = {{textAlign: 'center', color: 'red'}}>Could not load data, please try refreshing page</h1>
-                    : 
-                    <table style={{width:"100%", borderCollapse: 'collapse', textAlign: 'center'}}>
-                        <tbody>
-                            <tr style = {{border: "solid black 1px", padding: "8px"}}>
-                                <th>PO Number</th>
-                                <th>Status</th> 
-                                <th>Date Issued</th>
-                                <th>Tracking Number</th> 
-                                <th>Carrier</th>
-                                <th>View Order Details</th>
-                            </tr>
-                            {row}
-                        </tbody>
-                    </table>
-                }
-            </div>
+    return (
+        <div >
+            <div id="manage-orders-header">Manage Orders</div>
 
-            <div style={{textAlign: "center"}}>
-                <Pagination defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange={onPageChange}/>
-            </div>
+            {
+                currentOrder === null
+                ? <div>
+                    <div>
+                        <div style={{display: 'inline-block', paddingLeft: "1%", paddingTop: "2%"}}>
+                            <div style={{fontSize: "30px", fontWeight: "bold"}}>Orders</div>
+                        </div>
+
+                        <div style={{display: 'inline-block', paddingLeft: "2%", paddingTop: "2%"}}>
+                            <Select style={{width: "300px"}} placeholder="Filter By" onSelect={ v => {
+                                filterOrders(v, ordersOriginal, setOrders);
+                                setPage(0);
+                            }}>
+                                    <Option value={orderStatusConstants.NEW}>New</Option>
+                                    <Option value={orderStatusConstants.SHIPPED}>Shipped</Option>
+                                    <Option value={orderStatusConstants.COMPLETE}>Complete</Option>
+                            </Select>
+                        </div>
+
+                        <div style={{display: 'inline-block', paddingLeft: "2%", paddingTop: "2%"}}>
+                            <Select style={{width: "300px"}} placeholder="Order By" onSelect={ v => {
+                                sortOrders(v, orders, setOrders);
+                                setPage(0);
+                            }}>
+                                <OptGroup label="Data Issued">
+                                    <Option value="d_decending">Latest</Option>
+                                    <Option value="d_ascending">Earliest</Option>
+                                </OptGroup>
+                            </Select>
+                        </div >
+
+                        <div style={{display: 'inline-block', paddingLeft: "2%", paddingTop: "2%"}}>
+                            <Button onClick={() => {
+                                setOrders(ordersOriginal);
+                            }}>Reset Filters</Button>
+                        </div>
+                    </div>
+
+                    <div style={{overflowX: 'auto', paddingTop: "2%", height: "500px"}}>
+                        {
+                            loading 
+                            ? <div style = {{textAlign: 'center'}}><Spin size='large'/></div> 
+                            : error
+                            ? <h1 style = {{textAlign: 'center', color: 'red'}}>Could not load data, please try refreshing page</h1>
+                            : noOrders
+                            ? <h1 style = {{textAlign: 'center', color: 'green'}}>You have no current order history</h1>
+                            :
+                            <table style={{width:"100%", borderCollapse: 'collapse', textAlign: 'center'}}>
+                                <tbody>
+                                    <tr style = {{border: "solid black 1px", padding: "8px"}}>
+                                        <th>PO Number</th>
+                                        <th>Status</th> 
+                                        <th>Date Issued</th>
+                                        <th>Tracking Number</th> 
+                                        <th>Carrier</th>
+                                        <th>View Order Details</th>
+                                    </tr>
+                                    {row}
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+
+                    <div style={{textAlign: "center"}}>
+                        <Pagination defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange={onPageChange}/>
+                    </div>
+                </div>
+                :   <OrderView order={currentOrder} setCurrentOrder={setCurrentOrder} setPage={setPage}/>
+            }
         </div>
     );
 }
