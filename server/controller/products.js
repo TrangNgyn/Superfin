@@ -198,16 +198,19 @@ class Product {
                 //     images: p_image_uri,
                 // });
 
-                var stripe_product = await stripe_add_product(p_code, p_name, p_image_uri, p_price);
-                if(stripe_product.success){
-                    product_model.findByIdAndUpdate(p_code, {p_price_id: stripe_product.price_id});
-                    return res.json({ success: true,
-                                    message: `The product with code ${p_code} was added.` })
-                }else{
-                    Product.delete_images(images)
-                    return res.json({ success: false,
-                                    message: "Product was not added"})
-                }               
+                // var stripe_product = await stripe_add_product(p_code, p_name, p_image_uri, p_price);
+                // if(stripe_product.success){
+                //     product_model.findByIdAndUpdate(p_code, {p_price_id: stripe_product.price_id});
+                //     return res.json({ success: true,
+                //                     message: `The product with code ${p_code} was added.` })
+                // }else{
+                //     Product.delete_images(images)
+                //     return res.json({ success: false,
+                //                     message: "Product was not added"})
+                // }   
+                
+                return res.json({ success: true,
+                                message: `The product with code ${p_code} was added.` })
             }
             else {
                 Product.delete_images(images)
