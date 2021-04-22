@@ -1,11 +1,10 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-async function stripe_add_product(p_code, p_name, p_image_uri, p_price){
+async function stripe_add_product(p_code, p_name, p_price){
     // add product to stripe
     const stripe_product = await stripe.products.create({
         id: p_code,
         name: p_name,
-        images: p_image_uri,
     });
 
     // create price object
@@ -66,13 +65,12 @@ async function stripe_delete_product(p_code){
     }
 }
 
-async function stripe_update_product(p_code, p_name, p_image_uri){
+async function stripe_update_product(p_code, p_name){
     // update product
     const product = await stripe.products.update(
         p_code,
         {
-            name: p_name,
-            images: p_image_uri
+            name: p_name
         }
     );
 
@@ -125,6 +123,3 @@ module.exports = {
     stripe_update_price,
     stripe_create_session
 };
-
-// module.exports = stripe_add_product;
-// module.exports = stripe_deactivate_product;

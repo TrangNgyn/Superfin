@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const stripe_funcs = require('../middleware/stripe_funcs');
+const {stripe_add_product} = require('../middleware/stripe_util');
 
 //Create schema
 const productSchema = new Schema({
@@ -45,16 +45,14 @@ const productSchema = new Schema({
 
 productSchema.pre("save", function(next) {
     var doc = this
-    var stripe_product = stripe_funcs.stripe_add_product(doc.p_code, doc.p_name, doc.p_price,
-        function(error) {
-            if(error)
-                return next(error)
-            if(!stripe_product.sucess) 
-                return next(new Error(`Strip add failed`))
-            doc.p_price_id = stripe_product.price_id
-            next()
-        }
-    )
+    var stripe_product = stripe_add_product(doc.p_code, doc.p_name, doc.p_price);
+    if(!stripe_product.success)
+        return next(new Error(stripe_product.message))
+    else{
+        doc.p_price_id = stripe_product.price_id
+        next(); 
+    }
+    
 })
 
 module.exports = product = mongoose.model("products", productSchema)

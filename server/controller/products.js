@@ -3,7 +3,6 @@ const categories_model = require('../models/categories')
 const fs = require('fs');
 const path = require('path');
 const delete_object = require('../middleware/delete');
-const {stripe_add_product} = require('../middleware/stripe_funcs');
 
 var empty_field = { 
     succes: false,
@@ -171,7 +170,6 @@ class Product {
                 return res.json({ success: false,
                                   message: `Product was not added, the p_code ${p_code} is already in use` })
             }
-            
             // need too clean input here potentially to ensure that product addition is not corrupting the database
 
             const new_product = new product_model({
@@ -185,47 +183,23 @@ class Product {
             })
 
             var saved_product = await new_product.save()
-            if (saved_product) {
-
-                /////////////////////////////////////////
-                //          Stripe functions           //
-                /////////////////////////////////////////
-
-                // add product to stripe
-                const stripe_product = await stripe_add_product(p_code, p_name, images, p_price);
-                if(stripe_product.success){
-                    // store the associated price_id in MongoDB
-                    product_model.findByIdAndUpdate(p_code, {p_price_id: stripe_product.price_id});
-                    return res.json({ success: true,
-                                    message: `The product with code ${p_code} was added.` })
-                }else{
-                    // delete saved product from MongoDB
-                    product_model.deleteOne({ p_code: p_code }, (err,result) => {
-                        if(err){
-                            console.log(err)
-                        }
-                        else {
-                            if(result.deletedCount === 1){
-                                console.log("Product deleted")
-                            }
-                            else {
-                                console.log(result)
-                            }
-                        }
-                    });
-                    // delete images from S3 bucket
-                    Product.delete_images(images)
-                    return res.json({ success: false,
-                                    message: "Product was not added"})
-                }   
-                
-                // return res.json({ success: true,
-                //                 message: `The product with code ${p_code} was added.` })
+                                // .then(() => {
+                                //         return res.json({ success: true,
+                                //             message: `The product with code ${p_code} was added.` })
+                                // })
+                                // .catch(error => {
+                                //     Product.delete_images(images)
+                                //     return res.json(error)
+                                // })
+            
+            if (saved_product) {    
+                return res.json({ success: true,
+                                message: `The product with code ${p_code} was added.` })
             }
             else {
                 Product.delete_images(images)
                 return res.json({ success: false,
-                                    message: "Product was not added"})
+                                message: "Product was not added"})
             }
         }
         catch (err) {
