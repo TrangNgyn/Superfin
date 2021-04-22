@@ -3,7 +3,7 @@ const categories_model = require('../models/categories')
 const fs = require('fs');
 const path = require('path');
 const delete_object = require('../middleware/delete');
-const stripe_add_product = require('../middleware/stripe_funcs');
+const {stripe_add_product} = require('../middleware/stripe_funcs');
 
 var empty_field = { 
     succes: false,
@@ -192,7 +192,7 @@ class Product {
                 /////////////////////////////////////////
 
                 // add product to stripe
-                var stripe_product = await stripe_add_product(p_code, p_name, images, p_price);
+                const stripe_product = await stripe_add_product(p_code, p_name, images, p_price);
                 if(stripe_product.success){
                     // store the associated price_id in MongoDB
                     product_model.findByIdAndUpdate(p_code, {p_price_id: stripe_product.price_id});

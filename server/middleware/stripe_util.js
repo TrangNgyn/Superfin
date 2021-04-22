@@ -12,7 +12,7 @@ async function stripe_add_product(p_code, p_name, p_image_uri, p_price){
     if(stripe_product){
         const stripe_price = await stripe.prices.create({
             product: p_code,
-            unit_amount: p_price,
+            unit_amount: p_price*100,
             currency: 'aud',
         });
 
@@ -118,10 +118,13 @@ async function stripe_create_session(items){
     });
 }
 
-module.exports = array = {
+module.exports = {
     stripe_add_product,
     stripe_deactivate_product,
     stripe_update_product,
     stripe_update_price,
     stripe_create_session
 };
+
+// module.exports = stripe_add_product;
+// module.exports = stripe_deactivate_product;
