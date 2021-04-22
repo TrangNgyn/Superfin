@@ -191,26 +191,36 @@ class Product {
                 //          Stripe functions           //
                 /////////////////////////////////////////
 
-                // // add product to stripe
-                // const stripe_product = await stripe.products.create({
-                //     id: p_code,
-                //     name: p_name,
-                //     images: p_image_uri,
-                // });
-
-                // var stripe_product = await stripe_add_product(p_code, p_name, p_image_uri, p_price);
-                // if(stripe_product.success){
-                //     product_model.findByIdAndUpdate(p_code, {p_price_id: stripe_product.price_id});
-                //     return res.json({ success: true,
-                //                     message: `The product with code ${p_code} was added.` })
-                // }else{
-                //     Product.delete_images(images)
-                //     return res.json({ success: false,
-                //                     message: "Product was not added"})
-                // }   
+                // add product to stripe
+                var stripe_product = await stripe_add_product(p_code, p_name, images, p_price);
+                if(stripe_product.success){
+                    // store the associated price_id in MongoDB
+                    product_model.findByIdAndUpdate(p_code, {p_price_id: stripe_product.price_id});
+                    return res.json({ success: true,
+                                    message: `The product with code ${p_code} was added.` })
+                }else{
+                    // delete saved product from MongoDB
+                    product_model.deleteOne({ p_code: p_code }, (err,result) => {
+                        if(err){
+                            console.log(err)
+                        }
+                        else {
+                            if(result.deletedCount === 1){
+                                console.log("Product deleted")
+                            }
+                            else {
+                                console.log(result)
+                            }
+                        }
+                    });
+                    // delete images from S3 bucket
+                    Product.delete_images(images)
+                    return res.json({ success: false,
+                                    message: "Product was not added"})
+                }   
                 
-                return res.json({ success: true,
-                                message: `The product with code ${p_code} was added.` })
+                // return res.json({ success: true,
+                //                 message: `The product with code ${p_code} was added.` })
             }
             else {
                 Product.delete_images(images)
