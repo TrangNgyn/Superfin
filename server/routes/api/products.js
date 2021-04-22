@@ -3,12 +3,20 @@ const router = express.Router();
 const product_controller = require('../../controller/products')
 const upload = require('../../middleware/upload');
 const anyUpload = upload.any();
+const {stripe_deactivate_product} = require('../../middleware/stripe_util')
+let stringify = require('json-stringify-safe');
 
 // product viewing routes
 router.get('/all-product', product_controller.get_all_products);
 router.post('/product-by-id',product_controller.post_product_by_id);
 router.post('/product-by-category', product_controller.post_product_by_category);
 router.post('/product-by-category-price',product_controller.post_product_by_category_price);
+
+
+router.post('/delete-stripe', function(req,res){
+  stripe_deactivate_product(stringify(req.p_code), stringify(req.price_id));
+  return res.json({message:"stripe product deleted"})
+})
 
 // product management routes
 router.post('/add-product', function(req,res) {
