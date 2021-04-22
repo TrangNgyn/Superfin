@@ -21,14 +21,12 @@ async function stripe_add_product(p_code, p_name, p_price){
                 message: 'Price object created in Stripe'};
         }else{
             await stripe_delete_product(p_code);
-            console.log(stripe_price);
             return {success: false,
                 message: 'Error creating price object in Stripe'};
         }
             
     }
     else{
-        console.log(stripe_product);
         return {success: false,
             message: 'Error creating product object in Stripe'};
     }

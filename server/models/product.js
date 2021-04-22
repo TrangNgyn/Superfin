@@ -43,9 +43,9 @@ const productSchema = new Schema({
 
 });
 
-productSchema.pre("save", function(next) {
+productSchema.pre("save", async function(next) {
     var doc = this
-    var stripe_product = stripe_add_product(doc.p_code, doc.p_name, doc.p_price);
+    var stripe_product = await stripe_add_product(doc.p_code, doc.p_name, doc.p_price);
     if(!stripe_product.success)
         return next(new Error(stripe_product.message))
     else{
