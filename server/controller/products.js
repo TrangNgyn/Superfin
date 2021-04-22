@@ -304,7 +304,7 @@ class Product {
                         Product.delete_images(locations)
                         return res.json({
                             succes: false,
-                            message: err.message
+                            message:  message
                         })
                     }
                 }

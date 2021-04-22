@@ -30,27 +30,36 @@ async function stripe_add_product(p_code, p_name, p_price){
         return {success: false,
             message: 'Error creating product object in Stripe'};
     }
-
 }
-
 async function stripe_deactivate_product(p_code, p_price_id){
     // deactivate price
     const price = await stripe.prices.update(
         p_price_id,
         {active: false}
     );
-    
-    if(!price.active) // if update fails
-        console.log(price)
 
+    if(price.active){ // if update fails
+        return {success: false,
+            message: 'Error deactivating price object'}
+    }
+    
     //deactivate product
     const product = await stripe.products.update(
         p_code,
         {active: false}
     );
 
-    if(!product.active) // if update fails
-        console.log(product)
+    if(product.active){ // if update fails
+        await stripe.prices.update(
+            p_price_id,
+            {active: false}
+        );
+        return {success: false,
+            message: 'Error deactivating product object.'}
+    }
+
+    return {success: true,
+        message: 'Product deactivated.'}
 }
 
 async function stripe_delete_product(p_code){
@@ -80,7 +89,7 @@ async function stripe_update_price(p_code, new_p_price, old_p_price_id){
     // create new price associated with the p_code
     const new_price = await stripe.prices.create({
         product: p_code,
-        unit_amount: new_p_price,
+        unit_amount: new_p_price*100,
         currency: 'aud',
     });
 

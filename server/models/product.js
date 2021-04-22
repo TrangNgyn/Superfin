@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const {stripe_add_product} = require('../middleware/stripe_util');
+const {stripe_add_product, stripe_deactivate_product} = require('../middleware/stripe_util');
 
 //Create schema
 const productSchema = new Schema({
@@ -52,7 +52,16 @@ productSchema.pre("save", async function(next) {
         doc.p_price_id = stripe_product.price_id
         next(); 
     }
-    
+})
+
+productSchema.post("remove", async function(next){
+    var doc = this
+    var stripe_product = await stripe_deactivate_product(doc.p_code, doc.p_price_id);
+    if(!stripe_product.success)
+        return next(new Error(stripe_product.message))
+    else{
+        next(); 
+    }
 })
 
 module.exports = product = mongoose.model("products", productSchema)
