@@ -3,7 +3,6 @@ import NewItemForm from '../Forms/NewItemForm/NewItemForm';
 import { orderStatusConstants } from '../../../_constants/orderStatus.constants';
 import { Modal } from 'antd';
 import MODE from './PageConstants';
-import { addCompleteOrder } from '../../../_actions/completeOrderActions'; 
 import { addIncompleteOrder } from '../../../_actions/incompleteOrderActions';
 import { history } from '../../../_helpers/history';
 import axios from 'axios';

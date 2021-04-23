@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import './ManageOrdersCustomer.css';
+import '../../_assets/CSS/pages/ManageOrdersCustomer/ManageOrdersCustomer.css';
 import { Select, Button, Pagination, Spin } from 'antd';
 import axios from 'axios';
 import { filterOrders, sortOrders } from './Functions';
@@ -8,6 +8,9 @@ import OrderView from './OrderView';
 
 const {OptGroup, Option} = Select;
 const itemsPerPage = 10;
+
+const mockEmail = "its488@uowmail.edu.au";
+
 
 
 
@@ -29,14 +32,13 @@ const ManageOrdersCustomer = () => {
 
 
 
-
     const onPageChange = p => { setPage(p - 1) };
 
     useEffect(() => {
         if(!orders.length){
             setLoading(true);
 
-            axios.post('api/orders/order-by-email', { email: "its488@uowmail.edu.au" })
+            axios.post('api/orders/order-by-email', { email: mockEmail })
             .then(res => {
                 if(res.data.hasOwnProperty('success')){
                     console.log(res);
@@ -56,8 +58,9 @@ const ManageOrdersCustomer = () => {
                 setLoading(false);
             });
         }
+    }, [orders.length])
 
-    }, [])
+
 
 
 
@@ -99,11 +102,11 @@ const ManageOrdersCustomer = () => {
                 currentOrder === null
                 ? <div>
                     <div>
-                        <div style={{display: 'inline-block', paddingLeft: "1%", paddingTop: "2%"}}>
+                        <div id="manage-order-filters" style={{paddingLeft: "1%"}}>
                             <div style={{fontSize: "30px", fontWeight: "bold"}}>Orders</div>
                         </div>
 
-                        <div style={{display: 'inline-block', paddingLeft: "2%", paddingTop: "2%"}}>
+                        <div id="manage-order-filters">
                             <Select style={{width: "300px"}} placeholder="Filter By" onSelect={ v => {
                                 filterOrders(v, ordersOriginal, setOrders);
                                 setPage(0);
@@ -114,7 +117,7 @@ const ManageOrdersCustomer = () => {
                             </Select>
                         </div>
 
-                        <div style={{display: 'inline-block', paddingLeft: "2%", paddingTop: "2%"}}>
+                        <div id="manage-order-filters">
                             <Select style={{width: "300px"}} placeholder="Order By" onSelect={ v => {
                                 sortOrders(v, orders, setOrders);
                                 setPage(0);
@@ -126,14 +129,14 @@ const ManageOrdersCustomer = () => {
                             </Select>
                         </div >
 
-                        <div style={{display: 'inline-block', paddingLeft: "2%", paddingTop: "2%"}}>
+                        <div id="manage-order-filters">
                             <Button onClick={() => {
                                 setOrders(ordersOriginal);
                             }}>Reset Filters</Button>
                         </div>
                     </div>
 
-                    <div style={{overflowX: 'auto', paddingTop: "2%", height: "500px"}}>
+                    <div id="manage-order-table-wrapper">
                         {
                             loading 
                             ? <div style = {{textAlign: 'center'}}><Spin size='large'/></div> 
@@ -142,7 +145,7 @@ const ManageOrdersCustomer = () => {
                             : noOrders
                             ? <h1 style = {{textAlign: 'center', color: 'green'}}>You have no current order history</h1>
                             :
-                            <table style={{width:"100%", borderCollapse: 'collapse', textAlign: 'center'}}>
+                            <table className="manage-order-table">
                                 <tbody>
                                     <tr style = {{border: "solid black 1px", padding: "8px"}}>
                                         <th>PO Number</th>
@@ -159,7 +162,7 @@ const ManageOrdersCustomer = () => {
                     </div>
 
                     <div style={{textAlign: "center"}}>
-                        <Pagination defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange={onPageChange}/>
+                        <Pagination current={page + 1} defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange={onPageChange}/>
                     </div>
                 </div>
                 :   <OrderView order={currentOrder} setCurrentOrder={setCurrentOrder} setPage={setPage}/>
