@@ -15,6 +15,27 @@ class Product {
             delete_object(images[i])
         }
     }
+
+    static name_code(p_code, p_name) {
+        if( p_code.length > 255 || p_name.length > 255) {
+            Product.delete_images(locations)
+            return res.json({ 
+                succes: false,
+                error: "Name and Code cannot be longer than 255 characters."
+            })
+        }
+    }
+
+    static valid_price(p_price) {
+        if(p_price <= 0){
+            Product.delete_images(locations)
+            return res.json({ 
+                sucess: false,
+                message: "Price must be greater than 0"
+            })
+        }
+    }
+
     
     // @route   GET api/products/all-product
     // @desc    Get all itmes
@@ -149,6 +170,7 @@ class Product {
                 Product.delete_images(images)
                 return res.json(empty_field)
             }
+
             // validate that name and code
             if( p_code.length > 255 || p_name.length > 255 || p_description > 511) {
                 Product.delete_images(images)
@@ -224,6 +246,18 @@ class Product {
                 })
             }
 
+            // move the images into the images array for adding the locations of new images
+            if(typeof p_image_uri === 'string') {
+                if(p_image_uri !== "")
+                    array[0] = p_image_uri
+            }
+            else {
+                for(var i = 0; i < p_image_uri.length; i++){
+                    if(p_image_uri[i] !== "")
+                        array.push(p_image_uri[i])
+                }
+            }
+
             // ensure all the required fields are present 
             if( !p_code | !p_name | !p_categories | !p_price ){
                 Product.delete_images(locations)
@@ -231,22 +265,10 @@ class Product {
             }
 
             // ensure that some fields are not too long or short 
-            if( p_code.length > 255 || p_name.length > 255) {
-                Product.delete_images(locations)
-                return res.json({ 
-                    succes: false,
-                    error: "Name and Code cannot be longer than 255 characters."
-                })
-            }
+            name_code(p_code, p_name)
 
             // price must be greater than 0
-            if(p_price <= 0){
-                Product.delete_images(locations)
-                return res.json({ 
-                    sucess: false,
-                    message: "Price must be greater than 0"
-                })
-            }
+            valid_price(p_price)
 
             var found_product = await product_model.findOne({ p_code: p_code })
 
