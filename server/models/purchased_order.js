@@ -30,7 +30,8 @@ const order_schema = new Schema({
     },
     status: {
         type: String,
-        required: true
+        required: true,
+        default: "NEW"
     },
     items: {    // array of items, incl. item_code, quantity and special requriements for each
         type: [{

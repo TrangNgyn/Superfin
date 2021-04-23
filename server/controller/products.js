@@ -239,7 +239,7 @@ class Product {
                 return res.json(empty_field)
             }
 
-            if(images.length <= 0 && p_image_uri.length == 0) {
+            if(images.length <= 0 && p_image_uri.length <= 0) {
                 return res.json({ 
                     success: false,
                     message: `An image must be present in the edited product`
@@ -281,7 +281,7 @@ class Product {
             }
 
             // unlink images from the array as they are read in 
-            if(p_image_uri != 0){
+            if(p_image_uri > 0){
                 for(var i = 0; i < found_product.p_image_uri.length; i++){
                     var image = found_product.p_image_uri[i];
                     var found = false;
@@ -299,7 +299,7 @@ class Product {
                             delete_object(image)
                         }
                         catch(err) {
-                            delete_object(locations)
+                            Product.delete_images(locations)
                             return res.json({
                                 succes: false,
                                 message: err.message
@@ -308,7 +308,7 @@ class Product {
                     }
                 }
             }
-            else if(found_product.p_image_uri.length != 0){
+            else if(found_product.p_image_uri.length > 0){
                 for(var i = 0; i < found_product.p_image_uri.length; i++){
                     var image = found_product.p_image_uri[i];
                     try {
