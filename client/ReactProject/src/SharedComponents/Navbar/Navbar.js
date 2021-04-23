@@ -210,10 +210,6 @@ export default function Navbar(props){
         <Link to="/deliveryDispatch"> Delivery and Dispatch </Link>
       </Menu.Item>
 
-      <Menu.Item key="About">
-        <Link to="/aboutUs"> About Us </Link>
-      </Menu.Item>
-
       <Menu.Item key="Blog">
         <Link to="/blog"> Blog </Link>
       </Menu.Item>
@@ -229,10 +225,6 @@ export default function Navbar(props){
       {ourProductsSubmenuMobile}
       <Menu.Item key="Delivery">
         <Link to="/deliveryDispatch"> Delivery and Dispatch </Link>
-      </Menu.Item>
-
-      <Menu.Item key="About">
-        <Link to="/aboutUs"> About Us </Link>
       </Menu.Item>
 
       <Menu.Item key="Blog">
