@@ -35,25 +35,30 @@ class Purchased_Order {
     // @access  Public
 
     async post_order_by_email(req, res) {
-        // Using fetch
-        let {email} = req.body;
-        if(!email){
-            return res.json(empty_field)
+        try{
+            let {email} = req.body;
+            if(!email){
+                return res.json(empty_field)
+            }
+            order_model
+                .find({c_email: email})
+                .orFail( new Error(`${email} has no orders`))
+                .then((order) => {
+                    res.json(order)
+                })
+                .catch(err => {
+                    res.json({
+                        success: false,
+                        message: err.message
+                    })
+                })
         }
-        order_model
-            .find({CustomerEmail: email})
-            .exec()
-            .then((order) => {
-                if (!order) {
-                    res.status(404)
-                    return res.json({success: false})
-                }
-                return res.json(order)
-            })
-            .catch(err => res.json({
+        catch(err) {
+            res.json({
                 success: false,
                 message: err._message
-            }))
+            })
+        }
     } 
 
     // @route   POST api/orders/add-tracking
@@ -214,8 +219,8 @@ class Purchased_Order {
             })
             .orFail( new Error(`Order ${po_number} not found`))
             .then(() => {
-                res.json({ success: true,
-                                  message: `Order ${po_number} was edited`})
+                res.json({  success: true,
+                            message: `Order ${po_number} was edited`})
             })
             .catch(error => {
                 res.json({ error: error.message })

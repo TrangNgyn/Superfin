@@ -1,6 +1,6 @@
 import FooterMenu from './FooterMenu';
 import FooterMenuMobile from './FooterMenuMobile';
-import FooterContent from './FooterContent';
+//import FooterContent from './FooterContent';
 
 
 

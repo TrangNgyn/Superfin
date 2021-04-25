@@ -12,7 +12,7 @@ import POForm2 from './Forms/POForm/POForm2';
 import POForm1 from './Forms/POForm/POForm1';
 import POForm1View from './Forms/POForm/POForm1View';
 import axios from 'axios';
-import { _addCompleteOrder, _addIncompleteOrder, _editOrder } from './Helpers/Modals';
+import { _addIncompleteOrder, _editOrder } from './Helpers/Modals';
 import { createAddress, createOrderAdd, createOrderEdit } from './Helpers/Functions';
 
 
@@ -127,22 +127,15 @@ const Order = () => {
 
         if(mode===MODE.ADD){
             let order = createOrderAdd(values, address);
-            if(order.status === orderStatusConstants.COMPLETE){
-                if(compeletOrders.length > 0){
-                    order.issued_date = new Date();
-                    _addCompleteOrder(order, dispatch);
-                }
-                else _addCompleteOrder(order);
+      
+            if(incompleteOrders.length > 0){
+                order.issued_date = new Date();
+                _addIncompleteOrder(order, dispatch);
             }
-            else{
-                if(incompleteOrders.length > 0){
-                    order.issued_date = new Date();
-                    _addIncompleteOrder(order, dispatch);
-                }
-                else {
-                    _addIncompleteOrder(order);
-                }
+            else {
+                _addIncompleteOrder(order);
             }
+    
         }
         else if(mode===MODE.EDIT){
             if(editedOrder){
@@ -160,7 +153,6 @@ const Order = () => {
             setMode(MODE.EDIT);
             form_1.setFieldsValue(order);
             form_1.setFieldsValue(order.address);
-
         } 
         else setMode(MODE.VIEW);
     }
