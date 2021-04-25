@@ -13,9 +13,10 @@ import paypal from "../../_assets/Images/paypal.jpg"
 const { Title } = Typography;
 const { Sider, Content } = Layout;
 
-const Cart1 = () =>{
+const Cart = () =>{
       const { total, cartItems, itemCount } = useContext(CartContext);
       return(
+
         <body>
 
         <div id="cart-head">
@@ -77,4 +78,4 @@ const Cart1 = () =>{
 
 }
 
-export default Cart1;
+export default Cart;

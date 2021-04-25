@@ -1,8 +1,8 @@
 import '../../_assets/CSS/pages/Checkout/CheckoutShipping.css';
 import { Typography, Form, Input, Button, Row, Col, Steps, Select, InputNumber } from 'antd';
 import {CaretLeftOutlined} from '@ant-design/icons';
-import { Link } from 'react-router-dom';
-
+import { Link, Redirect } from 'react-router-dom';
+import { history } from '../../_helpers/history';
 
 
 
@@ -15,6 +15,8 @@ const CheckoutShipping = () =>{
       const [form] = Form.useForm();
       const onFinish = (values) => {
         console.log('Success:', values);
+        localStorage.setItem('user', JSON.stringify(values));
+        history.push('/CheckoutReviewOrder');
       };
       const onFinishFailed = (errorInfo) => {
           console.log('Failed:', errorInfo);
@@ -40,8 +42,8 @@ const CheckoutShipping = () =>{
         <div>
         <Steps current={0}>
             <Step title="Shipping Address"/>
-            <Step title="Secure Payment" />
             <Step title="Review Order"/>
+            <Step title="Secure Payment" />
             <Step title="Order Complete"/>
           </Steps>,
         </div>
@@ -91,7 +93,7 @@ const CheckoutShipping = () =>{
             <Row gutter={16}>
               <Col >
               <Form.Item label="State/Province" name="stateprovince" rules={[{ required: true}]}>
-              <Select  style={{ width: 120 }} >
+              <Select style={{ width: 120 }} >
                 <Option value="NSW">NSW</Option>
                 <Option value="VIC">VIC</Option>
                 <Option value="ACT">ACT</Option>
@@ -131,7 +133,7 @@ const CheckoutShipping = () =>{
               </Col>
               <Col span={12}>
               <Form.Item >
-              <Button type="primary" htmlType="submit"><Link to="/CheckoutSecurePayment">Continue</Link></Button>
+              <Button type="primary" htmlType="submit">Continue</Button>
               </Form.Item>
               </Col>
             </Row>
