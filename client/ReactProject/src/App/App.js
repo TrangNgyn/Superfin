@@ -42,7 +42,7 @@ import Footer from '../SharedComponents/Footer/FooterMain';
 import ManageOrdersCustomer from '../Pages/ManageOrdersCustomer/ManageOrdersCustomer';
 import Store from '../Pages/Homepage/products';
 import Cart from '../Pages/Cart/index';
-
+import ManageCategories from '../Pages/ManageCategories/ManageCategories';
 
 
 import Amplify, {Auth} from 'aws-amplify';
@@ -107,6 +107,7 @@ const App = () => (
 
                <Route path="/editCompanyInformation"><EditCompanyInfo /></Route>
                <Route path="/manageProducts"><ManageProducts /></Route>
+               <Route path="/manageCategories"><ManageCategories /></Route>
 
                 <Route exact path="/editAddProducts"><AddEditProduct /></Route>
                <Route path="/editAddProducts/:p_code"><AddEditProduct /></Route>
