@@ -367,7 +367,7 @@ class Product {
                     }
                     product_model.deleteOne({ p_code: p_code }, (err,result) => {
                         if(err){
-                            res.send(err)
+                            res.json(err)
                         }
                         else {
                             if(result.deletedCount === 1){
