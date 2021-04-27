@@ -3,9 +3,8 @@ import CartProducts from './CartProducts';
 import { CartContext } from '../../contexts/CartContext';
 import { formatNumber } from '../../_helpers/utils';
 import '../../_assets/CSS/pages/Cart.css';
-import { Typography, Button, Row, Col, InputNumber,Layout  } from 'antd';
+import { Typography, Button, Row, Col,Layout  } from 'antd';
 import { Link } from 'react-router-dom';
-import img1 from "../../_assets/Images/Temp_Images/product_image_1.jpg"
 import visa from "../../_assets/Images/visa.png"
 import mastercard from "../../_assets/Images/mastercard.jpg"
 import paypal from "../../_assets/Images/paypal.jpg"
@@ -15,7 +14,7 @@ const { Title } = Typography;
 const { Sider, Content } = Layout;
 
 const Cart1 = () =>{
-      const { total, cartItems, itemCount, clearCart, checkout, handleCheckout } = useContext(CartContext);
+      const { total, cartItems } = useContext(CartContext);
       return(
         <body>
 

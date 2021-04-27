@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { CartContext } from '../../contexts/CartContext';
-import { Typography, Button, Row, Col, InputNumber,Layout  } from 'antd';
+import { Row, Col } from 'antd';
 import {PlusCircleOutlined, MinusCircleOutlined, RestOutlined } from '@ant-design/icons';
 import { formatNumber } from '../../_helpers/utils';
 

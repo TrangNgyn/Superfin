@@ -1,5 +1,4 @@
 import { Button } from 'antd';
-import { useState, useEffect } from "react";
 
 const ProductMainTitle = props => {
     const productDetails = props;

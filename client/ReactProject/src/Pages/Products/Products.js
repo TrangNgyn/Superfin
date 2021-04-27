@@ -38,9 +38,7 @@ const Products = () => {
         }
     }
 
-    const filterProduct = (product) => {
-        return (filter === "allCategories" || filter === 0) ? true : product.p_categories === filter;
-    }
+    
 
     // For preloading data
     useEffect(() => {
@@ -52,9 +50,16 @@ const Products = () => {
 
     // For handling filtering and sorting
     useEffect(() => {
-        if(filter !== 0 && sorted !== 0)
-            setFilterAndSorted(products.filter(e => { return filterProduct(e); }).sort((a, b) => { return sortProduct(a, b, sorted); }));
-    }, [filter, sorted, categories, products, dispatch]);
+        const filterProduct = (product) => {
+            return (filter === "allCategories" || filter === 0) ? true : product.p_categories === filter;
+        }
+
+        if(filter !== 0 && sorted !== 0){
+            const filteredSortedProducts = products.filter(e => { return filterProduct(e); }).sort((a, b) => { return sortProduct(a, b, sorted); });
+            setFilterAndSorted(filteredSortedProducts);
+        }
+            
+    }, [filter, sorted, products, setFilterAndSorted]);
 
     return (
             <><div className="page-title-holder fill">
