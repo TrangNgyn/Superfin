@@ -1,8 +1,8 @@
 import '../../_assets/CSS/pages/Checkout/CheckoutShipping.css';
 import { Typography, Form, Input, Button, Row, Col, Steps, Select, InputNumber } from 'antd';
 import {CaretLeftOutlined} from '@ant-design/icons';
-import { Link } from 'react-router-dom';
-
+import { Link, Redirect } from 'react-router-dom';
+import { history } from '../../_helpers/history';
 
 
 
@@ -20,6 +20,8 @@ const CheckoutShipping = () =>{
 
       const onFinish = (values) => {
         console.log('Success:', values);
+        localStorage.setItem('user', JSON.stringify(values));
+        history.push('/CheckoutReviewOrder');
       };
 
       const onFinishFailed = (errorInfo) => {
@@ -39,8 +41,8 @@ const CheckoutShipping = () =>{
         <div>
         <Steps current={0}>
             <Step title="Shipping Address"/>
-            <Step title="Secure Payment" />
             <Step title="Review Order"/>
+            <Step title="Secure Payment" />
             <Step title="Order Complete"/>
           </Steps>,
         </div>
@@ -81,22 +83,14 @@ const CheckoutShipping = () =>{
             </Row>
             <Row gutter={16}>
               <Col span={24}>
-              <Form.Item label="Company Name" name="companyname">
-              <Input />
+              <Form.Item label="Street number" name="street_number" rules={[{ type: 'number',min:0, message: "Street number cannot be negative"},{required: true, message: "Input an address"}]}>
+              <InputNumber min={0} />
               </Form.Item>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={24}>
-              <Form.Item 
-                label="Address" 
-                name="address" 
-                rules={[
-                    { 
-                        required: true,
-                        message: "Input an address" 
-                    }
-                ]}>
+              <Form.Item label="Street name" name="street_name" rules={[{ required: true, message: "Input an address"  }]}>
               <Input />
               </Form.Item>
               </Col>
@@ -194,7 +188,7 @@ const CheckoutShipping = () =>{
               </Col>
               <Col span={12}>
               <Form.Item >
-              <Button type="primary" htmlType="submit"><Link to="/CheckoutSecurePayment">Continue</Link></Button>
+              <Button type="primary" htmlType="submit">Continue</Button>
               </Form.Item>
               </Col>
             </Row>
