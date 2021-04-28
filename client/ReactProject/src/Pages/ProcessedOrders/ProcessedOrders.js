@@ -74,7 +74,7 @@ const ProcessedOrders = () => {
                         <td>{o.trackingNumber}</td>
                         <td>{o.carrier}</td>
                         <td><b className="processed-orders-view" onClick={() => {
-                            history.push('/order/' + o.po_number);
+                            history.push(`/order/${o.po_number}/${o.status}`);
                         }}>View</b></td>
                     </tr>
                 );

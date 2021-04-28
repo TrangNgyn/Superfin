@@ -32,8 +32,7 @@ const CurrentOrders = () => {
     const orders = useSelector(state => state.incompleteOrdersState.incompleteOrders);
     const error = useSelector(state => state.incompleteOrdersState.error);
     const loading = useSelector(state => state.incompleteOrdersState.loading);
-    const [ordersList, setOrdersList] = useState([]);
-    //const [indexs, setIndex] = useState([]);                
+    const [ordersList, setOrdersList] = useState([]);             
     const [page, setPage] = useState(0);
     const maxNumberOfPages = (Math.ceil(ordersList.length/itemsPerPage) - 1);
     let renderableProducts = [];

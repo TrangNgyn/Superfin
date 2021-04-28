@@ -15,6 +15,7 @@ const { Sider, Content } = Layout;
 
 const Cart = () =>{
       const { total, cartItems, itemCount, clearCart } = useContext(CartContext);
+
       return(
 
         <body>

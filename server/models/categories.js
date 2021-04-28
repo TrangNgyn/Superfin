@@ -15,7 +15,8 @@ const categories_schema = new Schema({
     } 
 },
 {
-    collection: "categories"
+    collection: "categories",
+    versionKey: false
 })
 
 

@@ -5,7 +5,7 @@ const order_model = require('../models/purchased_order');
 
 var empty_field = { error: "All fields must be filled" }
 var incorrect_status = { error: "Status must be one of, NEW, SENT, or COMPLETE" }
-var stat = ['SENT','COMPLETE','NEW'];
+var stat = ['SHIPPED','COMPLETE','NEW'];
 
 mongoose.set('useFindAndModify', false);
 
@@ -35,22 +35,30 @@ class Purchased_Order {
     // @access  Public
 
     async post_order_by_email(req, res) {
-        // Using fetch
-        let {email} = req.body;
-        if(!email){
-            return res.json(empty_field)
+        try{
+            let {email} = req.body;
+            if(!email){
+                return res.json(empty_field)
+            }
+            order_model
+                .find({c_email: email})
+                .orFail( new Error(`${email} has no orders`))
+                .then((order) => {
+                    res.json(order)
+                })
+                .catch(err => {
+                    res.json({
+                        success: false,
+                        message: err.message
+                    })
+                })
         }
-        order_model
-            .find({CustomerEmail: email})
-            .exec()
-            .then((order) => {
-                if (!order) {
-                    res.status(404)
-                    return res.json({success: false})
-                }
-                return res.json(order)
+        catch(err) {
+            res.json({
+                success: false,
+                message: err._message
             })
-            .catch(err => res.json(err))
+        }
     } 
 
     // @route   POST api/orders/add-tracking
@@ -89,7 +97,10 @@ class Purchased_Order {
             })
         }
         catch (err) {
-            console.log(err);
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 
@@ -107,7 +118,10 @@ class Purchased_Order {
         }
         
         catch(err) {
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 
@@ -124,7 +138,10 @@ class Purchased_Order {
         }
         
         catch(err){
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 
@@ -135,34 +152,44 @@ class Purchased_Order {
     async create_order(req,res) {
         try {
 
-            let { po_number, c_email, status, items} = req.body
+            let { c_email, status, items, address } = req.body
 
-            if( !po_number | !c_email | !status | !items) {
+            if( !c_email | !status | !items | !address) {
                 return res.json(empty_field)
             }
 
             var issued_date = new Date()
 
-            const new_order = new order_model({
-                po_number,
-                c_email,
-                issued_date,
-                status,
-                items
-            })
-            var saved_order = await new_order.save()
-            if(saved_order){
-                return res.json({ success: true,
-                                  message: "Order was saved" })
+            try {
+                const doc = await order_model.create({
+                    c_email,
+                    issued_date,
+                    status,
+                    items,
+                    address
+                })
+
+                return res.json({
+                    success:true,
+                    message: "Order was added",
+                    po_number: doc.po_number
+                })
             }
-            else {
-                return res.json({ success: false,
-                                  message: "Order was not saved" })
-            }
+            catch(err) {
+                return res.json({
+                    success: false,
+                    message: "Order was not saved",
+                    error: err._message
+                })
+            }     
         
         }
-        catch(error){
-            console.log(error)
+        catch(err){
+            return res.json({
+                success: false,
+                message: err._message
+            })
+            
         }
     }
 
@@ -172,7 +199,11 @@ class Purchased_Order {
 
     async edit_order(req, res){
         try{
-            let { po_number, c_email, status, items, tracking_number, carrier} = req.body
+            let { po_number, c_email, status, items, tracking_number, carrier, address} = req.body
+
+            if( !po_number | !c_email | !status | !items | !address) {
+                return res.json(empty_field)
+            }
 
             if(stat.indexOf(status) === -1){
                 return res.json(incorrect_status)
@@ -183,12 +214,13 @@ class Purchased_Order {
                 status,
                 items,
                 tracking_number,
-                carrier
+                carrier,
+                address
             })
             .orFail( new Error(`Order ${po_number} not found`))
             .then(() => {
-                res.json({ success: true,
-                                  message: `Order ${po_number} was edited`})
+                res.json({  success: true,
+                            message: `Order ${po_number} was edited`})
             })
             .catch(error => {
                 res.json({ error: error.message })
@@ -198,7 +230,10 @@ class Purchased_Order {
 
         }
         catch(err){
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 
@@ -214,19 +249,22 @@ class Purchased_Order {
                 return res.json(empty_field)
             }
 
-            var deleted = await order_model.findOneAndDelete({ po_number: po_number })
-
-            if(!deleted){
-                res.json({ success: false,
-                                message: `No order with po_number ${po_number} was found`})
-            }
-            else{ 
+            order_model.findOneAndRemove({ po_number: po_number })
+            .orFail(new Error(`Order ${po_number} not found`))
+            .then(() => {
                 res.json({ success: true,
-                           message: `Order with po_number ${po_number} was deleted`})
-            }
+                           message: `Order ${po_number} was deleted`})
+            })
+            .catch(error => {
+                res.json({ success: false,
+                           message: error.message })
+            })
         }
         catch(err){
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 
@@ -242,17 +280,21 @@ class Purchased_Order {
                 return res.json(empty_field)
             }
 
-            var found_order = await order_model.findOne({ po_number: po_number})
+            var found_order = await order_model.findOne({ po_number: po_number })
 
             if(!found_order){
-                return res.json({ success: false,
-                                message: `There was no order with po_number ${po_number}`})
+                return res.json({ 
+                    success: false,
+                    message: `There was no order with po_number ${po_number}`})
             }
 
             return res.json(found_order)
         }
         catch(err){
-            console.log(err)
+            return res.json({
+                success: false,
+                message: err._message
+            })
         }
     }
 }

@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { CartContext } from '../../contexts/CartContext';
-import { Row, Col} from 'antd';
+
+import { Row, Col } from 'antd';
 import {PlusCircleOutlined, MinusCircleOutlined, RestOutlined } from '@ant-design/icons';
 import { formatNumber } from '../../_helpers/utils';
 import altImage from "../../_assets/Images/No_Image.jpg"

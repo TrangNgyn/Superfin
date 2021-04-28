@@ -40,7 +40,7 @@ const ContactUs = () =>{
   }, [dispatch, companyInfo]);
   return (
       <>
-        <div className="page-title-holder fill center-text">
+        <div className="page-title-holder fill">
           <h2>We'd love to hear from you</h2>
         </div>
         <div className="flex-horizontal-box-container" id="contact-us-content">

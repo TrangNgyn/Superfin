@@ -9,28 +9,26 @@ const monthFormat = 'MM/YY';
 
 
 const CheckoutSecurePayment = () =>{
-      const [form] = Form.useForm();
-      const onFinish = (values) => {
-        console.log('Success:', values);
-      };
-      const onFinishFailed = (errorInfo) => {
-          console.log('Failed:', errorInfo);
-      };
-      const validateMessages = {
-        required: '${label} is required',
-        types: {
-          email: '${label} is not a valid email',
-          number: '${label} is not a valid number!',
-        },
-        number: {
-          range: '${label} must be between ${min} and ${max}',
-        },
-      };
-      const [value, setValue] = React.useState(1);
-      const onChange = e => {
-          console.log('radio checked', e.target.value);
-          setValue(e.target.value);
-        };
+    const [form] = Form.useForm();
+    const [value, setValue] = React.useState(1);
+
+    const onFinish = (values) => {
+    console.log('Success:', values);
+    };
+
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
+
+    const onChange = e => {
+        console.log('radio checked', e.target.value);
+        setValue(e.target.value);
+    };
+
+
+
+
+
       return(
         <body>
         <div id="checkout-payment-head">
@@ -58,23 +56,46 @@ const CheckoutSecurePayment = () =>{
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
               requiredMark={false}
-              validateMessages={validateMessages}
             >
             <Row gutter={16}>
               <Col span={10} offset={7}>
-              <Form.Item name="Card Number" label="Card Number" rules={[{ type: 'number'},{required: true}]}>
+              <Form.Item 
+                name="Card Number" 
+                label="Card Number" 
+                rules={[
+                    { 
+                        type: 'number',
+                        required: true,
+                        message: 'Input valid card number!'
+                    }
+                ]}>
                 <InputNumber  style={{ width: 450 }}/>
               </Form.Item>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={3} offset={7}>
-              <Form.Item label="Exp Month/ Exp Year" name="expmonthyear" rules={[{ required: true}]}>
+              <Form.Item 
+                label="Exp Month/ Exp Year" 
+                name="expmonthyear" 
+                rules={[
+                    { 
+                        required: true,
+                        message: "Please input an expiration date"
+                    }
+                ]}>
               <DatePicker  format={monthFormat} picker="month" />
               </Form.Item>
               </Col>
               <Col span={6} offset={1}>
-              <Form.Item name="CVV" label="CVV" rules={[{ type: 'number',min: 0, max: 999,},{required: true}]}>
+              <Form.Item name="CVV" label="CVV" 
+                rules={[
+                    { 
+                        type: 'number',
+                        required: true,
+                        message: "Input a value between 0 and 999!"
+                    }
+                ]}>
                 <InputNumber min={0} max={999}/>
               </Form.Item>
               </Col>
