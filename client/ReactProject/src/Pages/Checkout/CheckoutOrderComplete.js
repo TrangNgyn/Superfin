@@ -1,8 +1,6 @@
 import React, { useContext } from 'react';
 import '../../_assets/CSS/pages/Checkout/CheckoutOrderComplete.css';
 import { Typography, Button, Row, Col, Steps } from 'antd';
-import img1 from "../../_assets/Images/Temp_Images/product_image_1.jpg"
-import img2 from "../../_assets/Images/visa.png"
 import CheckoutProducts from './CheckoutProducts';
 import { CartContext } from '../../contexts/CartContext';
 import { formatNumber } from '../../_helpers/utils';
@@ -14,9 +12,10 @@ const { Step } = Steps;
 
 
 const CheckoutOrderComplete = () =>{
-      const { total } = useContext(CartContext);
+      const { total, clearCart } = useContext(CartContext);
       const userInfo = JSON.parse(localStorage.getItem("user"));
-      console.log(userInfo.firstname);
+      localStorage.clear();
+
       return(
         <body>
 
@@ -81,7 +80,7 @@ const CheckoutOrderComplete = () =>{
         <Col span={12}><Title level={4}>Payment Details</Title></Col>
         </Row>
         <Row>
-        Payment type: Visa card <img src={img2} alt="visa" width="5%" height="5%"/>
+        Payment: Stripe
         </Row>
         </div>
 
@@ -90,7 +89,7 @@ const CheckoutOrderComplete = () =>{
         <Col span={12}><Title level={4}>Shipping Address</Title></Col>
         </Row>
         <Row>
-        <Col span={24}>Delivery Address:{userInfo.address}, {userInfo.suburb}, {userInfo.stateprovince}, Australia</Col>
+        <Col span={24}>Delivery Address: {userInfo.street_number} {userInfo.street_name}, {userInfo.suburb}, {userInfo.stateprovince}, Australia</Col>
         </Row>
         </div>
 

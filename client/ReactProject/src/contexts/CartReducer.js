@@ -14,8 +14,9 @@ export const CartReducer = (state, action) => {
         case "ADD_ITEM":
             if (!state.cartItems.find(item => item._id === action.payload._id)) {
                 state.cartItems.push({
-                    ...action.payload,
-                    quantity: 1
+                    id: action.payload._id,
+                    quantity: 1,
+                    p_price: action.payload.p_price
                 })
             }
 

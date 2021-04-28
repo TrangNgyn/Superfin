@@ -71,15 +71,15 @@ const CheckoutShipping = () =>{
             </Row>
             <Row gutter={16}>
               <Col span={24}>
-              <Form.Item label="Company Name" name="companyname">
-              <Input />
+              <Form.Item label="Street number" name="street_number" rules={[{ type: 'number',min:0},{required: true}]}>
+              <InputNumber />
               </Form.Item>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={24}>
-              <Form.Item label="Address" name="address" rules={[{ required: true }]}>
-              <Input />
+              <Form.Item label="Street name" name="street_name" rules={[{ required: true }]}>
+              <Input min={0}/>
               </Form.Item>
               </Col>
             </Row>

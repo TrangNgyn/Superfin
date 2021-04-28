@@ -14,7 +14,7 @@ const { Title } = Typography;
 const { Sider, Content } = Layout;
 
 const Cart = () =>{
-      const { total, cartItems, itemCount } = useContext(CartContext);
+      const { total, cartItems, itemCount, clearCart } = useContext(CartContext);
       return(
 
         <body>
@@ -61,6 +61,10 @@ const Cart = () =>{
         <Row gutter={[16, 18]} justify="space-around" align="middle">
         <Button type="primary"><Link to="/CheckoutShipping">CHECKOUT</Link></Button>
         </Row>
+        <Row gutter={[16, 18]} justify="space-around" align="middle">
+        <Button type= "text"onClick={clearCart}>Clear</Button>
+        </Row>
+
         <Row justify="space-around" align="middle">
         <img src={visa} alt="visa"width="30%"/>
         <img src={mastercard} alt="mastercard" width="30%" />
