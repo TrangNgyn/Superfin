@@ -98,12 +98,12 @@ export default function MyAccount(){
     //const [userType,setUseType] = useState(1);
     return(
         <Layout>
-                {/* <Sider width = "256" className="my-account-sider-menu"> 
+                {/* <Sider width = "256" className="my-account-sider-menu">
                     <MyAccountSideMenu/>
                 </Sider> */}
             <Content>
                 <Row>
-                    <h1>My Account</h1> 
+                    <h1>My Account</h1>
                 </Row>
                 <Row className="my-account-username-avatar">
                     <Avatar size={128} icon={<UserOutlined/>} />
