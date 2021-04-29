@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const MpathPlugin = require('mongoose-mpath/lib/mpath')
+const products_model = require('../models/product')
 
 const categories_schema = new Schema({
     c_name: {
@@ -11,6 +11,11 @@ const categories_schema = new Schema({
     },
     c_description: {
         type: String
+    },
+    path: {
+        type: String,
+        default: null,
+        index: true
     }
 },
 {
@@ -19,6 +24,9 @@ const categories_schema = new Schema({
 })
 
 
-categories_schema.plugin(MpathPlugin);
+categories_schema.pre('deleteOne', {document:true, query:false}, async function() {
+    await products_model.deleteMany({p_categories: this._id })
+})
+
 
 module.exports = category = mongoose.model("category", categories_schema);

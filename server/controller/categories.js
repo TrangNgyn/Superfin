@@ -6,40 +6,6 @@ var empty_field = {
     error: "All fields must be filled" 
 }
 
-
-async function defulat_search(req,value){
-    try{
-        var c_name = req.c_name
-        if(!c_name){
-            throw (empty_field)
-        }
-        var found_parent = await categories_model.findOne({c_name})
-
-        if(found_parent){
-            switch(value){
-                case 0:
-                    return found_parent.getAllChildren({},"c_name");
-                case 1:
-                    return found_parent.getImmediateChildren({},"c_name");
-                case 2:
-                    return found_parent.getAncestors({},"c_name");
-            } 
-        }
-        else{
-            throw {
-                succes: false,
-                message: `No parent found with name ${c_name}`
-            }
-        }
-    }
-    catch(err){
-        throw {
-            success:false,
-            message: err.message
-        }
-    }
-}
-
 class Category {
 
     // @route   GET api/categories/all-categories
@@ -54,7 +20,10 @@ class Category {
             })
         }
         catch(err) {
-            console.log(err)
+            return res.json({
+                success: false,
+                error: err.message 
+            })
         }
     }
 
@@ -64,38 +33,22 @@ class Category {
 
     async post_add_category(req,res) {
         try{
-            var { c_name, c_description, parent } = req.body
+            var { c_name, c_description, path } = req.body
 
-            // validate that all fields are present
-            if( !c_name | !c_description) {
+            // ensure required fields are present
+            if(!c_name | !c_description){
                 return res.json(empty_field)
             }
 
-            var new_category;
-
-            if(parent) {                
-                var found_parent = await categories_model.findOne({ c_name: parent })
-                    
-                if(!found_parent){
-                    return res.json({
-                        success: false,
-                        message: `No parent found with c_name ${parent}`
-                    })
-                }
-                new_category = new categories_model({
-                    c_name, 
-                    c_description,
-                    parent: found_parent
-                })
-                
-            }   
-            else {
-                new_category = new categories_model({
-                    c_name,
-                    c_description
-                })
+            if(path === "") {
+                path = null;
             }
-            
+
+            var new_category = new categories_model({
+                c_name,
+                c_description,
+                path
+            })
             new_category.save((err) => {
                 if(err) {
                     return res.json({
@@ -108,7 +61,7 @@ class Category {
                     message: `Category with name ${c_name} was added`
                 })
             })
-                
+            
         }
         catch(err) {
             return res.json({
@@ -119,51 +72,69 @@ class Category {
     }
 
     // @route   GET api/categories/all-children
-    // @desc    Get all children of specifed category
+    // @desc    Get all children of the specified root
     // @acess   Public
 
-    async all_children(req,res) {
+    async get_all_children(req,res) {
         try{
-            res.json(await defulat_search(req.query,0))
+            var c_name  = req.query.c_name
+
+            var found = await categories_model.find({ c_name })
+
+            if(found) {
+                var search = `,${c_name},`
+                var children = await categories_model.find({ path: new RegExp(search) })
+                res.json({
+                    children
+                })
+            }
+            else{
+                res.json({
+                    success: false,
+                    message: `No category found with c_name ${c_name}`
+                })
+            }
+
         }
-        catch(err){
-            return res.json({
+        catch(err) {
+            res.json({
                 success: false,
-                error: err.message 
+                error: err.message
             })
-        }  
+        }
     }
-
-    // @route   GET api/categories/children
-    // @desc    Get immediate children of specified category
+    // @route   GET api/categories/immediate-children
+    // @desc    Get immediate children
     // @acess   Public
 
-    async immed_children(req,res) {
-        try{
-            res.json(await defulat_search(req.query,1))
-        }
-        catch(err){
-            return res.json({
-                success: false,
-                error: err.message 
-            })
-        }  
-    }
 
-    // @route   GET api/categories/ancestors
-    // @desc    Get all ancestors of specified category
-    // @acess   Public
-
-    async get_ancestors(req,res) {
+    async get_immediate_children(req,res) {
         try{
-            res.json(await defulat_search(req.query,2))
+            var c_name  = req.query.c_name
+
+            var found = await categories_model.find({ c_name })
+
+            if(found) {
+                var search = `,${c_name},$`
+                var children = await categories_model.find({ path: new RegExp(search) })
+                res.json({
+                    children
+                })
+            }
+            else{
+                res.json({
+                    success: false,
+                    message: `No category found with c_name ${c_name}`
+                })
+            }
+
         }
-        catch(err){
-            return res.json({
+        catch(err) {
+            res.json({
                 success: false,
-                error: err.message 
+                error: err.message
             })
-        }  
+        }
     }
 
     // @route   DEL api/categories/delete
@@ -181,96 +152,43 @@ class Category {
             var delete_category = await categories_model.findOne({c_name})
 
             if(delete_category){
-                categories_model.deleteOne({c_name}, (err, result) => {
-                    if(err)
-                        res.json({
-                            succes: false,
-                            error: err.message
-                        })
-                    else {
-                        if(result.deletedCount===1){
+                var children = await categories_model.find({ path: new RegExp(`,${c_name},`)})
+                children.push(delete_category)
+                var deleted = [];
+                var process = 0;
+                children.forEach(element => {
+                    element.deleteOne((err,result) => {
+                        if(err){
                             return res.json({
-                                success: true,
-                                message: `The category with c_name ${c_name} was delted`
+                                success: false,
+                                message: err.message
                             })
                         }
                         else {
-                            res.json(result)
+                            process++
+                            deleted.push(result)
                         }
-                    }
+                        if(process === children.length) {
+                            return res.json({
+                                success: true,
+                                message: `${c_name} was deleted, as were sub-categories and products`,
+                                deleted: deleted
+                            })
+                        }
+                    })
                 })
             }
-            else {
-                return res.json({
+            else{
+                res.json({
                     success: false,
-                    message: `No category with c_name ${c_name} was found, no category deleted`
+                    message: `No category with c_name ${c_name}, no category was deleted`
                 })
             }
-
         }
         catch(err){
-            return res.json({
-                success: false,
-                error: err.message
-            })
+
         }
     }
-
-    async children_tree(req,res) {
-
-        categories_model.findOne({c_name: req.query.c_name})
-            .then(categories_model => categories_model.getChildrenTree({}))
-            .then(categories_model => res.json(categories_model))
-    }
-
-
-//     // @route   POST api/categoires/edit-category
-//     // @desc    Edit an existing category
-//     // @access  Public
-
-//     async post_edit_category(req,res) {
-//         try{
-//             // load data from the req body into variables
-//             var { c_name, c_description, c_image } = req.body
-
-//             // load the images from the files
-//             var images = req.files
-
-//             // check that the input was recieved
-//             if(!c_name | !c_description) {
-//                 return res.json({ success: false,
-//                                   message: empty_field })
-//             }
-
-//             // ensure that c_name and c_description are no longer than 255 characters
-//             if(c_name > 255 | c_description > 255) {
-//                 return res.json({ success: false,
-//                                   message: "c_name and c_description cannot be longer than 255 characters"})
-//             }
-
-//             // find the category that is being edited
-//             var category = await categories_model.findOne({ c_name: c_name })
-
-//             // if there is  no found category then return error 
-//             if(!category) {
-//                 res.status(404)
-//                 return res.json({ success: false,
-//                                   message: "No category found"})
-//             }
-
-//             // if the length of the submitted string is 0 remove all images from the category
-//             if(c_image.length === 0) {
-//                 Category.delete_images(category.c_image)
-//             }
-
-//             // check each of the 
-
-//         }
-//         catch(err) {
-//             console.log(err)
-//         }
-//     }
-
 }
 
 const categories_controller = new Category
