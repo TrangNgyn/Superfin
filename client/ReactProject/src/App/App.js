@@ -42,6 +42,7 @@ import Footer from '../SharedComponents/Footer/FooterMain';
 import ManageOrdersCustomer from '../Pages/ManageOrdersCustomer/ManageOrdersCustomer';
 import Store from '../Pages/Homepage/products';
 import Cart from '../Pages/Cart/index';
+import Cancel from '../Pages/cancel';
 
 
 
@@ -107,6 +108,7 @@ const App = () => (
 
                <Route path="/editCompanyInformation"><EditCompanyInfo /></Route>
                <Route path="/manageProducts"><ManageProducts /></Route>
+               <Route path="/Cancel"><Cancel /></Route>
 
                 <Route exact path="/editAddProducts"><AddEditProduct /></Route>
                <Route path="/editAddProducts/:p_code"><AddEditProduct /></Route>
