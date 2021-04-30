@@ -1,4 +1,3 @@
-import React, { useReducer } from "react";
 import {authConstants} from '../_constants/auth.constants';
 
 export const initialState = {

@@ -1,11 +1,9 @@
 import Product from './Product';
-
-import { useState } from "react";
 import { List } from 'antd';
 
 const ProductsList = props => {
 
-    const [page, setPage] = useState(0);
+   // const [page, setPage] = useState(0);
     return (
         <>
             <List className="container"
@@ -15,7 +13,7 @@ const ProductsList = props => {
                 pagination={{
                     showSizeChanger: true,
                     position: 'both',
-                    onChange: page => { setPage(page - 1) }
+                   // onChange: page => { setPage(page - 1) }
                 }}
                 dataSource={Object.values(props)}
                 renderItem={item => (

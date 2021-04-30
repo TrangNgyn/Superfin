@@ -22,7 +22,7 @@ const ProductDetails = props => {
     useEffect(() => { // For retrieving the details of the p_code
         if (productCode !== null)
             dispatch(getProductDetails(productCode));
-    }, [productCode, productDetails]);
+    }, [productCode, productDetails, dispatch]);
     
 
     return (<>

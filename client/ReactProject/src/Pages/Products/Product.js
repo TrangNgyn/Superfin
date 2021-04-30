@@ -20,7 +20,18 @@ const Product = props => {
             <ShoppingOutlined key="addToCart" />,
             <EditOutlined key="customizeBag" />
         ]}>
-        <Meta title={<a onClick={() => { history.push(`productDetails?p_code=${productDetails.p_code}`) }}>{productDetails.p_name}</a>} description={descriptionWithPrice} />
+        <Meta 
+            title={
+                    <span 
+                        id="view-product-title"
+                        onClick={() => { 
+                            history.push(`productDetails?p_code=${productDetails.p_code}`) 
+                        }}>
+                        {productDetails.p_name}
+                    </span>
+            } 
+            description={descriptionWithPrice} 
+        />
     </Card>);
 };
 
