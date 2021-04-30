@@ -23,7 +23,7 @@ const userDetails = {
 
 
 
-export default function Navbar(props){
+export default function Navbar(){
     const {itemCount} = useContext(CartContext);
     const [userType, setUserType] = useState(userDetails.userType);
     const categories = useSelector(state => state.categoryState.categories);

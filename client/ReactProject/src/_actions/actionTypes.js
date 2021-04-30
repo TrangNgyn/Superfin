@@ -12,6 +12,7 @@ export const ERROR = "ERROR";
 export const GET_CATEGORIES = "GET_CATEGORIES";
 export const ERROR_CATEGORIES = "ERROR_CATEGORIES";
 export const LOADING_CATEGORIES = "LOADING_CATEGORIES";
+export const EMPTY_CATEGORIES = "EMPTY_CATEGORIES";
 
 //Company Info Action Types
 export const GET_COMPANY_INFO = "GET_COMPANY_INFO";
