@@ -11,7 +11,7 @@ import { getAllCategories } from '../../_actions/categoryActions';
 import { onlyNumbers } from '../../_services/SharedFunctions';
 import { confirmEdit, confirmAdd } from './Modals'; 
 
-
+const { Option, OptGroup } = Select;
 
 
 
@@ -23,6 +23,12 @@ const AddEditProduct = () => {
 
     const productsList = useSelector(state => state.productState.products);
     const categories = useSelector(state => state.categoryState.categories);
+    const emptyCategories = useSelector(state => state.categoryState.empty);
+
+    const [parentCategoires, setParentCategories] = useState([]);
+    const [childCategories, setChildCategories] = useState([]);
+
+   
 
     
 
@@ -49,26 +55,46 @@ const AddEditProduct = () => {
         }
         else setPageState(ADD);
 
-        if(!categories.length) dispatch(getAllCategories());
-    }, [categories.length, dispatch, p_code, productsList]);
+        if(!categories.length && !emptyCategories) dispatch(getAllCategories());
+        else{   
+            if(!parentCategoires.length){
+                const parents = categories.filter(c => {
+                    return c.path === null;
+                });
+                setParentCategories(parents);
+            }
+            if(!childCategories.length){
+                const children = categories.filter(c => {
+                    return c.path !== null;
+                });
+                setChildCategories(children);
+            }
+        }
+    }, [categories.length, dispatch, p_code, productsList, categories, childCategories.length, emptyCategories, parentCategoires.length]);
 
     useEffect(() => {                                                       //sets the form values if in edit mode
         if(pageState === EDIT) setFormValues(form, product, categories);
     }, [categories, product, form, pageState]);
 
-    let selectCategories = <></>;                                           //dynamically displays the category choices
-    if(categories.length !== 0){
-        selectCategories = categories.map(p => {
-            return <Select.Option key={p.c_name} value={p.p_categories}>{p.c_name}</Select.Option>
-        })
-    }
+    
+
+    const selectCategories = parentCategoires.map(p => {
+        const sub_categories = childCategories
+            .filter(c => { return c.path === `,${p.c_name},`})
+            .map(c => {
+                return <Option key={c._id} value={c._id}>{c.c_name}</Option>
+            });
+
+        return <OptGroup key={p._id} label={p.c_name}>{sub_categories}</OptGroup>
+    });
+        
+    
 
 
 
 
 
     const onFinish = newProduct => {                                                    //handles form submission
-        newProduct.p_categories = getProductId(newProduct.p_categories, categories);
         newProduct.p_image_uri = [];                                                        //IMPORTANT remove this later
 
         if(pageState === EDIT){
@@ -79,9 +105,8 @@ const AddEditProduct = () => {
                 else confirmEdit(newProduct);    //if the Store does not contain products, just need to do API call. do not need to update store   
             }
         }
-        
-        if(pageState === ADD){
 
+        if(pageState === ADD){
             if(productsList.length !== 0) confirmAdd(newProduct, dispatch);
             else confirmAdd(newProduct);
         }
