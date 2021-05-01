@@ -24,14 +24,35 @@ const userDetails = {
 
 
 export default function Navbar(){
-    const {itemCount} = useContext(CartContext);
-    const [userType, setUserType] = useState(userDetails.userType);
-    const categories = useSelector(state => state.categoryState.categories);
     const dispatch = useDispatch();
+    const {itemCount} = useContext(CartContext);
+
+    const [userType, setUserType] = useState(userDetails.userType);
+    const [parentCategoires, setParentCategories] = useState([]);
+    const [childCategories, setChildCategories] = useState([]);
+
+    const categories = useSelector(state => state.categoryState.categories);
+    const emptyCategories = useSelector(state => state.categoryState.empty);
+
+    
 
     useEffect(() => {
-        if(!categories.length) dispatch(getAllCategories());
-    }, [categories.length, dispatch]);
+        if(!categories.length && !emptyCategories) dispatch(getAllCategories());
+        else{   
+            if(!parentCategoires.length){
+                const parents = categories.filter(c => {
+                    return c.path === null;
+                });
+                setParentCategories(parents);
+            }
+            if(!childCategories.length){
+                const children = categories.filter(c => {
+                    return c.path !== null;
+                });
+                setChildCategories(children);
+            }
+        }
+    }, [categories.length, dispatch, categories, childCategories.length, emptyCategories, parentCategoires.length]);
 
   const logout = () => {          //fake login logout functions
     setUserType("GUEST");
@@ -99,15 +120,18 @@ export default function Navbar(){
       </Menu.Item>
     </SubMenu>
   );
-  let categoriesMenu = <></>
+  
+  const categoriesMenu = parentCategoires.map(p => {
+        const sub_categories = childCategories
+        .filter(c => { return c.path === `,${p.c_name},`})
+        .map(c => {
+            return <Menu.Item key={c._id}>{c.c_name}</Menu.Item>
+        })
 
-  if(categories.length !== 0){
-      categoriesMenu = categories.map(c => {
-          return ( <Menu.Item key={c._id}>
-                      <Link to={`/products/${c._id}`}> {c.c_name} </Link>
-                  </Menu.Item>)
-      });
-  }
+        return (
+            <SubMenu key={p._id} title={p.c_name}>{sub_categories}</SubMenu>
+        );
+  })
 
   const ourProductsDropdown = ( //Our Products dropdown
     <Menu>

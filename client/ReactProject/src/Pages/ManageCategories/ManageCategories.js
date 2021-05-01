@@ -17,7 +17,7 @@ const ManageCategories = () => {
 
     const [parentCategoires, setParentCategories] = useState([]);
     const [childCategories, setChildCategories] = useState([]);
-
+ 
     //for delete subcategory
     const [parent, setParent] = useState(null);
     const [children, setChildren] = useState([]);
@@ -35,7 +35,6 @@ const ManageCategories = () => {
                 return c.path === null;
             });
             setParentCategories(parents);
-            setParent(parents[0]);
 
             const children = categories.filter(c => {
                 return c.path !== null;
