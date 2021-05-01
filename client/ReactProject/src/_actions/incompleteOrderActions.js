@@ -1,4 +1,4 @@
-import {GET_INCOMPLETE_ORDERS, LOADING_INCOMPLETE_ORDERS, ERROR_INCOMPLETE_ORDERS, DELETE_INCOMPLETE_ORDERS, ADD_TRACKING} from './actionTypes';
+import {GET_INCOMPLETE_ORDERS, LOADING_INCOMPLETE_ORDERS, ERROR_INCOMPLETE_ORDERS, DELETE_INCOMPLETE_ORDERS, ADD_TRACKING, ADD_INCOMPLETE_ORDER} from './actionTypes';
 import axios from 'axios';
 
 export const getIncompleteOrders = () => dispatch => {
@@ -66,6 +66,25 @@ export const addTracking = trackingDetails => dispatch => {
         console.log(err);
         return err;
     })
+}
+
+export const addIncompleteOrder = order => dispatch => {
+    return axios.post('/api/orders/create-order', order)
+    .then(res => {
+        if(res.data.success){
+            order.po_number = res.data.po_number;
+            dispatch({
+                type: ADD_INCOMPLETE_ORDER,
+                payload: order
+            })
+        }
+        else console.log(res);
+        return res;
+    })
+    .catch(err => {
+        console.log(err);
+        return err;
+    });
 }
 
 

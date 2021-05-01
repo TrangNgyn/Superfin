@@ -42,6 +42,7 @@ class Product {
     async post_product_by_id(req, res) {
         try{
             var { p_code } = req.body
+            
             if(!p_code){
                 return res.json(empty_field)
             }
@@ -171,10 +172,6 @@ class Product {
             }
             
             // need too clean input here potentially to ensure that product addition is not corrupting the database
-
-            /*for (const image of images) {
-                all_images.push(image.filename)
-            } */
 
             const new_product = new product_model({
                 p_image_uri: images,
@@ -385,7 +382,7 @@ class Product {
                     }
                     product_model.deleteOne({ p_code: p_code }, (err,result) => {
                         if(err){
-                            res.send(err)
+                            res.json(err)
                         }
                         else {
                             if(result.deletedCount === 1){

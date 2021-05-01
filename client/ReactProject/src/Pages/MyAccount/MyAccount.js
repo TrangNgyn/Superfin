@@ -1,12 +1,11 @@
-import { Layout, Row, Col, Avatar, Button, Divider, Form } from 'antd';
-import React, { useState } from 'react';
-import MyAccountSideMenu from '../MyAccount/MyAccountSideMenu'
+import { Layout, Row, Avatar, Button, Form } from 'antd';
+// import MyAccountSideMenu from '../MyAccount/MyAccountSideMenu'
 import GenerateFormItem from '../../SharedComponents/Form/FormItem' // This will be in charge of creating the Form.Item for each of the elements below
 import { UserOutlined, EditOutlined, SaveOutlined } from '@ant-design/icons';
 
 
-const { Header, Content, Sider } = Layout;
-const isAuthenticated = 1;
+const { Content } = Layout;
+//const isAuthenticated = 1;
 
 const formElements = [
     {
@@ -96,15 +95,15 @@ const formElements = [
 ];
 
 export default function MyAccount(){
-    const [userType,setUseType] = useState(1);
+    //const [userType,setUseType] = useState(1);
     return(
         <Layout>
-                {/* <Sider width = "256" className="my-account-sider-menu"> 
+                {/* <Sider width = "256" className="my-account-sider-menu">
                     <MyAccountSideMenu/>
                 </Sider> */}
             <Content>
                 <Row>
-                    <h1>My Account</h1> 
+                    <h1>My Account</h1>
                 </Row>
                 <Row className="my-account-username-avatar">
                     <Avatar size={128} icon={<UserOutlined/>} />

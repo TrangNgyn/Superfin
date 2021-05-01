@@ -1,8 +1,9 @@
 import { Menu, Dropdown } from 'antd';
 import { UserOutlined, ShoppingCartOutlined, MenuOutlined } from '@ant-design/icons';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch  } from 'react-redux';
+import { CartContext } from '../../contexts/CartContext';
 
 import { getAllCategories } from '../../_actions/categoryActions';
 import { history } from '../../_helpers/history';
@@ -20,21 +21,43 @@ const userDetails = {
 
 
 
+ 
 
-
-export default function Navbar(props){
-    const [userType, setUserType] = useState(userDetails.userType);
-    const categories = useSelector(state => state.categoryState.categories);
+export default function Navbar(){
     const dispatch = useDispatch();
+    const {itemCount} = useContext(CartContext);
 
-    useEffect(() => {             
-        if(!categories.length) dispatch(getAllCategories());
-    }, [categories.length, dispatch]);
+    const [userType, setUserType] = useState(userDetails.userType);
+    const [parentCategoires, setParentCategories] = useState([]);
+    const [childCategories, setChildCategories] = useState([]);
+
+    const categories = useSelector(state => state.categoryState.categories);
+    const emptyCategories = useSelector(state => state.categoryState.empty);
+
+    
+
+    useEffect(() => {
+        if(!categories.length && !emptyCategories) dispatch(getAllCategories());
+        else{   
+            if(!parentCategoires.length){
+                const parents = categories.filter(c => {
+                    return c.path === null;
+                });
+                setParentCategories(parents);
+            }
+            if(!childCategories.length){
+                const children = categories.filter(c => {
+                    return c.path !== null;
+                });
+                setChildCategories(children);
+            }
+        }
+    }, [categories.length, dispatch, categories, childCategories.length, emptyCategories, parentCategoires.length]);
 
   const logout = () => {          //fake login logout functions
     setUserType("GUEST");
   }
-  
+
   //delete these login functions
   const loginUserCustomer = () => {
     setUserType("CUSTOMER");
@@ -97,15 +120,18 @@ export default function Navbar(props){
       </Menu.Item>
     </SubMenu>
   );
-  let categoriesMenu = <></>
+  
+  const categoriesMenu = parentCategoires.map(p => {
+        const sub_categories = childCategories
+        .filter(c => { return c.path === `,${p.c_name},`})
+        .map(c => {
+            return <Menu.Item key={c._id}>{c.c_name}</Menu.Item>
+        })
 
-  if(categories.length !== 0){
-      categoriesMenu = categories.map(c => {
-          return ( <Menu.Item key={c._id}> 
-                      <Link to={`/products/${c._id}`}> {c.c_name} </Link>
-                  </Menu.Item>)
-      });
-  }
+        return (
+            <SubMenu key={p._id} title={p.c_name}>{sub_categories}</SubMenu>
+        );
+  })
 
   const ourProductsDropdown = ( //Our Products dropdown
     <Menu>
@@ -138,11 +164,11 @@ export default function Navbar(props){
       </Menu.Item>
     </SubMenu>
   );
-  
+
   //Login/Welcome, User menu item that changes based on whether user is logged in or not
 
   let login = ( <Menu.Item key = "Login" onContextMenu={loginUserCustomer} onDoubleClick={loginUserAdmin} icon={<UserOutlined />}>
-      <Link to="/login"> Login/Sign up </Link>       
+      <Link to="/login"> Login/Sign up </Link>
     </Menu.Item>
   );
   let loginMobile = login;
@@ -208,18 +234,14 @@ export default function Navbar(props){
         <Link to="/deliveryDispatch"> Delivery and Dispatch </Link>
       </Menu.Item>
 
-      <Menu.Item key="About">
-        <Link to="/aboutUs"> About Us </Link>
-      </Menu.Item>
-
       <Menu.Item key="Blog">
         <Link to="/blog"> Blog </Link>
       </Menu.Item>
 
       <Menu.Item key="Cart" icon = {<ShoppingCartOutlined />}>
-        <Link to="/cart"> Cart </Link>
+        <Link to="/cart"> Cart ({itemCount}) </Link>
       </Menu.Item>
-    </>       
+    </>
   );
 
   let mainMenuMobile = (
@@ -227,10 +249,6 @@ export default function Navbar(props){
       {ourProductsSubmenuMobile}
       <Menu.Item key="Delivery">
         <Link to="/deliveryDispatch"> Delivery and Dispatch </Link>
-      </Menu.Item>
-
-      <Menu.Item key="About">
-        <Link to="/aboutUs"> About Us </Link>
       </Menu.Item>
 
       <Menu.Item key="Blog">

@@ -17,7 +17,7 @@ const HomepageAdminOrder = props => {
     const [form] = useForm();
 
     const date = new Date(order.issued_date);
-    const dateString = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+    const dateString = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
   
     const onFinishOrder = () => {
         form.validateFields()
