@@ -6,7 +6,8 @@ const delete_object = require('../middleware/delete');
 
 var empty_field = { 
     succes: false,
-    message: "All fields must be filled and present" }
+    message: "All fields must be filled and present" 
+}
 class Product {
 
     // delete images referenced by product
@@ -183,15 +184,6 @@ class Product {
             })
 
             var saved_product = await new_product.save()
-                                // .then(() => {
-                                //         return res.json({ success: true,
-                                //             message: `The product with code ${p_code} was added.` })
-                                // })
-                                // .catch(error => {
-                                //     Product.delete_images(images)
-                                //     return res.json(error)
-                                // })
-            
             if (saved_product) {    
                 return res.json({ success: true,
                                 message: `The product with code ${p_code} was added.` })
