@@ -123,10 +123,35 @@ async function stripe_create_session(items){
     });
 }
 
+async function stripe_post_charge(req, res) {
+    try {
+      const { amount, source, receipt_email } = req.body
+  
+      const charge = await stripe.charges.create({
+        amount,
+        currency: 'aud',
+        source,
+        receipt_email
+      })
+  
+      if (!charge) throw new Error('charge unsuccessful')
+  
+      res.status(200).json({
+        message: 'charge posted successfully',
+        charge
+      })
+    } catch (error) {
+      res.status(500).json({
+        message: error.message
+      })
+    }
+}
+
 module.exports = {
     stripe_add_product,
     stripe_deactivate_product,
     stripe_update_product,
     stripe_update_price,
-    stripe_create_session
+    stripe_create_session,
+    stripe_post_charge,
 };

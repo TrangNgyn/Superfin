@@ -4,14 +4,9 @@ import {CaretLeftOutlined} from '@ant-design/icons';
 import { Link, Redirect } from 'react-router-dom';
 import { history } from '../../_helpers/history';
 
-
-
 const { Title } = Typography;
 const { Option } = Select;
 const { Step } = Steps;
-
-
-
 
 
 
@@ -26,11 +21,7 @@ const CheckoutShipping = () =>{
 
       const onFinishFailed = (errorInfo) => {
           console.log('Failed:', errorInfo);
-      };
-
-      
-
-      
+      };      
 
       return(
         <body>
