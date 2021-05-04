@@ -6,26 +6,21 @@ import { useParams } from 'react-router-dom';
 import '../../_assets/CSS/pages/AddEditProduct/AddEditProduct.css';
 import { EDIT, ADD } from './PageStates';
 import { history } from '../../_helpers/history'; 
-import { getProduct, _getProduct, onPriceChange, onPreview, beforeUpload, onRemove, setFormValues, checkProductsEqual, getProductId } from './Functions';
+import { getProduct, _getProduct, onPriceChange, onPreview, beforeUpload, onRemove, setFormValues, checkProductsEqual, /*getProductId*/ } from './Functions';
 import { getAllCategories } from '../../_actions/categoryActions';
 import { onlyNumbers } from '../../_services/SharedFunctions';
 import { confirmEdit, confirmAdd } from './Modals'; 
-
-<<<<<<< HEAD
 import { createFormData, checkBlob } from './Functions';
-import axios from 'axios';
-
+//import axios from 'axios';
+/*
 const config = {
     headers: {
         'content-type': 'multipart/form-data'
     }
-}
-=======
+}*/
+
 const { Option, OptGroup } = Select;
 
-
-
->>>>>>> develop
 
 const AddEditProduct = () => {
     
@@ -39,13 +34,6 @@ const AddEditProduct = () => {
     const [parentCategoires, setParentCategories] = useState([]);
     const [childCategories, setChildCategories] = useState([]);
 
-   
-
-<<<<<<< HEAD
-=======
-    
-
->>>>>>> develop
     const [pageState, setPageState] = useState(null);
     const [product, setProduct] = useState(null);
     const [fileList, updateFileList] = useState([]);
@@ -76,12 +64,6 @@ const AddEditProduct = () => {
         }
         else setPageState(ADD);
 
-<<<<<<< HEAD
-        if(!categories.length) dispatch(getAllCategories());
-
-
-    }, [categories.length, dispatch, p_code, productsList]);
-=======
         if(!categories.length && !emptyCategories) dispatch(getAllCategories());
         else{   
             if(!parentCategoires.length){
@@ -98,7 +80,8 @@ const AddEditProduct = () => {
             }
         }
     }, [categories.length, dispatch, p_code, productsList, categories, childCategories.length, emptyCategories, parentCategoires.length]);
->>>>>>> develop
+        
+
 
     useEffect(() => {                                                       //sets the form values if in edit mode
         if(pageState === EDIT) setFormValues(form, product, categories);
@@ -123,13 +106,7 @@ const AddEditProduct = () => {
 
 
     const onFinish = newProduct => {                                                    //handles form submission
-<<<<<<< HEAD
-        newProduct.p_categories = getProductId(newProduct.p_categories, categories);
-        
-=======
         newProduct.p_image_uri = [];                                                        //IMPORTANT remove this later
->>>>>>> develop
-
         if(pageState === EDIT){
             newProduct.p_code = product.p_code;
             newProduct.p_image_uri = product.p_image_uri;
@@ -146,19 +123,18 @@ const AddEditProduct = () => {
             formData.append("p_description", newProduct.p_description);
             formData.append("p_image_uri", newProduct.p_image_uri);
 
-            /*if(!checkProductsEqual(newProduct, product)){
+            if(!checkProductsEqual(newProduct, product)){
                 if(productsList.length !== 0) confirmEdit(newProduct, dispatch);    //if the Store contains the products, need to update this as well as do API call                                                                                    
                 else confirmEdit(newProduct);    //if the Store does not contain products, just need to do API call. do not need to update store   
-            }*/
-            axios.post('/api/products/edit-product', formData, config)
+            }
+           /* axios.post('/api/products/edit-product', formData, config)
             .then(res => {
                 console.log('res', res);
             })
             .catch(err => {
                 console.log('errr', err);
-            });
+            });*/
         }
-<<<<<<< HEAD
         
         if(pageState === ADD){
             let formData = createFormData(newProduct, fileList);
@@ -169,14 +145,14 @@ const AddEditProduct = () => {
            
             if(productsList.length !== 0) confirmAdd(newProduct, formData, dispatch);
             else confirmAdd(newProduct, formData);
-=======
 
-        if(pageState === ADD){
+
+       /* if(pageState === ADD){
             if(productsList.length !== 0) confirmAdd(newProduct, dispatch);
             else confirmAdd(newProduct);
->>>>>>> develop
-        }
-    };
+        }*/
+        };
+    }
 
 
 
@@ -234,13 +210,13 @@ const AddEditProduct = () => {
                             :   <></>
                         }
 
-                        <div> Units Sold
+                        <div><i style = {{color: 'red'}}>*</i> Units Sold
                             <Form.Item 
                                 name="p_units_sold"
                                 rules={[
                                     {
-    
-                                        message: 'No white spaces',
+                                        required: true,
+                                        message: 'Please add value to this field',
                                         validateTrigger: "onSubmit",
                                         whitespace: true
                                     }
@@ -253,7 +229,7 @@ const AddEditProduct = () => {
                             <Form.Item 
                                 name="p_image_uri"
                                 getValueFromEvent={info => { return info.fileList }}                                      //this name is subject to change
-                               /* rules={[
+                                rules={[
                                     {
                                         validateTrigger: 'onSubmit',
                                         validator: async (_) => {
@@ -262,7 +238,7 @@ const AddEditProduct = () => {
                                             } 
                                         }
                                     }
-                                ]}  */
+                                ]}  
                             >
                                 <Upload 
                                     fileList={fileList}
@@ -351,6 +327,7 @@ const AddEditProduct = () => {
             </Form>   
         </div>
     );
+    
 }
    
 export default AddEditProduct;

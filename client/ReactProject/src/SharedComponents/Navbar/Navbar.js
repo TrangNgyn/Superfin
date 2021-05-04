@@ -273,7 +273,7 @@ export default function Navbar(){
         </Menu.Item>
 
         <Menu.Item key="EditCustomer">
-            <Link to="/editCustomer">Edit Customer Information</Link>
+            <Link to="/manageCategories">Manage Product Categories</Link>
         </Menu.Item>
 
         <Menu.Item key="EditCompany">
