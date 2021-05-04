@@ -6,7 +6,8 @@ const delete_object = require('../middleware/delete');
 
 var empty_field = { 
     succes: false,
-    message: "All fields must be filled and present" }
+    message: "All fields must be filled and present" 
+}
 class Product {
 
     // delete images referenced by product
@@ -170,7 +171,6 @@ class Product {
                 return res.json({ success: false,
                                   message: `Product was not added, the p_code ${p_code} is already in use` })
             }
-            
             // need too clean input here potentially to ensure that product addition is not corrupting the database
 
             const new_product = new product_model({
@@ -184,14 +184,14 @@ class Product {
             })
 
             var saved_product = await new_product.save()
-            if (saved_product) {
+            if (saved_product) {    
                 return res.json({ success: true,
-                                    message: `The product with code ${p_code} was added.` })
+                                message: `The product with code ${p_code} was added.` })
             }
             else {
                 Product.delete_images(images)
                 return res.json({ success: false,
-                                    message: "Product was not added"})
+                                message: "Product was not added"})
             }
         }
         catch (err) {
@@ -309,7 +309,7 @@ class Product {
                         Product.delete_images(locations)
                         return res.json({
                             succes: false,
-                            message: err.message
+                            message:  message
                         })
                     }
                 }

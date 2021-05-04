@@ -47,10 +47,10 @@ import Cancel from '../Pages/cancel';
 
 
 
-import Amplify, {Auth} from 'aws-amplify';
-import awsconfig from '../aws-exports';
-Amplify.configure(awsconfig);
-Auth.configure(awsconfig);
+// import Amplify, {Auth} from 'aws-amplify';
+// import awsconfig from '../aws-exports';
+// Amplify.configure(awsconfig);
+// Auth.configure(awsconfig);
 
 
 
@@ -91,7 +91,7 @@ const App = () => (
                <Route path="/termsConditions"><TermsConditions /></Route>
                <Route path="/blog"><Blog /></Route>
 
-               <Route path="/login"><Login /></Route>
+               {/* <Route path="/login"><Login /></Route> */}
                <Route path="/emailRequest"><EmailRequest /></Route>
                <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
                <Route path="/reenterPassword"><ReenterPassword /></Route>
@@ -102,8 +102,9 @@ const App = () => (
 
 
                <Route path="/myAccount"><MyAccount/></Route>
-               <Route path="/signup"><Signup/></Route>
-               <Route path="/ConfirmSignup"><ConfirmSignup/></Route>
+               {/* <Route path="/signup"><Signup/></Route>
+               <Route path="/ConfirmSignup"><ConfirmSignup/></Route> */}
+               
                <Route path="/currentOrders"><CurrentOrders /></Route>
                <Route path="/processedOrders"><ProcessedOrders /></Route>
 
