@@ -1,4 +1,5 @@
-import { GET_PRODUCTS, GET_PRODUCT, DEFAULT_ORDER, LOADING_PRODUCTS, DELETE_PRODUCT, ERROR, EDIT_PRODUCT, ADD_PRODUCT } from './actionTypes';
+import { GET_PRODUCTS, GET_PRODUCT, DEFAULT_ORDER, LOADING_PRODUCTS,
+    DELETE_PRODUCT, ERROR, EDIT_PRODUCT, ADD_PRODUCT } from './actionTypes';
 import axios from 'axios';
 
 export const getAllProducts = () => dispatch  => {

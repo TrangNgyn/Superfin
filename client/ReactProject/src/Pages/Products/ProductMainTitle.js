@@ -14,20 +14,12 @@ const quantityOptionGenerator = maxOptionCounts => {
     }    
 }
 
-const addToCart = (p_code) => {
-    const order = {
-        p_code: p_code,
-        quantity: document.getElementById("quantitySelectionComponent").offsetParent.nextSibling.innerText,
-        requirement: document.getElementById("specialRequirementsField").textContent
-    };
-    console.log(order);
-}
-
 const ProductMainTitle = props => {
     const { Option } = Select;
     const { TextArea } = Input;
     const productDetails = props;
-    const quantitySelectionComponent = ((productDetails !== null) ?
+    const quantitySelectionComponent = 
+        ((productDetails !== null) ?
         <Select defaultValue="1" id="quantitySelectionComponent">
             {quantityOptionGenerator(10)}
         </Select> :
@@ -38,6 +30,17 @@ const ProductMainTitle = props => {
             <span> Not Available! </span>
         </>
     );
+
+    const addToCart = (p_code) => {
+        const order = {
+            p_code: p_code,
+            price_id: productDetails.p_price_id,
+            quantity: document.getElementById("quantitySelectionComponent")
+                            .offsetParent.nextSibling.innerText,
+            requirement: document.getElementById("specialRequirementsField").textContent.trim(),
+        };
+        console.log(order);
+    }
 
     return (
         <div className="product-details-main-title">
@@ -51,7 +54,10 @@ const ProductMainTitle = props => {
                 <label htmlFor="specialRequirementsField">Special Requirements:</label>
                 <TextArea id="specialRequirementsField" placeholder="Please give us any special requirements (e.g: Red Bag with a Rooster Icon on the front). Max length: 100" maxLength={100}/>
             </div>
-            <Button type="primary" icon={<ShoppingOutlined />} onClick={()=>{addToCart(productDetails.p_code);}}> Add to Cart </Button>
+            <Button type="primary" icon={<ShoppingOutlined />} 
+                onClick={()=>{addToCart(productDetails.p_code);}}> 
+                Add to Cart 
+            </Button>
         </div>
     );
 };
