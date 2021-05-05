@@ -26,7 +26,10 @@ const fetchCheckoutSession = async ({ line_items, c_email }) => {
 };
 
 // function to format price (e.g. $10.00)
-const formatPrice = ({ amount, currency, quantity }) => {
+const formatPrice = ({ amount, currency }) => {
+  if(!amount)
+    amount = 0.0
+
   const numberFormat = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency,
@@ -40,7 +43,7 @@ const formatPrice = ({ amount, currency, quantity }) => {
     }
   }
   amount = zeroDecimalCurrency ? amount : amount / 100;
-  const total = (quantity * amount).toFixed(2);
+  const total = amount.toFixed(2);
   return numberFormat.format(total);
 };
 

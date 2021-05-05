@@ -1,40 +1,12 @@
-import * as types from '../_constants/cart.constants'
+import { ADD_TO_CART, REMOVE_ITEM, SUB_QUANTITY,
+  ADD_QUANTITY, ADD_SHIPPING} from '../_constants/cart.constants'
 
-const receiveProducts = products => ({
-  type: types.RECEIVE_PRODUCTS,
-  products
-})
-
-export const getAllProducts = () => dispatch => {
-    // call get products API
-//   shop.getProducts(products => {
-//     dispatch(receiveProducts(products))
-//   })
-}
-
-const addToCartUnsafe = productId => ({
-  type: types.ADD_TO_CART,
-  productId
-})
-
-export const addToCart = productId => (dispatch, getState) => {
-  if (getState().products.byId[productId].inventory > 0) {
-    dispatch(addToCartUnsafe(productId))
+// add item to cart action
+export const addToCart= (product, quantity)=>{
+  return{
+    type: ADD_TO_CART,
+    product,
+    quantity
   }
 }
 
-export const checkout = products => (dispatch, getState) => {
-  const { cart } = getState()
-
-  dispatch({
-    type: types.CHECKOUT_REQUEST
-  })
-  shop.buyProducts(products, () => {
-    dispatch({
-      type: types.CHECKOUT_SUCCESS,
-      cart
-    })
-    // Replace the line above with line below to rollback on failure:
-    // dispatch({ type: types.CHECKOUT_FAILURE, cart })
-  })
-}
