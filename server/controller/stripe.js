@@ -15,6 +15,7 @@ class Stripe{
     async get_stripe_config(req, res){
         res.send({
             publicKey: process.env.STRIPE_PUBLISHABLE_KEY,
+            currency: process.env.CURRENCY,
         });
     }
 
@@ -53,11 +54,6 @@ class Stripe{
         const pmTypes = (payment_types || 'card').split(',').map((m) => m.trim());
 
         // Create new Checkout Session for the order
-        // Other optional params include:
-        // [billing_address_collection] - to display billing address details on the page
-        // [customer] - if you have an existing Stripe Customer ID
-        // [customer_email] - lets you prefill the email input in the Checkout page
-        // For full details see https://stripe.com/docs/api/checkout/sessions/create
         const session = await stripe.checkout.sessions.create({
             payment_method_types: pmTypes,
             mode: 'payment',

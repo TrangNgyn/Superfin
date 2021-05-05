@@ -1,5 +1,8 @@
 import { Select, Input, Button } from 'antd';
 import { ShoppingOutlined } from '@ant-design/icons';
+import { useDispatch, connect } from 'react-redux';
+import React, {useState} from 'react';
+import {addToCart} from '../../_actions/cartActions'
 
 const quantityOptionGenerator = maxOptionCounts => {
     const { Option } = Select;
@@ -14,30 +17,42 @@ const quantityOptionGenerator = maxOptionCounts => {
     }    
 }
 
-const addToCart = (p_code) => {
-    const order = {
-        p_code: p_code,
-        quantity: document.getElementById("quantitySelectionComponent").offsetParent.nextSibling.innerText,
-        requirement: document.getElementById("specialRequirementsField").textContent
-    };
-    console.log(order);
-}
-
 const ProductMainTitle = props => {
+    const dispatch = useDispatch();
+
     const { Option } = Select;
     const { TextArea } = Input;
     const productDetails = props;
-    const quantitySelectionComponent = ((productDetails !== null) ?
-        <Select defaultValue="1" id="quantitySelectionComponent">
+
+    const [quantity, setQuantity] = useState(0);
+
+    const onQuantityChange = (value) => {
+        setQuantity(value);
+    }
+
+    const quantitySelectionComponent = 
+        ((productDetails) ?
+        <Select defaultValue="1" 
+            id="quantitySelectionComponent"
+            onChange={onQuantityChange}
+        >
             {quantityOptionGenerator(10)}
         </Select> :
         <>
-            <Select defaultValue="0" id="quantitySelectionComponent" disabled>
+            <Select defaultValue="0" 
+                id="quantitySelectionComponent" 
+                onChange={onQuantityChange}
+                disabled>
                 <Option value="0" >0</Option>
             </Select>
             <span> Not Available! </span>
         </>
     );
+
+
+    const addToCart = (product, quantity) => {
+        props.addToCart(product, quantity);
+    }
 
     return (
         <div className="product-details-main-title">
@@ -51,9 +66,24 @@ const ProductMainTitle = props => {
                 <label htmlFor="specialRequirementsField">Special Requirements:</label>
                 <TextArea id="specialRequirementsField" placeholder="Please give us any special requirements (e.g: Red Bag with a Rooster Icon on the front). Max length: 100" maxLength={100}/>
             </div>
-            <Button type="primary" icon={<ShoppingOutlined />} onClick={()=>{addToCart(productDetails.p_code);}}> Add to Cart </Button>
+            <Button type="primary" icon={<ShoppingOutlined />} 
+                onClick={()=> 
+                    {
+
+                        addToCart(productDetails, quantity)
+                    }}
+            > 
+                Add to Cart 
+            </Button>
         </div>
     );
 };
+  
+const mapDispatchToProps= (dispatch)=>{
+    return{
+       addToCart: (product, quantity) => {dispatch(addToCart(product, quantity))}
+    }
+}
 
-export default ProductMainTitle;
+
+export default connect(null, mapDispatchToProps)(ProductMainTitle);

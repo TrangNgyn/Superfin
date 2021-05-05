@@ -4,8 +4,11 @@ import categoryReducer from './categoryReducer';
 import companyInfoReducer from './companyInfoReducer';
 import completeOrdersReducer from './completeOrdersReducer';
 import incompleteOrdersReducer from './incompleteOrdersReducer';
+import cartReducer from './cartReducer';
 import { combineReducers } from 'redux';
-import { authReducer } from './authReducer';
+//import { authReducer } from './authReducer';
+
+import { GET_PRODUCT } from '../_actions/actionTypes';
 
 const allReducers = combineReducers({
     productState: productReducer,
@@ -14,7 +17,8 @@ const allReducers = combineReducers({
     companyInfoState: companyInfoReducer,
     completeOrdersState: completeOrdersReducer,
     incompleteOrdersState: incompleteOrdersReducer,
-    authReducer: authReducer,
+    //authReducer: authReducer,
+    cartState: cartReducer,
 });
 
 export default allReducers;
