@@ -2,7 +2,10 @@ import '../../_assets/CSS/pages/Checkout/CheckoutSecurePayment.css';
 import { Typography, Form,  Button, Row, Col, Steps, Radio, DatePicker, InputNumber  } from 'antd';
 import React, { useEffect, useReducer } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { loadStripe } from '@stripe/stripe-js';
+import { loadStripeAction, setLoading, setError } from '../../_actions/cartActions';
+import axios from 'axios';
 
 const { Title } = Typography;
 const { Step } = Steps;
@@ -12,27 +15,23 @@ const monthFormat = 'MM/YY';
 //        Clean up later             //
 ///////////////////////////////////////
 
-const fetchCheckoutSession = async ({ line_items, c_email }) => {
+const fetchCheckoutSession = async ({ line_items }) => {
   return fetch('api/stripe/create-checkout-session', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      line_items,
-      c_email,
+      line_items
     }),
   }).then((res) => res.json());
 };
 
-// function to format price (e.g. $10.00)
-const formatPrice = ({ amount, currency }) => {
-  if(!amount)
-    amount = 0.0
-
+// function to format price specifically for stripe
+const formatPrice = ({ amount, quantity }) => {
   const numberFormat = new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency,
+    currency: 'AUD',
     currencyDisplay: 'symbol',
   });
   const parts = numberFormat.formatToParts(amount);
@@ -43,64 +42,16 @@ const formatPrice = ({ amount, currency }) => {
     }
   }
   amount = zeroDecimalCurrency ? amount : amount / 100;
-  const total = amount.toFixed(2);
+  const total = (quantity * amount).toFixed(2);
   return numberFormat.format(total);
 };
 
-function reducer(state, action) {
-  switch (action.type) {
-    case 'useEffectUpdate':
-      return {
-        ...state,
-        ...action.payload,
-        line_items: action.payload.line_items,
-      };
-    case 'increment':
-      return {
-        ...state,
-        quantity: state.quantity + 1,
-        price: formatPrice({
-          amount: state.unitAmount,
-          currency: state.currency,
-          quantity: state.quantity + 1,
-        }),
-      };
-    case 'decrement':
-      return {
-        ...state,
-        quantity: state.quantity - 1,
-        price: formatPrice({
-          amount: state.unitAmount,
-          currency: state.currency,
-          quantity: state.quantity - 1,
-        }),
-      };
-    case 'setLoading':
-      return { ...state, loading: action.payload.loading };
-    case 'setError':
-      return { ...state, error: action.payload.error };
-    default:
-      throw new Error();
-  }
-}
 
-
-
-
-const CheckoutSecurePayment = () =>{
+const CheckoutSecurePayment = (props) =>{
   const [form] = Form.useForm();
   // const [value, setValue] = React.useState(1);
 
-  // order state containing line_items and quantity
-  const [state, dispatch] = useReducer(reducer, {
-    line_items: [{
-      quantity: 0,
-      price_id: '',
-    }],
-    loading: false,
-    error: null,
-    stripe: null,
-  });
+  const line_items = props.line_items;
 
   // fetch stripe config on page load
   useEffect(() => {
@@ -112,10 +63,7 @@ const CheckoutSecurePayment = () =>{
       
       // Make sure to call `loadStripe` outside of a component’s render to avoid
       // recreating the `Stripe` object on every render.
-      dispatch({
-        type: 'useEffectUpdate',
-        payload: { currency, stripe: await loadStripe(publicKey) },
-      });
+      props.loadStripeAction(await loadStripe(publicKey));
     }
     fetchConfig();
   }, []);
@@ -123,31 +71,39 @@ const CheckoutSecurePayment = () =>{
 
   const paymentOnClick = async (event) => {
     // Call your backend to create the Checkout session.
-    dispatch({ type: 'setLoading', payload: { loading: true } });
+    props.setLoading(true);
     const { sessionId } = await fetchCheckoutSession({
-      line_items: state.line_items,
-      c_email: state.c_email,
+      line_items: props.line_items
     });
-    // When the customer clicks on the button, redirect them to Checkout.
-    const { error } = await state.stripe.redirectToCheckout({
-      sessionId,
-    });
-    // If `redirectToCheckout` fails due to a browser or network
-    // error, display the localized error message to your customer
-    // using `error.message`.
-    if (error) {
-      dispatch({ type: 'setError', payload: { error } });
-      dispatch({ type: 'setLoading', payload: { loading: false } });
+
+    if(sessionId){
+      // When the customer clicks on the button, redirect them to Checkout.
+      const { error } = await props.stripe.redirectToCheckout({
+        sessionId,
+      });
+    
+      // If `redirectToCheckout` fails due to a browser or network
+      // error, display the localized error message to your customer
+      // using `error.message`.
+      if (error) {
+        props.setError(error);
+        props.setLoading(false);
+      }
+
+      props.setLoading(false);
+    }else{
+      props.setError(sessionId);
+      props.setLoading(false);
     }
   };
 
-  const onFinish = (values) => {
-    console.log('Success:', values);
-  };
+  // const onFinish = (values) => {
+  //   console.log('Success:', values);
+  // };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
+  // const onFinishFailed = (errorInfo) => {
+  //   console.log('Failed:', errorInfo);
+  // };
 
   // const onChange = e => {
   //   console.log('radio checked', e.target.value);
@@ -180,8 +136,8 @@ const CheckoutSecurePayment = () =>{
             layout={'vertical'}
             form={form}
             name="basic"
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
+            // onFinish={onFinish}
+            // onFinishFailed={onFinishFailed}
             requiredMark={false}
         >
   {/*               
@@ -255,4 +211,21 @@ const CheckoutSecurePayment = () =>{
 
 }
 
-export default CheckoutSecurePayment
+//export default CheckoutSecurePayment
+
+const mapStateToProps = (state)=>{
+  return{
+      line_items: state.cartState.line_items,
+      stripe: state.cartState.stripe,
+  }
+}
+
+const mapDispatchToProps= (dispatch)=>{
+  return{
+     loadStripeAction: (stripe) => {dispatch(loadStripeAction(stripe))},
+     setLoading: (loading) => {dispatch(setLoading(loading))},
+     setError: (error) => {dispatch(setError(error))},
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(CheckoutSecurePayment);

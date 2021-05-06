@@ -73,7 +73,7 @@ const CheckoutReviewOrder = ({product}) =>{
         <Button type="primary"><Link to="/CheckoutShipping">Back</Link></Button>
         </Col>
         <Col  span={6}>
-        <Button type="primary"><Link to="/CheckoutOrderComplete">Go to payment</Link></Button>
+        <Button type="primary"><Link to="/CheckoutSecurePayment">Go to payment</Link></Button>
         </Col>
         </Row>
 

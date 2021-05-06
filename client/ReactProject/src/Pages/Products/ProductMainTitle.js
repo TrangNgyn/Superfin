@@ -69,7 +69,6 @@ const ProductMainTitle = props => {
             <Button type="primary" icon={<ShoppingOutlined />} 
                 onClick={()=> 
                     {
-
                         addToCart(productDetails, quantity)
                     }}
             > 
