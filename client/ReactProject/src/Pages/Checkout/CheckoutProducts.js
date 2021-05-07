@@ -1,16 +1,21 @@
-import React, { useContext } from 'react';
-import { CartContext } from '../../contexts/CartContext';
-import CartItem from './CheckoutItem';
+// import React, { useContext } from 'react';
+// import { connect } from 'react-redux';
+// import CartItem from './CheckoutItem';
 
-const CartProducts = () => {
-    const { cartItems } = useContext(CartContext);
-    return (
-      <div>
-        {
-          cartItems.map(product =>  <CartItem key={product.id} product={product}/>)
-        }
-      </div>
-    );
-}
+// const CartProducts = (props) => {
+//   return (
+//     <div>
+//       {
+//         props.cartItems.map(product =>  <CartItem key={product.p_code} product={product}/>)
+//       }
+//     </div>
+//   );
+// }
 
-export default CartProducts;
+// const mapStateToProps = (state)=>{
+//   return{
+//       cartItems: state.cartState.addedItems,
+//   }
+// }
+
+// export default connect(mapStateToProps)(CartProducts);

@@ -65,8 +65,8 @@ class Stripe{
             line_items: stripe_li, // array of price_ids and their quantity
 
             // ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
-            success_url: `${domainURL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${domainURL}/canceled.html`,
+            success_url: `${domainURL}/checkoutOrderComplete?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${domainURL}/paymentCancelled`,
             allow_promotion_codes: true,
             billing_address_collection: 'required',
         });

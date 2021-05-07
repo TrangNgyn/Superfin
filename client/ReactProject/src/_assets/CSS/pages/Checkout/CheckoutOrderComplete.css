@@ -1,24 +1,24 @@
 #checkout-order-complete-head {
-  font-family:Helvetica;
+  font-family: Helvetica;
   margin-top: 1%;
   margin-bottom: 1%;
   margin-left: 4%;
 }
 
-#checkout-order-complete-content{
-  font-family:Helvetica;
+#checkout-order-complete-content {
+  font-family: Helvetica;
   margin-left: 4%;
   margin-right: 4%;
 }
-#checkout-order-complete-confirmation{
-  font-family:Helvetica;
+#checkout-order-complete-confirmation {
+  font-family: Helvetica;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 10px;
   background-color: LightGray;
 }
-#checkout-order-complete-summary{
-  font-family:Helvetica;
+#checkout-order-complete-summary {
+  font-family: Helvetica;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 10px;
@@ -27,19 +27,8 @@
   margin-top: 10px;
   border-bottom: 1px solid #292929;
 }
-#checkout-order-complete-total{
-  font-family:Helvetica;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin: auto;
-  width: 60%;
-  margin-top: 10px;
-  border-bottom: 1px solid #292929;
-}
-#checkout-order-complete-payment{
-  font-family:Helvetica;
+#checkout-order-complete-total {
+  font-family: Helvetica;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 10px;
@@ -49,8 +38,19 @@
   margin-top: 10px;
   border-bottom: 1px solid #292929;
 }
-#checkout-order-complete-shipping{
-  font-family:Helvetica;
+#checkout-order-complete-payment {
+  font-family: Helvetica;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: auto;
+  width: 60%;
+  margin-top: 10px;
+  border-bottom: 1px solid #292929;
+}
+#checkout-order-complete-shipping {
+  font-family: Helvetica;
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 10px;

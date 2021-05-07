@@ -10,10 +10,6 @@ import noImage from '../../_assets/Images/No_Image.jpg';
 
 const itemsPerPage = 6;
 
-
-
-
-
 const CategoryList = () => {
     const dispatch = useDispatch();
 

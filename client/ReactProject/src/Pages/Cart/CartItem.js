@@ -7,6 +7,7 @@ import { addQuantity, subtractQuantity } from '../../_actions/cartActions'
 import altImage from "../../_assets/Images/No_Image.jpg"
 
 const CartItem = (props) => {
+  const editable = props.editable;
 
   const increase = (product) => {
     // props.increase(product)
@@ -36,10 +37,13 @@ const CartItem = (props) => {
           </div>
         </Col>
         <Col span={1}>
-        <div style={{textAlign: "right"}}>
-          <button onClick={() => increase(props.product)}><PlusCircleOutlined /></button>
+        <div style={{textAlign: "right"}}>  
           {
-            props.quantity > 1 &&
+            editable &&
+            <button onClick={() => increase(props.product)}><PlusCircleOutlined /></button>
+          }        
+          {
+            editable &&
             <button onClick={() => decrease(props.product)}><MinusCircleOutlined /></button>
           }
           {/* {

@@ -4,7 +4,8 @@ import { CartContext } from '../../contexts/CartContext';
 import CartItem from './CartItem';
 
 const CartProducts = (props) => {
-  
+    const editable = props.editable
+
     const itemList = () => {
       var items = [];
       for(var i = 0; i < props.cartItems.length; i++){
@@ -12,11 +13,13 @@ const CartProducts = (props) => {
           <CartItem key={props.cartItems[i].p_code} 
             product={props.cartItems[i]}
             quantity={props.quantity[i]} 
+            editable={editable}
           />
         )
       }
       return items;
     }
+
     return (
       <div>
         {
