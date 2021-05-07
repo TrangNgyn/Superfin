@@ -13,8 +13,7 @@ const CheckoutShipping = () =>{
 
   const onFinish = (values) => {
     console.log('Success:', values);
-    localStorage.setItem('user', JSON.stringify(values));
-    history.push('/CheckoutReviewOrder');
+    history.push('/checkoutReviewOrder');
   };
 
   const onFinishFailed = (errorInfo) => {

@@ -9,11 +9,6 @@ import axios from 'axios';
 
 const { Title } = Typography;
 const { Step } = Steps;
-const monthFormat = 'MM/YY';
-
-///////////////////////////////////////
-//        Clean up later             //
-///////////////////////////////////////
 
 const fetchCheckoutSession = async ({ line_items }) => {
   return fetch('api/stripe/create-checkout-session', {
@@ -27,31 +22,8 @@ const fetchCheckoutSession = async ({ line_items }) => {
   }).then((res) => res.json());
 };
 
-// function to format price specifically for stripe
-const formatPrice = ({ amount, quantity }) => {
-  const numberFormat = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'AUD',
-    currencyDisplay: 'symbol',
-  });
-  const parts = numberFormat.formatToParts(amount);
-  let zeroDecimalCurrency = true;
-  for (let part of parts) {
-    if (part.type === 'decimal') {
-      zeroDecimalCurrency = false;
-    }
-  }
-  amount = zeroDecimalCurrency ? amount : amount / 100;
-  const total = (quantity * amount).toFixed(2);
-  return numberFormat.format(total);
-};
-
-
 const CheckoutSecurePayment = (props) =>{
   const [form] = Form.useForm();
-  // const [value, setValue] = React.useState(1);
-
-  const line_items = props.line_items;
 
   // fetch stripe config on page load
   useEffect(() => {
@@ -96,20 +68,6 @@ const CheckoutSecurePayment = (props) =>{
       props.setLoading(false);
     }
   };
-
-  // const onFinish = (values) => {
-  //   console.log('Success:', values);
-  // };
-
-  // const onFinishFailed = (errorInfo) => {
-  //   console.log('Failed:', errorInfo);
-  // };
-
-  // const onChange = e => {
-  //   console.log('radio checked', e.target.value);
-  //   setValue(e.target.value);
-  // };
-
 
   return(
     <div>
@@ -189,7 +147,7 @@ const CheckoutSecurePayment = (props) =>{
             <Col span={2} offset={7}>
               <Form.Item >
                 <Button type="primary" htmlType="submit">
-                  <Link to="/CheckoutReviewOrder">Back</Link>
+                  <Link to="/checkoutReviewOrder">Back</Link>
                 </Button>
               </Form.Item>
             </Col>
