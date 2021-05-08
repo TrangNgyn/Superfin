@@ -113,16 +113,6 @@ async function stripe_update_price(p_code, new_p_price, old_p_price_id){
     }
 }
 
-async function stripe_create_session(items){
-    const session = await stripe.checkout.sessions.create({
-        success_url: 'https://superfinpkg.com.au/payment-success',
-        cancel_url: 'https://superfinpkg.com.au/payment-cancel',
-        payment_method_types: ['card'],
-        line_items: items,
-        mode: 'payment',
-    });
-}
-
 async function stripe_post_charge(req, res) {
     try {
       const { amount, source, receipt_email } = req.body
@@ -152,6 +142,5 @@ module.exports = {
     stripe_deactivate_product,
     stripe_update_product,
     stripe_update_price,
-    stripe_create_session,
     stripe_post_charge,
 };

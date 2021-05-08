@@ -15,8 +15,6 @@ const Product = props => {
     const categoryName = props.categoryName;
 
 
-
-
     
     const viewCategory = () => {
         console.log("View product info for " + product.name);

@@ -5,12 +5,17 @@ import { imageModal } from './Modals';
 import { message } from 'antd';
 import { getCategoryName } from '../../_services/SharedFunctions';
 
+const config = {
+    headers: {
+        'content-type': 'multipart/form-data'
+    }
+}
+
 export const getProduct = (p_code, setProduct, setPageState) => {               //returns an individual product
     axios.post('/api/products/product-by-id', { 
         p_code: p_code
     })
     .then(res => {
-        console.log(res);
         if(res.data.p_code === p_code){
             setProduct(res.data);
             setPageState(EDIT);
@@ -31,8 +36,8 @@ export const _editProduct = product => {                                //edits 
     return axios.post('/api/products/edit-product', product);
 }
 
-export const _addProduct = product => {
-    return axios.post('api/products/add-product', product);
+export const _addProduct = formData => {
+    return axios.post('api/products/add-product', formData, config);
 }
 
 
@@ -88,10 +93,13 @@ export const onRemove = (file, fileList, updateFileList) => {               //ha
 }
 
 export const setFormValues = (form, product, categories) => {                 //sets the values of the form to appropriate product values
+    let p_units_sold = "";
+    if(product.p_units_sold !== null) p_units_sold = product.p_units_sold.toString();
+
     form.setFieldsValue({
         p_name: product.p_name,
         p_code: product.p_code,
-        p_units_sold: product.p_units_sold.toString(),
+        p_units_sold: p_units_sold,
         p_price: product.p_price.toString(),
         p_categories: getCategoryName(product.p_categories, categories),
         p_description: product.p_description,
@@ -119,3 +127,29 @@ export const getProductId = (c_name, categories) => {
 
     return category._id;
 }
+
+export const createFormData = (newProduct, fileList) => {
+    let formData = new FormData();
+
+    [...fileList].forEach(image => {
+        formData.append("images", image.originFileObj);
+    });
+    
+    formData.append("p_name", newProduct.p_name);
+    formData.append("p_code", newProduct.p_code);
+    formData.append("p_units_sold", newProduct.p_units_sold);
+    formData.append("p_price", newProduct.p_price);
+    formData.append("p_categories", newProduct.p_categories);
+    formData.append("p_description", newProduct.p_description);
+
+    return formData;
+}
+
+export const checkBlob = (p_image_uri) => {
+    for(let i = 0; i < p_image_uri.length; i++){
+        if(p_image_uri[i].includes("blob")){
+            window.location.reload();
+            break;
+        }
+    }
+}   

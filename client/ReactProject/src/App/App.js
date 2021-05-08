@@ -43,7 +43,7 @@ import ManageOrdersCustomer from '../Pages/ManageOrdersCustomer/ManageOrdersCust
 import Store from '../Pages/Homepage/products';
 import Cart from '../Pages/Cart/index';
 import ManageCategories from '../Pages/ManageCategories/ManageCategories';
-import Cancel from '../Pages/cancel';
+import PaymentCancelled from '../Pages/Checkout/PaymentCancelled';
 
 
 
@@ -112,16 +112,15 @@ const App = () => (
                <Route path="/manageProducts"><ManageProducts /></Route>
                <Route path="/manageCategories"><ManageCategories /></Route>
 
-               <Route path="/Cancel"><Cancel /></Route>
-
                 <Route exact path="/editAddProducts"><AddEditProduct /></Route>
                <Route path="/editAddProducts/:p_code"><AddEditProduct /></Route>
                <Route exact path="/products" component={Store}/>
                <Route path="/cart"><Cart /></Route>
-               <Route path="/CheckoutShipping"><CheckoutShipping /></Route>
-               <Route path="/CheckoutSecurePayment"><CheckoutSecurePayment /></Route>
-               <Route path="/CheckoutReviewOrder"><CheckoutReviewOrder /></Route>
-               <Route path="/CheckoutOrderComplete"><CheckoutOrderComplete /></Route>
+               <Route path="/checkoutShipping"><CheckoutShipping /></Route>
+               <Route path="/checkoutSecurePayment"><CheckoutSecurePayment /></Route>
+               <Route path="/checkoutReviewOrder"><CheckoutReviewOrder /></Route>
+               <Route path='/checkoutOrderComplete'><CheckoutOrderComplete /></Route>
+               <Route path="/paymentCancelled"><PaymentCancelled /></Route>
                <Route path="/ViewProductInfo"><ViewProductInfo /></Route>
                <Route path="/Promocode"><Promocode /></Route>
                <Route path="/manageOrders"> <ManageOrdersCustomer /> </Route>
