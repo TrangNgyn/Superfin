@@ -205,27 +205,31 @@ class Product {
     // @route   POST api/products/edit-product
     // @desc    edit an existing product
     // @access  Public
-
+ 
     async post_edit_product(req, res, locations) {
         try {
 
             var { p_code, p_name, p_price, p_units_sold, p_image_uri, p_categories, p_description } = req.body
 
-            var images = req.files
-
+            // create array to hold images
             const array = [];
 
+            // check that the image url has been defined
             if(typeof p_image_uri === 'undefined') {
+                Product.delete_images(locations)
                 return res.json(empty_field)
             }
 
-            if(images.length <= 0 && p_image_uri.length == 0) {
+            // make sure that there is at least an image for the edited product
+            if(locations.length <= 0 && p_image_uri.length == 0) {
+                Product.delete_images(locations)
                 return res.json({ 
                     success: false,
                     message: `An image must be present in the edited product`
                 })
             }
 
+            // push images supplied from post to the array 
             if(typeof p_image_uri === 'string') {
                 if(p_image_uri !== "")
                     array[0] = p_image_uri
@@ -271,15 +275,27 @@ class Product {
                 })
             }
 
+            // ensure that the image links are all part of the original product
+            const array_include_test = array.every(val => found_product.p_image_uri.includes(val));
+
+            if(array_include_test == false) {
+                return res.json({
+                    success: false,
+                    message: `Cannot include image_links that are not inside the editied product`
+                })
+            }
+
+
             // unlink images from the array as they are read in 
-            if(array.length != 0){
+            if(array.length > 0){
                 for(var i = 0; i < found_product.p_image_uri.length; i++){
                     var image = found_product.p_image_uri[i];
                     var found = false;
 
                     // loop through all sent images with the url of the saved images
                     // if found break otherwise delete it from the array
-                    for(var s_image in array){
+                    for(var j = 0; j<array.length;j++){
+                        var s_image = array[j];
                         if(image === s_image){
                             found = true
                             break
@@ -299,7 +315,7 @@ class Product {
                     }
                 }
             }
-            else if(found_product.p_image_uri.length != 0){
+            else if(found_product.p_image_uri.length > 0){
                 for(var i = 0; i < found_product.p_image_uri.length; i++){
                     var image = found_product.p_image_uri[i];
                     try {
