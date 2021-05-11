@@ -5,6 +5,7 @@ const addSubCategories = (parents, categoriesList) => {
         parents.forEach(parent => {
             parent.title = parent.c_name;
             parent.key = parent._id;
+            parent.value = parent._id;
             parent.children = [];
             var childrenList = null;
             childrenList = categoriesList.filter(category => category.path.includes(parent.c_name)); // Filter the children out of the list
