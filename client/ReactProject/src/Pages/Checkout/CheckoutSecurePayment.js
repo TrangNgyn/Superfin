@@ -83,66 +83,13 @@ const CheckoutSecurePayment = (props) =>{
           <Step title="Order Complete"/>
         </Steps>,
       </div>
-      {/* <div id="payment-radio">
-        <Radio.Group onChange={onChange} value={value}>
-          <Radio value={1}> Credit Card </Radio>
-          <Radio value={2}>Paypal</Radio>
-        </Radio.Group>
-      </div> */}
       <div>
         <Form
             layout={'vertical'}
             form={form}
             name="basic"
-            // onFinish={onFinish}
-            // onFinishFailed={onFinishFailed}
             requiredMark={false}
         >
-  {/*               
-              <Row gutter={16}>
-                <Col span={10} offset={7}>
-                <Form.Item 
-                  name="Card Number" 
-                  label="Card Number" 
-                  rules={[
-                      { 
-                          type: 'number',
-                          required: true,
-                          message: 'Input valid card number!'
-                      }
-                  ]}>
-                  <InputNumber  style={{ width: 450 }}/>
-                </Form.Item>
-                </Col>
-              </Row>
-              <Row gutter={16}>
-                <Col span={3} offset={7}>
-                <Form.Item 
-                  label="Exp Month/ Exp Year" 
-                  name="expmonthyear" 
-                  rules={[
-                      { 
-                          required: true,
-                          message: "Please input an expiration date"
-                      }
-                  ]}>
-                <DatePicker  format={monthFormat} picker="month" />
-                </Form.Item>
-                </Col>
-                <Col span={6} offset={1}>
-                <Form.Item name="CVV" label="CVV" 
-                  rules={[
-                      { 
-                          type: 'number',
-                          required: true,
-                          message: "Input a value between 0 and 999!"
-                      }
-                  ]}>
-                  <InputNumber min={0} max={999}/>
-                </Form.Item>
-                </Col>
-
-              </Row> */}
           <Row gutter={16}>
             <Col span={2} offset={7}>
               <Form.Item >
@@ -173,7 +120,7 @@ const CheckoutSecurePayment = (props) =>{
 
 const mapStateToProps = (state)=>{
   return{
-      line_items: state.cartState.line_items,
+      line_items: state.cartState.items,
       stripe: state.cartState.stripe,
   }
 }

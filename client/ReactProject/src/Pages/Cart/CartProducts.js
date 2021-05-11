@@ -12,7 +12,8 @@ const CartProducts = (props) => {
         items.push(
           <CartItem key={props.cartItems[i].p_code} 
             product={props.cartItems[i]}
-            quantity={props.quantity[i]} 
+            quantity={props.line_items[i].quantity} 
+            special_requirements={props.line_items[i].special_requirements} 
             editable={editable}
           />
         )
@@ -23,7 +24,6 @@ const CartProducts = (props) => {
     return (
       <div>
         {
-          // props.cartItems.map(product => <CartItem key={product.id} product={product}/>)
           itemList()
         }
       </div>
@@ -33,7 +33,7 @@ const CartProducts = (props) => {
 const mapStateToProps = (state)=>{
   return{
       cartItems: state.cartState.addedItems,
-      quantity: state.cartState.quantity,
+      line_items: state.cartState.items,
   }
 }
 

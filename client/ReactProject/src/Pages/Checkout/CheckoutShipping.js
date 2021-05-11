@@ -2,7 +2,9 @@ import '../../_assets/CSS/pages/Checkout/CheckoutShipping.css';
 import { Typography, Form, Input, Button, Row, Col, Steps, Select, InputNumber } from 'antd';
 import {CaretLeftOutlined} from '@ant-design/icons';
 import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { history } from '../../_helpers/history';
+import { setAddress } from '../../_actions/cartActions';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -12,7 +14,7 @@ const CheckoutShipping = () =>{
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
-    console.log('Success:', values);
+    setAddress(values);
     history.push('/checkoutReviewOrder');
   };
 
@@ -44,25 +46,12 @@ const CheckoutShipping = () =>{
           requiredMark={false}
       >
         <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item 
-                label="First Name"
-                name="firstname" 
-                rules={[
-                  { 
-                    required: true,
-                    message: "Please enter your first name!"
-                  }
-                ]}>
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item label="Last Name" name="lastname" 
+          <Col span={24}>
+            <Form.Item label="Full Name" name="full_name" 
               rules={[
                 { 
                   required: true,
-                  message: "Please enter your last name!"
+                  message: "Please enter your full name!"
                 }
             ]}>
               <Input />
@@ -71,21 +60,47 @@ const CheckoutShipping = () =>{
         </Row>
         <Row gutter={16}>
           <Col span={24}>
-            <Form.Item label="Street number" name="street_number" 
-              rules={[{ type: 'number',min:0, message: "Street number cannot be negative"},
-                  {required: true, message: "Please enter your street number"}]}>
-              <InputNumber min={0} />
+            <Form.Item 
+              label="Email Address" 
+              name="email" 
+              rules={[
+                { 
+                  type: 'email',
+                  required: true,
+                  message: 'Please enter your email!'
+                }
+              ]}>
+              <Input/>
             </Form.Item>
           </Col>
         </Row>
         <Row gutter={16}>
           <Col span={24}>
-            <Form.Item label="Street name" name="street_name" 
-              rules={[{ required: true, message: "Please enter your street name"  }]}>
+            <Form.Item label="Address Line 1" name="address_line_1" 
+              rules={[
+                {
+                  required: true, 
+                  message: "Please enter your address line 1"
+                }
+              ]}>
               <Input />
             </Form.Item>
           </Col>
         </Row>
+
+        <Row gutter={16}>
+        <Col span={24}>
+            <Form.Item label="Address Line 2" name="address_line_2" 
+              rules={[
+                {
+                  required: false,
+                }
+              ]}>
+              <Input />
+            </Form.Item>
+          </Col>
+        </Row>
+
         <Row gutter={16}>
           <Col span={24}>
             <Form.Item 
@@ -101,11 +116,12 @@ const CheckoutShipping = () =>{
             </Form.Item>
           </Col>
         </Row>
+
         <Row gutter={16}>
           <Col >
             <Form.Item 
-              label="State/Province" 
-              name="stateprovince" 
+              label="State" 
+              name="state" 
               rules={[
                 { 
                   required: true,
@@ -127,7 +143,7 @@ const CheckoutShipping = () =>{
           <Col span={12}>
             <Form.Item 
               label="Postcode" 
-              name="Postcode"  
+              name="postcode"  
               rules={[
                 { 
                   required: true,
@@ -139,38 +155,7 @@ const CheckoutShipping = () =>{
             </Form.Item>
           </Col>
         </Row>
-        <Row gutter={16}>
-          <Col span={24}>
-            <Form.Item 
-              name="Phone Number" 
-              label="Phone Number" 
-              rules={[
-                { 
-                  required: true,
-                  type: 'number',
-                  message: "Please enter your phone number"
-                }
-              ]}>
-              <InputNumber  style={{ width: 226 }}/>
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={24}>
-            <Form.Item 
-              label="Email Address" 
-              name="emailaddress" 
-              rules={[
-                { 
-                  type: 'email',
-                  required: true,
-                  message: 'Please enter your email!'
-                }
-              ]}>
-              <Input/>
-            </Form.Item>
-          </Col>
-        </Row>
+
         <Row gutter={16}>
           <Col span={10}>
             <Form.Item>
@@ -190,4 +175,10 @@ const CheckoutShipping = () =>{
   );
 }
 
-export default CheckoutShipping
+const mapDispatchToProps= (dispatch)=>{
+  return{
+    setAddress: (address) => {dispatch(setAddress(address))}
+  }
+}
+
+export default connect(null, mapDispatchToProps)(CheckoutShipping);

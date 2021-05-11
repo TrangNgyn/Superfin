@@ -1,13 +1,22 @@
 import { ADD_TO_CART, REMOVE_ITEM, SUB_QUANTITY,
   ADD_QUANTITY, ADD_SHIPPING, SET_LOADING, SET_ERROR,
-  LOAD_STRIPE } from '../_constants/cart.constants'
+  LOAD_STRIPE, SET_ADDRESS} 
+  from '../_constants/cart.constants'
 
 // add item to cart action
-export const addToCart= (product, quantity)=>{
+export const addToCart = (product, quantity, special_requirements)=>{
   return{
     type: ADD_TO_CART,
     product,
-    quantity
+    quantity,
+    special_requirements,
+  }
+}
+
+export const setAddress  = (address) => {
+  return {
+    type: SET_ADDRESS,
+    address,
   }
 }
 

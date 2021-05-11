@@ -25,9 +25,14 @@ const ProductMainTitle = props => {
     const productDetails = props;
 
     const [quantity, setQuantity] = useState(0);
+    const [special_requirements, setSpecialRequirements] = useState("");
 
     const onQuantityChange = (value) => {
         setQuantity(value);
+    }
+    
+    const onRequirementChange = e => {
+        setSpecialRequirements(e.target.value);
     }
 
     const quantitySelectionComponent = 
@@ -50,8 +55,8 @@ const ProductMainTitle = props => {
     );
 
 
-    const addToCart = (product, quantity) => {
-        props.addToCart(product, quantity);
+    const addToCart = (product, quantity, special_requirements) => {
+        props.addToCart(product, quantity, special_requirements);
     }
 
     return (
@@ -64,12 +69,19 @@ const ProductMainTitle = props => {
             </div>
             <div id="special-requirements">
                 <label htmlFor="specialRequirementsField">Special Requirements:</label>
-                <TextArea id="specialRequirementsField" placeholder="Please give us any special requirements (e.g: Red Bag with a Rooster Icon on the front). Max length: 100" maxLength={100}/>
+                <TextArea 
+                    id="specialRequirementsField" 
+                    placeholder="Please specify any special requirement (e.g: Red Bag with a Rooster Icon on the front).
+                     (Max length: 100)" 
+                    maxLength={100}
+                    showCount
+                    onChange={onRequirementChange}
+                />
             </div>
             <Button type="primary" icon={<ShoppingOutlined />} 
                 onClick={()=> 
                     {
-                        addToCart(productDetails, quantity)
+                        addToCart(productDetails, quantity, special_requirements)
                     }}
             > 
                 Add to Cart 
@@ -80,7 +92,10 @@ const ProductMainTitle = props => {
   
 const mapDispatchToProps= (dispatch)=>{
     return{
-       addToCart: (product, quantity) => {dispatch(addToCart(product, quantity))}
+       addToCart: 
+        (product, quantity, special_requirements) => {
+            dispatch(addToCart(product, quantity, special_requirements))
+        }
     }
 }
 

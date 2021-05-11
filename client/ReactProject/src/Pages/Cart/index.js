@@ -40,7 +40,15 @@ const Cart = (props) =>{
                   <div style={{textAlign: "center",fontWeight:"bold"}}>Quantity</div>
                 </Col>
                 <Col span={6}>
-                  <div style={{textAlign: "right",paddingRight: "10px",fontWeight:"bold"}}>Total</div>
+                  <div 
+                    style={{
+                      textAlign: "right",
+                      paddingRight: "10px",
+                      fontWeight:"bold"
+                    }}
+                  >
+                    Special Requirements
+                  </div>
                 </Col>
               </Row>
             </div>
