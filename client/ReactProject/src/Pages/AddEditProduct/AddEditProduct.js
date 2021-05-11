@@ -6,14 +6,20 @@ import { useParams } from 'react-router-dom';
 import '../../_assets/CSS/pages/AddEditProduct/AddEditProduct.css';
 import { EDIT, ADD } from './PageStates';
 import { history } from '../../_helpers/history'; 
-import { getProduct, _getProduct, onPriceChange, onPreview, beforeUpload, onRemove, setFormValues, checkProductsEqual, getProductId } from './Functions';
+import { getProduct, _getProduct, onPriceChange, onPreview, beforeUpload, onRemove, setFormValues, checkProductsEqual, /*getProductId*/ } from './Functions';
 import { getAllCategories } from '../../_actions/categoryActions';
 import { onlyNumbers } from '../../_services/SharedFunctions';
 import { confirmEdit, confirmAdd } from './Modals'; 
+import { createFormData, checkBlob } from './Functions';
+//import axios from 'axios';
+/*
+const config = {
+    headers: {
+        'content-type': 'multipart/form-data'
+    }
+}*/
 
 const { Option, OptGroup } = Select;
-
-
 
 
 const AddEditProduct = () => {
@@ -28,20 +34,22 @@ const AddEditProduct = () => {
     const [parentCategoires, setParentCategories] = useState([]);
     const [childCategories, setChildCategories] = useState([]);
 
-   
-
-    
-
     const [pageState, setPageState] = useState(null);
     const [product, setProduct] = useState(null);
     const [fileList, updateFileList] = useState([]);
 
+    if(product !== null) console.log('p_image_uri', product.p_image_uri);
+    
+
     const [form] = Form.useForm();
 
-    useEffect(() => {                                                   //Changes the page state to edit or Add. Will also determine if API call necessary
+    useEffect(() => {                                                //Changes the page state to edit or Add. Will also determine if API call necessary
         if(p_code){
             if(productsList.length !== 0){
                 const product = _getProduct(p_code, productsList);
+
+                checkBlob(product.p_image_uri);
+
                 if(product !== undefined){
                     setProduct(product);
                     setPageState(EDIT);
@@ -52,6 +60,7 @@ const AddEditProduct = () => {
                 }                                
             }
             else getProduct(p_code, setProduct, setPageState);
+
         }
         else setPageState(ADD);
 
@@ -71,6 +80,8 @@ const AddEditProduct = () => {
             }
         }
     }, [categories.length, dispatch, p_code, productsList, categories, childCategories.length, emptyCategories, parentCategoires.length]);
+        
+
 
     useEffect(() => {                                                       //sets the form values if in edit mode
         if(pageState === EDIT) setFormValues(form, product, categories);
@@ -96,21 +107,52 @@ const AddEditProduct = () => {
 
     const onFinish = newProduct => {                                                    //handles form submission
         newProduct.p_image_uri = [];                                                        //IMPORTANT remove this later
-
         if(pageState === EDIT){
             newProduct.p_code = product.p_code;
+            newProduct.p_image_uri = product.p_image_uri;
+
+            console.log('p_image_uri', newProduct.p_image_uri );
+
+            let formData = new FormData();
+
+            formData.append("p_name", newProduct.p_name);
+            formData.append("p_code", newProduct.p_code);
+            formData.append("p_units_sold", newProduct.p_units_sold);
+            formData.append("p_price", newProduct.p_price);
+            formData.append("p_categories", newProduct.p_categories);
+            formData.append("p_description", newProduct.p_description);
+            formData.append("p_image_uri", newProduct.p_image_uri);
 
             if(!checkProductsEqual(newProduct, product)){
                 if(productsList.length !== 0) confirmEdit(newProduct, dispatch);    //if the Store contains the products, need to update this as well as do API call                                                                                    
                 else confirmEdit(newProduct);    //if the Store does not contain products, just need to do API call. do not need to update store   
             }
+           /* axios.post('/api/products/edit-product', formData, config)
+            .then(res => {
+                console.log('res', res);
+            })
+            .catch(err => {
+                console.log('errr', err);
+            });*/
         }
-
+        
         if(pageState === ADD){
+            let formData = createFormData(newProduct, fileList);
+            
+            for(let i = 0; i < fileList.length; i++){
+                newProduct.p_image_uri[i] = URL.createObjectURL(fileList[i].originFileObj);
+            }
+           
+            if(productsList.length !== 0) confirmAdd(newProduct, formData, dispatch);
+            else confirmAdd(newProduct, formData);
+
+
+       /* if(pageState === ADD){
             if(productsList.length !== 0) confirmAdd(newProduct, dispatch);
             else confirmAdd(newProduct);
-        }
-    };
+        }*/
+        };
+    }
 
 
 
@@ -123,6 +165,7 @@ const AddEditProduct = () => {
             {pageState === ADD ? <h1 id="ae-product-header-title">Add Product</h1> : <></>}
 
             <Form
+                encType='multipart/form-data'
                 form = {form}
                 onFinish={onFinish}
                 onFinishFailed={err => { console.log("Failed submit", err) }}
@@ -167,13 +210,13 @@ const AddEditProduct = () => {
                             :   <></>
                         }
 
-                        <div> Units Sold
+                        <div><i style = {{color: 'red'}}>*</i> Units Sold
                             <Form.Item 
                                 name="p_units_sold"
                                 rules={[
                                     {
-    
-                                        message: 'No white spaces',
+                                        required: true,
+                                        message: 'Please add value to this field',
                                         validateTrigger: "onSubmit",
                                         whitespace: true
                                     }
@@ -186,6 +229,16 @@ const AddEditProduct = () => {
                             <Form.Item 
                                 name="p_image_uri"
                                 getValueFromEvent={info => { return info.fileList }}                                      //this name is subject to change
+                                rules={[
+                                    {
+                                        validateTrigger: 'onSubmit',
+                                        validator: async (_) => {
+                                            if (fileList.length <= 0){
+                                                return Promise.reject(new Error("You must have at least one image uploaded"));
+                                            } 
+                                        }
+                                    }
+                                ]}  
                             >
                                 <Upload 
                                     fileList={fileList}
@@ -274,6 +327,7 @@ const AddEditProduct = () => {
             </Form>   
         </div>
     );
+    
 }
    
 export default AddEditProduct;

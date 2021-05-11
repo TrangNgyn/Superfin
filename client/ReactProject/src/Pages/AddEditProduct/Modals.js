@@ -4,6 +4,8 @@ import { history } from '../../_helpers/history';
 import { _editProduct, _addProduct } from './Functions';
 import { editProduct, addProduct } from '../../_actions/productActions'; 
 
+
+
 export const imageModal = (src, file, fileList, updateFileList) => {
     Modal.confirm({
         title: 'Image Preview',
@@ -32,7 +34,7 @@ const addSuccess = p_code => {
         title: "Add Successful",
         content: `Successfully added product: ${p_code}`,
         okText: "Ok",
-        onOk(){ history.push('/manageProducts') }
+        onOk(){ history.push('/admin') }
     });
 }
 
@@ -104,13 +106,15 @@ export const confirmEdit = (newProduct, dispatch) => {
     })
 }
 
-export const confirmAdd = (newProduct, dispatch) => {
+export const confirmAdd = (newProduct, formData, dispatch) => {
     Modal.confirm({
         title: `Adding product: ${newProduct.p_code}`,
         content: 'Are you sure you want to add this product?',
+
+
         onOk() {
             if(dispatch !== undefined){
-                return dispatch(addProduct(newProduct))
+                return dispatch(addProduct(formData, newProduct))
                 .then(res => {
                     if(res.data.success) addSuccess(newProduct.p_code);
                     else { 
@@ -124,7 +128,7 @@ export const confirmAdd = (newProduct, dispatch) => {
                 });
             }
             else{
-                return _addProduct(newProduct)
+                return _addProduct(formData)
                 .then(res => {
                     if(res.data.success) addSuccess(newProduct.p_code);
                     else{

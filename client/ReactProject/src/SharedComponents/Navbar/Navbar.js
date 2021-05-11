@@ -25,7 +25,6 @@ const userDetails = {
 
 export default function Navbar(){
     const dispatch = useDispatch();
-    const {itemCount} = useContext(CartContext);
 
     const [userType, setUserType] = useState(userDetails.userType);
     const [parentCategoires, setParentCategories] = useState([]);
@@ -34,7 +33,8 @@ export default function Navbar(){
     const categories = useSelector(state => state.categoryState.categories);
     const emptyCategories = useSelector(state => state.categoryState.empty);
 
-    
+    // update the number of items for Cart(itemCount) icon
+    const itemCount = useSelector(state => state.cartState.addedItems.length);
 
     useEffect(() => {
         if(!categories.length && !emptyCategories) dispatch(getAllCategories());
@@ -167,7 +167,12 @@ export default function Navbar(){
 
   //Login/Welcome, User menu item that changes based on whether user is logged in or not
 
-  let login = ( <Menu.Item key = "Login" onContextMenu={loginUserCustomer} onDoubleClick={loginUserAdmin} icon={<UserOutlined />}>
+  let login = ( 
+    <Menu.Item key = "Login" 
+        onContextMenu={loginUserCustomer} 
+        onDoubleClick={loginUserAdmin} 
+        icon={<UserOutlined />}
+    >
       <Link to="/login"> Login/Sign up </Link>
     </Menu.Item>
   );
@@ -273,7 +278,7 @@ export default function Navbar(){
         </Menu.Item>
 
         <Menu.Item key="EditCustomer">
-            <Link to="/editCustomer">Edit Customer Information</Link>
+            <Link to="/manageCategories">Manage Product Categories</Link>
         </Menu.Item>
 
         <Menu.Item key="EditCompany">

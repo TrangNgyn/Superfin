@@ -151,9 +151,9 @@ class Product {
                 return res.json(empty_field)
             }
             // validate that name and code
-            if( p_code.length > 255 || p_name.length > 255 || p_description > 511) {
+            if( p_code.length > 255 || p_name.length > 255 || p_description.length > 512) {
                 Product.delete_images(images)
-                return res.json({ error: "Name and Code cannot be longer than 255 characters and description cannot be larger than 511 "})
+                return res.json({ error: "Name and Code cannot be longer than 255 characters and description cannot be larger than 512 "})
             }
 
             var found_category = await categories_model.findOne({ _id: p_categories })
@@ -205,23 +205,40 @@ class Product {
     // @route   POST api/products/edit-product
     // @desc    edit an existing product
     // @access  Public
-
+ 
     async post_edit_product(req, res, locations) {
         try {
 
             var { p_code, p_name, p_price, p_units_sold, p_image_uri, p_categories, p_description } = req.body
 
-            var images = req.files
+            // create array to hold images
+            const array = [];
 
+            // check that the image url has been defined
             if(typeof p_image_uri === 'undefined') {
+                Product.delete_images(locations)
                 return res.json(empty_field)
             }
 
-            if(images.length <= 0 && p_image_uri.length == 0) {
+            // make sure that there is at least an image for the edited product
+            if(locations.length <= 0 && p_image_uri.length == 0) {
+                Product.delete_images(locations)
                 return res.json({ 
                     success: false,
                     message: `An image must be present in the edited product`
                 })
+            }
+
+            // push images supplied from post to the array 
+            if(typeof p_image_uri === 'string') {
+                if(p_image_uri !== "")
+                    array[0] = p_image_uri
+            }
+            else {
+                for(var i = 0; i < p_image_uri.length; i++){
+                    if(p_image_uri[i] !== "")
+                        array.push(p_image_uri[i])
+                }
             }
 
             // ensure all the required fields are present 
@@ -258,15 +275,27 @@ class Product {
                 })
             }
 
+            // ensure that the image links are all part of the original product
+            const array_include_test = array.every(val => found_product.p_image_uri.includes(val));
+
+            if(array_include_test == false) {
+                return res.json({
+                    success: false,
+                    message: `Cannot include image_links that are not inside the editied product`
+                })
+            }
+
+
             // unlink images from the array as they are read in 
-            if(p_image_uri != 0){
+            if(array.length > 0){
                 for(var i = 0; i < found_product.p_image_uri.length; i++){
                     var image = found_product.p_image_uri[i];
                     var found = false;
 
                     // loop through all sent images with the url of the saved images
                     // if found break otherwise delete it from the array
-                    for(var s_image in p_image_uri){
+                    for(var j = 0; j<array.length;j++){
+                        var s_image = array[j];
                         if(image === s_image){
                             found = true
                             break
@@ -277,7 +306,7 @@ class Product {
                             delete_object(image)
                         }
                         catch(err) {
-                            delete_object(locations)
+                            Product.delete_images(locations)
                             return res.json({
                                 succes: false,
                                 message: err.message
@@ -286,7 +315,7 @@ class Product {
                     }
                 }
             }
-            else if(found_product.p_image_uri.length != 0){
+            else if(found_product.p_image_uri.length > 0){
                 for(var i = 0; i < found_product.p_image_uri.length; i++){
                     var image = found_product.p_image_uri[i];
                     try {
@@ -303,11 +332,13 @@ class Product {
             }
 
 
-            p_image_uri += locations;
+            for(var i = 0;i < locations.length; i++) {
+                array.push(locations[i])
+            }
 
             var edited_product = product_model.findByIdAndUpdate(found_product._id, {
                 p_code,
-                p_image_uri,
+                p_image_uri: array,
                 p_name,
                 p_price,
                 p_units_sold,
