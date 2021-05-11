@@ -1,8 +1,10 @@
-import { Input, Button, Select, Form} from 'antd';
+import { Input, Button, Select, Form, Tree} from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCategories } from '../../_actions/categoryActions';
 import { useEffect, useState } from 'react';
 import { confirmChild, confirmParent, confirmDeleteParent, confirmDeleteChild } from './Helpers/Modals';
+import renderEmpty from 'antd/lib/config-provider/renderEmpty';
+import { getCategoriesHierarchy } from '../../SharedComponents/Categories/CategoriesFunctions';
 
 const { Option } = Select;
 
@@ -70,7 +72,7 @@ const ManageCategories = () => {
 
 
 
-    const parentCategoiresSelect = parentCategoires.map(c => {
+    const parentCatagoriesSelect = parentCategoires.map(c => {
         return <Option key={c._id} value={c.c_name}>{c.c_name}</Option>
     });
 
@@ -84,32 +86,15 @@ const ManageCategories = () => {
 
     return (
         <div>
-            <div id="manage-products-header">Manage Categories</div>
-            <div style={{textAlign: "center"}}>
-                <h3>Current Categories</h3>
-                <div style={{paddingBottom: '100px'}}>
-                    {
-                        parentCategoires.map(c => {
-                            return (
-                                <div key={c._id}>
-                                    <div style={{fontWeight: 'bold'}}>
-                                        {c.c_name}
-                                    </div>
-                                    <div>
-                                        {
-                                            childCategories
-                                            .filter(ch => { return ch.path === `,${c.c_name},`})
-                                            .map(ch => {
-                                                return <div key={ch._id}>{ch.c_name}</div>
-                                            })
-                                        }
-                                    </div>
-                                </div>
-                            );  
-                        })
-                    }
+            <div className="page-title-holder fill">
+                <h2>Manage Categories</h2>
+            </div>
+            <div className="container flex-horizontal-box-container">
+                <div className="box-item-xs-1 box-item-sm-2 box-item-md-3 box-item-lg-3 box-item-xl-4 box-shadow" id="manage-categories-current-panel">
+                    <h3>Current Categories</h3>
+                    <Tree treeData={getCategoriesHierarchy(categories, false)}/>
                 </div>
-                <div>
+                <div className="box-item-xs-1 box-item-sm-2 box-item-md-3 box-item-lg-3 box-item-xl-4 box-shadow" id="manage-categories-add-parent-panel">
                     <h3>Add Parent Category</h3>
                     <Form form={form_1} onFinish={onSubmitForm_1}>
                         <Form.Item
@@ -122,14 +107,14 @@ const ManageCategories = () => {
                                 }
                             ]}
                         >
-                            <Input maxLength={30} style={{width: "300px"}} placeholder="Type new parent category here"/>
+                            <Input maxLength={30} placeholder="Type new parent category here" />
                         </Form.Item>
                         <Form.Item>
                             <Button htmlType='submit'>Add</Button>
                         </Form.Item>
                     </Form>
                 </div>
-                <div style={{paddingTop: "100px"}}>
+                <div className="box-item-xs-1 box-item-sm-2 box-item-md-3 box-item-lg-3 box-item-xl-4 box-shadow" id="manage-categories-add-sub-panel">
                     <h3>Add Sub-Category</h3>
                     <Form form={form_2} onFinish={onSubmitForm_2}>
                         <Form.Item
@@ -142,7 +127,7 @@ const ManageCategories = () => {
                                 }
                             ]}
                         >
-                            <Input maxLength={30} style={{width: "300px"}} placeholder="Type new sub-category here"/>
+                            <Input maxLength={30} placeholder="Type new sub-category here" />
                         </Form.Item>
                         <Form.Item
                             name="parent_name"
@@ -153,17 +138,16 @@ const ManageCategories = () => {
                                 }
                             ]}
                         >
-                            <Select style={{ width: 300 }} placeholder="Select parent category">
-                                {parentCategoiresSelect}
+                            <Select placeholder="Select parent category">
+                                {parentCatagoriesSelect}
                             </Select>
                         </Form.Item>
-
                         <Form.Item>
                             <Button htmlType='submit'>Add</Button>
                         </Form.Item>
                     </Form>
                 </div>
-                <div style={{paddingTop: "100px"}}>
+                <div className="box-item-xs-1 box-item-sm-2 box-item-md-2 box-item-lg-2 box-item-xl-4 box-shadow" id="manage-categories-delete-parent-panel">
                     <h3>Delete Parent Category</h3>
                     <Form onFinish={onSubmitForm_3}>
                         <Form.Item
@@ -175,8 +159,8 @@ const ManageCategories = () => {
                                 }
                             ]}
                         >
-                            <Select style={{ width: 300 }} placeholder="Select parent category">
-                                {parentCategoiresSelect}
+                            <Select placeholder="Select parent category">
+                                {parentCatagoriesSelect}
                             </Select>
                         </Form.Item>
                         <Form.Item>
@@ -184,7 +168,7 @@ const ManageCategories = () => {
                         </Form.Item>
                     </Form>
                 </div>
-                <div style={{paddingTop: "100px", paddingBottom: "100px"}}>
+                <div className="box-item-xs-1 box-item-sm-1 box-item-md-2 box-item-lg-2 box-item-xl-4 box-shadow" id="manage-categories-delete-sub-panel">
                     <h3>Delete Sub-Category</h3>
                     <Form onFinish={onSubmitForm_4}>
                         <Form.Item
@@ -196,19 +180,19 @@ const ManageCategories = () => {
                                 }
                             ]}
                         >
-                            <Select style={{ width: 300 }} placeholder="Select parent category" onSelect={v => {setParent(v)}}>
-                                {parentCategoiresSelect}
+                            <Select placeholder="Select parent category" onSelect={v => { setParent(v) }}>
+                                {parentCatagoriesSelect}
                             </Select>
                         </Form.Item>
                         <Form.Item
-                             name="category_name"
-                             rules={[
-                                 {
-                                     required: true,
-                                     message: 'Please select a sub-category!'
-                                 }
-                             ]}>
-                            <Select style={{ width: 300 }} placeholder="Select sub-category">
+                            name="category_name"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please select a sub-category!'
+                                }
+                            ]}>
+                            <Select placeholder="Select sub-category">
                                 {childrenOfParent}
                             </Select>
                         </Form.Item>
@@ -217,7 +201,7 @@ const ManageCategories = () => {
                         </Form.Item>
                     </Form>
                 </div>
-            </div>
+            </div> 
         </div>
     );
 }

@@ -706,6 +706,23 @@ form#authentication-form > div:nth-last-child(1) {
 /* ====================================== */
 
 /* ====================================== */
+/* ========== Category Details  ========= */
+/* ====================================== */
+div#manage-categories-current-panel, div#manage-categories-add-parent-panel,
+div#manage-categories-add-sub-panel, div#manage-categories-delete-parent-panel,
+div#manage-categories-delete-sub-panel {
+	padding: 8px;
+}
+
+div#manage-categories-current-panel div.ant-tree {
+	max-height: 320px;
+	overflow-y: scroll;
+}
+/* ====================================== */
+/* ======== End Category Details  ======= */
+/* ====================================== */
+
+/* ====================================== */
 /* =========== Product Details  ========= */
 /* ====================================== */
 
@@ -754,6 +771,14 @@ form#authentication-form > div:nth-last-child(1) {
 
 /* ====================================== */
 /* ======== End Product Details  ======== */
+/* ====================================== */
+
+/* ====================================== */
+/* =========== Tree Component  ========== */
+/* ====================================== */
+
+/* ====================================== */
+/* ========= End Tree Component  ======== */
 /* ====================================== */
 
 /* ====================================== */
