@@ -2,24 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { Upload, Button, Form, Input, Select } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-
 import '../../_assets/CSS/pages/AddEditProduct/AddEditProduct.css';
 import { EDIT, ADD } from './PageStates';
 import { history } from '../../_helpers/history'; 
-import { getProduct, _getProduct, onPriceChange, onPreview, beforeUpload, onRemove, setFormValues, checkProductsEqual, /*getProductId*/ } from './Functions';
+import { getProduct, _getProduct, onPriceChange, onPreview, beforeUpload, onRemove, setFormValues, checkProductsEqual, addUriToFileList, createFormDataEdit } from './Functions';
 import { getAllCategories } from '../../_actions/categoryActions';
 import { onlyNumbers } from '../../_services/SharedFunctions';
 import { confirmEdit, confirmAdd } from './Modals'; 
 import { createFormData, checkBlob } from './Functions';
-//import axios from 'axios';
-/*
-const config = {
-    headers: {
-        'content-type': 'multipart/form-data'
-    }
-}*/
 
 const { Option, OptGroup } = Select;
+
+
+
 
 
 const AddEditProduct = () => {
@@ -29,7 +24,7 @@ const AddEditProduct = () => {
 
     const productsList = useSelector(state => state.productState.products);
     const categories = useSelector(state => state.categoryState.categories);
-    const emptyCategories = useSelector(state => state.categoryState.empty);
+    const emptyCategories = useSelector(state => state.categoryState.empty);        //for checking there are categories available 
 
     const [parentCategoires, setParentCategories] = useState([]);
     const [childCategories, setChildCategories] = useState([]);
@@ -37,59 +32,59 @@ const AddEditProduct = () => {
     const [pageState, setPageState] = useState(null);
     const [product, setProduct] = useState(null);
     const [fileList, updateFileList] = useState([]);
-
-    if(product !== null) console.log('p_image_uri', product.p_image_uri);
-    
+    const [originalImageListLength, setOriginalImageListLength] = useState(0);      //used for checking if the newly edited file differs from the original
+    const [newPage, setNewPage] = useState(true);                 //checks if the page is fresh 
 
     const [form] = Form.useForm();
 
+
+
+
+
     useEffect(() => {                                                //Changes the page state to edit or Add. Will also determine if API call necessary
         if(p_code){
-            if(productsList.length !== 0){
+            if(productsList.length !== 0){                              //dont make API call if redux store is populated
                 const product = _getProduct(p_code, productsList);
-
-                checkBlob(product.p_image_uri);
-
+                if(checkBlob(product.p_image_uri) && newPage) window.location.reload(); //checks if the file list contains a blob. will not trigger unless the page is in a fresh state
                 if(product !== undefined){
-                    setProduct(product);
+                    setProduct(product);            
                     setPageState(EDIT);
                 }
-                else{
+                else{                                   //if some nonsense is typed in the URL
                     history.push('/editAddProducts');
                     window.location.reload();
                 }                                
             }
             else getProduct(p_code, setProduct, setPageState);
-
         }
         else setPageState(ADD);
 
-        if(!categories.length && !emptyCategories) dispatch(getAllCategories());
+        if(!categories.length && !emptyCategories) dispatch(getAllCategories());        //sets up the parent and child categories in the select input
         else{   
             if(!parentCategoires.length){
-                const parents = categories.filter(c => {
-                    return c.path === null;
-                });
+                const parents = categories.filter(c => { return c.path === null });
                 setParentCategories(parents);
             }
             if(!childCategories.length){
-                const children = categories.filter(c => {
-                    return c.path !== null;
-                });
+                const children = categories.filter(c => { return c.path !== null; });
                 setChildCategories(children);
             }
         }
-    }, [categories.length, dispatch, p_code, productsList, categories, childCategories.length, emptyCategories, parentCategoires.length]);
+    }, [categories.length, dispatch, p_code, productsList, categories, childCategories.length, emptyCategories, parentCategoires.length, newPage]);
         
-
-
-    useEffect(() => {                                                       //sets the form values if in edit mode
-        if(pageState === EDIT) setFormValues(form, product, categories);
+    useEffect(() => {                                                       
+        if(pageState === EDIT){
+            addUriToFileList(product.p_image_uri, updateFileList);     //populates the file list
+            setFormValues(form, product, categories);       //sets the form values if in edit mode
+            setOriginalImageListLength(product.p_image_uri.length);      
+        } 
     }, [categories, product, form, pageState]);
 
-    
 
-    const selectCategories = parentCategoires.map(p => {
+
+
+
+    const selectCategories = parentCategoires.map(p => {                            //Options for the categories select input
         const sub_categories = childCategories
             .filter(c => { return c.path === `,${p.c_name},`})
             .map(c => {
@@ -99,58 +94,37 @@ const AddEditProduct = () => {
         return <OptGroup key={p._id} label={p.c_name}>{sub_categories}</OptGroup>
     });
         
-    
-
 
 
 
 
     const onFinish = newProduct => {                                                    //handles form submission
-        newProduct.p_image_uri = [];                                                        //IMPORTANT remove this later
         if(pageState === EDIT){
-            newProduct.p_code = product.p_code;
-            newProduct.p_image_uri = product.p_image_uri;
+            newProduct.p_code = product.p_code;             //set the new form p_code and p_image_uri fields to those of the original
+            newProduct.p_image_uri = product.p_image_uri;   
+            let number_of_new_images = 0;                   //used for checking if the product has been edited
+         
+            const formData = createFormDataEdit(newProduct, product, fileList);
 
-            console.log('p_image_uri', newProduct.p_image_uri );
+            [...fileList].forEach(image => {   
+                if(!image.uid.startsWith('EST')) number_of_new_images++;          
+            });
 
-            let formData = new FormData();
-
-            formData.append("p_name", newProduct.p_name);
-            formData.append("p_code", newProduct.p_code);
-            formData.append("p_units_sold", newProduct.p_units_sold);
-            formData.append("p_price", newProduct.p_price);
-            formData.append("p_categories", newProduct.p_categories);
-            formData.append("p_description", newProduct.p_description);
-            formData.append("p_image_uri", newProduct.p_image_uri);
-
-            if(!checkProductsEqual(newProduct, product)){
-                if(productsList.length !== 0) confirmEdit(newProduct, dispatch);    //if the Store contains the products, need to update this as well as do API call                                                                                    
-                else confirmEdit(newProduct);    //if the Store does not contain products, just need to do API call. do not need to update store   
+            if(!checkProductsEqual(newProduct, product, number_of_new_images, originalImageListLength)){
+                setNewPage(false);
+                if(productsList.length !== 0) confirmEdit(newProduct, formData, dispatch);    //if the Store contains the products, need to update this as well as do API call                                                                                 
+                else confirmEdit(newProduct, formData);    //if the Store does not contain products, just need to do API call. do not need to update store   
             }
-           /* axios.post('/api/products/edit-product', formData, config)
-            .then(res => {
-                console.log('res', res);
-            })
-            .catch(err => {
-                console.log('errr', err);
-            });*/
         }
-        
-        if(pageState === ADD){
+
+        if(pageState === ADD){                                      //if the page is in add mode, add the product
+            setNewPage(false);
             let formData = createFormData(newProduct, fileList);
             
-            for(let i = 0; i < fileList.length; i++){
-                newProduct.p_image_uri[i] = URL.createObjectURL(fileList[i].originFileObj);
-            }
+            for(let i = 0; i < fileList.length; i++)  newProduct.p_image_uri[i] = URL.createObjectURL(fileList[i].originFileObj);
            
-            if(productsList.length !== 0) confirmAdd(newProduct, formData, dispatch);
-            else confirmAdd(newProduct, formData);
-
-
-       /* if(pageState === ADD){
-            if(productsList.length !== 0) confirmAdd(newProduct, dispatch);
-            else confirmAdd(newProduct);
-        }*/
+            if(productsList.length !== 0) confirmAdd(newProduct, formData, dispatch);       //if there are products in redux store, add product there as well
+            else confirmAdd(newProduct, formData);              //else just make the request as usual
         };
     }
 
@@ -158,7 +132,7 @@ const AddEditProduct = () => {
 
 
 
-    
+
     return (
         <div>
             {pageState === EDIT ? <h1 id="ae-product-header-title">Editing Product: {product.p_code}</h1> : <></>}
@@ -243,10 +217,10 @@ const AddEditProduct = () => {
                                 <Upload 
                                     fileList={fileList}
                                     listType = "picture-card"
-                                    onPreview = {file => { onPreview(file, fileList, updateFileList) }}
+                                    onPreview = {file => { onPreview(file, fileList, updateFileList, product, setProduct) }}
                                     onChange = {info => { updateFileList([...info.fileList]) }}
                                     beforeUpload = {beforeUpload}
-                                    onRemove = {file => {onRemove(file, fileList, updateFileList)}}
+                                    onRemove = {file => {onRemove(file, fileList, updateFileList, product, setProduct)}}
                                 >
                                     {fileList.length < 6 && '+ Drag image or click'} 
                                 </Upload>
