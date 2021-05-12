@@ -44,7 +44,7 @@ const ContactUs = () =>{
           <h2>We'd love to hear from you</h2>
         </div>
         <div className="flex-horizontal-box-container" id="contact-us-content">
-          <div className="box-item-lg-6 box-item-md-6 box-item-sm-12 box-item-xs-12">
+          <div className="box-item-xs-12 box-item-sm-12 box-item-md-6 box-item-lg-6">
             <form  onSubmit={handleSubmit}>
               <div>
                 <Title level={4}>Name</Title>
@@ -64,7 +64,7 @@ const ContactUs = () =>{
             </form>
           </div>
 
-        <div className="box-item-lg-6 box-item-md-6 box-item-sm-12 box-item-xs-12">
+        <div className="box-item-xs-12 box-item-sm-12 box-item-md-6 box-item-lg-6">
           <Title level={3}>You can contact us via:</Title>
           <Title level={3}><PhoneFilled />: (02) 9681 6075</Title>
           <Title level={3}><EnvironmentFilled />: 3/34-36 Fairfield St, Fairfield East NSW 2165</Title>
