@@ -1,0 +1,857 @@
+@import 'layouts/_all';
+@import 'utilities/_all';
+
+/* ====================================== */
+/* =============== FONT ================= */
+/* ====================================== */
+// Set base font size and line height as belows
+$base-font-size: 16px;
+$base-line-height: 16px;
+$margin-between-flex-col: 8px;
+$margin-between-flex-row: 8px;
+
+/* Any sizes apart from body will use em to ensure the consistency between different places where fonts are used
+
+https://all-markup-news.com/px-to-em/
+
+Use the link above, put the base font size as 16 and you should be able to have a corresponding px to em (or vice versa) value*/
+html, body {
+    margin: 0;
+    padding: 0;
+}
+body {
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-size: $base-font-size;
+}
+
+code {
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+p {
+	font-size: 1em; /* 16px */
+	line-height: 1.0000em; /* 16px */
+	margin: 0 0 1.0000em 0;
+}
+
+h1 {
+	font-size: 2.2500em; /* 36px */
+	line-height: 1.3333em; /* 48px */
+	margin: 0.4444em 0 0 0;
+}
+
+h2 {
+	font-size: 2.0000em; /* 32px */
+	line-height: 1.0000em; /* 32px */
+	margin: 0.5000em 0 0 0;
+}
+
+h3 {
+	font-size: 1.7500em; /* 28px */
+	line-height: 1.1429em; /* 32px */
+	margin-top: 0.5714em 0 0 0;
+}
+
+h4 {
+	font-size: 1.5000em; /* 24px */
+	line-height: 1.3333em; /* 32px */
+	margin-top: 0.6667em 0 0 0;
+}
+
+h5 {
+	font-size: 1.2500em; /* 20px */
+	line-height: 1.6000em; /* 32px */
+	margin-top: 0.8000em 0 0 0;
+}
+
+h6 {
+	font-size: 1.0000em; /* 16px */
+	line-height: 1.0000em; /* 16px */
+	margin-top: 1.0000em 0 0 0;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.capitalize {
+    text-transform: capitalize;
+}
+
+.bold-text {
+    font-weight: bold;
+}
+
+.font-lg {
+    font-size: $font-lg;
+}
+
+.font-md {
+    font-size: $font-md;
+}
+
+.font-sm {
+    font-size: $font-sm;
+}
+
+.font-xs {
+    font-size: $font-xs;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.un-active-link {
+	color: $black;
+	&:hover {
+		color: $gray;
+	}
+	&.active {
+		color: $gray;
+		font-weight: 600;
+	}
+}
+
+/* ====================================== */
+/* ============= END FONT =============== */
+/* ====================================== */
+
+
+/* ====================================== */
+/* ============= ALIGNMENT ============== */
+/* ====================================== */
+
+.clearfix {
+    overflow: auto;
+}
+
+.flex {
+    display: flex !important;
+}
+
+.flex-center {
+    align-items: center;
+    justify-content: center;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+.no-padding {
+    padding: 0 !important;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.float-right {
+    float: right;
+}
+
+.float-left {
+    float: left;
+}
+
+.display-flex{
+	display: flex;
+}
+
+.mobile {
+	display: none !important;
+	@include screen-size(xs) {
+	    display: inherit !important;
+	}
+}
+
+.desktop {
+	display: none !important;
+	@include screen-size(sm) {
+	    display: inherit !important;
+	}
+}
+
+.bordered {
+	border: 1px solid $border-color;
+	border-radius: 4px;
+}
+
+.full-vertical-height {
+	height: 100vh; // Careful it might not be compatible with IE8 and backwards
+}
+
+/* ====================================== */
+/* ========== END ALIGNMENT ============= */
+/* ====================================== */
+
+
+/* ====================================== */
+/* ========== Additional Style ========== */
+/* ====================================== */
+.container.with-top-padding {
+	padding-top: 24px;
+}
+
+.box-shadow {
+	-webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+				0 3px 1px -2px rgba(0, 0, 0, 0.12),
+				0 1px 5px 0 rgba(0, 0, 0, 0.2);
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+				0 3px 1px -2px rgba(0, 0, 0, 0.12),
+				0 1px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+.card-shadow-hoverable {
+	-webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+				0 3px 1px -2px rgba(0, 0, 0, 0.12),
+				0 1px 5px 0 rgba(0, 0, 0, 0.2);
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+				0 3px 1px -2px rgba(0, 0, 0, 0.12),
+				0 1px 5px 0 rgba(0, 0, 0, 0.2);
+	transition: -webkit-box-shadow ease-in-out .1s,
+				box-shadow ease-in-out .1s,
+				transform ease-in-out .15s,
+				z-index linear .15s;
+}
+
+.card-shadow-hoverable:hover,
+.card-shadow-hoverable:focus,
+.card-shadow-hoverable:active {
+	transform: scale(1.045);
+	-webkit-box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.14),
+				0 3px 15px -2px rgba(0, 0, 0, 0.12),
+				0 1px 19px 0 rgba(0, 0, 0, 0.2);
+	box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.14),
+				0 3px 15px -2px rgba(0, 0, 0, 0.12),
+				0 1px 19px 0 rgba(0, 0, 0, 0.2);
+	outline: none;
+	z-index: 99;
+}
+/* ====================================== */
+/* ======== End Additional Style ======== */
+/* ====================================== */
+
+
+
+/* ====================================== */
+/* =============== Navbar =============== */
+/* ====================================== */
+ul.Navbar {
+	text-align: center;
+	background-color: gray-light;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 100;
+}
+
+ul.Navbar-Mobile {
+	text-align: justify;
+}
+
+ul.Navbar > li#Logo,
+ul.Navbar > li:nth-child(2) {
+	float: left;
+}
+
+ul.Navbar > li#Logo > a:only-child > img:only-child,
+ul.Navbar > li:nth-child(2) > a:only-child > img:only-child,
+ul.Navbar-Mobile > li#Logo > a:only-child > img:only-child,
+ul.Navbar-Mobile > li:nth-child(2) > a:only-child > img:only-child  {
+	width: 120px;
+}
+
+ul.Navbar > li:not(#Logo):not(:nth-child(2)):not(:nth-last-child(2)):not(:nth-last-child(4)){
+	margin: 0 30px 0 30px !important;
+}
+
+ul.Navbar > li:nth-last-child(2),
+ul.Navbar > li:nth-last-child(4) {
+	float: right;
+}
+
+.submenu-background > ul.ant-menu {
+	background-color: $gray-light !important;
+}
+/* ====================================== */
+/* =========== End Navbar =============== */
+/* ====================================== */
+
+/* ====================================== */
+/* ================ Body ================ */
+/* ====================================== */
+.flex-horizontal-box-container,
+.flex-vertical-box-container {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.flex-horizontal-box-container {
+	flex-direction: row;
+}
+
+.flex-vertical-box-container {
+	flex-direction: column;
+}
+
+.flex-horizontal-box-container > [class*="box-item"] {
+	flex: 1 1 auto;
+	margin-right: $margin-between-flex-col;
+	margin-bottom: $margin-between-flex-row;
+}
+
+// Flex horizontal will be in 12 columns and calculated in _variables.scss
+.flex-vertical-box-container > .box-item {
+	flex: 1 1 0px;
+}
+
+// Normal container
+.container {
+	margin: 16px 20% auto;
+}
+
+div.Website-Body {
+	z-index: 90;
+}
+/* ====================================== */
+/* ============== End Body ============== */
+/* ====================================== */
+
+/* ====================================== */
+/* =============== Footer =============== */
+/* ====================================== */
+div.Website-Footer {
+    z-index: 99;
+}
+
+ul[class*="footer-menubar"],
+ul.footer-menubar,
+ul.footer-menubar-mobile {
+    text-align: center;
+    background-color : $gray-light;
+}
+
+ul[class*="footer-menubar"]:after,
+ul.footer-menubar:after,
+ul.footer-menubar-mobile:after {
+	content: "";
+	display: block;
+	margin: 0 auto;
+	width: 90%;
+	border-bottom: 1px solid black;
+}
+
+ul.footer-menubar > li.item {
+    width: 175px;
+}
+
+div.footer-content-container {
+	background-color : $gray-light;
+	min-height: 128px;
+	width: 100%;
+	display: flex;
+	flex-flow: row wrap;
+}
+
+div.footer-content-container > div {
+	flex: 1 0 0px; // set the flex item to grow evenly by 1 with each base on the width of 100% / 3
+}
+
+div.footer-content-container > div#footer-email-input > form#footer-email-form:before {
+	content: "SIGN UP FOR SPECIAL OFFERS";
+	display: block; // So that the form is below the pseudo element
+	width: 100%; // Make its width equal that of the form
+	font-size: $base-font-size;
+}
+
+div.footer-content-container > div#footer-email-input > form#footer-email-form {
+	margin: 0 5% 0 10%;
+}
+
+div.footer-content-container > div#footer-email-input > form#footer-email-form > div.ant-form-item:first-child {
+	max-width: 300px; // Set the maximum width so that the content won't clip outside the div
+	min-width: 128px; // Set the minimum width so that it wouldn't be too small
+	width: 100%; // Make the div fill the whole width of the form
+}
+
+div.footer-content-container > div#footer-email-input > form#footer-email-form > div {
+	margin: 4px 0 4px 0; // Set this so the email input box + button are not mashed together like potato
+}
+
+div.footer-content-container > div#footer-social-media-links {
+	flex: 0 1 auto !important; // set this as important so it would disbable the ability to grow and allow to shrink to it's content-width
+	display: flex;
+	justify-content: center; // To align the content center of the main-axis (horizontal align to center)
+	align-items: flex-end; // To align the items to the end of the cross-axis (vertical align to bottom)
+}
+
+div.footer-content-container > div#footer-social-media-links > a {
+	color: $black;
+	font-size: 30px;
+	margin: 10px;
+}
+
+div.footer-content-container > div#footer-support-details {
+	display: flex;
+	flex-flow: column wrap; // Make the email and phone div flow in column
+	align-items: center; // Align the items in the middle of the div (vertically)
+	justify-content: center; // Align the items in the center of the div (horizontally)
+}
+
+div.footer-content-container > div#footer-support-details > div {
+	text-align: center;
+	font-size: 11px;
+	font-weight: bold;
+}
+
+div#copyright-background{
+	padding: 4px 0;
+	width: 100%;
+	background-color: $gray-light;
+	text-align: center;
+	font-size: 10px;
+}
+
+/* ====================================== */
+/* =========== End Footer =============== */
+/* ====================================== */
+
+
+
+/* ====================================== */
+/* ============ Page Title  ============= */
+/* ====================================== */
+
+.page-title-holder {
+	height: 150px;
+	text-align: center;
+}
+
+.page-title-holder.fill {
+	background-color: $orange-light;
+}
+
+.page-title-holder.with-divider {
+	border-bottom: 1px solid #B7B7B7;
+	position: relative;
+}
+
+.page-title-holder.center-page, .center-with-page-title-holder {
+	margin: 0 25% auto;
+}
+
+.center-with-page-title-holder {
+	padding-top: 8px;
+}
+
+.page-title-holder > h1,
+.page-title-holder > h2,
+.page-title-holder > h3,
+.page-title-holder > h4,
+.page-title-holder > h5,
+.page-title-holder > h6 {
+	position: relative;
+	top: 35%;
+}
+
+.page-title-holder.with-divider > h1,
+.page-title-holder.with-divider > h2,
+.page-title-holder.with-divider > h3,
+.page-title-holder.with-divider > h4,
+.page-title-holder.with-divider > h5,
+.page-title-holder.with-divider > h6 {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+.page-title-holder.with-divider > h1 {
+	margin-top: 40px;
+}
+
+.page-title-holder.with-divider > h2 {
+	margin-top: 45px;
+}
+
+.page-title-holder.with-divider > h3 {
+	margin-top: 50px;
+}
+
+.page-title-holder.with-divider > h4 {
+	margin-top: 55px;
+}
+
+.page-title-holder.with-divider > h5 {
+	margin-top: 60px;
+}
+
+.page-title-holder.with-divider > h6 {
+	margin-top: 65px;
+}
+
+/* ====================================== */
+/* =========== End Page Title  ========== */
+/* ====================================== */
+
+
+/* ====================================== */
+/* =========== MEDIA QUERIES ============ */
+/* ====================================== */
+
+@include screen-size('xs', $breakpoints) {
+	ul.Navbar,
+	ul.footer-menubar {
+		display: none;
+	}
+
+	ul.Navbar-Mobile,
+	ul.footer-menubar-mobile {
+		display: block;
+	}
+
+	.card-shadow-hoverable:hover,
+	.card-shadow-hoverable:focus
+	 {
+		transform: scale(1);
+	}
+
+	.container {
+		margin: 16px 5% auto;
+	}
+
+	.page-title-holder.center-page {
+		margin: 0;
+	}
+
+	ul[class*="footer-menubar"]:after,
+	ul.footer-menubar:after,
+	ul.footer-menubar-mobile:after {
+		width: 100%;
+	}
+
+	div.footer-content-container > div#footer-social-media-links {
+		align-items: center; // Make the logo vertically centered if below XS
+	}
+
+	div.footer-content-container > div#footer-support-details {
+		align-items: flex-end; // Set the details to be aligned to the right of the div
+		padding-right: 2%; // Add padding to the right to not be clashing with the main browser window
+	}
+	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
+	@for $flex-grow-width from 1 through 12 {
+		.flex-horizontal-box-container > .box-item-xs-#{$flex-grow-width} {
+			width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+			max-width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+		}
+	}
+}
+
+@include screen-size('sm', $breakpoints) {
+	ul.Navbar,
+	ul.footer-menubar{
+		display: block;
+	}
+
+	ul.Navbar-Mobile,
+	ul.footer-menubar-mobile {
+		display: none;
+	}
+
+	div.Website-Body {
+		margin-top: 50px;
+	}
+
+	div.Website-Body:after {
+		height: 200px;
+		content:'';
+		display: block;
+	}
+
+	.container {
+		margin: 16px 10% auto;
+	}
+
+	div.Website-Footer {
+            /*position: fixed;
+            bottom: 0;*/
+            background: grey;
+		width: 100%;
+	}
+
+	div.footer-content-container > div#footer-email-input > form#footer-email-form {
+		margin: 0 5% 0 15%;
+	}
+
+	div.footer-content-container > div#footer-social-media-links {
+		align-items: center; // Make the logo vertically centered if below SM
+	}
+
+	div.footer-content-container > div#footer-support-details > div {
+		margin: 0; // Set the margin to nothing to make them align
+	}
+	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
+	@for $flex-grow-width from 1 through 12 {
+		.flex-horizontal-box-container > .box-item-sm-#{$flex-grow-width} {
+			width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+			max-width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+		}
+	}
+}
+
+@include screen-size('md', $breakpoints) {
+	.container {
+		margin: 16px 15% auto;
+	}
+
+	div.footer-content-container > div#footer-email-input > form#footer-email-form {
+		margin: 0 5% 0 25%;
+	}
+
+	div.footer-content-container > div#footer-social-media-links {
+		align-items: flex-end; // Make the icons start from the bottom of the div
+	}
+
+	div.footer-content-container > div#footer-support-details > div {
+		margin-left: 15%; // Set margin relative to keep the design consistent
+	}
+	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
+	@for $flex-grow-width from 1 through 12 {
+		.flex-horizontal-box-container > .box-item-md-#{$flex-grow-width} {
+			width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+			max-width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+		}
+	}
+}
+
+@include screen-size('lg', $breakpoints) {
+	div.footer-content-container > div#footer-support-details > div {
+		margin-left: 35%; // Set margin relative to keep the design consistent
+	}
+	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
+	@for $flex-grow-width from 1 through 12 {
+		.flex-horizontal-box-container > .box-item-lg-#{$flex-grow-width} {
+			width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+			max-width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+		}
+	}
+}
+
+@include screen-size('xl', $breakpoints) {
+	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
+	@for $flex-grow-width from 1 through 12 {
+		.flex-horizontal-box-container > .box-item-xl-#{$flex-grow-width} {
+			width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+			max-width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+		}
+	}
+}
+
+/* ====================================== */
+/* =========== END MEDIA QUERIES ======== */
+/* ====================================== */
+
+
+/* ====================================== */
+/* ============ Contact Us Page ========= */
+/* ====================================== */
+div#contact-us-content > div {
+	border: 1px solid #000000;
+	padding: 20px;
+}
+
+div#contact-us-content > div:nth-child(1) > form > div:nth-last-child(1) {
+	margin-top: 12px;
+	text-align: center;
+}
+
+div#contact-us-content > div:nth-child(2) {
+	background-color: $gray-light;
+	text-align: center;
+}
+
+/* ====================================== */
+/* ========== End Contact Us Page ======= */
+/* ====================================== */
+
+/* ====================================== */
+/* ======== Authentication Pages ======== */
+/* ====================================== */
+
+form#authentication-form  {
+	margin-top: 32px;
+}
+
+form#authentication-form > div {
+	margin: 10px 25% auto;
+}
+
+form#authentication-form > div:nth-last-child(1),
+form#authentication-form > div:nth-last-child(2),
+form#authentication-form > div:nth-last-child(3) {
+	text-align: right;
+}
+
+form#authentication-form > div:nth-last-child(1) {
+	margin-top: 32px;
+}
+
+/* ====================================== */
+/* ========== End Authentication ======== */
+/* ====================================== */
+
+/* ====================================== */
+/* =========== Product Details  ========= */
+/* ====================================== */
+
+.product-details-main-title {
+	width: 100%;
+	padding: 0 16px 8px 16px;
+}
+
+.product-details-main-title > h1#product-name,
+.product-details-main-title > h2#product-name,
+.product-details-main-title > h3#product-name,
+.product-details-main-title > h4#product-name,
+.product-details-main-title > h5#product-name,
+.product-details-main-title > h6#product-name {
+	width: 100%;
+	overflow-wrap: break-word;
+}
+
+.product-details-main-title > div#quantity-selection,
+.product-details-main-title > div#quantity-selection > span,
+.product-details-main-title > div#special-requirements {
+	margin-top: 8px;
+}
+
+.product-details-main-title > div#quantity-selection > span {
+	margin-left: 8px;
+}
+
+.product-details-main-title > div#special-requirements > textarea#specialRequirementsField{
+	width: 100%;
+	height: 100%;
+}
+
+.product-details-main-title > button {
+	margin: 4px 4px 4px 0;
+}
+
+.product-details-description {
+	padding: 16px;
+}
+
+.product-details-description > span {
+	display: block;
+	margin-top: 8px;
+}
+
+/* ====================================== */
+/* ======== End Product Details  ======== */
+/* ====================================== */
+
+/* ====================================== */
+/* ============ Card Styling  =========== */
+/* ====================================== */
+
+.ant-card {
+	border-radius: 5px;
+}
+
+.ant-card > .ant-card-cover > img.cover-img {
+	object-fit: cover;
+}
+
+.ant-card > .ant-card-cover > img.cover-img.fixed-size {
+	height: 256px;
+}
+
+.ant-card > .ant-card-body > .ant-card-meta > .ant-card-meta-detail > .ant-card-meta-description > p {
+	width: inherit;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.ant-card > .ant-card-actions {
+	border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.ant-card > .ant-card-actions > li:first-child {
+	border-bottom-left-radius: 5px !important;
+}
+
+.ant-card > .ant-card-actions > li:last-child {
+	border-bottom-right-radius: 5px !important;
+}
+
+.ant-card > .ant-card-actions > li {
+	margin: 0 !important;
+	height: 48px;
+	transition: background-color ease-in-out .1s;
+}
+
+.ant-card > .ant-card-actions > li:hover,
+.ant-card > .ant-card-actions > li:focus {
+	background-color: rgba(0, 0, 0, 0.15);
+}
+
+.ant-card > .ant-card-actions > li > span {
+	height: 100%;
+}
+
+.ant-card > .ant-card-actions > li > span > * {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+#view-product-title {
+    color: #EB6E00;
+    cursor: pointer;
+}
+
+/* ====================================== */
+/* =========== End Card Styling ========= */
+/* ====================================== */
+
+/* ====================================== */
+/* ============= List Styling =========== */
+/* ====================================== */
+.ant-list-pagination {
+	margin-bottom: 16px;
+}
+/* ====================================== */
+/* =========== End List Styling ========= */
+/* ====================================== */
+
+main.ant-layout-content > div.ant-row.my-account-username-avatar {
+	display: flex;
+	flex-flow: column wrap;
+	align-content: center;
+}
+
+main.ant-layout-content > div.ant-row.my-account-username-avatar > * {
+	margin: .25em 0 0 0;
+	text-align: center;
+	flex: 1 0;
+}
+
+main.ant-layout-content > div.ant-row.my-account-details > form {
+	margin-top: 1.5em;
+	padding: 1em;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+main.ant-layout-content > div.ant-row.my-account-details > form > * {
+	flex: 0 45%;
+	margin: .5em;
+}

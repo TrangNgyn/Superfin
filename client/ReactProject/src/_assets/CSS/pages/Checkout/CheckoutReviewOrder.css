@@ -1,0 +1,46 @@
+#checkout-review-order-head {
+  font-family:Helvetica;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  margin-left: 4%;
+}
+
+#checkout-review-order-content{
+  font-family:Helvetica;
+  margin-left: 4%;
+  margin-right: 4%;
+}
+#checkout-review-order-info{
+  font-family:Helvetica;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  margin: auto;
+  width: 60%;
+  background-color: LightGray;
+}
+#checkout-review-order-summary{
+  font-family:Helvetica;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  margin: auto;
+  width: 60%;
+  background-color: LightGray;
+  margin-top: 10px;
+}
+#checkout-review-order-total{
+  font-family:Helvetica;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: auto;
+  width: 60%;
+  background-color: LightGray;
+  margin-top: 10px;
+}
+#checkout-review-order-button{
+  padding-top: 10px;
+  margin: auto;
+}

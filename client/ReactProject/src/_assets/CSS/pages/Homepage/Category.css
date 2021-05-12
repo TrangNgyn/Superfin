@@ -1,0 +1,21 @@
+.Category-Container {
+    text-align: center;
+    width: 250px;
+}
+
+
+.Category-Container  img {
+    display: block;
+    margin: 0 auto;
+    width: 250px;
+    height: 250px;
+}
+
+.Category-Container b {
+    color: black;
+}
+
+.Category-Image-Text {
+    cursor: pointer;
+}
+
