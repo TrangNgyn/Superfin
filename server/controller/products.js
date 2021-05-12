@@ -129,9 +129,6 @@ class Product {
     // @desc    Create a product
     // @access  Public
 
-
-    // need to add category to this - and implement categories across the database
-
     async post_add_product(req,res) {
         try {
 
@@ -218,7 +215,7 @@ class Product {
 
             var locations = req.images
 
-            const array = [];
+            const array = []
 
             if(typeof p_image_uri === 'undefined') {
                 return res.json(empty_field)
@@ -279,8 +276,8 @@ class Product {
             // unlink images from the array as they are read in 
             if(array.length != 0){
                 for(var i = 0; i < found_product.p_image_uri.length; i++){
-                    var image = found_product.p_image_uri[i];
-                    var found = false;
+                    var image = found_product.p_image_uri[i]
+                    var found = false
 
                     // loop through all sent images with the url of the saved images
                     // if found break otherwise delete it from the array
@@ -383,7 +380,7 @@ class Product {
                 var delete_product = await product_model.findOne({ p_code: p_code })
                 if(delete_product) {
                     if(delete_product.p_image_uri){
-                        Product.delete_images(delete_product.p_image_uri);
+                        Product.delete_images(delete_product.p_image_uri)
                     }
                     product_model.deleteOne({ p_code: p_code }, (err,result) => {
                         if(err){
@@ -399,7 +396,7 @@ class Product {
                                 res.send(result)
                             }
                         }
-                    });
+                    })
                 } 
                 else {
                     return res.json({ 
@@ -456,4 +453,4 @@ class Product {
 }
 
 const product_controller = new Product
-module.exports = product_controller;
+module.exports = product_controller

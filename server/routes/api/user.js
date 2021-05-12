@@ -18,10 +18,10 @@
 
 // module.exports = router;
 
-// get user info -> user based 
+// get user info -> user based done
 // forgot password -> user based
 // reset password -> user based
-// edit customer -> user based  
+// edit customer -> user based  done
     // name, mobile
     // needs admin and customer version
 
