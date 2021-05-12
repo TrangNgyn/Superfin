@@ -67,13 +67,13 @@ export const deleteProduct = p_code => dispatch => {
     });
 }
 
-export const editProduct = (newProduct, formData) => dispatch => {
-    return axios.post('/api/products/edit-product', formData)
+export const editProduct = product => dispatch => {
+    return axios.post('/api/products/edit-product', product)
         .then(res => {
             if(res.data.success){
                 dispatch({
                     type: EDIT_PRODUCT,
-                    payload: newProduct
+                    payload: product
                 })
             }
             return res;

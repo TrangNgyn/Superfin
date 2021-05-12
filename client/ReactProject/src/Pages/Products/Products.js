@@ -38,7 +38,6 @@ const Products = () => {
                 return 0;
         }
     }
-
     const filterAndSortProduct = () => {
         if (filter !== 0 && sorted !== 0) {
             const filteredSortedProducts = products.filter(e => { return (filter === "allCategories" || filter === 0) ? true : e.p_categories === filter; }).sort((a, b) => { return sortProduct(a, b, sorted); });
