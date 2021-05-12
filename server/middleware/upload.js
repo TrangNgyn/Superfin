@@ -31,5 +31,30 @@ var upload = multer({
     })
 })
 
-module.exports = upload
+const any_upload = upload.any()
+
+upload_any = (req,res,next) => {
+    any_upload(req,res, function (err) {
+      if(err) {
+        return res.json({
+          success: false,
+          message: err.message
+        })
+      }
+      var array = []
+      for (var i = 0; i<req.files.length; i++) {
+        array.push(req.files[i].location)
+      }
+      req.images = array
+      next()
+    }) 
+  }
+    
+
+
+const upload_files = {
+    upload_any
+}
+
+module.exports = upload_files
 

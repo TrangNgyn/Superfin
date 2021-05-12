@@ -132,10 +132,12 @@ class Product {
 
     // need to add category to this - and implement categories across the database
 
-    async post_add_product(req,res,images) {
+    async post_add_product(req,res) {
         try {
 
             var { p_code, p_name, p_price, p_units_sold, p_categories, p_description } =  req.body  
+
+            var images = req.images
 
             if(images.length <= 0) {
                 Product.delete_images(images)
@@ -195,6 +197,7 @@ class Product {
             }
         }
         catch (err) {
+            Product.delete_images(images)
             return res.json({
                 success: false,
                 message: err.message
@@ -206,12 +209,14 @@ class Product {
     // @desc    edit an existing product
     // @access  Public
 
-    async post_edit_product(req, res, locations) {
+    async post_edit_product(req, res) {
         try {
 
             var { p_code, p_name, p_price, p_units_sold, p_image_uri, p_categories, p_description } = req.body
 
             var images = req.files
+
+            var locations = req.images
 
             const array = [];
 

@@ -36,7 +36,7 @@ class Purchased_Order {
 
     async post_order_by_email(req, res) {
         try{
-            let {email} = req.body;
+            let { email } = req.body;
             if(!email){
                 return res.json(empty_field)
             }

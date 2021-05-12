@@ -223,20 +223,20 @@ class Customer {
                     }
                 });
           },
-          function(user, done) {
+          function(user, next) {
             // create the random token
             crypto.randomBytes(20, function(err, buffer) {
               var token = buffer.toString('hex');
-              done(err, user, token);
+                next(err, user, token);
             });
           },
-          function(user, token, done) {
+          function(user, token, next) {
             customer_model
                 .findByIdAndUpdate({ _id: user._id }, 
                     { reset_password_token: token, reset_password_expires: Date.now() + 86400000 },
                     { upsert: true, new: true, useFindAndModify: true })
                 .exec(function(err, new_user) {
-                    done(err, token, new_user);
+                    next(err, token, new_user);
                 });
           },
           function(token, user, done) {
