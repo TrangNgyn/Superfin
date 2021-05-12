@@ -41,13 +41,13 @@ const ProductDetails = props => {
             </div> :
             (productDetailsLoading ? <Spin size='large' /> :<>
                 <div className="container with-top-padding flex-horizontal-box-container">
-                    <div className="box-item-xs-1 box-item-sm-1 box-item-md-2 box-item-lg-2 box-item-xl-2">
+                    <div className="box-item-xs-12 box-item-sm-12 box-item-md-6 box-item-lg-6 box-item-xl-6">
                         <ProductImagesCarousel {...productDetails}/>
                     </div>
-                    <div className="box-item-xs-1 box-item-sm-1 box-item-md-2 box-item-lg-2 box-item-xl-2">
+                    <div className="box-item-xs-12 box-item-sm-12 box-item-md-6 box-item-lg-6 box-item-xl-6">
                         <ProductMainTitle {...productDetails} />
                     </div>
-                    <div className="box-item-xs-1 box-item-sm-1 box-item-md-1 box-item-lg-1 box-item-xl-1">
+                    <div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-12">
                         <ProductDescription {...productDetails}/>
                     </div>
                 </div>
