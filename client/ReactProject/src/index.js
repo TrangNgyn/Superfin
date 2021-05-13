@@ -6,7 +6,6 @@ import reportWebVitals from './Misc/reportWebVitals';
 import { Provider } from 'react-redux';
 import { store } from './_helpers/store';
 import { HelmetProvider } from 'react-helmet-async';
-import CartContextProvider from './contexts/CartContext';
 
 
 
@@ -14,11 +13,8 @@ import CartContextProvider from './contexts/CartContext';
 ReactDOM.render(
   <Provider store = {store}>
     <HelmetProvider>
-        <CartContextProvider>
       <App />
-      </CartContextProvider>
-  </HelmetProvider>,
-
+    </HelmetProvider>,
   </Provider>,
   document.getElementById('main')
 );
