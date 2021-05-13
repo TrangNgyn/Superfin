@@ -5,7 +5,7 @@ import { Typography, Button, Row, Col, Steps, Spin } from 'antd';
 import { CheckCircleFilled } from '@ant-design/icons';
 import { formatNumber } from '../../_helpers/utils';
 import CartProducts from '../Cart/CartProducts';
-import { setError, setLoading } from '../../_actions/cartActions';
+import { clearCart, setError, setLoading } from '../../_actions/cartActions';
 import axios from 'axios';
 
 const { Title } = Typography;
@@ -24,15 +24,6 @@ const CheckoutOrderComplete = (props) =>{
   const [isLoading, setLoadingState] = useState(true);
 
   useEffect(() => {
-    // clean up before component unmount
-    return () => {
-      localStorage.clear();
-    }    
-  }, [])
-
-  useEffect(() => {
-    props.setLoading(isLoading);
-
     // create an order on rendering
     axios
       .post('/api/orders/create-order', {
@@ -42,12 +33,21 @@ const CheckoutOrderComplete = (props) =>{
         address,
       })
       .then(res => {
-        console.log(res)
+        // set loading state to false when done
         setLoadingState(false);
         return res;
       })
       .catch(err => props.setError(err))
-      
+
+    // clean up before component unmount
+    return () => {
+      localStorage.clear();
+      props.clearCart()
+    }    
+  }, [])
+
+  useEffect(() => {
+    props.setLoading(isLoading);      
   }, [isLoading])
 
   return(<>
@@ -166,6 +166,7 @@ const mapDispatchToProps= (dispatch)=>{
   return{
     setLoading: (isLoading) => {dispatch(setLoading(isLoading))},
     setError: (err) => {dispatch(setError(err))},
+    clearCart: () => {dispatch(clearCart())}
   }
 }
 

@@ -1,3 +1,9 @@
+/*
+  Author: Trang Nguyen, Thinh Thai
+  Note: The user will be redirected to this page
+    after they cancel a payment
+*/
+
 import { Link } from 'react-router-dom'; 
 import React, { useEffect } from 'react';
 import { CloseCircleFilled } from '@ant-design/icons';
