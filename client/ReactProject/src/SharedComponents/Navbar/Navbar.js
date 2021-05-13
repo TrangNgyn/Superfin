@@ -34,6 +34,8 @@ export default function Navbar(){
 
     // update the number of items for Cart(itemCount) icon
     const itemCount = useSelector(state => state.cartState.items.length);
+    // check if the order is being processed
+    const isLoading = useSelector(state => state.cartState.loading);
 
     useEffect(() => {
         if(!categories.length && !emptyCategories) dispatch(getAllCategories());
@@ -305,27 +307,41 @@ export default function Navbar(){
 
   return (
     <>
+    {
+      isLoading ?
+      // don't allow the user to navigate if true
       <Menu className="Navbar box-shadow" mode="horizontal" selectable={false}>
-        <Menu.Item key="Logo" id="Logo" selectable="false">
+        <Menu.Item key="Logo" id="Logo" selectable="false" disabled={true}>
           <Link to="/" >
             <img src={image} alt="Logo" />
           </Link>
         </Menu.Item>
-        {mainMenu}
-        {login}
       </Menu>
-      <Menu className="Navbar-Mobile" mode="inline" selectable={false}>
-        <Menu.Item key="Logo" id="Logo">
-          <Link to="/" >
-            <img src={image} alt="Logo" />
-          </Link>
-        </Menu.Item>
-        {mainMenuMobile}
-        <Menu.Item key="Cart" icon = {<ShoppingCartOutlined/>}>
-          <Link to="/cart"> Cart </Link>
-        </Menu.Item>
-        {loginMobile}
-      </Menu>
+      :
+      <>
+        <Menu className="Navbar box-shadow" mode="horizontal" selectable={false}>
+          <Menu.Item key="Logo" id="Logo" selectable="false">
+            <Link to="/" >
+              <img src={image} alt="Logo" />
+            </Link>
+          </Menu.Item>
+          {mainMenu}
+          {login}
+        </Menu>
+        <Menu className="Navbar-Mobile" mode="inline" selectable={false}>
+          <Menu.Item key="Logo" id="Logo">
+            <Link to="/" >
+              <img src={image} alt="Logo" />
+            </Link>
+          </Menu.Item>
+          {mainMenuMobile}
+          <Menu.Item key="Cart" icon = {<ShoppingCartOutlined/>}>
+            <Link to="/cart"> Cart </Link>
+          </Menu.Item>
+          {loginMobile}
+        </Menu>
+      </>
+    }
     </>
   );
 }

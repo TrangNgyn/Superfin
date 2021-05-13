@@ -153,7 +153,7 @@ class Purchased_Order {
         try {
 
             let { c_email, status, items, address } = req.body
-
+            
             if( !c_email | !status | !items | !address) {
                 return res.json(empty_field)
             }
