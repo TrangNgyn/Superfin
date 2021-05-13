@@ -114,7 +114,7 @@ class Customer {
                             mobile: customer.mobile_number,
                             po_address: customer.po_address_line1 + ' ' + customer.po_address_line2
                                     + ', ' + customer.po_suburb + ', ' + customer.po_state
-                                    + customer.po_postal_code + ', ' + customer.po_country})
+                                    + customer.po_postcode + ', ' + customer.po_country})
                     })
                     .catch(err => res.json(err))
                 }) 

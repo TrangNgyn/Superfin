@@ -1,24 +1,13 @@
-import React, { useContext } from 'react';
-import { CartContext } from '../../../contexts/CartContext';
+import React from 'react';
 import { Button } from 'antd';
-import altImage from "../../../_assets/Images/No_Image.jpg"
-
-
 
 const ProductItem = ({product}) => {
-
-    const { addProduct, cartItems, increase } = useContext(CartContext);
-
-    const isInCart = product => {
-        return !!cartItems.find(item => item._id === product._id);
-    }
-
     return (
 
       <div id="product-container">
           <img id="product-image"
               src= {product.p_image_uri}
-              alt={altImage}
+              alt={product.p_name}
               style={{height: '310px', width:'310px'}}
           />
 
@@ -35,23 +24,9 @@ const ProductItem = ({product}) => {
                   </tr>
               </tbody>
           </table>
-
-          <div id="product-icon-container">
-          {
-              isInCart(product) &&
-              <Button type="primary"
-              onClick={() => increase(product)} >Add more</Button>
-          }
-          {
-              !isInCart(product) &&
-              <Button type="primary"
-              onClick={() => addProduct(product)}>Add to cart</Button>
-          }
-          </div>
       </div>
 
-
-     );
+    );
 }
 
 export default ProductItem;

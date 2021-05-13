@@ -17,12 +17,14 @@ const { Step } = Steps;
 const CheckoutReviewOrder = (props) =>{
   const total = props.total;
   const itemCount = props.cartItems.length;
+  const address = props.address;
+  const email = props.email;
 
   return(
     <div>
 
       <div id="checkout-review-order-head">
-        <Title level={3}>CHECK OUT</Title>
+        <Title level={3}>Checkout</Title>
       </div>
 
       <div id="checkout-review-order-content">
@@ -38,23 +40,76 @@ const CheckoutReviewOrder = (props) =>{
 
         <div id="checkout-review-order-summary">
           <Row>
+            <Col span={12}><Title level={4}>Shipping Information</Title></Col>
+          </Row>
+          {
+            address ?
+              <>
+                <Row>
+                  <strong>The items are to be delivered to:</strong> &nbsp;
+                  {address.po_attention_to}
+                </Row>
+                {
+                  address.po_address_line2 ?
+                    <Row>
+                      <strong>Receiver's address:</strong> &nbsp;
+                      {address.po_address_line2}/{address.po_address_line1}, &nbsp;
+                      {address.po_suburb}, {address.po_state} {address.po_postcode}
+                    </Row>
+                  :
+                    <Row>
+                      <strong>Receiver's address: </strong> &nbsp;
+                      {address.po_address_line1}, {address.po_suburb}, &nbsp;
+                      {address.po_state} {address.po_postcode}
+                    </Row>
+                }
+                <Row>
+                  <strong>Receiver's email:</strong> &nbsp;
+                  {email}
+                </Row>
+              </>
+            :
+              <>
+                <Row>
+                  Shipping Address not available.
+                  Please go back to the previous Step (Step 1)!
+                </Row>
+              </>
+          }
+        </div>
+
+        <div id="checkout-review-order-summary">
+          <Row>
             <Col span={12}><Title level={4}>Order Summary ({itemCount} items)</Title></Col>
           </Row>
-          <Row>
-            <Col span={6}>
-              <div style={{fontWeight:"bold"}}>Product</div>
-            </Col>
-            <Col span={6}>
-              <div style={{textAlign: "center", fontWeight:"bold"}}>Price</div>
-            </Col>
-            <Col span={6}>
-              <div style={{textAlign: "center", fontWeight:"bold"}}>Quantity</div>
-              </Col>
-            <Col span={6}>
-              <div style={{textAlign: "right", paddingRight: "10px", fontWeight:"bold"}}>Total</div>
-            </Col>
-          </Row>
-          <CartProducts editable={false} />
+          {
+            itemCount === 0 ? 
+              <div>Your cart is empty</div>
+            : <>
+              <Row>
+                <Col span={6}>
+                  <div style={{fontWeight:"bold"}}>Product</div>
+                </Col>
+                <Col span={6}>
+                  <div style={{textAlign: "center", fontWeight:"bold"}}>Price</div>
+                </Col>
+                <Col span={3}>
+                  <div style={{textAlign: "center", fontWeight:"bold"}}>Quantity</div>
+                  </Col>
+                <Col span={9}>
+                  <div 
+                    style={{
+                      textAlign: "left", 
+                      paddingRight: "10px", 
+                      fontWeight:"bold"
+                    }}>
+                      Special Requirements
+                  </div>
+                </Col>
+              </Row>
+              <CartProducts editable={false} />
+            </>
+          }          
         </div>
 
         <div id="checkout-review-order-total">
@@ -115,8 +170,10 @@ const CheckoutReviewOrder = (props) =>{
 
 const mapStateToProps = (state)=>{
   return{
-      cartItems: state.cartState.addedItems,
+      cartItems: state.cartState.items,
       total: state.cartState.total,
+      address: state.cartState.address,
+      email: state.cartState.c_email,
   }
 }
 

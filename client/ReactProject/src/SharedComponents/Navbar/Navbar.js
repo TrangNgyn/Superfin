@@ -1,9 +1,8 @@
-import { Menu, Dropdown } from 'antd';
+import { Menu, Dropdown, Badge } from 'antd';
 import { UserOutlined, ShoppingCartOutlined, MenuOutlined } from '@ant-design/icons';
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch  } from 'react-redux';
-import { CartContext } from '../../contexts/CartContext';
 
 import { getAllCategories } from '../../_actions/categoryActions';
 import { history } from '../../_helpers/history';
@@ -34,7 +33,7 @@ export default function Navbar(){
     const emptyCategories = useSelector(state => state.categoryState.empty);
 
     // update the number of items for Cart(itemCount) icon
-    const itemCount = useSelector(state => state.cartState.addedItems.length);
+    const itemCount = useSelector(state => state.cartState.items.length);
 
     useEffect(() => {
         if(!categories.length && !emptyCategories) dispatch(getAllCategories());
@@ -52,7 +51,10 @@ export default function Navbar(){
                 setChildCategories(children);
             }
         }
-    }, [categories.length, dispatch, categories, childCategories.length, emptyCategories, parentCategoires.length]);
+    }, [
+        categories.length, dispatch, categories,
+        childCategories.length, emptyCategories, parentCategoires.length
+      ]);
 
   const logout = () => {          //fake login logout functions
     setUserType("GUEST");
@@ -113,7 +115,13 @@ export default function Navbar(){
     </Menu>
   );
 
-  const accountMenuMobile = (<SubMenu key="AccountMenuMobile" className="submenu-background"  icon={<UserOutlined />} title={"Welcome, " + userDetails.name}>
+  const accountMenuMobile = (
+    <SubMenu 
+      key="AccountMenuMobile" 
+      className="submenu-background"  
+      icon={<UserOutlined />} 
+      title={"Welcome, " + userDetails.name}
+    >
       {accountSpecificMenu}
       <Menu.Item>
         <Link to="/" onClick={logout}>Logout</Link>
@@ -243,8 +251,15 @@ export default function Navbar(){
         <Link to="/blog"> Blog </Link>
       </Menu.Item>
 
-      <Menu.Item key="Cart" icon = {<ShoppingCartOutlined />}>
-        <Link to="/cart"> Cart ({itemCount}) </Link>
+      <Menu.Item key="Cart" 
+        icon = {
+          <Badge count={itemCount} showZero
+              style={{backgroundColor: "#EB6E00"}} >
+            <ShoppingCartOutlined />
+          </Badge>          
+        }
+      >
+        <Link to="/cart"> Cart </Link>
       </Menu.Item>
     </>
   );

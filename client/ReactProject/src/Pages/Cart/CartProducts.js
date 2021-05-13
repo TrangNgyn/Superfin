@@ -1,6 +1,5 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { CartContext } from '../../contexts/CartContext';
 import CartItem from './CartItem';
 
 const CartProducts = (props) => {
@@ -8,11 +7,10 @@ const CartProducts = (props) => {
 
     const itemList = () => {
       var items = [];
-      for(var i = 0; i < props.cartItems.length; i++){
+      for(var i = 0; i < props.line_items.length; i++){
         items.push(
-          <CartItem key={props.cartItems[i].p_code} 
-            product={props.cartItems[i]}
-            quantity={props.quantity[i]} 
+          <CartItem key={props.line_items[i].item_code} 
+            product={props.line_items[i]}
             editable={editable}
           />
         )
@@ -23,7 +21,6 @@ const CartProducts = (props) => {
     return (
       <div>
         {
-          // props.cartItems.map(product => <CartItem key={product.id} product={product}/>)
           itemList()
         }
       </div>
@@ -32,8 +29,7 @@ const CartProducts = (props) => {
 
 const mapStateToProps = (state)=>{
   return{
-      cartItems: state.cartState.addedItems,
-      quantity: state.cartState.quantity,
+      line_items: state.cartState.items,
   }
 }
 

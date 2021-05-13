@@ -4,17 +4,10 @@ import { CloseCircleFilled } from '@ant-design/icons';
 import { Row } from 'antd';
 
 const PaymentCancelled = () =>{
-  // clean up after component unloads
+  // clean up when component mounts
   useEffect(() => {
-
-    const onbeforeunloadFn = () => {
-      localStorage.removeItem('products')
-    }
-
-    window.addEventListener('beforeunload', onbeforeunloadFn);
-    return () => {
-      window.removeEventListener('beforeunload', onbeforeunloadFn);
-    }
+    localStorage.removeItem('address');
+    localStorage.removeItem('email');
   }, [])
 
     return (
