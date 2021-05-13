@@ -1,7 +1,7 @@
 import { Select, Input, Button } from 'antd';
 import { ShoppingOutlined } from '@ant-design/icons';
 import { useDispatch, connect } from 'react-redux';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {addToCart} from '../../_actions/cartActions'
 
 const quantityOptionGenerator = maxOptionCounts => {
@@ -18,13 +18,12 @@ const quantityOptionGenerator = maxOptionCounts => {
 }
 
 const ProductMainTitle = props => {
-    const dispatch = useDispatch();
-
     const { Option } = Select;
     const { TextArea } = Input;
     const productDetails = props;
 
-    const [quantity, setQuantity] = useState(0);
+    // line items' variables
+    const [quantity, setQuantity] = useState(1);
     const [special_requirements, setSpecialRequirements] = useState("");
 
     const onQuantityChange = (value) => {
@@ -54,15 +53,23 @@ const ProductMainTitle = props => {
         </>
     );
 
-
-    const addToCart = (product, quantity, special_requirements) => {
-        props.addToCart(product, quantity, special_requirements);
+    const addToCart = (product, quantity, special_requirements) => {        
+        // update cart state
+        props.addToCart(product, quantity, special_requirements);        
     }
+
+    useEffect(() => {
+        // store cart state to local storage
+        localStorage.setItem("items", JSON.stringify(props.items));
+        localStorage.setItem("total", props.total);
+    }, [props.total, props.items])
 
     return (
         <div className="product-details-main-title">
             <h3 id="product-name">{productDetails && productDetails.p_name}</h3>
-            <div id="units-sold"><strong>{productDetails && productDetails.p_units_sold} sold</strong></div>
+            <div id="units-sold">
+                <strong>{productDetails && productDetails.p_units_sold} sold</strong>
+            </div>
             <div id="quantity-selection">
                 <label htmlFor="quantitySelectionComponent">Quantity: </label>
                 {quantitySelectionComponent}
@@ -71,13 +78,16 @@ const ProductMainTitle = props => {
                 <label htmlFor="specialRequirementsField">Special Requirements:</label>
                 <TextArea 
                     id="specialRequirementsField" 
-                    placeholder="Please specify any special requirement (e.g: Red Bag with a Rooster Icon on the front).
-                     (Max length: 100)" 
+                    placeholder="Please specify any special requirement
+                    (e.g: Red Bag with a Rooster Icon on the front).
+                    (Max length: 100)" 
                     maxLength={100}
+                    rows={3}
                     showCount
                     onChange={onRequirementChange}
                 />
             </div>
+            <br/>
             <Button type="primary" icon={<ShoppingOutlined />} 
                 onClick={()=> 
                     {
@@ -89,10 +99,17 @@ const ProductMainTitle = props => {
         </div>
     );
 };
-  
+
+const mapStateToProps = (state)=>{
+    return{
+      items: state.cartState.items,
+      total: state.cartState.total,
+    }
+}
+
 const mapDispatchToProps= (dispatch)=>{
     return{
-       addToCart: 
+      addToCart: 
         (product, quantity, special_requirements) => {
             dispatch(addToCart(product, quantity, special_requirements))
         }
@@ -100,4 +117,4 @@ const mapDispatchToProps= (dispatch)=>{
 }
 
 
-export default connect(null, mapDispatchToProps)(ProductMainTitle);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductMainTitle);

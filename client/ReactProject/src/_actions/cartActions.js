@@ -4,8 +4,8 @@ import { ADD_TO_CART, REMOVE_ITEM, SUB_QUANTITY,
   from '../_constants/cart.constants'
 
 // add item to cart action
-export const addToCart = (product, quantity, special_requirements)=>{
-  return{
+export const addToCart = (product, quantity, special_requirements) => {
+  return {
     type: ADD_TO_CART,
     product,
     quantity,
@@ -19,6 +19,8 @@ export const setAddress  = (address) => {
     address,
   }
 }
+
+// export const subtractQuantity
 
 export const setLoading  = (loading) => {
   return {

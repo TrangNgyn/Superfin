@@ -5,16 +5,23 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { history } from '../../_helpers/history';
 import { setAddress } from '../../_actions/cartActions';
+import { useEffect } from 'react';
 
 const { Title } = Typography;
 const { Option } = Select;
 const { Step } = Steps;
 
-const CheckoutShipping = () =>{
+const CheckoutShipping = (props) =>{
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
-    setAddress(values);
+    // update cart state
+    props.setAddress(values);
+
+    // store input address to local storage
+    localStorage.setItem("address", JSON.stringify(values));
+
+    // redirect to review order page
     history.push('/checkoutReviewOrder');
   };
 
@@ -23,9 +30,9 @@ const CheckoutShipping = () =>{
   };      
 
   return(
-    <body>
+    <>
       <div id="checkout-shipping-head">
-        <Title level={3}>CHECK OUT</Title>
+        <Title level={3}>Checkout</Title>
       </div>
       <div id="checkout-shipping-status">
       <div>
@@ -47,7 +54,7 @@ const CheckoutShipping = () =>{
       >
         <Row gutter={16}>
           <Col span={24}>
-            <Form.Item label="Full Name" name="full_name" 
+            <Form.Item label="Full Name" name="po_attention_to" 
               rules={[
                 { 
                   required: true,
@@ -121,14 +128,9 @@ const CheckoutShipping = () =>{
           <Col >
             <Form.Item 
               label="State" 
-              name="state" 
-              rules={[
-                { 
-                  required: true,
-                  message: "Select a state!"
-                }
-              ]}>
-              <Select  style={{ width: 120 }} >
+              name="state"
+            >
+              <Select style={{ width: 120 }} >
                 <Option value="NSW">NSW</Option>
                 <Option value="VIC">VIC</Option>
                 <Option value="ACT">ACT</Option>
@@ -171,7 +173,7 @@ const CheckoutShipping = () =>{
       </Form>
       </div>
     </div>
-    </body>
+    </>
   );
 }
 

@@ -17,7 +17,7 @@ const CheckoutOrderComplete = (props) =>{
   useEffect(() => {
 
     const onbeforeunloadFn = () => {
-      localStorage.removeItem('products')
+      localStorage.removeItem('items')
     }
 
     window.addEventListener('beforeunload', onbeforeunloadFn);

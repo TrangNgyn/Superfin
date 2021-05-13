@@ -72,7 +72,7 @@ const CheckoutSecurePayment = (props) =>{
   return(
     <div>
     <div id="checkout-payment-head">
-      <Title level={3}>CHECKOUT</Title>
+      <Title level={3}>Checkout</Title>
     </div>
     <div id="checkout-payment-content">
       <div>
@@ -122,6 +122,8 @@ const mapStateToProps = (state)=>{
   return{
       line_items: state.cartState.items,
       stripe: state.cartState.stripe,
+      isLoading: state.cartState.loading,
+      error: state.cartState.error,
   }
 }
 
