@@ -4,7 +4,9 @@ import { history } from '../../_helpers/history';
 import { _editProduct, _addProduct } from './Functions';
 import { editProduct, addProduct } from '../../_actions/productActions'; 
 
-export const imageModal = (src, file, fileList, updateFileList, product, setProduct) => {           //displays the preview of the image
+
+
+export const imageModal = (src, file, fileList, updateFileList) => {
     Modal.confirm({
         title: 'Image Preview',
         icon: null,
@@ -13,17 +15,17 @@ export const imageModal = (src, file, fileList, updateFileList, product, setProd
         cancelText: "Delete Image",
         onOk() {},
         onCancel() {
-            onRemove(file, fileList, updateFileList, product, setProduct)
+            onRemove(file, fileList, updateFileList)
         },
     });
 }
 
-const editSuccess = p_code => {                                 
+const editSuccess = p_code => {
     Modal.info({
         title: "Edit Successful",
         content: `Successfully edited product: ${p_code}`,
         okText: "Ok",
-        onOk(){ history.goBack() }
+        onOk(){ history.push('/manageProducts') }
     });
 }
 
@@ -32,7 +34,7 @@ const addSuccess = p_code => {
         title: "Add Successful",
         content: `Successfully added product: ${p_code}`,
         okText: "Ok",
-        onOk(){ history.goBack() }
+        onOk(){ history.push('/admin') }
     });
 }
 
@@ -42,7 +44,7 @@ const editFail = p_code => {
         title: "ERROR",
         content: `There was a problem editing product: ${p_code}. Please try again or contact support.`,
         okText: "Ok",
-        onOk(){ history.goBack()}
+        onOk(){ history.push('/manageProducts') }
     });
 }
 
@@ -59,24 +61,21 @@ const addFail = p_code => {
         title: "ERROR",
         content: `There was a problem adding product: ${p_code}. Please try again or contact support.`,
         okText: "Ok",
-        onOk(){ history.goBack() }
+        onOk(){ history.push('/manageProducts') }
     });
 }
 
- 
 
-export const confirmEdit = (newProduct, formData, dispatch) => {                //confirms the edit
+
+export const confirmEdit = (newProduct, dispatch) => {
     Modal.confirm({
         title: `Editing product: ${newProduct.p_code}`,
         content: 'Are you sure you want to make these edits?',
         onOk() {
-            if(dispatch !== undefined){                                     //if dispatch is defined then need to send product to the redux store (as well as the db)
-                
-                return dispatch(editProduct(newProduct, formData))
+            if(dispatch !== undefined){
+                return dispatch(editProduct(newProduct))
                 .then(res => {
-                    if(res.data.success){
-                        editSuccess(newProduct.p_code);
-                    } 
+                    if(res.data.success) editSuccess(newProduct.p_code);
                     else { 
                         console.log("Error", res);
                         editFail(newProduct.p_code);
@@ -87,8 +86,8 @@ export const confirmEdit = (newProduct, formData, dispatch) => {                
                     editFail(newProduct.p_code);
                 });
             }
-            else{                                               //else just push it to the db
-                return _editProduct(formData)
+            else{
+                return _editProduct(newProduct)
                 .then(res => {
                     if(res.data.success) editSuccess(newProduct.p_code);
                     else{
@@ -103,7 +102,7 @@ export const confirmEdit = (newProduct, formData, dispatch) => {                
                 });
             } 
         },
-        onCancel() {}
+        onCancel() {},
     })
 }
 
@@ -112,8 +111,9 @@ export const confirmAdd = (newProduct, formData, dispatch) => {
         title: `Adding product: ${newProduct.p_code}`,
         content: 'Are you sure you want to add this product?',
 
+
         onOk() {
-            if(dispatch !== undefined){                                             //if dispatch is defined need to send it to the redux store (as well as the db)
+            if(dispatch !== undefined){
                 return dispatch(addProduct(formData, newProduct))
                 .then(res => {
                     if(res.data.success) addSuccess(newProduct.p_code);
@@ -127,7 +127,7 @@ export const confirmAdd = (newProduct, formData, dispatch) => {
                     addFail(newProduct.p_code);
                 });
             }
-            else{                                                                 //else just push it directly to the db
+            else{
                 return _addProduct(formData)
                 .then(res => {
                     if(res.data.success) addSuccess(newProduct.p_code);
