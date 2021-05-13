@@ -14,7 +14,8 @@ exports.sign_up =  (req,res) => {
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, salt_rounds),
         first_name: req.body.first_name,
-        last_name: req.body.last_name
+        last_name: req.body.last_name,
+        mobile: req.body.mobile
     });
     customer.save((err,customer) => {
         if(err) {

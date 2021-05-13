@@ -233,7 +233,7 @@ class Customer {
           function(user, token, next) {
             customer_model
                 .findByIdAndUpdate({ _id: user._id }, 
-                    { reset_password_token: token, reset_password_expires: Date.now() + 86400000 },
+                    { reset_password_token: token, reset_password_expires: Date.now() + 86400 },
                     { upsert: true, new: true, useFindAndModify: true })
                 .exec(function(err, new_user) {
                     next(err, token, new_user);
