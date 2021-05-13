@@ -65,8 +65,8 @@ const Products = () => {
             { error ? <div class="container"><h1 style={{ textAlign: 'center', color: 'red' }}>Could not load data, please try refreshing page!</h1></div> :
                 (loading ? <Spin size='large' /> : <>
                     <div className="container flex-horizontal-box-container">
-                        <TreeSelect className="box-item-xs-2 box-item-sm-3 box-item-md-3 box-item-lg-3 box-item-xl-4" treeData={getCategoriesHierarchy(categories, true)} placeholder="Filter Category" defaultValue="allCategories" treeDefaultExpandAll onSelect={e => { setFilter(e); }}/>
-                        <Select className="box-item-xs-2 box-item-sm-3 box-item-md-2 box-item-lg-3 box-item-xl-4" defaultValue="priceAsc" onSelect={e => { setSorted(e); }}>
+                        <TreeSelect className="box-item-xs-6 box-item-sm-4 box-item-md-4 box-item-lg-4 box-item-xl-3" treeData={getCategoriesHierarchy(categories, true)} placeholder="Filter Category" defaultValue="allCategories" treeDefaultExpandAll onSelect={e => { setFilter(e); }}/>
+                        <Select className="box-item-xs-6 box-item-sm-4 box-item-md-4 box-item-lg-4 box-item-xl-3" defaultValue="priceAsc" onSelect={e => { setSorted(e); }}>
                             <Option value="noSort" disabled><SortAscendingOutlined />Sort By</Option>
                             <Option value="alphaAsc"><SortAscendingOutlined />Sort By: Alphabetically Ascending</Option>
                             <Option value="alphaDesc"><SortDescendingOutlined />AscendingSort By: Alphabetically Descending</Option>
