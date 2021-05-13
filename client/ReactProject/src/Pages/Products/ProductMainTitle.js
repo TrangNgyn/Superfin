@@ -61,7 +61,7 @@ const ProductMainTitle = props => {
     useEffect(() => {
         // store cart state to local storage
         localStorage.setItem("items", JSON.stringify(props.items));
-        localStorage.setItem("total", props.total);
+        localStorage.setItem("total", JSON.stringify(props.total));
     }, [props.total, props.items])
 
     return (

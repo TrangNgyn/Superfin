@@ -1,6 +1,7 @@
-import { ADD_TO_CART, REMOVE_ITEM, SUB_QUANTITY,
-  ADD_QUANTITY, SET_LOADING, SET_ERROR,
-  LOAD_STRIPE, SET_SHIPPING_INFO} 
+import { 
+  ADD_TO_CART, SET_LOADING, SET_ERROR, LOAD_STRIPE,
+  SET_SHIPPING_INFO, INCREASE_QUANTITY, DECREASE_QUANTITY, CLEAR_CART,
+} 
   from '../_constants/cart.constants'
 
 // add item to cart action
@@ -21,7 +22,26 @@ export const setShipping  = (address, email) => {
   }
 }
 
-// export const subtractQuantity
+export const increaseQuantity = (index) => {
+  return {
+    type: INCREASE_QUANTITY,
+    index,
+  }
+}
+
+export const decreaseQuantity = (index) => {
+  return {
+    type: DECREASE_QUANTITY,
+    index,
+  }
+}
+
+export const clearCart = () => {
+  return {
+    type: CLEAR_CART,
+  }
+}
+
 
 export const setLoading  = (loading) => {
   return {

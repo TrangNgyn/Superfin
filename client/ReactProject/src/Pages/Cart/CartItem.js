@@ -3,20 +3,33 @@ import {connect} from 'react-redux';
 import { Row, Col, Button, Input } from 'antd';
 import {PlusOutlined, MinusOutlined, RestOutlined } from '@ant-design/icons';
 import { formatNumber } from '../../_helpers/utils';
-import { addQuantity, subtractQuantity } from '../../_actions/cartActions'
+import { decreaseQuantity, increaseQuantity } from '../../_actions/cartActions'
 
 const { TextArea } = Input;
 
 const CartItem = (props) => {
+  // getting the props values
   const editable = props.editable;
   const product = props.product;
+  const index = props.index;
 
-  const increase = (product) => {
-    // props.increase(product)
+  const [quantityState, setQuantityState] = useState(product.quantity);
+
+  const increase = () => {
+    // update the quantity displayed
+    setQuantityState(quantityState + 1);
+
+    // update site's state
+    props.increase(index);
   }
 
-  const decrease = (product) => {
-    // props.decrease(product);
+  const decrease = () => {
+    // update the displayed quantity
+    setQuantityState(quantityState - 1);
+
+    // update the site's state
+    props.decrease(index);
+    
   }
 
     return (
@@ -35,22 +48,22 @@ const CartItem = (props) => {
         </Col>
         
         <Col span={2}>
-          <div style={{textAlign: "center"}}>{product.quantity}</div>
+          <div style={{textAlign: "center"}}>{quantityState}</div>
         </Col>
         <Col span={1}>
           <div style={{textAlign: "left"}}>  
             {
               editable &&
-              <Button onClick={() => increase(props.product)}
+              <Button onClick={() => increase()}
                 shape="circle"
                 icon={<PlusOutlined />}
                 style={{color: "#EB6E00"}}
               />
             }
-            <br/>        
+            <br/> <br/>      
             {
               editable &&
-              <Button onClick={() => decrease(props.product)}
+              <Button onClick={() => decrease()}
                 shape="circle"
                 icon={<MinusOutlined />}
                 style={{color: "#EB6E00"}}
@@ -84,13 +97,13 @@ const CartItem = (props) => {
       </Row>
 )}
 
-// const mapDispatchToProps= (dispatch)=>{
-//   return{
-//      decrease: (product) => {dispatch(subtractQuantity(product))},
-//      increase: (product) => {dispatch(addQuantity(product))},
-//   }
-// }
+const mapDispatchToProps= (dispatch)=>{
+  return{
+    increase: (index) => {dispatch(increaseQuantity(index))},
+    decrease: (index) => {dispatch(decreaseQuantity(index))},
+  }
+}
 
-// export default connect(null, mapDispatchToProps)(CartItem);
+export default connect(null, mapDispatchToProps)(CartItem);
 
-export default CartItem;
+// export default CartItem;

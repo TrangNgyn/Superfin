@@ -9,7 +9,10 @@ import {
   SET_SHIPPING_INFO,
   SET_LOADING,
   SET_ERROR,
-  LOAD_STRIPE
+  LOAD_STRIPE,
+  INCREASE_QUANTITY,
+  DECREASE_QUANTITY,
+  CLEAR_CART
 } from '../_constants/cart.constants'
 
 // initial state of address
@@ -79,6 +82,43 @@ const cartReducer= (state = initialState, action)=>{
         total : newTotal
       }
     }
+  }
+  else if(action.type === INCREASE_QUANTITY){
+    const i = action.index;
+
+    // update new quantity
+    state.items[i].quantity += 1;
+
+    // calc new total
+    const newTotal = state.total + state.items[i].unit_price;
+
+    return {...state, total: newTotal};
+  }
+  else if(action.type === DECREASE_QUANTITY){
+    const i = action.index;
+
+    // decrease the quantity by 1
+    state.items[i].quantity -= 1;
+
+    // calc new total
+    const newTotal = state.total - state.items[i].unit_price;
+
+    // remove of item list if quantity = 0
+    if(state.items[i].quantity === 0){
+      state.items.splice(i, 1);
+    }
+
+    return {...state, total: newTotal};
+  }
+  else if(action.type === CLEAR_CART){
+    return{
+      ...state,
+      total: 0,
+      items: [],
+      address: address_init,
+      c_email: "",
+    }
+
   }
   else if(action.type === SET_SHIPPING_INFO){
     return { ...state, address: action.address, c_email: action.email };

@@ -47,6 +47,7 @@ const CheckoutOrderComplete = (props) =>{
         return res;
       })
       .catch(err => props.setError(err))
+      
   }, [isLoading])
 
   return(<>
@@ -62,6 +63,7 @@ const CheckoutOrderComplete = (props) =>{
       </>
       :
       <div>
+        <br/>
         <div id="checkout-order-complete-head">
           <Title level={3}>Order Placed</Title>
         </div>

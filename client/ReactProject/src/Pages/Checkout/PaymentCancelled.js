@@ -12,6 +12,7 @@ const PaymentCancelled = () =>{
 
     return (
       <>
+        <br/>
         <div className="page-title-holder fill">
           <h2>Payment canceled</h2>
         </div>
