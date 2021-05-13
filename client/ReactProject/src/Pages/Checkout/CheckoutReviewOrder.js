@@ -17,7 +17,8 @@ const { Step } = Steps;
 const CheckoutReviewOrder = (props) =>{
   const total = props.total;
   const itemCount = props.cartItems.length;
-  const shippingAddress = props.shippingAddress;
+  const address = props.address;
+  const email = props.email;
 
   return(
     <div>
@@ -42,26 +43,30 @@ const CheckoutReviewOrder = (props) =>{
             <Col span={12}><Title level={4}>Shipping Information</Title></Col>
           </Row>
           {
-            shippingAddress ?
+            address ?
               <>
                 <Row>
                   <strong>The items are to be delivered to:</strong> &nbsp;
-                  {shippingAddress.full_name}
+                  {address.po_attention_to}
                 </Row>
                 {
-                  shippingAddress.address_line_2 ?
+                  address.po_address_line2 ?
                     <Row>
-                      <strong>Receiver's Address:</strong> &nbsp;
-                      {shippingAddress.address_line_2}/{shippingAddress.address_line_1}, &nbsp;
-                      {shippingAddress.suburb}, {shippingAddress.state} {shippingAddress.postcode}
+                      <strong>Receiver's address:</strong> &nbsp;
+                      {address.po_address_line2}/{address.po_address_line1}, &nbsp;
+                      {address.po_suburb}, {address.po_state} {address.po_postcode}
                     </Row>
                   :
                     <Row>
-                      <strong>Receiver's Address: </strong> &nbsp;
-                      {shippingAddress.address_line_1}, {shippingAddress.suburb}, &nbsp;
-                      {shippingAddress.state} {shippingAddress.postcode}
+                      <strong>Receiver's address: </strong> &nbsp;
+                      {address.po_address_line1}, {address.po_suburb}, &nbsp;
+                      {address.po_state} {address.po_postcode}
                     </Row>
                 }
+                <Row>
+                  <strong>Receiver's email:</strong> &nbsp;
+                  {email}
+                </Row>
               </>
             :
               <>
@@ -167,7 +172,8 @@ const mapStateToProps = (state)=>{
   return{
       cartItems: state.cartState.items,
       total: state.cartState.total,
-      shippingAddress: state.cartState.address,
+      address: state.cartState.address,
+      email: state.cartState.c_email,
   }
 }
 

@@ -254,7 +254,7 @@ const POForm1 = props => {
 
                     <div className="view-order-field-header"><span style={{color: 'red'}}>*</span>Post Code</div>
                     <Form.Item 
-                        name="po_postal_code"
+                        name="po_postcode"
                         rules={[
                             {
                                 whitespace: true,
@@ -264,7 +264,7 @@ const POForm1 = props => {
                             }
                         ]}
                     >                                                   
-                        <Input onChange={e => onlyNumbers(e, props.form, "po_postal_code",)} maxLength={100} style={{width: "500px"}} />
+                        <Input onChange={e => onlyNumbers(e, props.form, "po_postcode",)} maxLength={100} style={{width: "500px"}} />
                     </Form.Item>
 
                     <div className="view-order-field-header"><span style={{color: 'red'}}>*</span>Country</div>

@@ -6,7 +6,7 @@
 
 import {
   ADD_TO_CART,
-  SET_ADDRESS,
+  SET_SHIPPING_INFO,
   SET_LOADING,
   SET_ERROR,
   LOAD_STRIPE
@@ -15,11 +15,11 @@ import {
 // initial state of address
 const address_init = {
   po_attention_to: "",
-  address_line_1: "",
-  address_line_2: "",
-  suburb: "Sydney",
-  state: "NSW",
-  postcode: 2000,
+  po_address_line1: "",
+  po_address_line2: "",
+  po_suburb: "Sydney",
+  po_state: "NSW",
+  po_postcode: 2000,
 }
 
 // the cart's initial state
@@ -28,7 +28,7 @@ const initialState = {
                                                          //   quantity, special_requirements, image_uri[]}
   total: JSON.parse(localStorage.getItem("total")) || 0, // order total
   address: JSON.parse(localStorage.getItem("address")) || address_init, // shipping address
-  email: "",         // user email         
+  c_email: JSON.parse(localStorage.getItem("email")) || "", // user email         
   loading: false,    // page's loading state
   error: null,       // if an error is returned
   stripe: null,      // stripe session id
@@ -80,8 +80,8 @@ const cartReducer= (state = initialState, action)=>{
       }
     }
   }
-  else if(action.type === SET_ADDRESS){
-    return { ...state, address: action.address };
+  else if(action.type === SET_SHIPPING_INFO){
+    return { ...state, address: action.address, c_email: action.email };
   }
   else if(action.type === SET_LOADING){
     return { ...state, loading: action.loading };

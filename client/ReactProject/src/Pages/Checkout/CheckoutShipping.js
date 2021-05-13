@@ -4,8 +4,7 @@ import {CaretLeftOutlined} from '@ant-design/icons';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { history } from '../../_helpers/history';
-import { setAddress } from '../../_actions/cartActions';
-import { useEffect } from 'react';
+import { setShipping } from '../../_actions/cartActions';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -15,11 +14,23 @@ const CheckoutShipping = (props) =>{
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
+    const addressPayload = {
+      po_attention_to: values.po_attention_to,
+      po_address_line1: values.address_line_1,
+      po_address_line2: values.address_line_2,
+      po_suburb: values.suburb,
+      po_state: values.state,
+      po_postcode: values.postcode,
+    };
+
+    const emailPayload = values.email;
+    console.log(addressPayload)
     // update cart state
-    props.setAddress(values);
+    props.setShipping(addressPayload, emailPayload);
 
     // store input address to local storage
-    localStorage.setItem("address", JSON.stringify(values));
+    localStorage.setItem("address", JSON.stringify(addressPayload));
+    localStorage.setItem("email", JSON.stringify(emailPayload));
 
     // redirect to review order page
     history.push('/checkoutReviewOrder');
@@ -129,6 +140,12 @@ const CheckoutShipping = (props) =>{
             <Form.Item 
               label="State" 
               name="state"
+              rules={[
+                { 
+                  required: true,
+                  message: 'Please select a state!'
+                }
+              ]}
             >
               <Select style={{ width: 120 }} >
                 <Option value="NSW">NSW</Option>
@@ -179,7 +196,7 @@ const CheckoutShipping = (props) =>{
 
 const mapDispatchToProps= (dispatch)=>{
   return{
-    setAddress: (address) => {dispatch(setAddress(address))}
+    setShipping: (address, email) => {dispatch(setShipping(address, email))}
   }
 }
 

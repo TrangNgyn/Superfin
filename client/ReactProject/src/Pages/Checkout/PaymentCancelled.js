@@ -7,6 +7,7 @@ const PaymentCancelled = () =>{
   // clean up when component mounts
   useEffect(() => {
     localStorage.removeItem('address');
+    localStorage.removeItem('email');
   }, [])
 
     return (

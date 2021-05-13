@@ -1,6 +1,6 @@
 import { ADD_TO_CART, REMOVE_ITEM, SUB_QUANTITY,
-  ADD_QUANTITY, ADD_SHIPPING, SET_LOADING, SET_ERROR,
-  LOAD_STRIPE, SET_ADDRESS} 
+  ADD_QUANTITY, SET_LOADING, SET_ERROR,
+  LOAD_STRIPE, SET_SHIPPING_INFO} 
   from '../_constants/cart.constants'
 
 // add item to cart action
@@ -13,10 +13,11 @@ export const addToCart = (product, quantity, special_requirements) => {
   }
 }
 
-export const setAddress  = (address) => {
+export const setShipping  = (address, email) => {
   return {
-    type: SET_ADDRESS,
+    type: SET_SHIPPING_INFO,
     address,
+    email,
   }
 }
 

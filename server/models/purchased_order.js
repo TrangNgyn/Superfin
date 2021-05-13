@@ -79,7 +79,7 @@ const order_schema = new Schema({
                 type: String,
                 required: true
             },
-            po_postal_code: {
+            po_postcode: {
                 type: String,
                 required: true
             },

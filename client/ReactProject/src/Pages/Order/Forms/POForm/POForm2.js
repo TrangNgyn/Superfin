@@ -18,7 +18,7 @@ const POForm2 = props => {
         po_address_line2: props.orderOriginal.po_address_line2,
         po_suburb: props.orderOriginal.po_suburb,
         po_state: props.orderOriginal.po_state,
-        po_postal_code: props.orderOriginal.po_postal_code,
+        po_postcode: props.orderOriginal.po_postcode,
         po_country: props.orderOriginal.po_country,
         mobile_number: props.orderOriginal.mobile_number
     }*/
