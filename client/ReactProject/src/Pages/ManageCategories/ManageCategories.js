@@ -40,7 +40,7 @@ const ManageCategories = () => {
     }, [categories.length, dispatch, categories]);
 
     return (
-        <div>
+        <>
             <div className="page-title-holder fill">
                 <h2>Manage Categories</h2>
             </div>
@@ -115,7 +115,7 @@ const ManageCategories = () => {
                     </Form>
                 </div>
             </div> 
-        </div>
+        </>
     );
 }
 
