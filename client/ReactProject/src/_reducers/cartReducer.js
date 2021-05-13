@@ -28,9 +28,10 @@ const initialState = {
                                                          //   quantity, special_requirements, image_uri[]}
   total: JSON.parse(localStorage.getItem("total")) || 0, // order total
   address: JSON.parse(localStorage.getItem("address")) || address_init, // shipping address
-  loading: false,                             // page's loading state
-  error: null,                                // if an error is returned
-  stripe: null,                               // stripe session id
+  email: "",         // user email         
+  loading: false,    // page's loading state
+  error: null,       // if an error is returned
+  stripe: null,      // stripe session id
 }
 
 // cart reducer that performs different actions depending on action.type
