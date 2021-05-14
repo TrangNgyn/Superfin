@@ -37,7 +37,7 @@ const Order = () => {
     const [form_2] = Form.useForm();
 
 
-
+    console.log('Order', order);
 
     //for refreshing the item list
     useEffect(() => {     
@@ -122,20 +122,17 @@ const Order = () => {
     //after validating fields, this function submits the forms
     const confirmSubmit = values => {
         const editedOrder = JSON.stringify(order) !== JSON.stringify(orderOriginal);
-
+        console.log(editedOrder);
         let address = createAddress(values);
 
         if(mode===MODE.ADD){
             let order = createOrderAdd(values, address);
-      
-            if(incompleteOrders.length > 0){
+            console.log(order);
+            /*if(incompleteOrders.length > 0){
                 order.issued_date = new Date();
                 _addIncompleteOrder(order, dispatch);
             }
-            else {
-                _addIncompleteOrder(order);
-            }
-    
+            else*/ _addIncompleteOrder(order);
         }
         else if(mode===MODE.EDIT){
             if(editedOrder){

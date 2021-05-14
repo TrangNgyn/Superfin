@@ -89,6 +89,22 @@ const POForm2 = props => {
                         :   item.special_requirements
                     } 
                 </td>
+                <td>
+                    {props.mode===MODE.EDIT || props.mode===MODE.ADD
+                        ?   <Form.Item 
+                                name ={['items', index, 'p_size']}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Please input a size"
+                                    }
+                                ]}
+                            >
+                                <Input maxLength={50} style={{width: "100px"}} />
+                            </Form.Item>
+                        :   item.p_size
+                    } 
+                </td>
                 {props.mode===MODE.EDIT || props.mode===MODE.ADD
                     ?   <td onClick={() => showDeleteConfirm(index, deleteOrderItem)}><DeleteOutlined className="view-order-icon"/></td> 
                     :   <></>
@@ -109,6 +125,7 @@ const POForm2 = props => {
                         <th><span style={{color: 'red'}}>*</span>Item Code</th> 
                         <th><span style={{color: 'red'}}>*</span>Quantity</th>
                         <th>Special Requirements</th>
+                        <th><span style={{color: 'red'}}>*</span>Size</th>
                         {props.mode===MODE.EDIT || props.mode===MODE.ADD 
                             ?   <th onClick = {() => {props.onClick(true)}} className="view-order-icon" style ={{fontSize: "30px"}}>+</th>
                             : <></>

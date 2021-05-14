@@ -165,8 +165,8 @@ const addFail = () => {
         content: 'There was a problem adding this order. Please try again or contact support.',
         okText: "Ok",
         onOk(){ 
-            history.push('/order');
-            window.location.reload();
+          //  history.push('/order');
+           // window.location.reload();
         }
     });
 }
