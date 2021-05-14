@@ -124,10 +124,8 @@ const App = () => (
                <Route path="/ViewProductInfo"><ViewProductInfo /></Route>
                <Route path="/Promocode"><Promocode /></Route>
                <Route path="/manageOrders"> <ManageOrdersCustomer /> </Route>
-               {/* <div>
-                   <AppRoute path="/admin" component={HomepageAdmin} />
-                  <Route path="/login" component={Login} />
-                </div> */}
+               <Route path="/login"> <Login /> </Route>
+          
 
             </Switch>
          </div>

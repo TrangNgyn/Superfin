@@ -41,6 +41,21 @@ const NewItemForm = (props) => {
                 <Input maxLength={4} onChange={e => onlyNumbers(e, props.form, "quantity",)} style={{width: "50px"}} />
             </Form.Item>
 
+            <Form.Item 
+                name='p_size' 
+                label="Size"
+                rules={[
+                    {
+                        whitespace: true,
+                        required: true,
+                        validateTrigger: 'onSubmit',
+                        message: 'Please input a product size',
+                    }
+                ]}
+            >
+                <Input maxLength={50} style={{width: "100px"}}/>
+            </Form.Item>
+
             <Form.Item maxLength={200} name='special_requirements' label="Special Requirements">
                 <Input/>
             </Form.Item>

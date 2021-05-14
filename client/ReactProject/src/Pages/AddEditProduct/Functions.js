@@ -103,9 +103,8 @@ export const onRemove = (file, fileList, updateFileList, product, setProduct) =>
     }
 }
 
-export const setFormValues = (form, product, categories) => {                 //sets the values of the form to appropriate values when in edit mode
+export const setFormValues = (form, product) => {                 //sets the values of the form to appropriate values when in edit mode
     let p_units_sold = "";
-    if(product.p_units_sold !== null) p_units_sold = product.p_units_sold.toString();
 
     form.setFieldsValue({
         p_name: product.p_name,
@@ -114,6 +113,7 @@ export const setFormValues = (form, product, categories) => {                 //
         p_price: product.p_price.toString(),
         p_categories: product.p_categories,
         p_description: product.p_description,
+        p_unit: product.p_unit,
         p_image_uri: []
     });
 }
@@ -127,6 +127,8 @@ export const checkProductsEqual = (product_a, product_b, numberOfNewImages, orig
             product_a.p_price === product_b.p_price.toString() && 
             product_a.p_image_uri.length + numberOfNewImages === product_b.p_image_uri.length &&
             product_a.p_image_uri.length === originalFileLength &&
+            product_a.p_unit === product_b.p_unit &&
+            JSON.stringify(product_a.p_size) === JSON.stringify(product_b.p_size) &&
             product_a.p_units_sold === product_b.p_units_sold.toString()){
                 return true
             }
@@ -136,16 +138,21 @@ export const checkProductsEqual = (product_a, product_b, numberOfNewImages, orig
 export const createFormData = (newProduct, fileList) => {               //create form data for add mode
     let formData = new FormData();
 
+    newProduct.p_size.forEach(s => {
+        formData.append('p_size[]', s);               //appending all sizes to the form data
+    });
+
     [...fileList].forEach(image => {
         formData.append("images", image.originFileObj);
     });
-    
+
     formData.append("p_name", newProduct.p_name);
     formData.append("p_code", newProduct.p_code);
     formData.append("p_units_sold", newProduct.p_units_sold);
     formData.append("p_price", newProduct.p_price);
     formData.append("p_categories", newProduct.p_categories);
     formData.append("p_description", newProduct.p_description);
+    formData.append("p_unit", newProduct.p_unit);
 
     return formData;
 }
@@ -159,6 +166,11 @@ export const createFormDataEdit = (newProduct, product, fileList) => {          
     formData.append("p_price", newProduct.p_price);
     formData.append("p_categories", newProduct.p_categories);
     formData.append("p_description", newProduct.p_description);
+    formData.append("p_unit", newProduct.p_unit);
+
+    newProduct.p_size.forEach(s => {
+        formData.append('p_size[]', s);               //appending all sizes to the form data
+    });
 
     if(product.p_image_uri <= 0) formData.append("p_image_uri", []);
     else{
@@ -199,4 +211,17 @@ export const addUriToFileList = (p_image_uri, updateFileList) => {              
         )
     });
     updateFileList(newFileList);
+}
+
+export const deleteSizeOption = (s, sizeOptions, setSizeOptions) => {
+    const temp = [...sizeOptions];
+    const i = temp.indexOf(s);
+    if(i !== -1) temp.splice(i, 1);
+    setSizeOptions(temp);
+}
+
+export const addSizeOption = (sizeOptions, setSizeOptions) => {
+    const s = document.getElementById('size-option-input').value;
+    if(s === "") return;
+    setSizeOptions([...sizeOptions, s]);
 }

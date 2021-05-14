@@ -5,9 +5,22 @@ import { useParams } from 'react-router-dom';
 import '../../_assets/CSS/pages/AddEditProduct/AddEditProduct.css';
 import { EDIT, ADD } from './PageStates';
 import { history } from '../../_helpers/history'; 
-import { getProduct, _getProduct, onPriceChange, onPreview, beforeUpload, onRemove, setFormValues, checkProductsEqual, addUriToFileList, createFormDataEdit } from './Functions';
+import { 
+    getProduct, 
+    _getProduct, 
+    onPriceChange, 
+    onPreview, 
+    beforeUpload, 
+    onRemove, 
+    setFormValues, 
+    checkProductsEqual, 
+    addUriToFileList, 
+    createFormDataEdit,
+    deleteSizeOption,
+    addSizeOption
+} from './Functions';
 import { getAllCategories } from '../../_actions/categoryActions';
-import { onlyNumbers } from '../../_services/SharedFunctions';
+import { onlyNumbers, removeSpaces } from '../../_services/SharedFunctions';
 import { confirmEdit, confirmAdd } from './Modals'; 
 import { createFormData, checkBlob } from './Functions';
 
@@ -18,7 +31,7 @@ const { Option, OptGroup } = Select;
 
 
 const AddEditProduct = () => {
-    
+
     const { p_code } = useParams();
     const dispatch = useDispatch();
 
@@ -34,6 +47,7 @@ const AddEditProduct = () => {
     const [fileList, updateFileList] = useState([]);
     const [originalImageListLength, setOriginalImageListLength] = useState(0);      //used for checking if the newly edited file differs from the original
     const [newPage, setNewPage] = useState(true);                 //checks if the page is fresh 
+    const [sizeOptions, setSizeOptions] = useState([]);
 
     const [form] = Form.useForm();
 
@@ -70,13 +84,16 @@ const AddEditProduct = () => {
                 setChildCategories(children);
             }
         }
+
     }, [categories.length, dispatch, p_code, productsList, categories, childCategories.length, emptyCategories, parentCategoires.length, newPage]);
         
     useEffect(() => {                                                       
-        if(pageState === EDIT){
-            addUriToFileList(product.p_image_uri, updateFileList);     //populates the file list
+        if(pageState === EDIT && newPage){
             setFormValues(form, product, categories);       //sets the form values if in edit mode
             setOriginalImageListLength(product.p_image_uri.length);      
+            setSizeOptions(product.p_size);
+            addUriToFileList(product.p_image_uri, updateFileList);     //populates the file list
+            
         } 
     }, [categories, product, form, pageState]);
 
@@ -93,12 +110,25 @@ const AddEditProduct = () => {
 
         return <OptGroup key={p._id} label={p.c_name}>{sub_categories}</OptGroup>
     });
+
+    const sizeOptionsList = sizeOptions.map((s, i) => {
+        return(
+            <div key={i}>
+                <span>{s}</span> 
+                <Button type='text' danger onClick={() => {deleteSizeOption(s, sizeOptions, setSizeOptions)}}>x</Button>
+            </div>
+        );
+    });
+
+    
         
 
 
 
 
     const onFinish = newProduct => {                                                    //handles form submission
+        newProduct.p_size = sizeOptions;                //adding size options to the form data
+
         if(pageState === EDIT){
             newProduct.p_code = product.p_code;             //set the new form p_code and p_image_uri fields to those of the original
             newProduct.p_image_uri = product.p_image_uri;   
@@ -124,7 +154,10 @@ const AddEditProduct = () => {
             for(let i = 0; i < fileList.length; i++)  newProduct.p_image_uri[i] = URL.createObjectURL(fileList[i].originFileObj);
            
             if(productsList.length !== 0) confirmAdd(newProduct, formData, dispatch);       //if there are products in redux store, add product there as well
-            else confirmAdd(newProduct, formData);              //else just make the request as usual
+            else{
+                console.log("here");
+                confirmAdd(newProduct, formData);              //else just make the request as usual
+            } 
         };
     }
 
@@ -178,15 +211,15 @@ const AddEditProduct = () => {
                                                 
                                             }
                                     ]}>
-                                        <Input style ={{width:"500px"}}/>
+                                        <Input onChange={e => {removeSpaces(e, form, 'p_code')}} style ={{width:"500px"}}/>
                                     </Form.Item>
                                 </div>
                             :   <></>
                         }
 
-                        <div><i style = {{color: 'red'}}>*</i> Units Sold
+                        <div><i style = {{color: 'red'}}>*</i> Units per item
                             <Form.Item 
-                                name="p_units_sold"
+                                name="p_unit"
                                 rules={[
                                     {
                                         required: true,
@@ -195,7 +228,7 @@ const AddEditProduct = () => {
                                         whitespace: true
                                     }
                             ]}>
-                                <Input onChange={e => {onlyNumbers(e, form, 'p_units_sold')}} maxLength={10} style ={{width:"500px"}}/>
+                                <Input maxLength={6} onChange={e => {onlyNumbers(e, form, 'p_unit')}} style ={{width:"500px"}}/>
                             </Form.Item>
                         </div>
                         
@@ -225,9 +258,33 @@ const AddEditProduct = () => {
                                     {fileList.length < 6 && '+ Drag image or click'} 
                                 </Upload>
                             </Form.Item>
+                        
+                            <div><i style = {{color: 'red'}}>*</i> Size Options</div> 
+                            <Form.Item 
+                                name="p_size"
+                                rules={[
+                                    {
+                                        message: 'Please input at least 1 size option',
+                                        validateTrigger: "onSubmit",
+                                    },
+                                    {
+                                        validator: async (_,) => {
+                                            if (sizeOptions.length <= 0){
+                                                return Promise.reject(new Error('Must have at least 1 size option'));
+                                            } 
+                                        }
+                                    }
+                            ]}>
+                                <Input id="size-option-input" placeholder={"Enter size options for this product"} style ={{width:"500px"}}/>     
+                            </Form.Item>
+
+                            <Button onClick={() => {addSizeOption(sizeOptions, setSizeOptions)}}>Add</Button>
+
+                            <div style={{textAlign: 'left', paddingTop: '2%'}}>
+                                {sizeOptionsList}
+                            </div>
                         </div>
                     </div>
-
                     <div className="ae-product-form">
                         <div className="ae-product-input">
                             <div><i style = {{color: 'red'}}>*</i> Unit Price</div> 
@@ -250,7 +307,7 @@ const AddEditProduct = () => {
                                         }
                                     }
                             ]}>
-                                <Input onChange={e => {onPriceChange(e, form)}} maxLength={10}/>
+                                <Input maxLength={6} onChange={e => {onPriceChange(e, form)}}/>
                             </Form.Item>
                         </div>
 
@@ -301,7 +358,6 @@ const AddEditProduct = () => {
             </Form>   
         </div>
     );
-    
 }
    
 export default AddEditProduct;

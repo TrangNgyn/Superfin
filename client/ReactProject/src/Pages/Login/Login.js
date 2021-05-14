@@ -1,11 +1,7 @@
 import { Form, Input, Button } from 'antd';
 import { history } from '../../_helpers/history';
-
-import React, {useState} from 'react';
-//import {Auth} from 'aws-amplify';
-import { useDispatch } from 'react-redux';
-import {login} from '../../_actions/authActions';
-import {store} from '../../_helpers/store';
+import {useState} from 'react';
+import axios from 'axios';
 
 //Layout stuff//
 const layout = {
@@ -30,18 +26,28 @@ const Login = (props) => {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState(false);
     const [loading] = useState(false);
-    const dispatch = useDispatch();
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        try{
-            if (email && password) {
-                await dispatch(login(email, password))
-            }
-        }catch(error){
-            setErrorMessage(store.getState().authReducer.errorMessage);
+    const login = () => {
+        console.log("logging in");
+        const user = {
+            email: "its488@uowmail.com",
+            password: "Password@1"
         }
-        
+
+        const config = {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+            }
+          };
+
+        axios.post('http://localhost:5000/api/auth/sign_in', user, config)
+        .then(res => {
+            console.log(res);
+        })
+        .catch(err => {
+            console.log(err);
+        });
     }
 
     const onFinish = values => {
@@ -103,8 +109,7 @@ const Login = (props) => {
                 </Form.Item>
 
                 <Form.Item {...actionButtonsLayout}>
-                    <Button type="primary" htmlType="submit"
-                        onClick={handleLogin} disabled={loading} >
+                    <Button onClick={login} type="primary" >
                             Login
                     </Button>
                 </Form.Item>
