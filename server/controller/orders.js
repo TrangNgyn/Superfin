@@ -166,14 +166,15 @@ class Purchased_Order {
                     message: "The order must include as least one product"
                 }
             }
-            for(i in items){
-                if(!i.item_code | !i.p_size | !i.quantity | !i.special_requirements){
+
+            items.forEach(element => {
+                if(!element.item_code | !element.p_size | !element.quantity | !element.special_requirements){
                     return {
                         success: false,
                         message: "The ordered items must specify the product code, product size, quantity, and special requirements (blank if not applicable)"
                     }
                 }
-            }
+            })
 
             var issued_date = new Date()
 
@@ -202,6 +203,7 @@ class Purchased_Order {
         
         }
         catch(err){
+            console.log(err)
             return res.json({
                 success: false,
                 message: err
@@ -235,14 +237,14 @@ class Purchased_Order {
                     message: "The order must include as least one product"
                 }
             }
-            for(i in items){
-                if(!i.item_code | !i.p_size | !i.quantity | !i.special_requirements){
+            items.forEach(element => {
+                if(!element.item_code | !element.p_size | !element.quantity | !element.special_requirements){
                     return {
                         success: false,
                         message: "The ordered items must specify the product code, product size, quantity, and special requirements (blank if not applicable)"
                     }
                 }
-            }
+            })
 
             // update the order
             order_model.findOneAndUpdate({ po_number: po_number }, {
