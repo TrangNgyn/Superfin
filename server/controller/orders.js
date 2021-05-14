@@ -187,7 +187,7 @@ class Purchased_Order {
         catch(err){
             return res.json({
                 success: false,
-                message: err._message
+                message: err
             })
             
         }
