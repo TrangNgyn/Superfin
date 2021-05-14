@@ -20,9 +20,15 @@ const productSchema = new Schema({
         type: String,
         default: "",
     },
-    p_units_sold: {
-        type: Number,
-        default: 0
+    p_unit: { // unit per item (e.g. 100 bags per item)
+        type: String,
+        default: "",
+        required: true,
+    },
+    p_size: { // Small, Medium, Large or (W x H x D)
+        type: [String],
+        default: [],
+        required: true,
     },
     p_categories: {
         type: Schema.Types.ObjectId,

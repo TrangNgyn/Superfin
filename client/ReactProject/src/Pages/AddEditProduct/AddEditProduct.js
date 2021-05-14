@@ -264,15 +264,14 @@ const AddEditProduct = () => {
                                 name="p_size"
                                 rules={[
                                     {
-                                        message: 'Please input at least 1 size option',
-                                        validateTrigger: "onSubmit",
-                                    },
-                                    {
+
                                         validator: async (_,) => {
                                             if (sizeOptions.length <= 0){
                                                 return Promise.reject(new Error('Must have at least 1 size option'));
                                             } 
-                                        }
+                                        },
+                                        validateTrigger: "onSubmit",
+                                        message: 'Please input at least 1 size option'
                                     }
                             ]}>
                                 <Input id="size-option-input" placeholder={"Enter size options for this product"} style ={{width:"500px"}}/>     

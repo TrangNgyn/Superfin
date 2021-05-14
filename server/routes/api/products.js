@@ -23,4 +23,3 @@ router.post('/edit-product',
   product_controller.post_edit_product); // admin
 
 module.exports = router
-
