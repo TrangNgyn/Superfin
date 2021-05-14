@@ -12,7 +12,7 @@ router.post('/order-by-email',
     [auth_jwt.verify_token,auth_jwt.is_admin], 
     order_controller.post_order_by_email);  // admin
 
-router.post('/orders-for-user') // need user based order collection
+router.get('/orders-for-user') // need user based order collection
 
 router.post('/add-tracking',
     [auth_jwt.verify_token,auth_jwt.is_admin],

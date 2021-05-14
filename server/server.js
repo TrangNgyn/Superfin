@@ -57,7 +57,6 @@ app.use(function(req, res, next) {
 // Routes
 app.use('/api/products', product)
 app.use('/api/categories', categories)
-app.use('/api/customers', customer)
 app.use('/api/orders', order)
 app.use('/api/aboutus', about)
 app.use('/api/stripe', stripe)

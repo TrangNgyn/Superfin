@@ -24,12 +24,6 @@ var smtpTransport = nodemailer.createTransport({
 
 var salt_rounds = 12
 
-// var handlebarsOptions = {
-//     viewEngine: 'handlebars',
-//     viewPath: path.resolve('./','templates/'),
-//     extName: '.html'
-// }
-
 var handlebarsOptions =  {
     viewEngine: {
         partialsDir: path.resolve('./', 'views/partials'),
@@ -43,7 +37,9 @@ smtpTransport.use('compile', hbs(handlebarsOptions))
 
 class User {
 
-    // @route GET api/user/
+    // @route   GET api/user/
+    // @desc    get the user info for the specified user
+    // @access  restricted to signed in users
 
     async get_user_info(req,res) {
         try{
@@ -70,7 +66,9 @@ class User {
         }
     }
 
-    // @route POST api/user/customer
+    // @route   POST api/user/edit-customer
+    // @desc    edit customer information (not password)
+    // @access  Restricted to signed in customers
 
     async post_edit_customer(req,res) {
         try{
@@ -79,7 +77,7 @@ class User {
             if(!first_name | !last_name | !mobile) 
                 return res.status(400).json(empty_field)
             
-            db.user.findById(req.user_id, (err,user) => {
+            db.customer.findById(req.user_id, (err,user) => {
                 if(err) 
                     return res.status(500).json({
                         succes: false,
@@ -114,7 +112,9 @@ class User {
         }
     }    
 
-    // @route POST api/user/admin
+    // @route   POST api/user/edit-admin
+    // @desc    edit admin information (not password)
+    // @access  Restricted to signed in admins
 
     async post_edit_admin(req,res) {
         try {
@@ -123,7 +123,7 @@ class User {
             if(!acc_name) 
                 return res.status(400).json(empty_field)
 
-            db.user.findById(req.user_id, (err,user)=> {
+            db.admin.findById(req.user_id, (err,user)=> {
                 if(err)
                     return res.status(500).json({
                         success: false,
@@ -155,6 +155,10 @@ class User {
             })
         }
     }
+
+    // @route   POST api/user/forgot-password
+    // @desc    
+    // @access  Restricted to signed in customers
 
     async post_forgot_password(req,res) {
         try{
@@ -192,8 +196,9 @@ class User {
                             context: {
                                 // this needs to be the FE address so that they can use the token and email in the 
                                 // password reset request
-                                url: 'user/reset-password?token=' + buffer.toString('hex') + '&email=' + user.email, 
-                                name: user.first_name
+                                url: 'http://www.superfinpkg.com.au/user/reset-password-email/token/'+ buffer.toString('hex') + '/email/' + user.email,
+                                name: user.first_name,
+                                token: buffer.toString('hex')
                             }
                         }
             
@@ -219,6 +224,10 @@ class User {
             })
         }
     }
+
+    // @route   POST api/user/reset-password-email
+    // @desc    User has recieved a 
+    // @access  Restricted to signed in customers
 
     async post_reset_password_email(req,res) {
         try{
