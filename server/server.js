@@ -17,7 +17,8 @@ const stripe = require('./routes/api/stripe');
 const app = express();
 
 // bodyparser middleware
-app.use(bodyParser.json());
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 
 // connect to mongo
 mongoose
