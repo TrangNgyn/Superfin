@@ -30,18 +30,13 @@ const Login = (props) => {
     const login = () => {
         console.log("logging in");
         const user = {
-            email: "its488@uowmail.com",
+            email: "its488@uowmail.com.au",
             password: "Password@1"
         }
 
-        const config = {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
-            }
-          };
+ 
 
-        axios.post('http://localhost:5000/api/auth/sign_in', user, config)
+        axios.post('api/auth/sign_in', user)
         .then(res => {
             console.log(res);
         })
