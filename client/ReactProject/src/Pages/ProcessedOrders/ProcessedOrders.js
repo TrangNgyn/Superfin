@@ -90,7 +90,7 @@ const ProcessedOrders = () => {
             <div id="processed-orders-header">Processed Orders</div>
 
             <div>
-                <table id="processed-orders-select-table">
+                <table id="processed-orders-select-table" className="center-content">
                     <tbody>
                         <tr>
                             <td>

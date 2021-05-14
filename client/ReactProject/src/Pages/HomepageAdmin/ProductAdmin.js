@@ -34,7 +34,7 @@ const Product = props => {
                 style={{height: '310px', width:'310px'}}
             />
         
-            <table id="admin-product-text-container">
+            <table id="admin-product-text-container" className="center-content">
                 <tbody>
                     <tr>
                         <td>Product Code: {product.p_code}</td>

@@ -34,8 +34,8 @@ const Product = props => {
             cover={
                 <img className="cover-img fixed-size" 
                     style={{ cursor: 'pointer' }} 
-                    alt={productDetails.p_name} 
-                    src={productDetails.p_image_uri[0]} 
+                    alt={(productDetails.p_name === null || (productDetails.p_name !== null && productDetails.p_name.length === 0)) ? "image for paper bag" : productDetails.p_name}
+                    src={(productDetails.p_image_uri[0] === null || (productDetails.p_image_uri[0] !== null && productDetails.p_image_uri[0].length === 0)) ? placeholderImg : productDetails.p_image_uri[0]}
                     onClick={() => { 
                         history.push(`productDetails?p_code=${productDetails.p_code}&price_id=${productDetails.p_price_id}`) 
                     }}

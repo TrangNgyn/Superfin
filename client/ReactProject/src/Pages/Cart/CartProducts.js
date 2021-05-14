@@ -18,13 +18,7 @@ const CartProducts = (props) => {
       return items;
     }
 
-    return (
-      <div>
-        {
-          itemList()
-        }
-      </div>
-    );
+    return (<>{itemList()}</>);
 }
 
 const mapStateToProps = (state)=>{

@@ -814,12 +814,27 @@ textarea#manage-order-details-panel-special-spec {
 /* ====================================== */
 
 /* ====================================== */
+/* ============  Cart Details  ========== */
+/* ====================================== */
+div#cart-content-page div:last-child {
+	padding: 16px;
+}
+
+div#cart-content-page-accept-payment img{
+	height: 38px;
+	margin: 4px;
+}
+/* ====================================== */
+/* =========  End Cart Details  ========= */
+/* ====================================== */
+
+/* ====================================== */
 /* ========== Table Component  ========== */
 /* ====================================== */
 table {
 	width: 100%;
 	border-radius: 5px;
-	margin: 16px 4px 16px 4px;
+	margin: 16px 0;
 
 }
 
@@ -833,8 +848,16 @@ tbody tr:hover, tbody tr:focus{
 	background-color: rgba(0, 0, 0, 0.14);
 }
 
+tbody tr.non-hover:hover, tbody tr.non-hover:focus{
+	background-color: transparent;
+}
+
 th, td {
 	padding: 8px;
+}
+
+table.center-content * th,
+table.center-content * td {
 	text-align: center;
 	vertical-align: middle;
 }

@@ -117,7 +117,7 @@ const ManageOrdersCustomer = () => {
                             : noOrders
                             ? <h1 style = {{textAlign: 'center', color: 'green'}}>You have no current order history</h1>
                             :
-                            <table className="box-shadow">
+                            <table className="box-shadow center-content">
                                 <thead>
                                     <tr>
                                         <th>PO Number</th>

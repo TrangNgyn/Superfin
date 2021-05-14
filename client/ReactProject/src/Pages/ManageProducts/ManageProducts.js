@@ -76,7 +76,7 @@ const ManageProducts = () => {
             <div id="manage-products-header">Manage Products</div>
 
             <div>
-                <table id="manage-products-select-table">
+                <table id="manage-products-select-table" className="center-content">
                     <tbody>
                         <tr>
                             <td>

@@ -39,7 +39,7 @@ const OrderView = props => {
                     <Descriptions.Item label="Country">{props.order.address.po_country}</Descriptions.Item>
                 </Descriptions>
                 <div className="table-container">
-                    <table>
+                    <table className="center-content">
                         <thead>
                             <tr>
                                 <th>Item Code</th> 
