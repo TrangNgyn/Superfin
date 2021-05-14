@@ -1,5 +1,5 @@
-const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+const path = require('path')
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 
 const express = require('express'),
     bodyParser = require('body-parser'),
@@ -7,11 +7,12 @@ const express = require('express'),
 
 // Imported routers
 
-const product = require('./routes/api/products');
-const categories = require('./routes/api/categories');
-const user = require('./routes/api/user');
-const order = require('./routes/api/orders');
-const about = require('./routes/api/aboutus');
+const product = require('./routes/api/products')
+const categories = require('./routes/api/categories')
+const user = require('./routes/api/user')
+const order = require('./routes/api/orders')
+const about = require('./routes/api/aboutus')
+const stripe = require('./routes/api/stripe')
 
 const app = express();
 
@@ -42,25 +43,25 @@ db.mongoose
         console.log('MongoDB connected...')
         initial();
     })
-    .catch(err => console.log(err));
+    .catch(err => console.log(err))
 
 
 
 // allow Cross origin 
 app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000"); 
-    res.header("Access-Control-Allow-Headers", "x-access-token Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000")
+    res.header("Access-Control-Allow-Headers", "x-access-token Origin, X-Requested-With, Content-Type, Accept")
     next(); 
 });
 
 // Routes
 app.use('/api/products', product)
-// app.use('/api/categories', categories);
-// app.use('/api/customers', customer);
-// app.use('/api/orders', order);
-// app.use('/api/aboutus', about);
+app.use('/api/categories', categories)
+app.use('/api/customers', customer)
+app.use('/api/orders', order)
+app.use('/api/aboutus', about)
+app.use('/api/stripe', stripe)
 app.use('/api/user', user)
-
 require('./routes/api/auth')(app)
 
 

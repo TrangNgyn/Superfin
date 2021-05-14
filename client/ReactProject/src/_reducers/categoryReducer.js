@@ -1,4 +1,4 @@
-import { GET_CATEGORIES, LOADING_CATEGORIES, ERROR_CATEGORIES, EMPTY_CATEGORIES } from '../_actions/actionTypes';
+import { GET_CATEGORIES, GET_SUB_CATEGORIES, LOADING_CATEGORIES, ERROR_CATEGORIES, EMPTY_CATEGORIES } from '../_actions/actionTypes';
 
 const initState = {
     categories: [],
@@ -10,6 +10,12 @@ const initState = {
 const categoryReducer = (state = initState, {type, payload}) => {
     switch(type){
         case GET_CATEGORIES:
+            return {
+                ...state,
+                categories: payload,
+                loading: false
+            }
+        case GET_SUB_CATEGORIES:
             return {
                 ...state,
                 categories: payload,

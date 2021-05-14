@@ -1,1 +1,1 @@
-{"c_number":"Hello","c_address":"Company Address","c_email":"superfin@gmail.com","c_TandC":"Company Terms and conditions","c_about":"We like to make paper bags","c_delivery":"Company delivery and dispatch information","c_blog":"Company blog"}
+{"c_number":"Hello","c_address":"Company Address","c_email":"superfin@gmail.com","c_TandC":"Company Terms and conditions","c_delivery":"Company delivery and dispatch information","c_blog":"This is the placeholder text for the company blog","c_about":"_"}

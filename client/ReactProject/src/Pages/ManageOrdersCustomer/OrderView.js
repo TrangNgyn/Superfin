@@ -61,7 +61,7 @@ const OrderView = props => {
                     <div className="manage-order-field-header" style={{paddingBottom: "20px", fontWeight: "normal"}}>{props.order.address.po_state}</div>
 
                     <div className="manage-order-field-header">Post Code</div>
-                    <div className="manage-order-field-header" style={{paddingBottom: "20px", fontWeight: "normal"}}>{props.order.address.po_postal_code}</div>
+                    <div className="manage-order-field-header" style={{paddingBottom: "20px", fontWeight: "normal"}}>{props.order.address.po_postcode}</div>
 
                     <div className="manage-order-field-header">Country</div>
                     <div className="manage-order-field-header" style={{paddingBottom: "20px", fontWeight: "normal"}}>{props.order.address.po_country}</div>

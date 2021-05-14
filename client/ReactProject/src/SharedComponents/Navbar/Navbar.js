@@ -1,9 +1,8 @@
-import { Menu, Dropdown } from 'antd';
+import { Menu, Dropdown, Badge } from 'antd';
 import { UserOutlined, ShoppingCartOutlined, MenuOutlined } from '@ant-design/icons';
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch  } from 'react-redux';
-import { CartContext } from '../../contexts/CartContext';
 
 import { getAllCategories } from '../../_actions/categoryActions';
 import { history } from '../../_helpers/history';
@@ -25,7 +24,6 @@ const userDetails = {
 
 export default function Navbar(){
     const dispatch = useDispatch();
-    const {itemCount} = useContext(CartContext);
 
     const [userType, setUserType] = useState(userDetails.userType);
     const [parentCategoires, setParentCategories] = useState([]);
@@ -34,7 +32,10 @@ export default function Navbar(){
     const categories = useSelector(state => state.categoryState.categories);
     const emptyCategories = useSelector(state => state.categoryState.empty);
 
-    
+    // update the number of items for Cart(itemCount) icon
+    const itemCount = useSelector(state => state.cartState.items.length);
+    // check if the order is being processed
+    const isLoading = useSelector(state => state.cartState.loading);
 
     useEffect(() => {
         if(!categories.length && !emptyCategories) dispatch(getAllCategories());
@@ -52,7 +53,10 @@ export default function Navbar(){
                 setChildCategories(children);
             }
         }
-    }, [categories.length, dispatch, categories, childCategories.length, emptyCategories, parentCategoires.length]);
+    }, [
+        categories.length, dispatch, categories,
+        childCategories.length, emptyCategories, parentCategoires.length
+      ]);
 
   const logout = () => {          //fake login logout functions
     setUserType("GUEST");
@@ -113,7 +117,13 @@ export default function Navbar(){
     </Menu>
   );
 
-  const accountMenuMobile = (<SubMenu key="AccountMenuMobile" className="submenu-background"  icon={<UserOutlined />} title={"Welcome, " + userDetails.name}>
+  const accountMenuMobile = (
+    <SubMenu 
+      key="AccountMenuMobile" 
+      className="submenu-background"  
+      icon={<UserOutlined />} 
+      title={"Welcome, " + userDetails.name}
+    >
       {accountSpecificMenu}
       <Menu.Item>
         <Link to="/" onClick={logout}>Logout</Link>
@@ -167,7 +177,12 @@ export default function Navbar(){
 
   //Login/Welcome, User menu item that changes based on whether user is logged in or not
 
-  let login = ( <Menu.Item key = "Login" onContextMenu={loginUserCustomer} onDoubleClick={loginUserAdmin} icon={<UserOutlined />}>
+  let login = ( 
+    <Menu.Item key = "Login" 
+        onContextMenu={loginUserCustomer} 
+        onDoubleClick={loginUserAdmin} 
+        icon={<UserOutlined />}
+    >
       <Link to="/login"> Login/Sign up </Link>
     </Menu.Item>
   );
@@ -238,8 +253,15 @@ export default function Navbar(){
         <Link to="/blog"> Blog </Link>
       </Menu.Item>
 
-      <Menu.Item key="Cart" icon = {<ShoppingCartOutlined />}>
-        <Link to="/cart"> Cart ({itemCount}) </Link>
+      <Menu.Item key="Cart" 
+        icon = {
+          <Badge count={itemCount} showZero
+              style={{backgroundColor: "#EB6E00"}} >
+            <ShoppingCartOutlined />
+          </Badge>          
+        }
+      >
+        <Link to="/cart"> Cart </Link>
       </Menu.Item>
     </>
   );
@@ -285,27 +307,41 @@ export default function Navbar(){
 
   return (
     <>
+    {
+      isLoading ?
+      // don't allow the user to navigate if true
       <Menu className="Navbar box-shadow" mode="horizontal" selectable={false}>
-        <Menu.Item key="Logo" id="Logo" selectable="false">
+        <Menu.Item key="Logo" id="Logo" selectable="false" disabled={true}>
           <Link to="/" >
             <img src={image} alt="Logo" />
           </Link>
         </Menu.Item>
-        {mainMenu}
-        {login}
       </Menu>
-      <Menu className="Navbar-Mobile" mode="inline" selectable={false}>
-        <Menu.Item key="Logo" id="Logo">
-          <Link to="/" >
-            <img src={image} alt="Logo" />
-          </Link>
-        </Menu.Item>
-        {mainMenuMobile}
-        <Menu.Item key="Cart" icon = {<ShoppingCartOutlined/>}>
-          <Link to="/cart"> Cart </Link>
-        </Menu.Item>
-        {loginMobile}
-      </Menu>
+      :
+      <>
+        <Menu className="Navbar box-shadow" mode="horizontal" selectable={false}>
+          <Menu.Item key="Logo" id="Logo" selectable="false">
+            <Link to="/" >
+              <img src={image} alt="Logo" />
+            </Link>
+          </Menu.Item>
+          {mainMenu}
+          {login}
+        </Menu>
+        <Menu className="Navbar-Mobile" mode="inline" selectable={false}>
+          <Menu.Item key="Logo" id="Logo">
+            <Link to="/" >
+              <img src={image} alt="Logo" />
+            </Link>
+          </Menu.Item>
+          {mainMenuMobile}
+          <Menu.Item key="Cart" icon = {<ShoppingCartOutlined/>}>
+            <Link to="/cart"> Cart </Link>
+          </Menu.Item>
+          {loginMobile}
+        </Menu>
+      </>
+    }
     </>
   );
 }

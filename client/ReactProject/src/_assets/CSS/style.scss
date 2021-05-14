@@ -546,8 +546,8 @@ div#copyright-background{
 	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
 	@for $flex-grow-width from 1 through 12 {
 		.flex-horizontal-box-container > .box-item-xs-#{$flex-grow-width} {
-			width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
-			max-width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+			width: calc(#{percentage($flex-grow-width / 12)} - #{$margin-between-flex-col});
+			max-width: calc(#{percentage($flex-grow-width / 12)} - #{$margin-between-flex-col});
 		}
 	}
 }
@@ -598,8 +598,8 @@ div#copyright-background{
 	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
 	@for $flex-grow-width from 1 through 12 {
 		.flex-horizontal-box-container > .box-item-sm-#{$flex-grow-width} {
-			width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
-			max-width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+			width: calc(#{percentage($flex-grow-width / 12)} - #{$margin-between-flex-col});
+			max-width: calc(#{percentage($flex-grow-width / 12)} - #{$margin-between-flex-col});
 		}
 	}
 }
@@ -623,8 +623,8 @@ div#copyright-background{
 	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
 	@for $flex-grow-width from 1 through 12 {
 		.flex-horizontal-box-container > .box-item-md-#{$flex-grow-width} {
-			width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
-			max-width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+			width: calc(#{percentage($flex-grow-width / 12)} - #{$margin-between-flex-col});
+			max-width: calc(#{percentage($flex-grow-width / 12)} - #{$margin-between-flex-col});
 		}
 	}
 }
@@ -636,8 +636,8 @@ div#copyright-background{
 	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
 	@for $flex-grow-width from 1 through 12 {
 		.flex-horizontal-box-container > .box-item-lg-#{$flex-grow-width} {
-			width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
-			max-width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+			width: calc(#{percentage($flex-grow-width / 12)} - #{$margin-between-flex-col});
+			max-width: calc(#{percentage($flex-grow-width / 12)} - #{$margin-between-flex-col});
 		}
 	}
 }
@@ -646,8 +646,8 @@ div#copyright-background{
 	// Flexbox Item - Dividing a flexbox horizontal container into 12 parts
 	@for $flex-grow-width from 1 through 12 {
 		.flex-horizontal-box-container > .box-item-xl-#{$flex-grow-width} {
-			width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
-			max-width: calc(#{percentage(1 / $flex-grow-width)} - #{$margin-between-flex-col});
+			width: calc(#{percentage($flex-grow-width / 12)} - #{$margin-between-flex-col});
+			max-width: calc(#{percentage($flex-grow-width / 12)} - #{$margin-between-flex-col});
 		}
 	}
 }
@@ -706,6 +706,22 @@ form#authentication-form > div:nth-last-child(1) {
 /* ====================================== */
 
 /* ====================================== */
+/* ========== Category Details  ========= */
+/* ====================================== */
+div#manage-categories-current-panel, div#manage-categories-add-category-panel,
+div#manage-categories-delete-category-panel {
+	padding: 16px 8px 16px 8px;
+}
+
+div#manage-categories-current-panel div.ant-tree {
+	max-height: 336px;
+	overflow-y: scroll;
+}
+/* ====================================== */
+/* ======== End Category Details  ======= */
+/* ====================================== */
+
+/* ====================================== */
 /* =========== Product Details  ========= */
 /* ====================================== */
 
@@ -754,6 +770,14 @@ form#authentication-form > div:nth-last-child(1) {
 
 /* ====================================== */
 /* ======== End Product Details  ======== */
+/* ====================================== */
+
+/* ====================================== */
+/* =========== Tree Component  ========== */
+/* ====================================== */
+
+/* ====================================== */
+/* ========= End Tree Component  ======== */
 /* ====================================== */
 
 /* ====================================== */
