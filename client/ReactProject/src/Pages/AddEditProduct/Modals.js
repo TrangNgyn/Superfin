@@ -23,7 +23,7 @@ const editSuccess = p_code => {
         title: "Edit Successful",
         content: `Successfully edited product: ${p_code}`,
         okText: "Ok",
-        onOk(){ history.goBack() }
+        onOk(){ history.push('/admin') }
     });
 }
 
@@ -32,7 +32,7 @@ const addSuccess = p_code => {
         title: "Add Successful",
         content: `Successfully added product: ${p_code}`,
         okText: "Ok",
-        onOk(){ history.goBack() }
+        onOk(){ history.push('/admin') }
     });
 }
 
@@ -42,7 +42,7 @@ const editFail = p_code => {
         title: "ERROR",
         content: `There was a problem editing product: ${p_code}. Please try again or contact support.`,
         okText: "Ok",
-        onOk(){ history.goBack()}
+        onOk(){ history.push('/admin') }
     });
 }
 
@@ -59,7 +59,7 @@ const addFail = p_code => {
         title: "ERROR",
         content: `There was a problem adding product: ${p_code}. Please try again or contact support.`,
         okText: "Ok",
-        onOk(){ history.goBack() }
+        onOk(){ history.push('/admin') }
     });
 }
 

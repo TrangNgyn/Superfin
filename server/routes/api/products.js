@@ -42,7 +42,7 @@ router.post('/edit-product', function(req,res) {
     product_controller.post_edit_product(req,res,array);
   })
 });
-router.post('/product-sold',product_controller.post_product_sold);
+// router.post('/product-sold',product_controller.post_product_sold);
 
 module.exports = router
 

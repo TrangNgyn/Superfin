@@ -52,3 +52,23 @@ export const filterEmail = (orders, c_email, setOrdersList) => {
     else emailNotFound();
 }
 
+export const removeSpaces = (e, form, field) => {
+    const reg = /^[a-z0-9A-Z]+$/;
+    const str = e.target.value
+    let field_obj = {};
+
+    if (str === '' || reg.test(str))field_obj[field] = str;
+    else field_obj[field] = removeSpaceLogic(str);
+
+    form.setFieldsValue(field_obj);
+}
+
+export const removeSpaceLogic = str => { 
+    for(let i = 0; i < str.length; i++){
+        if(str[i]===" " || !/^[a-z0-9A-Z]+$/.test(str[i])){
+            str = str.substring(0, i) + str.substring(i+1, str.length);
+            i--;
+        }
+    }
+    return str;
+}

@@ -71,46 +71,47 @@ const CheckoutSecurePayment = (props) =>{
 
   return(
     <div>
-    <div id="checkout-payment-head">
-      <Title level={3}>Checkout</Title>
-    </div>
-    <div id="checkout-payment-content">
-      <div>
-        <Steps current={2}>
-          <Step title="Shipping Address"/>
-          <Step title="Review Order"/>
-          <Step title="Secure Payment"/>
-          <Step title="Order Complete"/>
-        </Steps>,
+      <br/>
+      <div id="checkout-payment-head">
+        <Title level={3}>Checkout</Title>
       </div>
-      <div>
-        <Form
-            layout={'vertical'}
-            form={form}
-            name="basic"
-            requiredMark={false}
-        >
-          <Row gutter={16}>
-            <Col span={2} offset={7}>
-              <Form.Item >
-                <Button type="primary" htmlType="submit">
-                  <Link to="/checkoutReviewOrder">Back</Link>
-                </Button>
-              </Form.Item>
-            </Col>
-            <Col >
-              <Form.Item >
-                <Button type="primary" 
-                    htmlType="submit" 
-                    onClick={paymentOnClick}>
-                  Continue to Payment Gateway
-                </Button>
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
+      <div id="checkout-payment-content">
+        <div>
+          <Steps current={2}>
+            <Step title="Shipping Address"/>
+            <Step title="Review Order"/>
+            <Step title="Secure Payment"/>
+            <Step title="Order Complete"/>
+          </Steps>,
+        </div>
+        <div>
+          <Form
+              layout={'vertical'}
+              form={form}
+              name="basic"
+              requiredMark={false}
+          >
+            <Row gutter={16}>
+              <Col span={2} offset={7}>
+                <Form.Item >
+                  <Button type="primary" htmlType="submit">
+                    <Link to="/checkoutReviewOrder">Back</Link>
+                  </Button>
+                </Form.Item>
+              </Col>
+              <Col >
+                <Form.Item >
+                  <Button type="primary" 
+                      htmlType="submit" 
+                      onClick={paymentOnClick}>
+                    Continue to Payment Gateway
+                  </Button>
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+        </div>
       </div>
-    </div>
     </div>
   );
 

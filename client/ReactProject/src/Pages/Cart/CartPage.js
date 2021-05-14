@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {connect} from 'react-redux';
 import CartProducts from './CartProducts';
 import { formatNumber } from '../../_helpers/utils';
@@ -7,82 +7,101 @@ import { Typography, Button, Row, Col,Layout  } from 'antd';
 import { Link } from 'react-router-dom';
 import visa from "../../_assets/Images/visa.png"
 import mastercard from "../../_assets/Images/mastercard.jpg"
-import paypal from "../../_assets/Images/paypal.jpg"
+import alipay from "../../_assets/Images/Alipay.png"
+import { clearCart } from '../../_actions/cartActions';
 
 const Cart = (props) =>{
-  const itemCount = props.cartItems.length;
+    const itemCount = props.cartItems.length;
 
-  const clearCart = () => {
+    const clearCart = () => {
+        props.clearCart();
+    }
 
-  }
+    useEffect(() => {
+        if(props.total === 0){ // if cart cleared
+            localStorage.clear();
+        }
+        else {
+            localStorage.setItem("items", JSON.stringify(props.cartItems));
+            localStorage.setItem("total", JSON.stringify(props.total));
+        }
+        
+    }, [props.cartItems, props.total])
   
-  return(<>
-    <div className="page-title-holder fill">
-        <h2>Shopping Cart</h2>
-    </div>
-    <div className="container flex-horizontal-box-container" id="cart-content-page">
-        <div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-8 box-item-xl-9 box-shadow">
-            <table className="table-container center-content">
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Unit Price</th> 
-                        <th>Quantity</th>
-                        <th>Special Requirements</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    { itemCount > 0 ? <CartProducts editable={true} /> : <tr aria-colspan={4}>Your cart is empty</tr>}
-                </tbody>
-            </table>
+    return(<>
+        <div className="page-title-holder fill">
+            <h2>Shopping Cart</h2>
         </div>
-        <div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-4 box-item-xl-3 box-shadow">
-            <h4>Order Summary</h4>
-            <table>
-                <tbody>
-                    <tr className="non-hover">
-                        <td><strong>Number of items:</strong></td>
-                        <td>{itemCount}</td>
-                    </tr>
-                    <tr className="non-hover">
-                        <td><strong>Subtotal:</strong></td>
-                        <td>{formatNumber(props.total)}</td>
-                    </tr>
-                    <tr className="non-hover">
-                        <td><strong>Freight charge:</strong></td>
-                        <td>{formatNumber(props.total*0.05)}</td>
-                    </tr>
-                    <tr className="non-hover">
-                        <td><strong>GST:</strong></td>
-                        <td>{formatNumber(props.total*0.01)}</td>
-                    </tr>
-                    <tr className="non-hover">
-                        <td><strong>Total:</strong></td>
-                        <td>{formatNumber(props.total*1.06)}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <Button type="secondary" disabled={itemCount > 0} onClick={clearCart}>Clear Cart</Button>
-            &emsp;
-            <Button type="primary" disabled={itemCount < 1}>
-                <Link to="/CheckoutShipping">Checkout</Link>
-            </Button>
-            <div id="cart-content-page-accept-payment">
-                <strong><em>We accept the following: </em></strong>
-                <img src={visa} alt="visa"/>
-                <img src={mastercard} alt="mastercard"/>
-                <img src={paypal} alt="paypal"/>
+        <div className="container flex-horizontal-box-container" id="cart-content-page">
+            <div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-8 box-item-xl-9 box-shadow">
+                <table className="table-container center-content">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Unit Price</th> 
+                            <th>Quantity</th>
+                            <th>Special Requirements</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        { itemCount > 0 ? <CartProducts editable={true} /> : <tr aria-colspan={4}>Your cart is empty</tr>}
+                    </tbody>
+                </table>
+            </div>
+            <div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-4 box-item-xl-3 box-shadow">
+                <h4>Order Summary</h4>
+                <table>
+                    <tbody>
+                        <tr className="non-hover">
+                            <td><strong>Distinct items:</strong></td>
+                            <td>{itemCount}</td>
+                        </tr>
+                        <tr className="non-hover">
+                            <td><strong>Subtotal:</strong></td>
+                            <td>{formatNumber(props.total)}</td>
+                        </tr>
+                        <tr className="non-hover">
+                            <td><strong>Freight charge:</strong></td>
+                            <td>{formatNumber(props.total*0.05)}</td>
+                        </tr>
+                        <tr className="non-hover">
+                            <td><strong>GST:</strong></td>
+                            <td>{formatNumber(props.total*0.01)}</td>
+                        </tr>
+                        <tr className="non-hover">
+                            <td><strong>Total:</strong></td>
+                            <td>{formatNumber(props.total*1.06)}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <Button type="secondary" disabled={itemCount > 0} onClick={clearCart}>Clear Cart</Button>
+                &emsp;
+                <Button type="primary" disabled={itemCount < 1}>
+                    <Link to="/CheckoutShipping">Checkout</Link>
+                </Button>
+                <div id="cart-content-page-accept-payment">
+                    <strong><em>We accept the following: </em></strong>
+                    <img src={visa} alt="Visa"/>
+                    <img src={mastercard} alt="Mastercard"/>
+                    <img src={alipay} alt="Alipay"/>
+                </div>
             </div>
         </div>
-    </div>
     </>);
 }
 
 const mapStateToProps = (state)=>{
-  return{
-      cartItems: state.cartState.items,
-      total: state.cartState.total,
+    return{
+        cartItems: state.cartState.items,
+        total: state.cartState.total,
+    }
   }
-}
-
-export default connect(mapStateToProps)(Cart);
+  
+  const mapDispatchToProps= (dispatch)=>{
+    return{
+      clearCart: () => {dispatch(clearCart())},
+    }
+  }
+  
+  
+  export default connect(mapStateToProps,mapDispatchToProps)(Cart);

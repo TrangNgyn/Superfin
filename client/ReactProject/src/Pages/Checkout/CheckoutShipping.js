@@ -42,6 +42,7 @@ const CheckoutShipping = (props) =>{
 
   return(
     <>
+      <br/>
       <div id="checkout-shipping-head">
         <Title level={3}>Checkout</Title>
       </div>

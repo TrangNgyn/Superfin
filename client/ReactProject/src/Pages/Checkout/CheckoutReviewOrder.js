@@ -22,7 +22,7 @@ const CheckoutReviewOrder = (props) =>{
 
   return(
     <div>
-
+      <br/>
       <div id="checkout-review-order-head">
         <Title level={3}>Checkout</Title>
       </div>

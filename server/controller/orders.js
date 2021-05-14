@@ -153,9 +153,26 @@ class Purchased_Order {
         try {
 
             let { c_email, status, items, address } = req.body
-
+            
+            // check for empty fields
             if( !c_email | !status | !items | !address) {
                 return res.json(empty_field)
+            }
+
+            // ensuring items has at least one product with the required fields
+            if(!Array.isArray(items) || items.length === 0){
+                return {
+                    success: false,
+                    message: "The order must include as least one product"
+                }
+            }
+            for(i in items){
+                if(!i.item_code | !i.p_size | !i.quantity | !i.special_requirements){
+                    return {
+                        success: false,
+                        message: "The ordered items must specify the product code, product size, quantity, and special requirements (blank if not applicable)"
+                    }
+                }
             }
 
             var issued_date = new Date()
@@ -201,14 +218,33 @@ class Purchased_Order {
         try{
             let { po_number, c_email, status, items, tracking_number, carrier, address} = req.body
 
+            // check for empty fields
             if( !po_number | !c_email | !status | !items | !address) {
                 return res.json(empty_field)
             }
 
+            // check if the status is correct
             if(stat.indexOf(status) === -1){
                 return res.json(incorrect_status)
             }
             
+            // ensuring items has at least one product with the required fields
+            if(!Array.isArray(items) || items.length === 0){
+                return {
+                    success: false,
+                    message: "The order must include as least one product"
+                }
+            }
+            for(i in items){
+                if(!i.item_code | !i.p_size | !i.quantity | !i.special_requirements){
+                    return {
+                        success: false,
+                        message: "The ordered items must specify the product code, product size, quantity, and special requirements (blank if not applicable)"
+                    }
+                }
+            }
+
+            // update the order
             order_model.findOneAndUpdate({ po_number: po_number }, {
                 c_email,
                 status,

@@ -30,10 +30,10 @@ export const createAddress = values => {
 export const createOrderAdd = (values, address) => {
     let order = {};
     order.c_email = values.c_email;
-    order.carrier = "";
+    order.carrier = "dsfsd";
     order.items = [...values.items];
     order.status = orderStatusConstants.NEW;
-    order.tracking_number = "";
+    order.tracking_number = "sdfsdf";
     order.address = address;
     return order;
 }
