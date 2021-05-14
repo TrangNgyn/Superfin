@@ -29,8 +29,6 @@ import ProductDetails from '../Pages/Products/ProductDetails';
 import EditCompanyInfo from '../Pages/EditCompanyInfo/EditCompanyInfo';
 import ManageProducts from '../Pages/ManageProducts/ManageProducts';
 import MyAccount from '../Pages/MyAccount/MyAccount';
-import Signup from '../Pages/Signup/Signup';
-import ConfirmSignup from '../Pages/Signup/ConfirmSignup';
 import TermsConditions from '../Pages/TermsConditions/TermsConditions';
 import CheckoutShipping from '../Pages/Checkout/CheckoutShipping';
 import CheckoutSecurePayment from '../Pages/Checkout/CheckoutSecurePayment';
@@ -44,6 +42,7 @@ import Store from '../Pages/Homepage/products';
 import Cart from '../Pages/Cart/index';
 import ManageCategories from '../Pages/ManageCategories/ManageCategories';
 import PaymentCancelled from '../Pages/Checkout/PaymentCancelled';
+import AuthProvider from '../SharedComponents/AuthContext/AuthContext';
 
 
 
@@ -68,6 +67,7 @@ import PaymentCancelled from '../Pages/Checkout/PaymentCancelled';
 
 const App = () => (
    <>
+    <AuthProvider>
       <Router history = {history}>
          <div className="Website-Header">
             <Navbar />
@@ -133,6 +133,7 @@ const App = () => (
             <Footer />
          </footer>
       </Router>
+      </AuthProvider>
    </>
 );
 
