@@ -1,3 +1,5 @@
+import { orderStatusConstants } from '../../../_constants/orderStatus.constants';
+
 export const setUndefinedValues = order => {
     const newOrder = order;
     if(newOrder.items){
@@ -19,7 +21,7 @@ export const createAddress = values => {
     address.po_address_line2 = values.po_address_line2;
     address.po_attention_to = values.po_attention_to;
     address.po_country = values.po_country;
-    address.po_postal_code = values.po_postal_code;
+    address.po_postcode = values.po_postcode;
     address.po_state = values.po_state;
     address.po_suburb = values.po_suburb;
     return address;
@@ -28,10 +30,10 @@ export const createAddress = values => {
 export const createOrderAdd = (values, address) => {
     let order = {};
     order.c_email = values.c_email;
-    order.carrier = values.carrier;
+    order.carrier = "";
     order.items = [...values.items];
-    order.status = values.status;
-    order.tracking_number = values.tracking_number;
+    order.status = orderStatusConstants.NEW;
+    order.tracking_number = "";
     order.address = address;
     return order;
 }

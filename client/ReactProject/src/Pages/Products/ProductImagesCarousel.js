@@ -1,4 +1,4 @@
-import { Carousel, Button } from 'antd';
+import { Carousel } from 'antd';
 import placeholderImg from '../../_assets/Images/No_Image.jpg';
 
 const ProductImagesCarousel = props => {

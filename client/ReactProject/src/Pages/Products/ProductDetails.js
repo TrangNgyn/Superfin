@@ -14,28 +14,40 @@ const ProductDetails = props => {
     const productDetailsError = useSelector(state => state.productDetailsState.error);
 
     useEffect(() => { // For setting the state of the p_code
-        if (window.location.toString().split("?p_code=").length === 2) {
-            setProductCode(window.location.toString().split("?p_code=")[1]);
+        // get the query string (e.g. ?p_code=123&price_id=)
+        const queryString = window.location.search;
+        // get param values
+        const urlParams = new URLSearchParams(queryString);
+        const p_code = urlParams.get('p_code');
+
+        // check if p_code is defined and is not an empty string
+        if (p_code && p_code !== "") {
+            setProductCode(p_code);
         }
     }, [productCode]);
 
     useEffect(() => { // For retrieving the details of the p_code
         if (productCode !== null)
             dispatch(getProductDetails(productCode));
-    }, [productCode, productDetails]);
+    }, [productCode, productDetails, dispatch]);
     
 
     return (<>
-        { productDetailsError ?<div class= "container" > <h1 style={{ textAlign: 'center', color: 'red' }}>Could not load data, please try refreshing page!</h1></div> :
+        { productDetailsError ?
+            <div class= "container" > 
+                <h1 style={{ textAlign: 'center', color: 'red' }}>
+                    Could not load data, please try refreshing page!
+                </h1>
+            </div> :
             (productDetailsLoading ? <Spin size='large' /> :<>
                 <div className="container with-top-padding flex-horizontal-box-container">
-                    <div className="box-item-xs-1 box-item-sm-1 box-item-md-2 box-item-lg-2 box-item-xl-2">
+                    <div className="box-item-xs-12 box-item-sm-12 box-item-md-6 box-item-lg-6 box-item-xl-6">
                         <ProductImagesCarousel {...productDetails}/>
                     </div>
-                    <div className="box-item-xs-1 box-item-sm-1 box-item-md-2 box-item-lg-2 box-item-xl-2">
+                    <div className="box-item-xs-12 box-item-sm-12 box-item-md-6 box-item-lg-6 box-item-xl-6">
                         <ProductMainTitle {...productDetails} />
                     </div>
-                    <div className="box-item-xs-1 box-item-sm-1 box-item-md-1 box-item-lg-1 box-item-xl-1">
+                    <div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-12">
                         <ProductDescription {...productDetails}/>
                     </div>
                 </div>

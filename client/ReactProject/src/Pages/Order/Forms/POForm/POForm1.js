@@ -60,6 +60,78 @@ const POForm1 = props => {
                     style={{width: "500px"}}
                 />  
             </Form.Item>
+            
+            <div className="view-order-field-header"><span style={{color: 'red'}}>*</span>Status</div>
+                <Form.Item
+                    name="status" 
+                    rules={[
+                        {
+                            required: true,
+                            validateTrigger: 'onSubmit',
+                            message: 'Please select order status',
+                        }
+                    ]}
+                >
+                    <Select onChange={updateOrderSelect} style={{width: "500px", textAlign: "left"}}>
+                        <Select.Option value="NEW">New</Select.Option>                         
+                        <Select.Option value="SHIPPED">Shipped</Select.Option>
+                        <Select.Option value="COMPLETE">Complete</Select.Option>
+                    </Select>
+                </Form.Item>
+                
+                <div className="view-order-field-header">Carrier</div>
+                <Form.Item 
+                    name="carrier"
+                    rules={[
+                        {
+                            whitespace: true,
+                            validateTrigger: 'onSubmit',
+                            message: 'Cannot contain white spaces',
+                        },
+                        {
+                            validator: async (_, value) => {
+                                if (props.order.status !== orderStatusConstants.NEW && (value === undefined || value === "")){
+                                    return Promise.reject(new Error('Only New orders can have empty carrier fields'));
+                                } 
+                            }
+                        },
+                        {
+                            validator: async (_, value) => {
+                                if (props.order.status === orderStatusConstants.NEW && (value !== undefined && value !== "")){
+                                    return Promise.reject(new Error('Set status to "Shipped" or "Complete" if you wish to add carrier values'));
+                                } 
+                            }
+                        }
+                ]}>
+                    <Input onBlur={updateOrderText} maxLength={100} style={{width: "500px"}}/>
+                    </Form.Item>  
+
+                <div className="view-order-field-header">Tracking Number</div>
+                <Form.Item 
+                    name="tracking_number"
+                    rules={[
+                        {
+                            whitespace: true,
+                            validateTrigger: 'onSubmit',
+                            message: 'Cannot contain white spaces',
+                        },
+                        {
+                            validator: async (_, value) => {
+                                if (props.order.status !== orderStatusConstants.NEW && (value === undefined || value === "")){
+                                    return Promise.reject(new Error('Only New orders can have empty tracking number fields'));
+                                } 
+                            }
+                        },
+                        {
+                            validator: async (_, value) => {
+                                if (props.order.status === orderStatusConstants.NEW && (value !== undefined && value !== "")){
+                                    return Promise.reject(new Error('Set status to "Shipped" or "Complete" if you wish to add tracking values'));
+                                } 
+                            }
+                        }
+                ]}>
+                    <Input onBlur={updateOrderText} maxLength={100} style={{width: "500px"}}/>
+            </Form.Item>
         </>
     );
     
@@ -98,77 +170,8 @@ const POForm1 = props => {
                     {props.mode === MODE.EDIT   ?   section_1_a   :   <></>}
                     {props.mode === MODE.ADD    ?   section_1_b   :   <></>}
 
-                    <div className="view-order-field-header"><span style={{color: 'red'}}>*</span>Status</div>
-                    <Form.Item
-                        name="status" 
-                        rules={[
-                            {
-                                required: true,
-                                validateTrigger: 'onSubmit',
-                                message: 'Please select order status',
-                            }
-                        ]}
-                    >
-                        <Select onChange={updateOrderSelect} style={{width: "500px", textAlign: "left"}}>
-                            <Select.Option value="NEW">New</Select.Option>                         
-                            <Select.Option value="SHIPPED">Shipped</Select.Option>
-                            <Select.Option value="COMPLETE">Complete</Select.Option>
-                        </Select>
-                    </Form.Item>
                     
-                    <div className="view-order-field-header">Carrier</div>
-                    <Form.Item 
-                        name="carrier"
-                        rules={[
-                            {
-                                whitespace: true,
-                                validateTrigger: 'onSubmit',
-                                message: 'Cannot contain white spaces',
-                            },
-                            {
-                                validator: async (_, value) => {
-                                    if (props.order.status !== orderStatusConstants.NEW && (value === undefined || value === "")){
-                                        return Promise.reject(new Error('Only New orders can have empty carrier fields'));
-                                    } 
-                                }
-                            },
-                            {
-                                validator: async (_, value) => {
-                                    if (props.order.status === orderStatusConstants.NEW && (value !== undefined && value !== "")){
-                                        return Promise.reject(new Error('Set status to "Shipped" or "Complete" if you wish to add carrier values'));
-                                    } 
-                                }
-                            }
-                    ]}>
-                        <Input onBlur={updateOrderText} maxLength={100} style={{width: "500px"}}/>
-                        </Form.Item>  
-
-                    <div className="view-order-field-header">Tracking Number</div>
-                    <Form.Item 
-                        name="tracking_number"
-                        rules={[
-                            {
-                                whitespace: true,
-                                validateTrigger: 'onSubmit',
-                                message: 'Cannot contain white spaces',
-                            },
-                            {
-                                validator: async (_, value) => {
-                                    if (props.order.status !== orderStatusConstants.NEW && (value === undefined || value === "")){
-                                        return Promise.reject(new Error('Only New orders can have empty tracking number fields'));
-                                    } 
-                                }
-                            },
-                            {
-                                validator: async (_, value) => {
-                                    if (props.order.status === orderStatusConstants.NEW && (value !== undefined && value !== "")){
-                                        return Promise.reject(new Error('Set status to "Shipped" or "Complete" if you wish to add tracking values'));
-                                    } 
-                                }
-                            }
-                    ]}>
-                        <Input onBlur={updateOrderText} maxLength={100} style={{width: "500px"}}/>
-                    </Form.Item>    
+                        
                 </Form>
             </div>
 
@@ -251,7 +254,7 @@ const POForm1 = props => {
 
                     <div className="view-order-field-header"><span style={{color: 'red'}}>*</span>Post Code</div>
                     <Form.Item 
-                        name="po_postal_code"
+                        name="po_postcode"
                         rules={[
                             {
                                 whitespace: true,
@@ -261,7 +264,7 @@ const POForm1 = props => {
                             }
                         ]}
                     >                                                   
-                        <Input onChange={e => onlyNumbers(e, props.form, "po_postal_code",)} maxLength={100} style={{width: "500px"}} />
+                        <Input onChange={e => onlyNumbers(e, props.form, "po_postcode",)} maxLength={100} style={{width: "500px"}} />
                     </Form.Item>
 
                     <div className="view-order-field-header"><span style={{color: 'red'}}>*</span>Country</div>

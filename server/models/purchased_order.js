@@ -38,12 +38,17 @@ const order_schema = new Schema({
                 type: String,
                 required: true
             },
+            p_size: { // the chosen size of the product
+                type: String,
+                required: true,
+            },
             quantity: {
                 type: Number,
                 required: true
             },
             special_requirements: {
-                type: String
+                type: String,
+                default: ""
             }
         }],
         default: [],   
@@ -57,34 +62,37 @@ const order_schema = new Schema({
         default: ""
     },
     address: {
-        po_attention_to: {
-            type: String,
-            required: true
+        type: {
+            po_attention_to: {
+                type: String,
+                required: true
+            },
+            po_address_line1: {
+                type: String,
+                required: true
+            },
+            po_address_line2: {
+                type: String,
+                default: "",
+            },
+            po_suburb: {
+                type: String,
+                required: true
+            },
+            po_state: {
+                type: String,
+                required: true
+            },
+            po_postcode: {
+                type: String,
+                required: true
+            },
+            po_country: {
+                type: String,
+                default: "Australia"
+            }
         },
-        po_address_line1: {
-            type: String,
-            required: true
-        },
-        po_address_line2: {
-            type: String,
-            required: true
-        },
-        po_suburb: {
-            type: String,
-            required: true
-        },
-        po_state: {
-            type: String,
-            required: true
-        },
-        po_postal_code: {
-            type: String,
-            required: true
-        },
-        po_country: {
-            type: String,
-            required: true
-        }
+        default: {}
     }
 },
 {

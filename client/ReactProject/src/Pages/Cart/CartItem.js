@@ -1,40 +1,109 @@
-import React, { useContext } from 'react';
-import { CartContext } from '../../contexts/CartContext';
-import { Typography, Button, Row, Col, InputNumber,Layout  } from 'antd';
-import {PlusCircleOutlined, MinusCircleOutlined, RestOutlined } from '@ant-design/icons';
+import React, { useContext, useEffect, useState } from 'react';
+import {connect} from 'react-redux';
+import { Row, Col, Button, Input } from 'antd';
+import {PlusOutlined, MinusOutlined, RestOutlined } from '@ant-design/icons';
 import { formatNumber } from '../../_helpers/utils';
+import { decreaseQuantity, increaseQuantity } from '../../_actions/cartActions'
 
-const CartItem = ({product}) => {
+const { TextArea } = Input;
 
-    const { increase, decrease, removeProduct } = useContext(CartContext);
+const CartItem = (props) => {
+  // getting the props values
+  const editable = props.editable;
+  const product = props.product;
+  const index = props.index;
+
+  const [quantityState, setQuantityState] = useState(product.quantity);
+
+  const increase = () => {
+    // update the quantity displayed
+    setQuantityState(quantityState + 1);
+
+    // update site's state
+    props.increase(index);
+  }
+
+  const decrease = () => {
+    // update the displayed quantity
+    setQuantityState(quantityState - 1);
+
+    // update the site's state
+    props.decrease(index);
+    
+  }
 
     return (
       <Row justify="space-around" align="middle">
-        <Col span={4}>
-          <Row><img
-          alt={product.name}
-          style={{margin: "0 auto", maxHeight: "50px"}}
-          src={product.photo} className="img-fluid d-block"/></Row>
-          <Row>{product.name}</Row>
-          <Row>Unit:100</Row>
+        <Col span={6} >
+          <Row justify="left">
+            <img alt={"No Image Available"} 
+              src= {product.p_image_uri} 
+              width="80%" height="80%"
+            />
+          </Row>
+          <Row justify="left">{product.p_name}</Row>
         </Col>
-        <Col span={5}>Print cats on the bags</Col>
-        <Col span={5}><div style={{textAlign: "center"}}>{formatNumber(product.price)}</div></Col>
-        <Col span={5}><div style={{textAlign: "center"}}>{product.quantity}</div></Col>
-        <Col span={4}><div style={{textAlign: "right",paddingRight: "10px"}}>{formatNumber(product.price*product.quantity)}</div></Col>
+        <Col span={6}>
+          <div style={{textAlign: "center"}}>{formatNumber(product.unit_price)}</div>
+        </Col>
+        
+        <Col span={2}>
+          <div style={{textAlign: "center"}}>{quantityState}</div>
+        </Col>
         <Col span={1}>
-        <div style={{textAlign: "right"}}>
-          <button onClick={() => increase(product)}><PlusCircleOutlined /></button>
-          {
-            product.quantity > 1 &&
-            <button onClick={() => decrease(product)}><MinusCircleOutlined /></button>
-          }
-          {
-            product.quantity === 1 &&
-            <button onClick={() => removeProduct(product)}><RestOutlined /></button>
-          }
-        </div></Col>
+          <div style={{textAlign: "left"}}>  
+            {
+              editable &&
+              <Button onClick={() => increase()}
+                shape="circle"
+                icon={<PlusOutlined />}
+                style={{color: "#EB6E00"}}
+              />
+            }
+            <br/> <br/>      
+            {
+              editable &&
+              <Button onClick={() => decrease()}
+                shape="circle"
+                icon={<MinusOutlined />}
+                style={{color: "#EB6E00"}}
+              />
+            }
+          </div>
+        </Col>
+        <Col span={9} justify="right">
+          <div 
+            style={{
+              textAlign: "right",
+              paddingRight: "10px",
+            }}
+          >
+            { product.special_requirements.length > 0 ? 
+                <TextArea style={{width: 270}}
+                  value={product.special_requirements}
+                  rows={4}
+                  maxLength={100}
+                  autoSize={{ minRows: 4, maxRows: 4 }}
+                />
+              : <TextArea style={{width: 270}}
+                  value={"N/A"}
+                  rows={4}
+                  maxLength={100}
+                  autoSize={{ minRows: 4, maxRows: 4 }}
+                />
+              }
+          </div>
+        </Col>
       </Row>
 )}
 
-export default CartItem;
+const mapDispatchToProps= (dispatch)=>{
+  return{
+    increase: (index) => {dispatch(increaseQuantity(index))},
+    decrease: (index) => {dispatch(decreaseQuantity(index))},
+  }
+}
+
+export default connect(null, mapDispatchToProps)(CartItem);
+
+// export default CartItem;

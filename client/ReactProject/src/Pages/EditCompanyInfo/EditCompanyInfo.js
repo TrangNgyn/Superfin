@@ -42,6 +42,7 @@ const EditCompanyInfo = () => {
 
     //form functions
     const onFinish = newInfo => {
+        newInfo.c_about = "_";                 //about us has been removed. This stops backend from breaking
         if(JSON.stringify(newInfo) !== JSON.stringify(companyInfo)){
             confirmEdit(newInfo);
         } 
@@ -114,18 +115,6 @@ const EditCompanyInfo = () => {
                         <Form.Item 
                             label="Terms and Conditions" 
                             name="c_TandC"
-                            rules={[{
-                                whitespace: true, 
-                                required: true, 
-                                message: 'Please provide data' 
-                            }]}
-                        >
-                            <Input.TextArea style = {{width: "500px"}} rows = {6} maxLength={30000}/>
-                        </Form.Item>
-
-                        <Form.Item 
-                            label="About Page Text" 
-                            name="c_about"
                             rules={[{
                                 whitespace: true, 
                                 required: true, 

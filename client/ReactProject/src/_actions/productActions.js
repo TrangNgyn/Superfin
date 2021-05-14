@@ -1,5 +1,12 @@
-import { GET_PRODUCTS, GET_PRODUCT, DEFAULT_ORDER, LOADING_PRODUCTS, DELETE_PRODUCT, ERROR, EDIT_PRODUCT, ADD_PRODUCT } from './actionTypes';
+import { GET_PRODUCTS, GET_PRODUCT, DEFAULT_ORDER, LOADING_PRODUCTS,
+    DELETE_PRODUCT, ERROR, EDIT_PRODUCT, ADD_PRODUCT } from './actionTypes';
 import axios from 'axios';
+
+const config = {
+    headers: {
+        'content-type': 'multipart/form-data'
+    }
+}
 
 export const getAllProducts = () => dispatch  => {
     dispatch(setIsLoading(true));
@@ -60,26 +67,26 @@ export const deleteProduct = p_code => dispatch => {
     });
 }
 
-export const editProduct = product => dispatch => {
-    return axios.post('/api/products/edit-product', product)
+export const editProduct = (newProduct, formData) => dispatch => {
+    return axios.post('/api/products/edit-product', formData)
         .then(res => {
             if(res.data.success){
                 dispatch({
                     type: EDIT_PRODUCT,
-                    payload: product
+                    payload: newProduct
                 })
             }
             return res;
         });
 }
 
-export const addProduct = product => dispatch => {
-    return axios.post('/api/products/add-product', product)
+export const addProduct = (formData, newProduct) => dispatch => {
+    return axios.post('/api/products/add-product', formData, config)
         .then(res => {
             if(res.data.success){
                 dispatch({
                     type: ADD_PRODUCT,
-                    payload: product
+                    payload: newProduct
                 })
             }
             return res;

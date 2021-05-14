@@ -10,8 +10,10 @@ export const ERROR = "ERROR";
 
 //Category Action Types
 export const GET_CATEGORIES = "GET_CATEGORIES";
+export const GET_SUB_CATEGORIES = "GET_SUB_CATEGORIES";
 export const ERROR_CATEGORIES = "ERROR_CATEGORIES";
 export const LOADING_CATEGORIES = "LOADING_CATEGORIES";
+export const EMPTY_CATEGORIES = "EMPTY_CATEGORIES";
 
 //Company Info Action Types
 export const GET_COMPANY_INFO = "GET_COMPANY_INFO";

@@ -1,0 +1,8 @@
+export const ADD_TO_CART = 'ADD_TO_CART'
+export const CLEAR_CART = 'CLEAR_CART'
+export const INCREASE_QUANTITY = 'INCREASE_QUANTITY'
+export const DECREASE_QUANTITY = 'DECREASE_QUANTITY'
+export const SET_SHIPPING_INFO = 'SET_SHIPPING_INFO'
+export const SET_LOADING = 'SET_LOADING'
+export const SET_ERROR = 'SET_ERROR'
+export const LOAD_STRIPE = 'LOAD_STRIPE'

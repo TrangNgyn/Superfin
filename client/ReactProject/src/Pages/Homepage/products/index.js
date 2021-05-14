@@ -1,40 +1,20 @@
 import React from 'react';
 import ProductsGrid from './ProductsGrid';
-import axios from 'axios';
-import { useState, useEffect } from 'react';
+import '../../../_assets/CSS/pages/Homepage/productPage.css';
+
 
 const Store = () => {
 
+
     return (
-            <div >
+      <div>
+            <div id="products-page-header">Products</div>
+            <div>
                 <ProductsGrid/>
-                <Products/>
             </div>
+      </div>
      );
 }
 
-const getProducts = setProducts => {
-    axios.get('api/products/all-product')
-    .then(res => {
-        console.log(res);
-        setProducts(res.data.products);
-    })
-    .catch(err => {
-        console.log(err);
-    })
-
-}
-
-const Products = () => {
-    const [productsList, setProducts] = useState([]);
-
-    useEffect(() => {
-        getProducts(setProducts);
-    }, []);
-
-    const productsString = JSON.stringify(productsList);
-
-    return productsString;
-}
 
 export default Store;

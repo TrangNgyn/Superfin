@@ -35,25 +35,30 @@ class Purchased_Order {
     // @access  Public
 
     async post_order_by_email(req, res) {
-        // Using fetch
-        let {email} = req.body;
-        if(!email){
-            return res.json(empty_field)
+        try{
+            let {email} = req.body;
+            if(!email){
+                return res.json(empty_field)
+            }
+            order_model
+                .find({c_email: email})
+                .orFail( new Error(`${email} has no orders`))
+                .then((order) => {
+                    res.json(order)
+                })
+                .catch(err => {
+                    res.json({
+                        success: false,
+                        message: err.message
+                    })
+                })
         }
-        order_model
-            .find({CustomerEmail: email})
-            .exec()
-            .then((order) => {
-                if (!order) {
-                    res.status(404)
-                    return res.json({success: false})
-                }
-                return res.json(order)
-            })
-            .catch(err => res.json({
+        catch(err) {
+            res.json({
                 success: false,
                 message: err._message
-            }))
+            })
+        }
     } 
 
     // @route   POST api/orders/add-tracking
@@ -148,9 +153,26 @@ class Purchased_Order {
         try {
 
             let { c_email, status, items, address } = req.body
-
+            
+            // check for empty fields
             if( !c_email | !status | !items | !address) {
                 return res.json(empty_field)
+            }
+
+            // ensuring items has at least one product with the required fields
+            if(!Array.isArray(items) || items.length === 0){
+                return {
+                    success: false,
+                    message: "The order must include as least one product"
+                }
+            }
+            for(i in items){
+                if(!i.item_code | !i.p_size | !i.quantity | !i.special_requirements){
+                    return {
+                        success: false,
+                        message: "The ordered items must specify the product code, product size, quantity, and special requirements (blank if not applicable)"
+                    }
+                }
             }
 
             var issued_date = new Date()
@@ -196,14 +218,33 @@ class Purchased_Order {
         try{
             let { po_number, c_email, status, items, tracking_number, carrier, address} = req.body
 
+            // check for empty fields
             if( !po_number | !c_email | !status | !items | !address) {
                 return res.json(empty_field)
             }
 
+            // check if the status is correct
             if(stat.indexOf(status) === -1){
                 return res.json(incorrect_status)
             }
             
+            // ensuring items has at least one product with the required fields
+            if(!Array.isArray(items) || items.length === 0){
+                return {
+                    success: false,
+                    message: "The order must include as least one product"
+                }
+            }
+            for(i in items){
+                if(!i.item_code | !i.p_size | !i.quantity | !i.special_requirements){
+                    return {
+                        success: false,
+                        message: "The ordered items must specify the product code, product size, quantity, and special requirements (blank if not applicable)"
+                    }
+                }
+            }
+
+            // update the order
             order_model.findOneAndUpdate({ po_number: po_number }, {
                 c_email,
                 status,
@@ -214,8 +255,8 @@ class Purchased_Order {
             })
             .orFail( new Error(`Order ${po_number} not found`))
             .then(() => {
-                res.json({ success: true,
-                                  message: `Order ${po_number} was edited`})
+                res.json({  success: true,
+                            message: `Order ${po_number} was edited`})
             })
             .catch(error => {
                 res.json({ error: error.message })

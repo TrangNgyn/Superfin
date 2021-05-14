@@ -39,14 +39,18 @@ import CheckoutOrderComplete from '../Pages/Checkout/CheckoutOrderComplete';
 import ViewProductInfo from '../Pages/ViewProductInfo/ViewProductInfo';
 import Promocode from '../Pages/Promocode/Promocode';
 import Footer from '../SharedComponents/Footer/FooterMain';
+import ManageOrdersCustomer from '../Pages/ManageOrdersCustomer/ManageOrdersCustomer';
 import Store from '../Pages/Homepage/products';
 import Cart from '../Pages/Cart/index';
+import ManageCategories from '../Pages/ManageCategories/ManageCategories';
+import PaymentCancelled from '../Pages/Checkout/PaymentCancelled';
 
 
-import Amplify, {Auth} from 'aws-amplify';
-import awsconfig from '../aws-exports';
-Amplify.configure(awsconfig);
-Auth.configure(awsconfig);
+
+// import Amplify, {Auth} from 'aws-amplify';
+// import awsconfig from '../aws-exports';
+// Amplify.configure(awsconfig);
+// Auth.configure(awsconfig);
 
 
 
@@ -87,7 +91,7 @@ const App = () => (
                <Route path="/termsConditions"><TermsConditions /></Route>
                <Route path="/blog"><Blog /></Route>
 
-               <Route path="/login"><Login /></Route>
+               {/* <Route path="/login"><Login /></Route> */}
                <Route path="/emailRequest"><EmailRequest /></Route>
                <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
                <Route path="/reenterPassword"><ReenterPassword /></Route>
@@ -98,25 +102,28 @@ const App = () => (
 
 
                <Route path="/myAccount"><MyAccount/></Route>
-               <Route path="/signup"><Signup/></Route>
-               <Route path="/ConfirmSignup"><ConfirmSignup/></Route>
+               {/* <Route path="/signup"><Signup/></Route>
+               <Route path="/ConfirmSignup"><ConfirmSignup/></Route> */}
+               
                <Route path="/currentOrders"><CurrentOrders /></Route>
                <Route path="/processedOrders"><ProcessedOrders /></Route>
 
                <Route path="/editCompanyInformation"><EditCompanyInfo /></Route>
                <Route path="/manageProducts"><ManageProducts /></Route>
+               <Route path="/manageCategories"><ManageCategories /></Route>
 
                 <Route exact path="/editAddProducts"><AddEditProduct /></Route>
                <Route path="/editAddProducts/:p_code"><AddEditProduct /></Route>
                <Route exact path="/products" component={Store}/>
                <Route path="/cart"><Cart /></Route>
-               <Route path="/CheckoutShipping"><CheckoutShipping /></Route>
-               <Route path="/CheckoutSecurePayment"><CheckoutSecurePayment /></Route>
-               <Route path="/CheckoutReviewOrder"><CheckoutReviewOrder /></Route>
-               <Route path="/CheckoutOrderComplete"><CheckoutOrderComplete /></Route>
+               <Route path="/checkoutShipping"><CheckoutShipping /></Route>
+               <Route path="/checkoutSecurePayment"><CheckoutSecurePayment /></Route>
+               <Route path="/checkoutReviewOrder"><CheckoutReviewOrder /></Route>
+               <Route path='/checkoutOrderComplete'><CheckoutOrderComplete /></Route>
+               <Route path="/paymentCancelled"><PaymentCancelled /></Route>
                <Route path="/ViewProductInfo"><ViewProductInfo /></Route>
                <Route path="/Promocode"><Promocode /></Route>
-
+               <Route path="/manageOrders"> <ManageOrdersCustomer /> </Route>
                {/* <div>
                    <AppRoute path="/admin" component={HomepageAdmin} />
                   <Route path="/login" component={Login} />
