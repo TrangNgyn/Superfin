@@ -108,7 +108,7 @@ const ManageOrdersCustomer = () => {
                         }}>Reset Filters</Button>
                     </div>
 
-                    <div className="container">
+                    <div className="container table-container">
                         {
                             loading 
                             ? <div style = {{textAlign: 'center'}}><Spin size='large'/></div> 
@@ -133,8 +133,8 @@ const ManageOrdersCustomer = () => {
                                 </tbody>
                             </table>
                         }
-                        <Pagination current={page + 1} defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange={onPageChange} className="text-center"/>
                     </div>
+                    <Pagination current={page + 1} defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange={onPageChange} className="text-center"/>
                 </>
                 :   <OrderView order={currentOrder} setCurrentOrder={setCurrentOrder} setPage={setPage}/>
             }

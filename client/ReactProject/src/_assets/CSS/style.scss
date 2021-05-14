@@ -819,9 +819,15 @@ textarea#manage-order-details-panel-special-spec {
 table {
 	width: 100%;
 	border-radius: 5px;
-	margin-top: 16px;
-	margin-bottom: 16px;
+	margin: 16px 4px 16px 4px;
+
 }
+
+div.table-container {
+	overflow-x: auto;
+	padding: 4px;
+}
+
 
 tbody tr:hover, tbody tr:focus{
 	background-color: rgba(0, 0, 0, 0.14);

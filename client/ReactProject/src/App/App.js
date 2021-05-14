@@ -41,7 +41,7 @@ import Promocode from '../Pages/Promocode/Promocode';
 import Footer from '../SharedComponents/Footer/FooterMain';
 import ManageOrdersCustomer from '../Pages/ManageOrdersCustomer/ManageOrdersCustomer';
 import Store from '../Pages/Homepage/products';
-import Cart from '../Pages/Cart/index';
+import Cart from '../Pages/Cart/CartPage';
 import ManageCategories from '../Pages/ManageCategories/ManageCategories';
 import PaymentCancelled from '../Pages/Checkout/PaymentCancelled';
 

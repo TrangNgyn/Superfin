@@ -38,18 +38,20 @@ const OrderView = props => {
                     <Descriptions.Item label="Post Code">{props.order.address.po_postal_code}</Descriptions.Item>
                     <Descriptions.Item label="Country">{props.order.address.po_country}</Descriptions.Item>
                 </Descriptions>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Item Code</th> 
-                            <th>Quantity</th>
-                            <th>Special Requirements</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {itemRow}
-                    </tbody>
-                </table>
+                <div className="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Item Code</th> 
+                                <th>Quantity</th>
+                                <th>Special Requirements</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {itemRow}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </>
     );
