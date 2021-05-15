@@ -91,7 +91,7 @@ const Login = () => {
                     </Form.Item >
 
                 <Form.Item {...actionButtonsLayout}>
-                    <span style={{cursor: 'pointer', color: '#EB6E00', marginRight: '17px'}}>Forgot Password ?</span>
+                    <span style={{cursor: 'pointer', color: '#EB6E00', marginRight: '17px'}} onClick={() => {history.push('/emailRequest')}}>Forgot Password ?</span>
                 </Form.Item>
 
                 <Form.Item {...actionButtonsLayout} >
