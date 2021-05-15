@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useForm } from 'antd/lib/form/Form';
 import { layout, actionButtonsLayout } from './layouts'; 
 import { isWhiteSpace, validateEmail } from '../../_services/SharedFunctions';
+import { userConstants } from '../../_constants/user.constants';
 
 
 const Login = () => {
@@ -30,7 +31,8 @@ const Login = () => {
             setLoading(false);
             localStorage.setItem('SUPERFIN_USER', JSON.stringify(res.data));
             updateAuth(res.data);
-            history.push('/');
+            if(res.data.roles[0] === userConstants.ROLE_ADMIN) history.push('/admin');
+            else history.push('/');
         })
         .catch(err => {
             console.log(err);

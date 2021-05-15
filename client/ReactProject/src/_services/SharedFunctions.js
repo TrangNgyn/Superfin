@@ -1,4 +1,6 @@
-import { emailNotFound } from './SharedModals'; 
+import { emailNotFound } from './SharedModals';
+import { userConstants } from '../_constants/user.constants'; 
+import { history } from '../_helpers/history';
 
 export const getCategoryName = (id, categories) => {
     const category = categories.find(category => {
@@ -86,6 +88,12 @@ export const validateEmail = email => {
 export const checkPasswordStrength = password => {
     const re = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
     return re.test(password);
+}
+
+export const _logout = updateAuth => {
+    localStorage.setItem('SUPERFIN_USER', JSON.stringify({roles: [userConstants.ROLE_GUEST]}));
+    updateAuth({roles: [userConstants.ROLE_GUEST]});
+    history.push('/login');
 }
 
 

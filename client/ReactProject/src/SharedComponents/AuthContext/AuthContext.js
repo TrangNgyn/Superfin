@@ -14,7 +14,10 @@ export function useAuthUpdate(){
 
 const initialAuth = () => {
     const user = JSON.parse(localStorage.getItem('SUPERFIN_USER'));
-    if(user === null) return {roles: [userConstants.ROLE_GUEST]};
+    if(user === null){
+        localStorage.setItem('SUPERFIN_USER', JSON.stringify({roles: [userConstants.ROLE_GUEST]}));
+        return {roles: [userConstants.ROLE_GUEST]};
+    } 
     return user;
 }
 
