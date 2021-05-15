@@ -1,119 +1,106 @@
 import { Form, Input, Button } from 'antd';
 import { history } from '../../_helpers/history';
 import {useState} from 'react';
+import { useAuthUpdate } from '../../SharedComponents/AuthContext/AuthContext';
 import axios from 'axios';
-
-//Layout stuff//
-const layout = {
-    labelCol: {
-      span: 8
-    },
-    wrapperCol: {
-      span: 14
-    }
-};
-
-const actionButtonsLayout = {
-    wrapperCol: {
-        span: 22
-    }
-};
+import { useForm } from 'antd/lib/form/Form';
+import { layout, actionButtonsLayout } from './layouts'; 
+import { isWhiteSpace, validateEmail } from '../../_services/SharedFunctions';
 
 
+const Login = () => {
+    const [loading, setLoading] = useState(false);
+    const [form] = useForm();
+    const updateAuth = useAuthUpdate();
 
-const Login = (props) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [errorMessage, setErrorMessage] = useState(false);
-    const [loading] = useState(false);
+    const login = (_, password) => {
+        const email = form.getFieldValue('email');
 
-    const login = () => {
-        console.log("logging in");
+        if(!password || isWhiteSpace(password) || !validateEmail(email)) return Promise.resolve();
+
+        setLoading(true);
+
         const user = {
-            email: "its488@uowmail.com.au",
-            password: "Password@1"
+            email: email.toLowerCase(),
+            password: password
         }
-
- 
-
-        axios.post('api/auth/sign_in', user)
+        
+        return axios.post('api/auth/sign_in', user)
         .then(res => {
-            console.log(res);
+            setLoading(false);
+            localStorage.setItem('SUPERFIN_USER', JSON.stringify(res.data));
+            updateAuth(res.data);
+            history.push('/');
         })
         .catch(err => {
             console.log(err);
+            setLoading(false);
+            return Promise.reject(new Error('Could not find email or password our system!'));
         });
     }
 
-    const onFinish = values => {
-        console.log('Success:', values);
-    };
 
-    const onFinishFailed = errorInfo => {
-        console.log('Failed:', errorInfo);
-    };
-
-    const navigateForgotPasswordPage = () => {
-        props.history.push('/emailRequest');
-    }
-
-    const navigateRegisterPage = () => {
-        history.push('/signup');
-    }
+    
 
     return(
-        <>
+        <div>
             <div className="page-title-holder with-divider center-page">
                 <h1>Login</h1>
             </div>
-            {
-                errorMessage ? <p style={{color: 'red'}}>{errorMessage}</p> : null
-            }
-
+        
             <Form
                 {...layout}
                 name="authentication-form"
-                initialValues={{remember: true,}}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}>
+                form={form}
+            >
+                 <Form.Item
+                        label="Email"
+                        name="email"
+                        rules={[
+                            {   
+                                type: 'email',
+                                required: true,
+                                message: 'Please input valid email!',
+                                whitespace: true,
+                                validateTrigger: "onSubmit"
+                            },
+                        ]}
+                    >
+                        <Input maxLength={100}/>
+                    </Form.Item>
 
-                <Form.Item
-                    label="Email"
-                    name="username"
-                    rules={[{
-                        required: true,
-                        message: 'Please input your email!',
-                    },]}>
-                    <Input value={email} onChange={(e) => setEmail(e.target.value)}
-                        disabled={loading} />
-                </Form.Item>
-
-                <Form.Item
-                    label="Password"
-                    name="password"
-                    rules={[{
-                        required: true,
-                        message: 'Please input your password!',
-                    },]}>
-                    <Input.Password value={password} onChange={(e) => setPassword(e.target.value)}
-                        disabled={loading} />   
-                </Form.Item >
+                    <Form.Item
+                        label="Password"
+                        name="password"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your password!',
+                                whitespace: true
+                            },
+                        
+                            {
+                                validator: login,
+                                validateTrigger: "onSubmit"
+                            }
+                        ]}
+                    >
+                        <Input.Password maxLength={100}/>
+                    </Form.Item >
 
                 <Form.Item {...actionButtonsLayout}>
-                    <div onClick = {navigateForgotPasswordPage} style = {{cursor: 'pointer', color: '#EB6E00'}}>Forgot Password ?</div>
+                    <span style={{cursor: 'pointer', color: '#EB6E00', marginRight: '17px'}}>Forgot Password ?</span>
+                </Form.Item>
+
+                <Form.Item {...actionButtonsLayout} >
+                    <Button style={{marginRight: '17px'}} loading={loading} type="primary" htmlType="submit">Login</Button>
                 </Form.Item>
 
                 <Form.Item {...actionButtonsLayout}>
-                    <Button onClick={login} type="primary" >
-                            Login
-                    </Button>
-                </Form.Item>
-
-                <Form.Item {...actionButtonsLayout}>
-                    <span>Don't have an account yet ? &nbsp; <Button type="secondary" onClick={navigateRegisterPage}>Create an Account</Button></span>
+                    <span>Don't have an account yet ? &nbsp; <Button type="link" >Create an Account</Button></span>
                 </Form.Item>
             </Form>
-        </>
+        </div>
     );
 }
 

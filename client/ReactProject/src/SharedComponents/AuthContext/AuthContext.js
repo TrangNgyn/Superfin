@@ -13,13 +13,14 @@ export function useAuthUpdate(){
 }
 
 const initialAuth = () => {
-    const user = JSON.parse(localStorage.getItem('USER'));
-    if(user === null) return {type: userConstants.GUEST};
+    const user = JSON.parse(localStorage.getItem('SUPERFIN_USER'));
+    if(user === null) return {roles: [userConstants.ROLE_GUEST]};
     return user;
 }
 
 const AuthProvider = ({children}) => {
     const [authType, setAuthType] = useState(initialAuth());
+    console.log(authType);
 
     const updateAuth = USER => {
         setAuthType(USER);
