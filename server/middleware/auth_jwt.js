@@ -6,9 +6,9 @@ verify_token = (req,res,next) => {
     let token = req.headers['x-access-token'];
 
     if(!token) 
-        return res.status(403).send({
+        return res.status(401).send({
             success: false,
-            message: "No token provided"
+            message: "Unauthorized"
         })
     
     jwt.verify(token,config.secret,(err,decoded) => {
@@ -28,6 +28,11 @@ is_admin = (req,res,next) => {
             return res.status(500).send({
                 success: false,
                 message: err
+            })
+        if(!user) 
+            return res.status(404).send({
+                success: false,
+                message: "No user found"
             })
         db.role.find({
             _id: {$in: user.roles }

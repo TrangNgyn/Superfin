@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { db } = require('../models/customer');
 
 const customer_model = require('../models/customer');
 const order_model = require('../models/purchased_order');
@@ -32,7 +33,7 @@ class Purchased_Order {
     
     // @route   POST api/orders/order-by-email
     // @desc    Get all orders of a customer through their email
-    // @access  Public
+    // @access  Admin
 
     async post_order_by_email(req, res) {
         try{
@@ -59,8 +60,100 @@ class Purchased_Order {
                 message: err._message
             })
         }
-    } 
+    }
 
+    async get_customer_orders (req,res) {
+        try {
+            if(!req.user_id)
+                return res.status(400).send({
+                    success: false,
+                    message: "No user_id supplied"
+                })
+            db.customer.findById(req.user_id, (err,user) =>{
+                if(err)
+                    return res.status(500).send({
+                        success: false,
+                        message: err.message
+                    })
+                if(!user)
+                    return res.status(404).send({
+                        success: false,
+                        message: "User with provided ID does not exist"
+                    })
+                db.order.find({email: user.email}, (err, orders) => {
+                    if(err) 
+                        return res.status(500).send({
+                            success: false,
+                            message: err.message
+                        })
+                    return res.send(orders)    
+                })
+            })
+        } catch (err) {
+            return res.status(500).send({
+                success: false,
+                message: err.message
+            })
+        }
+    }
+    
+    // @route   GET api/orders/single-order-for-user
+    // @desc    Gets a single order from a user's collection
+    // @access  Customer
+
+    async get_single_order_customer(req,res) {
+        try{
+            if(!req.user_id)
+                return res.status(400).send({
+                    success: false,
+                    message: "No user_id was supplied"
+                })
+            if(!req.query.po_number) 
+                return res.status(400).send({
+                    success: false,
+                    message: "No po_number supplied"
+                })
+            db.user.findById(req.user_id, (err,user) => {
+                if(err)
+                    return res.status(500).send({
+                        success: false,
+                        message: err.message
+                    })
+                if(!user)
+                    return res.status(404).send({
+                        success: false,
+                        message: "No user was found"
+                    })
+                db.order.find({email: user.email},(err,orders) => {
+                    if(err)
+                        return res.status(500).send({
+                            success: false,
+                            message: err.message
+                        })
+                    if(!orders)
+                        return res.status(404).send({
+                            succcess: true,
+                            message: "The user has no orders"
+                        })
+                    orders.forEach(order => {
+                        if(order.po_number == req.query.po_number)
+                            return res.send(order)
+                    })
+                    return res.status(404).send({
+                        success: false
+                    })
+                })
+            })
+            
+        } catch(err) {
+            return res.status(500).send({
+                success: false,
+                message: err.message
+            })
+        }
+    }
+
+    
     // @route   POST api/orders/add-tracking
     // @desc    add tracking number to an existing order
     // @access  Public

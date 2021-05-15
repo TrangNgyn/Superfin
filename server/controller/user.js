@@ -7,7 +7,6 @@ const pass = process.env.MAILER_PASSWORD
 const path = require('path');
 const bcrypt = require('bcrypt')
 
-const passwordRegex = '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'
 
 var empty_field = { 
     succes: false,
@@ -43,6 +42,12 @@ class User {
 
     async get_user_info(req,res) {
         try{
+
+            if(!req.body.user_id)
+                return res.status(403).send({
+                    success: false,
+                    message: "Unauthorized"
+                })
 
             db.user.findById(req.user_id).select("-password -roles -reset_password_token -reset_password_expires -__t -_id -__v").exec((err,user) => {
                 if(err)
@@ -85,7 +90,7 @@ class User {
                     })
                 if(!user) 
                     return res.status(404).json({
-                        succes: false,
+                        success: false,
                         message: "User was not found"
                     })
                 user.first_name = first_name
@@ -94,7 +99,7 @@ class User {
                 user.save(err => {
                     if(err)
                         return res.status(500).json({
-                            succes: false,
+                            success: false,
                             message: err.message
                         })
                     return res.json({
@@ -194,10 +199,9 @@ class User {
                             template: 'forgot-password-email',
                             subject: 'Request to Reset Password',
                             context: {
-                                // this needs to be the FE address so that they can use the token and email in the 
-                                // password reset request
-                                url: 'http://www.superfinpkg.com.au/user/reset-password-email/token/'+ buffer.toString('hex') + '/email/' + user.email,
+                                url: 'http://localhost:3000/user/reset-password-email/token/'+ buffer.toString('hex') + '/email/' + user.email,
                                 name: user.first_name,
+                                // this is only temporary while the link doesnt work
                                 token: buffer.toString('hex')
                             }
                         }
@@ -247,19 +251,20 @@ class User {
                 if(user.reset_password_token == null | user.reset_password_expires == null)
                     return res.status(403).send({
                         success: false,
-                        message: "Password reset has not been requested"
+                        message: "Forbidden"
                     })
                 if(user.reset_password_token !== req.body.token) 
                     return res.status(401).send({
                         success: false,
                         message: "Unauthorized"
                     })
-                if(user.reset_password_expires < Date.now())
+                if(user.reset_password_expires < Date.now()) {
                     return res.status(400).send({
                         success: false,
-                        message: "Token has expired"
+                        message: "Unauthorized"
                     })
-                const found = req.body.new_password.match(passwordRegex)
+                }
+                const found = req.body.new_password.match(db.passwordRegex)
                 if(found == null)
                     return res.status(400).send({
                         success: false,
@@ -270,7 +275,7 @@ class User {
                 if(new_password_compare)
                     return res.status(400).send({
                         success: false,
-                        message: "New password cannot be the same as the old password"
+                        message: "New password cannot be the same as an old password"
                     })
                 user.password = bcrypt.hashSync(req.body.new_password, salt_rounds)
                 user.reset_password_expires = null
@@ -329,7 +334,7 @@ class User {
                         success: false,
                         message: "User was not found"
                     })
-                const found = req.body.new_password.match(passwordRegex)
+                const found = req.body.new_password.match(db.passwordRegex)
                 if(found == null)
                     return res.status(400).send({
                         success: false,

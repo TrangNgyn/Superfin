@@ -62,6 +62,7 @@ app.use('/api/orders', order)
 app.use('/api/aboutus', about)
 app.use('/api/stripe', stripe)
 app.use('/api/user', user)
+// need to change this routing 
 require('./routes/api/auth')(app)
 
 
