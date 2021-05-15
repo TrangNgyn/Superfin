@@ -1,22 +1,46 @@
+const { ComputeOptimizer } = require('aws-sdk')
 const jwt = require('jsonwebtoken'),
     config = require('../config/auth_config'),
     db = require('../models/db')
 
 verify_token = (req,res,next) => {
-    let token = req.headers['x-access-token'];
+    let auth_header = req.headers.authorization
+    let token
 
-    if(!token) 
-        return res.status(401).send({
+    // need to send back the different header
+    if(!auth_header){
+        res.setHeader("WWW-Authenticate","Bearer")
+        return res.status(401).json({
             success: false,
             message: "Unauthorized"
         })
-    
+    }
+    else
+        token = auth_header.split(' ')[1]
     jwt.verify(token,config.secret,(err,decoded) => {
-        if(err)
-            return res.status(401).send({
+        if(err) {
+            res.status(401)
+            if(err.message=="jwt expired") {
+                res.setHeader("WWW-Authenticate","Bearer error='invalid_token',error_description='The access token has expired'")
+                return res.send({
+                    success: false,
+                    message: "Unauthorized"
+                })
+            }
+            if(err.message=='invalid token'){
+                res.setHeader("WWW-Authenticate","Bearer error='invalid_token',error_description='The access token failed verification'")
+                return res.send({
+                    success: false,
+                    message: "Unauthorized"
+                })
+            }
+            res.setHeader("WWW-Authenticate","Bearer error='invalid_token',error_description='Unexpected validation error'")
+            return res.send({
                 success: false,
                 message: "Unauthorized"
             })
+                
+        }
         req.user_id =  decoded._id
         next()
     })
@@ -47,6 +71,7 @@ is_admin = (req,res,next) => {
                     return next()
                 }
             }
+            res.setHeader("WWW-Authenticate","Bearer realm='is_admin',error='insufficient_scope',error_description='Access token not valid for this resource'")
             res.status(403).send({
                 success: false,
                 message: "Require Admin Role, unauthorized"
@@ -78,6 +103,7 @@ is_customer = (req,res,next) => {
                     return next()
                 }
             }
+            res.setHeader("WWW-Authenticate","Bearer realm='is_customer',error='insufficient_scope',error_description='Access token not valid for this resource'")
             res.status(403).send({
                 success: false,
                 message: "Require Customer Role, unauthorized"

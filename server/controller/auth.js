@@ -164,20 +164,11 @@ exports.sign_in = (req,res) => {
             authorities.push("ROLE_" + user.roles[i].name.toUpperCase())
         }
 
-        res.status(200).send({
-            user_id: user._id,
-            email: user.email,
+        res.send({
+            access_token: token,
+            token_type: "Bearer",
             roles: authorities,
-            access_token: token
+            expires_in: ":1800"
         })
     })
-}
-
-exports.test = (req,res) => {
-    const auth_header = req.headers.authorization
-
-    if(auth_header){
-        const token = auth_header.split(' ')[0]
-        return res.send(token)
-    }
 }

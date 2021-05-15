@@ -35,7 +35,9 @@ function initial() {
   }
 
 // bodyparser middleware
-app.use(bodyParser.json());
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
 
 // connect to mongo
 db.mongoose
@@ -51,7 +53,7 @@ app.use(cors())
 // allow Cross origin 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "http://localhost:3000")
-    res.header("Access-Control-Allow-Headers", "x-access-token Origin, X-Requested-With, Content-Type, Accept")
+    res.header("Access-Control-Allow-Headers", "Authorization Origin, X-Requested-With, Content-Type, Accept")
     next(); 
 });
 

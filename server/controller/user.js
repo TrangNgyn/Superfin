@@ -9,7 +9,7 @@ const bcrypt = require('bcrypt')
 
 
 var empty_field = { 
-    succes: false,
+    success: false,
     message: "All fields must be filled and present" 
 }
 
@@ -259,7 +259,7 @@ class User {
                         message: "Unauthorized"
                     })
                 if(user.reset_password_expires < Date.now()) {
-                    return res.status(400).send({
+                    return res.status(401).send({
                         success: false,
                         message: "Unauthorized"
                     })

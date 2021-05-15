@@ -18,5 +18,4 @@ module.exports = function(app) {
         verify_sign_up.check_duplicate_email,
         verify_sign_up.check_roles_exist
     ], controller.sign_up_admin) 
-
 }
