@@ -8,7 +8,6 @@ import {
    Switch,
 } from 'react-router-dom';
 
-//import AppRoute from '../_routers/AppRoute';
 import EditCustomer from '../Pages/EditCustomer/EditCustomer';
 import AddEditProduct from '../Pages/AddEditProduct/AddEditProduct';
 import Login from '../Pages/Login/Login';
@@ -90,11 +89,9 @@ const App = () => (
                <Route path="/aboutUs"><AboutUS /></Route>
                <Route path="/termsConditions"><TermsConditions /></Route>
                <Route path="/blog"><Blog /></Route>
-
-               {/* <Route path="/login"><Login /></Route> */}
                <Route path="/emailRequest"><EmailRequest /></Route>
                <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
-               <Route path="/reenterPassword"><ReenterPassword /></Route>
+               <Route path="/user/reset-password-email/token/:token/email/:email"><ReenterPassword /></Route>
 
                <Route exact path="/order"><Order /></Route>
                <Route exact path="/order/:po_number"><Order /></Route>
@@ -113,18 +110,20 @@ const App = () => (
                <Route path="/manageCategories"><ManageCategories /></Route>
 
                 <Route exact path="/editAddProducts"><AddEditProduct /></Route>
-               <Route path="/editAddProducts/:p_code"><AddEditProduct /></Route>
-               <Route exact path="/products" component={Store}/>
-               <Route path="/cart"><Cart /></Route>
-               <Route path="/checkoutShipping"><CheckoutShipping /></Route>
-               <Route path="/checkoutSecurePayment"><CheckoutSecurePayment /></Route>
-               <Route path="/checkoutReviewOrder"><CheckoutReviewOrder /></Route>
-               <Route path='/checkoutOrderComplete'><CheckoutOrderComplete /></Route>
-               <Route path="/paymentCancelled"><PaymentCancelled /></Route>
-               <Route path="/ViewProductInfo"><ViewProductInfo /></Route>
-               <Route path="/Promocode"><Promocode /></Route>
-               <Route path="/manageOrders"> <ManageOrdersCustomer /> </Route>
-               <Route path="/login"> <Login /> </Route>
+                <Route path="/editAddProducts/:p_code"><AddEditProduct /></Route>
+                <Route exact path="/products" component={Store}/>
+                <Route path="/cart"><Cart /></Route>
+                <Route path="/checkoutShipping"><CheckoutShipping /></Route>
+                <Route path="/checkoutSecurePayment"><CheckoutSecurePayment /></Route>
+                <Route path="/checkoutReviewOrder"><CheckoutReviewOrder /></Route>
+                <Route path='/checkoutOrderComplete'><CheckoutOrderComplete /></Route>
+                <Route path="/paymentCancelled"><PaymentCancelled /></Route>
+                <Route path="/ViewProductInfo"><ViewProductInfo /></Route>
+                <Route path="/Promocode"><Promocode /></Route>
+                <Route path="/manageOrders"> <ManageOrdersCustomer /> </Route>
+                <Route path="/login"> <Login /> </Route>
+                <Route path="*"> <Homepage /> </Route>
+
           
 
             </Switch>
