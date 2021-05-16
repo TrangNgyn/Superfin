@@ -7,7 +7,7 @@ import { Typography, Button, Row, Col,Layout  } from 'antd';
 import { Link } from 'react-router-dom';
 import visa from "../../_assets/Images/visa.png"
 import mastercard from "../../_assets/Images/mastercard.jpg"
-import alipay from "../../_assets/Images/Alipay.png";
+import alipay from "../../_assets/Images/alipay.png"
 import { clearCart } from '../../_actions/cartActions';
 
 const { Title } = Typography;
