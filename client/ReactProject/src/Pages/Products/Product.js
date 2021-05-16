@@ -9,7 +9,7 @@ const Product = props => {
     const productDetails = props;
     var descriptionWithPrice = null;
     if (productDetails.p_description === null ||
-            (productDetails.p_description !== null && 
+            (productDetails.p_description !== null &&
             productDetails.p_description.trim().length === 0 &&
             productDetails.p_description.length === 0)) {
 
@@ -19,7 +19,7 @@ const Product = props => {
             </span>
             <p>&zwnj;</p>
         </>;
-    
+
     } else {
         descriptionWithPrice = <>
             <span>
@@ -40,22 +40,18 @@ const Product = props => {
                         history.push(`productDetails?p_code=${productDetails.p_code}&price_id=${productDetails.p_price_id}`) 
                     }}
                 />
-            }
-            actions={[
-                <ShoppingOutlined key="addToCart" />,
-                <EditOutlined key="customizeBag" />
-            ]}>
-            <Meta 
+            }>
+            <Meta
                 title={
-                    <span 
+                    <span
                         id="view-product-title"
-                        onClick={() => { 
-                            history.push(`productDetails?p_code=${productDetails.p_code}&price_id=${productDetails.p_price_id}`) 
+                        onClick={() => {
+                            history.push(`productDetails?p_code=${productDetails.p_code}&price_id=${productDetails.p_price_id}`)
                         }}>
                         {productDetails.p_name}
                     </span>
-                } 
-                description={descriptionWithPrice} 
+                }
+                description={descriptionWithPrice}
             />
         </Card>
     );

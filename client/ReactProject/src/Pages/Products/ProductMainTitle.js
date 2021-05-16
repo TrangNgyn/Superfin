@@ -3,6 +3,7 @@ import { ShoppingOutlined } from '@ant-design/icons';
 import { useDispatch, connect } from 'react-redux';
 import React, {useEffect, useState} from 'react';
 import {addToCart} from '../../_actions/cartActions'
+import { formatNumber } from '../../_helpers/utils';
 
 const quantityOptionGenerator = maxOptionCounts => {
     const { Option } = Select;
@@ -14,7 +15,7 @@ const quantityOptionGenerator = maxOptionCounts => {
             returnElement.push(<Option value={index} key={index}>{index}</Option>);
         }
         return returnElement;
-    }    
+    }
 }
 
 const ProductMainTitle = props => {
@@ -24,27 +25,27 @@ const ProductMainTitle = props => {
 
     // line items' variables
     const [quantity, setQuantity] = useState(1);
-    const [special_requirements, setSpecialRequirements] = useState("");
+    const [specialRequirements, setSpecialRequirements] = useState("");
 
     const onQuantityChange = (value) => {
         setQuantity(value);
     }
-    
+
     const onRequirementChange = e => {
         setSpecialRequirements(e.target.value);
     }
 
-    const quantitySelectionComponent = 
+    const quantitySelectionComponent =
         ((productDetails) ?
-        <Select defaultValue="1" 
+        <Select defaultValue="1"
             id="quantitySelectionComponent"
             onChange={onQuantityChange}
         >
             {quantityOptionGenerator(10)}
         </Select> :
         <>
-            <Select defaultValue="0" 
-                id="quantitySelectionComponent" 
+            <Select defaultValue="0"
+                id="quantitySelectionComponent"
                 onChange={onQuantityChange}
                 disabled>
                 <Option value="0" >0</Option>
@@ -53,9 +54,9 @@ const ProductMainTitle = props => {
         </>
     );
 
-    const addToCart = (product, quantity, special_requirements) => {        
+    const addToCart = (product, quantity, specialRequirements) => {
         // update cart state
-        props.addToCart(product, quantity, special_requirements);        
+        props.addToCart(product, quantity, specialRequirements);
     }
 
     useEffect(() => {
@@ -67,20 +68,27 @@ const ProductMainTitle = props => {
     return (
         <div className="product-details-main-title">
             <h3 id="product-name">{productDetails && productDetails.p_name}</h3>
-            <div id="units-sold">
-                <strong>{productDetails && productDetails.p_units_sold} sold</strong>
+            <div id="product-price">
+                <strong>Price: {formatNumber(productDetails.p_price)} </strong>
             </div>
             <div id="quantity-selection">
                 <label htmlFor="quantitySelectionComponent">Quantity: </label>
                 {quantitySelectionComponent}
             </div>
+            <div id="unit-per-item">
+                <label htmlFor="unitPerItem">Unit per item: </label>
+            </div>
+            <div id="size-selection">
+                <label htmlFor="sizeSelectionComponent">Size: </label>
+                <Select></Select>
+            </div>
             <div id="special-requirements">
                 <label htmlFor="specialRequirementsField">Special Requirements:</label>
-                <TextArea 
-                    id="specialRequirementsField" 
+                <TextArea
+                    id="specialRequirementsField"
                     placeholder="Please specify any special requirement
                     (e.g: Red Bag with a Rooster Icon on the front).
-                    (Max length: 100)" 
+                    (Max length: 100)"
                     maxLength={100}
                     rows={3}
                     showCount
@@ -88,13 +96,13 @@ const ProductMainTitle = props => {
                 />
             </div>
             <br/>
-            <Button type="primary" icon={<ShoppingOutlined />} 
-                onClick={()=> 
+            <Button type="primary" icon={<ShoppingOutlined />}
+                onClick={()=>
                     {
-                        addToCart(productDetails, quantity, special_requirements)
+                        addToCart(productDetails, quantity, specialRequirements)
                     }}
-            > 
-                Add to Cart 
+            >
+                Add to Cart
             </Button>
         </div>
     );
@@ -109,9 +117,9 @@ const mapStateToProps = (state)=>{
 
 const mapDispatchToProps= (dispatch)=>{
     return{
-      addToCart: 
-        (product, quantity, special_requirements) => {
-            dispatch(addToCart(product, quantity, special_requirements))
+      addToCart:
+        (product, quantity, specialRequirements) => {
+            dispatch(addToCart(product, quantity, specialRequirements))
         }
     }
 }
