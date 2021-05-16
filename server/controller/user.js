@@ -43,7 +43,7 @@ class User {
     async get_user_info(req,res) {
         try{
 
-            if(!req.body.user_id)
+            if(!req.user_id)
                 return res.status(403).send({
                     success: false,
                     message: "Unauthorized"
