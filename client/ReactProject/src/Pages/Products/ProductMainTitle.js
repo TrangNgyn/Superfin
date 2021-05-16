@@ -4,6 +4,7 @@ import { useDispatch, connect } from 'react-redux';
 import React, {useEffect, useState} from 'react';
 import {addToCart} from '../../_actions/cartActions'
 import { formatNumber } from '../../_helpers/utils';
+
 const quantityOptionGenerator = maxOptionCounts => {
     const { Option } = Select;
     var returnElement = [];
@@ -24,7 +25,7 @@ const ProductMainTitle = props => {
 
     // line items' variables
     const [quantity, setQuantity] = useState(1);
-    const [special_requirements, setSpecialRequirements] = useState("");
+    const [specialRequirements, setSpecialRequirements] = useState("");
 
     const onQuantityChange = (value) => {
         setQuantity(value);
@@ -53,9 +54,9 @@ const ProductMainTitle = props => {
         </>
     );
 
-    const addToCart = (product, quantity, special_requirements) => {
+    const addToCart = (product, quantity, specialRequirements) => {
         // update cart state
-        props.addToCart(product, quantity, special_requirements);
+        props.addToCart(product, quantity, specialRequirements);
     }
 
     useEffect(() => {
@@ -98,7 +99,7 @@ const ProductMainTitle = props => {
             <Button type="primary" icon={<ShoppingOutlined />}
                 onClick={()=>
                     {
-                        addToCart(productDetails, quantity, special_requirements)
+                        addToCart(productDetails, quantity, specialRequirements)
                     }}
             >
                 Add to Cart
@@ -117,8 +118,8 @@ const mapStateToProps = (state)=>{
 const mapDispatchToProps= (dispatch)=>{
     return{
       addToCart:
-        (product, quantity, special_requirements) => {
-            dispatch(addToCart(product, quantity, special_requirements))
+        (product, quantity, specialRequirements) => {
+            dispatch(addToCart(product, quantity, specialRequirements))
         }
     }
 }
