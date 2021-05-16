@@ -56,14 +56,18 @@ export default function Navbar(){
 
     useEffect(() => {   //for populating the welcome name    
         if(auth.roles[0] !== userConstants.ROLE_GUEST && JSON.stringify(userDetails) === '{}'){
-            const config = { headers:{ "x-access-token" : auth.access_token }}
+
+            const config = { headers:{ authorization : `Bearer ${auth.access_token}` }}
 
             axios.get('api/user/', config)
             .then(res => { setUserDetails(res.data) })
             .catch(err => {
-                console.log(err);
+                console.log('error here', err);
                 _logout(updateAuth);
             });
+
+
+
         } 
     }, [auth]);
 

@@ -18,7 +18,6 @@ import DeliveryDispatch from '../Pages/DeliveryDispatch/DeliveryDispatch';
 import Blog from '../Pages/Blog/Blog';
 import AboutUS from '../Pages/AboutUs/AboutUs';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
-import ResetPasswordConfirmation from '../Pages/ResetPasswordConfirmation/ResetPasswordConfirmation';
 import Order from '../Pages/Order/Order';
 import ReenterPassword from '../Pages/ReenterPassword/ReenterPassword'
 import CurrentOrders from '../Pages/CurrentOrders/CurrentOrders';
@@ -90,7 +89,6 @@ const App = () => (
                <Route path="/termsConditions"><TermsConditions /></Route>
                <Route path="/blog"><Blog /></Route>
                <Route path="/emailRequest"><EmailRequest /></Route>
-               <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
                <Route path="/user/reset-password-email/token/:token/email/:email"><ReenterPassword /></Route>
 
                <Route exact path="/order"><Order /></Route>
