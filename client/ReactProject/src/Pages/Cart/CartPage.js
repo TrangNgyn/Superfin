@@ -44,7 +44,7 @@ const Cart = (props) =>{
                         </tr>
                     </thead>
                     <tbody>
-                        { itemCount > 0 ? <CartProducts editable={true} /> : <tr aria-colspan={4}>Your cart is empty</tr>}
+                        {itemCount > 0 ? <CartProducts editable={true} /> : <tr><td colSpan={4}><h3 style={{textAlign: 'center'}}>Your cart is empty! :(</h3></td></tr> }
                     </tbody>
                 </table>
             </div>
