@@ -49,7 +49,7 @@ export const deleteIncompleteOrder = (po_number, token) => dispatch => {
     });
 }
 
-export const addTracking = (trackingDetails, token, updateAuth) => dispatch => {
+export const addTracking = (trackingDetails, token) => dispatch => {
     const config = { headers:{ authorization : `Bearer ${token}` }};
 
     return axios.post('api/orders/add-tracking', trackingDetails, config)
@@ -65,15 +65,11 @@ export const addTracking = (trackingDetails, token, updateAuth) => dispatch => {
             console.log(res);
             return res;
         }
-    })
-    .catch(err => {
-        console.log(err);
-        if(err.response.status === 401) _logout(updateAuth);
-        return err;
-    })
+    });
 }
 
 export const addIncompleteOrder = order => dispatch => {
+
     return axios.post('/api/orders/create-order', order)
     .then(res => {
         if(res.data.success){
@@ -85,10 +81,6 @@ export const addIncompleteOrder = order => dispatch => {
         }
         else console.log(res);
         return res;
-    })
-    .catch(err => {
-        console.log(err);
-        return err;
     });
 }
 

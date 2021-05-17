@@ -4,6 +4,7 @@ import { getAllCategories } from '../../_actions/categoryActions';
 import { useEffect } from 'react';
 import { confirmAddingCategory, confirmDeleteCategory } from './Helpers/Modals';
 import { getCategoriesHierarchy } from '../../SharedComponents/Categories/CategoriesFunctions';
+import { useAuth, useAuthUpdate } from '../../SharedComponents/AuthContext/AuthContext';
 
 const { TextArea } = Input;
 
@@ -12,6 +13,9 @@ const ManageCategories = () => {
     const categories = useSelector(state => state.categoryState.categories);
     const [form_add_category] = Form.useForm();
     const [form_delete_category] = Form.useForm();
+    const updateAuth = useAuthUpdate();             //authorization data
+    const auth = useAuth();
+
     const onSubmitAddCategoryForm = values => {
         confirmAddingCategory(values, form_add_category);
     }

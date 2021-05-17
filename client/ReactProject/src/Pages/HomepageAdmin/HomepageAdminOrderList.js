@@ -25,7 +25,7 @@ const HomepageAdminOrderList = props => {
                 updateAuth: updateAuth,
                 access_token: access_token
             }
-            return <div key={o._id}><HomepageAdminOrder {...orderProps}/></div>
+            return <div key={o._id}>< HomepageAdminOrder {...orderProps}/></div>
         }); 
     }
     

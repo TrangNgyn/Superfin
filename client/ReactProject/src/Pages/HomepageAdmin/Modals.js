@@ -30,8 +30,10 @@ export const confirmSubmitTracking = (tracking, dispatch, token, updateAuth) => 
                 if(res.data.success) sumbitTrackingSuccess(tracking.po_number);
                 else sumbitTrackingFailed(tracking.po_number);
             })
-            .catch(() => { 
-                sumbitTrackingFailed(tracking.po_number);
+            .catch((err) => {
+                console.log(err);
+                if(err.response.status === 401) _logout(updateAuth);
+                else sumbitTrackingFailed(tracking.po_number);
             });
         }
     });
