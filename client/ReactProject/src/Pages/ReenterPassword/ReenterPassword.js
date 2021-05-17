@@ -27,7 +27,10 @@ const actionButtonsLayout = {
 const successReset = () => {
     Modal.success({
         title: 'Password reset!',
-        content: 'You can now use this password to log into your account',
+        content: 'Confirmation has been sent to your email address. You can now use this password to log into your account.',
+        onOk() {
+            history.push('/login');
+        }
     });
 }
 
@@ -45,8 +48,12 @@ const ReenterPassword = () => {
     const {token, email} = useParams();
     const [form] = useForm();
     const [toolTipVisible, setToolTipVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     if(token === undefined || email === undefined) somethingWentWrong();
+
+    console.log("token", token);
+    console.log(email, email);
 
     const submitNewPassword = (_, confirmPassword) => {
         const new_password = form.getFieldValue('password');
@@ -58,19 +65,24 @@ const ReenterPassword = () => {
             return Promise.reject(new Error('Password not strong enough'));
         } 
 
-        const config = { headers:{ "x-access-token" : token }};
-        
         const body = {
             new_password: new_password,
-            email: email
+            email: email,
+            token: token
         }
 
-        return axios.post('api/user/reset-password-email', body, config)
+        setLoading(true);
+
+        return axios.post('/api/user/reset-password-email', body)
         .then(res => {
-            console.log(res);
+            setLoading(false);
+            successReset();
         })
         .catch(err => {
-            console.log(err)
+            setLoading(false);
+            console.log(err);
+            if(err.response.status === 400) return Promise.reject(new Error('Cannot use previous password!'));
+            else somethingWentWrong();
         });
     }
 
@@ -123,7 +135,7 @@ const ReenterPassword = () => {
                 
                 
                 <Form.Item {...actionButtonsLayout}>
-                    <Button type="primary" htmlType="submit">Reset</Button>
+                    <Button loading={loading} type="primary" htmlType="submit">Reset</Button>
                 </Form.Item>
             </Form>
         </div>

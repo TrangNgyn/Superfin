@@ -7,6 +7,7 @@ import { addIncompleteOrder } from '../../../_actions/incompleteOrderActions';
 import { history } from '../../../_helpers/history';
 import axios from 'axios';
 import { 
+<<<<<<< HEAD
     DELETE_INCOMPLETE_ORDERS, 
     ADD_INCOMPLETE_ORDER, 
     ADD_COMPLETE_ORDER, 
@@ -14,6 +15,16 @@ import {
     EDIT_COMPLETE_ORDER, 
     EDIT_INCOMPLETE_ORDER 
 } from '../../../_constants/actionTypes.constants';
+=======
+            DELETE_INCOMPLETE_ORDERS, 
+            ADD_INCOMPLETE_ORDER, 
+            ADD_COMPLETE_ORDER, 
+            DELETE_COMPLETE_ORDER, 
+            EDIT_COMPLETE_ORDER, 
+            EDIT_INCOMPLETE_ORDER 
+        } from '../../../_actions/actionTypes';
+import { _logout } from '../../../_services/SharedFunctions';
+>>>>>>> af79e2fb5e5db654bec2681dd21744b9759a3549
 
 
 
@@ -165,13 +176,15 @@ const addFail = () => {
         content: 'There was a problem adding this order. Please try again or contact support.',
         okText: "Ok",
         onOk(){ 
-          //  history.push('/order');
-           // window.location.reload();
+            history.push('/order');
+            window.location.reload();
         }
     });
 }
 
-export const _editOrder = (order, dispatch, prev, curr, completeLength, incompleteLength, setOrder, setOrderOriginal, setMode) => {
+export const _editOrder = (order, dispatch, prev, curr, completeLength, incompleteLength, setOrder, setOrderOriginal, setMode, access_token, updateAuth) => {
+    const config = { headers:{ authorization : `Bearer ${access_token}` }};
+
     Modal.confirm({
         title: 'Edit Order?',
         icon: <ExclamationCircleOutlined />,
@@ -179,7 +192,7 @@ export const _editOrder = (order, dispatch, prev, curr, completeLength, incomple
         okText: 'Yes',
         cancelText: 'No',
         onOk() { 
-            return axios.post('/api/orders/edit-order', order)
+            return axios.post('/api/orders/edit-order', order, config)
             .then(res => {
                 if(res.data.success){
                     if((prev === orderStatusConstants.NEW || prev === orderStatusConstants.SHIPPED) && curr === orderStatusConstants.COMPLETE){
@@ -246,7 +259,8 @@ export const _editOrder = (order, dispatch, prev, curr, completeLength, incomple
             })
             .catch(err => {
                 console.log(err);
-                editFail();
+                if(err.response.status === 401) _logout(updateAuth);
+                else editFail();
             });
         }
     });

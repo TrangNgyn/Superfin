@@ -14,6 +14,7 @@ const Login = () => {
     const [form] = useForm();
     const updateAuth = useAuthUpdate();
 
+
     const login = (_, password) => {
         const email = form.getFieldValue('email');
 

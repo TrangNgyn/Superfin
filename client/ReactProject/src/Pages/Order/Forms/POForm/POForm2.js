@@ -54,7 +54,7 @@ const POForm2 = props => {
     //Dynamic production of item forms
     const itemRow = props.order.items.map((item, index) => {
         return (
-            <tr key = {item.item_code} className="view-order-table-row">
+            <tr key = {index} className="view-order-table-row">
                 <td>
                     {item.item_code}
                     <Form.Item hidden name={['items', index, 'item_code']} ><Input /></Form.Item>
