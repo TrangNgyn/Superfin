@@ -357,11 +357,31 @@ class Product {
                 array.push(locations[i])
             }
 
+            // init edited price to old price
+            var edited_price = {
+                success: false,
+                p_price_id: found_product.p_price_id,
+            };
+            var p_price_id = found_product.p_price_id;
+
+            // update price if p_price changes
+            if(found_product.p_price !== p_price){
+                edited_price = stripe_update_price(p_code, p_price, found_product.p_price_id);
+
+                if(edited_price.success){
+                    p_price_id = edited_price.p_price_id;
+                }else{
+                    Product.delete_images(locations)
+                    return res.json(edited_price)
+                }
+            }
+
             var edited_product = product_model.findByIdAndUpdate(found_product._id, {
                 p_code,
                 p_image_uri: array,
                 p_name,
                 p_price,
+                p_price_id,
                 p_unit,
                 p_size,
                 p_categories,
@@ -376,6 +396,8 @@ class Product {
                         message: err.message
                     })
                 }
+
+                // if success
                 return res.json({ 
                     success: true,
                     message: `Product ${p_code} was edited`})

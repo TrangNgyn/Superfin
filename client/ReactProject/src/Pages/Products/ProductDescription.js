@@ -1,8 +1,8 @@
 import { Button } from 'antd';
 import { history } from '../../_helpers/history';
 
-const ProductMainTitle = props => {
-    const productDetails = props;
+const ProductDescription = props => {
+    const productDetails = props.productDetails;
 
     return (
         <div className="product-details-description">
@@ -17,12 +17,12 @@ const ProductMainTitle = props => {
             </span>
             <span id="enquire-span">
                 <Button type="primary"
-                    onClick={() => { history.push(`ContactUs`) }}>
-                    Enquire
-                </Button> Click here to enquire for more information.
+                    onClick={() => { history.push('ContactUs') }}>
+                    Inquire
+                </Button> Click here for more information on how to send us your product enquiry.
             </span>
         </div>
     );
 };
 
-export default ProductMainTitle;
+export default ProductDescription;

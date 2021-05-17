@@ -8,7 +8,7 @@ import cartReducer from './cartReducer';
 import { combineReducers } from 'redux';
 //import { authReducer } from './authReducer';
 
-import { GET_PRODUCT } from '../_actions/actionTypes';
+import { GET_PRODUCT } from '../_constants/actionTypes.constants';
 
 const allReducers = combineReducers({
     productState: productReducer,

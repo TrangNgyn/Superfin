@@ -1,5 +1,14 @@
-import { GET_PRODUCTS, GET_PRODUCT, DEFAULT_ORDER, LOADING_PRODUCTS,
-    DELETE_PRODUCT, ERROR, EDIT_PRODUCT, ADD_PRODUCT } from './actionTypes';
+import { 
+    GET_PRODUCTS, 
+    GET_PRODUCT, 
+    DEFAULT_ORDER, 
+    LOADING_PRODUCTS,
+    DELETE_PRODUCT, 
+    ERROR, 
+    EDIT_PRODUCT, 
+    ADD_PRODUCT,
+    SET_LOADING,
+} from '../_constants/actionTypes.constants';
 import axios from 'axios';
 
 const config = {
@@ -27,7 +36,7 @@ export const getAllProducts = () => dispatch  => {
 };
 
 export const getProductDetails = p_code => dispatch => {
-    dispatch(setIsLoading(true));
+    dispatch(setLoadingProductDetails(true));
     axios.post('api/products/product-by-id', {
         p_code: p_code
     }).then(res => {
@@ -37,12 +46,16 @@ export const getProductDetails = p_code => dispatch => {
         })
     })
     .catch(() => {
-        dispatch(setIsLoading(false));
+        dispatch(setLoadingProductDetails(false));
         dispatch({
             type: ERROR
         })
     });
 };
+
+export const setLoadingProductDetails = () => {
+    return {type: SET_LOADING}
+}
 
 export const setDefaultOrder = () => {
     return {

@@ -1,4 +1,11 @@
-import {GET_INCOMPLETE_ORDERS, LOADING_INCOMPLETE_ORDERS, ERROR_INCOMPLETE_ORDERS, DELETE_INCOMPLETE_ORDERS, ADD_TRACKING, ADD_INCOMPLETE_ORDER} from './actionTypes';
+import {
+    GET_INCOMPLETE_ORDERS,
+    LOADING_INCOMPLETE_ORDERS, 
+    ERROR_INCOMPLETE_ORDERS, 
+    DELETE_INCOMPLETE_ORDERS, 
+    ADD_TRACKING,
+    ADD_INCOMPLETE_ORDER
+} from '../_constants/actionTypes.constants';
 import axios from 'axios';
 
 export const getIncompleteOrders = () => dispatch => {

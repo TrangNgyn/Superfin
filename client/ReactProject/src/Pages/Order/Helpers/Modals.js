@@ -7,13 +7,13 @@ import { addIncompleteOrder } from '../../../_actions/incompleteOrderActions';
 import { history } from '../../../_helpers/history';
 import axios from 'axios';
 import { 
-            DELETE_INCOMPLETE_ORDERS, 
-            ADD_INCOMPLETE_ORDER, 
-            ADD_COMPLETE_ORDER, 
-            DELETE_COMPLETE_ORDER, 
-            EDIT_COMPLETE_ORDER, 
-            EDIT_INCOMPLETE_ORDER 
-        } from '../../../_actions/actionTypes';
+    DELETE_INCOMPLETE_ORDERS, 
+    ADD_INCOMPLETE_ORDER, 
+    ADD_COMPLETE_ORDER, 
+    DELETE_COMPLETE_ORDER, 
+    EDIT_COMPLETE_ORDER, 
+    EDIT_INCOMPLETE_ORDER 
+} from '../../../_constants/actionTypes.constants';
 
 
 

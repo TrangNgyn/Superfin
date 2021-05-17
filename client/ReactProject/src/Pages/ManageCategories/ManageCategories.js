@@ -52,7 +52,7 @@ const ManageCategories = () => {
                 <div className="box-item-xs-12 box-item-sm-12 box-item-md-6 box-item-lg-6 box-item-xl-4 box-shadow" id="manage-categories-add-category-panel">
                     <h3>Add Category</h3>
                     <Form form={form_add_category} onFinish={onSubmitAddCategoryForm}
-                    initialValues={{"categoryParentPath": 'root'}}>
+                      initialValues={{"categoryParentPath": 'root'}}>
                         <label htmlFor="categoryParentPath">Select parent category</label>
                         <Form.Item name="categoryParentPath"
                             rules={[

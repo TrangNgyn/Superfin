@@ -1,4 +1,10 @@
-import { GET_COMPLETE_ORDERS, LOADING_COMPLETE_ORDERS, ERROR_COMPLETE_ORDERS, DELETE_COMPLETE_ORDER, ADD_COMPLETE_ORDER } from './actionTypes';
+import { 
+    GET_COMPLETE_ORDERS, 
+    LOADING_COMPLETE_ORDERS, 
+    ERROR_COMPLETE_ORDERS, 
+    DELETE_COMPLETE_ORDER, 
+    ADD_COMPLETE_ORDER 
+} from '../_constants/actionTypes.constants';
 import axios from 'axios';
 
 export const getCompleteOrders = () => dispatch => {

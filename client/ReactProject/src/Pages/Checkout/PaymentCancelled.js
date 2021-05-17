@@ -18,11 +18,11 @@ const PaymentCancelled = () =>{
 
     return (
       <>
-        <br/>
         <div className="page-title-holder fill">
           <h2>Payment canceled</h2>
         </div>
         <div style={{textAlign: "center"}} >
+          <br/>
           <Row justify="space-around" align="middle" >
             <p>
               <CloseCircleFilled style={{ fontSize: '400%', color: '#EB6E00'}} />

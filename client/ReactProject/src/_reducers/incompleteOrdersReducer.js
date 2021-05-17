@@ -1,4 +1,12 @@
-import { GET_INCOMPLETE_ORDERS, ERROR_INCOMPLETE_ORDERS, LOADING_INCOMPLETE_ORDERS, DELETE_INCOMPLETE_ORDERS, ADD_TRACKING, ADD_INCOMPLETE_ORDER, EDIT_INCOMPLETE_ORDER } from '../_actions/actionTypes';
+import { 
+    GET_INCOMPLETE_ORDERS,
+    ERROR_INCOMPLETE_ORDERS, 
+    LOADING_INCOMPLETE_ORDERS, 
+    DELETE_INCOMPLETE_ORDERS, 
+    ADD_TRACKING, 
+    ADD_INCOMPLETE_ORDER, 
+    EDIT_INCOMPLETE_ORDER 
+} from '../_constants/actionTypes.constants';
 import { orderStatusConstants } from '../_constants/orderStatus.constants'; 
 
 const initState = {
