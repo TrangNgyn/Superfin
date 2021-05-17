@@ -10,6 +10,7 @@ import { getAllCategories } from '../../_actions/categoryActions';
 import image from '../../_assets/Images/new_logo.jpg'
 import { history } from '../../_helpers/history';
 import axios from 'axios';
+import { baseURL } from '../../_helpers/axiosBaseURL';
 
 
 const { SubMenu } = Menu;
@@ -57,20 +58,19 @@ export default function Navbar(){
     useEffect(() => {   //for populating the welcome name    
         if(auth.roles[0] !== userConstants.ROLE_GUEST && JSON.stringify(userDetails) === '{}'){
 
-            const config = { headers:{ authorization : `Bearer ${auth.access_token}` }}
+            const config = { headers:{ authorization : `Bearer ${auth.access_token}` }};
+            axios.defaults.baseURL = baseURL;
+         
 
             axios.get('api/user/', config)
             .then(res => { setUserDetails(res.data) })
             .catch(err => {
-                console.log('error here', err);
-                _logout(updateAuth);
+                console.log(err);
+                if(err.response.status === 401) _logout(updateAuth);
             });
-
-
-
         } 
     }, [auth]);
-
+ 
     const logout = () => {         
         _logout(updateAuth);
     }

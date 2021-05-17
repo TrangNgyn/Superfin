@@ -6,48 +6,21 @@ import { getCompleteOrders } from '../../_actions/completeOrderActions';
 import { getIncompleteOrders } from '../../_actions/incompleteOrderActions'; 
 import { history } from '../../_helpers/history';
 import { navigateAddOrder, navigateFullList } from './Functions';
-
+import { useAuthUpdate, useAuth } from '../../SharedComponents/AuthContext/AuthContext';
 import { Button, Radio } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState , useEffect } from 'react';
 
 
-/*
-import {Auth} from 'aws-amplify';
-import {logout} from '../../_actions/authActions';
-import {store} from '../../_helpers/store';*/
-
-/*
-    Tasks left
-    Make Images work for products.
-*/
-
-/*
-    If time
-    Modal after successful delete
-    Modal after unsuccessful delete
-    Loading circle for delete process
-    
-*/
 
 
 
 
 
-const HomepageAdmin = (props) => {
+const HomepageAdmin = () => {
     const dispatch = useDispatch();
-    //const {isAuthenticated} = store.getState().authReducer;
-    // Auth state
-    //const [currentUser, setCurrentUser] = useState(false);
-    //read user details from context
-   /* useEffect(() => {
-        Auth.currentAuthenticatedUser().then(user => {setCurrentUser(user)});
-    }, [])*/
-
-   /* const handleLogout = async () => {
-        await dispatch(logout()); //call the logout action
-        history.push('/login') //navigate to logout page on logout
-    }*/
+    const updateAuth = useAuthUpdate();             //authorization data
+    const auth = useAuth();
 
     const [radioState, setRadioState] = useState(false);            //false is 'Current Orders'
 
@@ -89,7 +62,9 @@ const HomepageAdmin = (props) => {
         dispatch: dispatch,
         orders: orders,
         errorLoadingOrders: errorLoadingOrders,
-        loadingOrders: loadingOrders
+        loadingOrders: loadingOrders,
+        updateAuth: updateAuth,
+        access_token: auth.access_token
     }
 
 
@@ -99,9 +74,9 @@ const HomepageAdmin = (props) => {
         if(!productsList.length) dispatch(getAllProducts());      
         else dispatch(setDefaultOrder());
 
-        if(!completeOrders.length && radioState) dispatch(getCompleteOrders());
+        if(!completeOrders.length && radioState) dispatch(getCompleteOrders(auth.access_token, updateAuth));
 
-        if(!incompleteOrders.length && !radioState) dispatch(getIncompleteOrders());
+        if(!incompleteOrders.length && !radioState) dispatch(getIncompleteOrders(auth.access_token, updateAuth));
 
     }, [productsList.length, completeOrders.length, incompleteOrders.length, radioState, dispatch]);
     
@@ -121,15 +96,6 @@ const HomepageAdmin = (props) => {
     return(
         <>
             <div id="homepage-admin-header">Admin Station</div>
-
-
-            {/* Testing Log-in */}
-            {/* Make sure user details is loaded before displaying */}
-            {/*{ currentUser &&
-                <div>Welcome {currentUser.attributes.email}</div>
-            }*/}
-
-            {/*<button onClick={handleLogout}>Logout</button>*/}
 
             <div style  = {{height:"20px"}}></div>
 

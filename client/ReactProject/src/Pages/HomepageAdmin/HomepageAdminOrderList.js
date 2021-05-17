@@ -11,6 +11,8 @@ const HomepageAdminOrderList = props => {
     const loading = props.loadingOrders;
     const error = props.errorLoadingOrders;
     const dispatch = props.dispatch;
+    const access_token = props.access_token;
+    const updateAuth = props.updateAuth;
 
 
 
@@ -19,7 +21,9 @@ const HomepageAdminOrderList = props => {
         renderableOrders = orders.map(o => {
             const orderProps = {
                 order: o,
-                dispatch: dispatch
+                dispatch: dispatch,
+                updateAuth: updateAuth,
+                access_token: access_token
             }
             return <div key={o._id}><HomepageAdminOrder {...orderProps}/></div>
         }); 

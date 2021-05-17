@@ -14,6 +14,9 @@ import { useForm } from "antd/lib/form/Form";
 const HomepageAdminOrder = props => {
     const order = props.order;
     const dispatch = props.dispatch;
+    const access_token = props.access_token;
+    const updateAuth = props.updateAuth;
+
     const [form] = useForm();
 
     const date = new Date(order.issued_date);
@@ -23,7 +26,7 @@ const HomepageAdminOrder = props => {
         form.validateFields()
         .then(values => {
             values.po_number = order.po_number;
-            confirmSubmitTracking(values, dispatch);
+            confirmSubmitTracking(values, dispatch, access_token, updateAuth);
         });  
     }
 

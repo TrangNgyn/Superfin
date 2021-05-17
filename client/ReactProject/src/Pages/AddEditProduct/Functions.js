@@ -31,8 +31,8 @@ export const getProduct = (p_code, setProduct, setPageState) => {               
     })
 }
 
-export const _editProduct = product => {                                //api for edit a product
-    return axios.post('/api/products/edit-product', product);
+export const _editProduct = (product, config) => {                                //api for edit a product
+    return axios.post('/api/products/edit-product', product, config);
 }
 
 export const _addProduct = formData => {                                        //api for add a product

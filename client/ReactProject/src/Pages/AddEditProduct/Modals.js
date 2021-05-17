@@ -3,6 +3,7 @@ import { onRemove } from './Functions';
 import { history } from '../../_helpers/history';
 import { _editProduct, _addProduct } from './Functions';
 import { editProduct, addProduct } from '../../_actions/productActions'; 
+import { _logout } from '../../_services/SharedFunctions';
 
 export const imageModal = (src, file, fileList, updateFileList, product, setProduct) => {           //displays the preview of the image
     Modal.confirm({
@@ -65,14 +66,17 @@ const addFail = p_code => {
 
  
 
-export const confirmEdit = (newProduct, formData, dispatch) => {                //confirms the edit
+export const confirmEdit = (newProduct, formData, access_token, updateAuth, dispatch) => {                //confirms the edit
+    const config = { headers:{ authorization : `Bearer ${access_token}` }};
+
+
     Modal.confirm({
         title: `Editing product: ${newProduct.p_code}`,
         content: 'Are you sure you want to make these edits?',
         onOk() {
             if(dispatch !== undefined){                                     //if dispatch is defined then need to send product to the redux store (as well as the db)
                 
-                return dispatch(editProduct(newProduct, formData))
+                return dispatch(editProduct(newProduct, formData, access_token, updateAuth))
                 .then(res => {
                     if(res.data.success){
                         editSuccess(newProduct.p_code);
@@ -88,18 +92,21 @@ export const confirmEdit = (newProduct, formData, dispatch) => {                
                 });
             }
             else{                                               //else just push it to the db
-                return _editProduct(formData)
+                return _editProduct(formData, config)
                 .then(res => {
                     if(res.data.success) editSuccess(newProduct.p_code);
                     else{
-                        console.log("Error", res);
-                        editFail(newProduct.p_code);
+                        console.log("Error here 1", res);
+                       // editFail(newProduct.p_code);
                     }
 
                 })
                 .catch(err => {
-                    console.log("Error", err);
-                    editFail(newProduct.p_code);
+                    console.log("Error here", err);
+
+                    console.log(access_token);
+                   // if(err.response.status === 401) _logout(updateAuth);
+                  //  editFail(newProduct.p_code);
                 });
             } 
         },
@@ -107,7 +114,7 @@ export const confirmEdit = (newProduct, formData, dispatch) => {                
     })
 }
 
-export const confirmAdd = (newProduct, formData, dispatch) => {
+export const confirmAdd = (newProduct, formData, dispatch, access_token, updateAuth) => {
     Modal.confirm({
         title: `Adding product: ${newProduct.p_code}`,
         content: 'Are you sure you want to add this product?',

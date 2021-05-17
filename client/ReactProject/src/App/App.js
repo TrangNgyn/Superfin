@@ -120,7 +120,7 @@ const App = () => (
                 <Route path="/Promocode"><Promocode /></Route>
                 <Route path="/manageOrders"> <ManageOrdersCustomer /> </Route>
                 <Route path="/login"> <Login /> </Route>
-                <Route path="*"> <Homepage /> </Route>
+                <Route path="*"> <Login /> </Route>
 
           
 
