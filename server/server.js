@@ -39,22 +39,19 @@ app.use(function(req, res, next) {
     next(); 
 });
 
-
-
-app.use(express.static(path.join(__dirname,'..','client','ReactProject','build')))
-
-if(process.env.NODE_ENV === 'production') {
-    app.get('/*', function(req,res) {
-        app.use(express.static(path.json(__dirname, '..','client','ReactProject','build','index.js')))
-    })
-}
-
 // Routes
 app.use('/api/products', product);
 app.use('/api/categories', categories);
 app.use('/api/customers', customer);
 app.use('/api/orders', order);
 app.use('/api/aboutus', about);
+
+if(process.env.NODE_ENV === 'production') 
+    app.use(express.static('../client/ReactProject/build'))
+    
+app.get('*', (req,res) => {
+        app.sendFile(path.join(__dirname, '../client/ReactProject/build','index.html'))
+})
 
 // Run Server
 const port = process.env.PORT || 5000;
