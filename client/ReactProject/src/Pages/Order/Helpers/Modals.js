@@ -7,7 +7,6 @@ import { addIncompleteOrder } from '../../../_actions/incompleteOrderActions';
 import { history } from '../../../_helpers/history';
 import axios from 'axios';
 import { 
-<<<<<<< HEAD
     DELETE_INCOMPLETE_ORDERS, 
     ADD_INCOMPLETE_ORDER, 
     ADD_COMPLETE_ORDER, 
@@ -15,16 +14,7 @@ import {
     EDIT_COMPLETE_ORDER, 
     EDIT_INCOMPLETE_ORDER 
 } from '../../../_constants/actionTypes.constants';
-=======
-            DELETE_INCOMPLETE_ORDERS, 
-            ADD_INCOMPLETE_ORDER, 
-            ADD_COMPLETE_ORDER, 
-            DELETE_COMPLETE_ORDER, 
-            EDIT_COMPLETE_ORDER, 
-            EDIT_INCOMPLETE_ORDER 
-        } from '../../../_actions/actionTypes';
 import { _logout } from '../../../_services/SharedFunctions';
->>>>>>> af79e2fb5e5db654bec2681dd21744b9759a3549
 
 
 
