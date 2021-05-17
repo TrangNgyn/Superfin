@@ -22,6 +22,7 @@ import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ResetPasswordConfirmation from '../Pages/ResetPasswordConfirmation/ResetPasswordConfirmation';
 import Order from '../Pages/Order/Order';
 import ReenterPassword from '../Pages/ReenterPassword/ReenterPassword'
+import ChangePassword from '../Pages/ChangePassword/ChangePassword'
 import CurrentOrders from '../Pages/CurrentOrders/CurrentOrders';
 import ProcessedOrders from '../Pages/ProcessedOrders/ProcessedOrders';
 import Products from '../Pages/Products/Products';
@@ -95,6 +96,7 @@ const App = () => (
                <Route path="/emailRequest"><EmailRequest /></Route>
                <Route path="/resetPasswordConfirmation"><ResetPasswordConfirmation /></Route>
                <Route path="/reenterPassword"><ReenterPassword /></Route>
+               <Route path="/ChangePassword"><ChangePassword /></Route>
 
                <Route exact path="/order"><Order /></Route>
                <Route exact path="/order/:po_number"><Order /></Route>
@@ -104,7 +106,7 @@ const App = () => (
                <Route path="/myAccount"><MyAccount/></Route>
                {/* <Route path="/signup"><Signup/></Route>
                <Route path="/ConfirmSignup"><ConfirmSignup/></Route> */}
-               
+
                <Route path="/currentOrders"><CurrentOrders /></Route>
                <Route path="/processedOrders"><ProcessedOrders /></Route>
 

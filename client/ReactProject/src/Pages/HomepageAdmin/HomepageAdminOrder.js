@@ -18,13 +18,13 @@ const HomepageAdminOrder = props => {
 
     const date = new Date(order.issued_date);
     const dateString = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-  
+
     const onFinishOrder = () => {
         form.validateFields()
         .then(values => {
             values.po_number = order.po_number;
             confirmSubmitTracking(values, dispatch);
-        });  
+        });
     }
 
     const onFinishFailedOrder = err => {
@@ -52,7 +52,7 @@ const HomepageAdminOrder = props => {
                                             ]}
                                         >
                                             <Input maxLength='40' placeholder="Enter tracking number here" style = {{width:"300px"}}/>
-                                        </Form.Item> 
+                                        </Form.Item>
                                     </div>
 
                                     <div className="Homepage-Admin-Order-Text"><b>Enter Carrier</b></div>
@@ -69,10 +69,10 @@ const HomepageAdminOrder = props => {
                                              ]}
                                         >
                                             <Input maxLength='40' placeholder="Enter carrier name here" style = {{width:"300px"}}/>
-                                        </Form.Item>   
+                                        </Form.Item>
                                     </div>
-                                    
-                                    <div className="Homepage-Admin-Order-Text"> 
+
+                                    <div className="Homepage-Admin-Order-Text">
                                         <Form.Item>
                                             <Button  type="primary" htmlType="submit">Submit</Button>
                                         </Form.Item>
@@ -81,36 +81,36 @@ const HomepageAdminOrder = props => {
                             </div>
 
 
-    //if the order is complete it will contain the tracking number 
+    //if the order is complete it will contain the tracking number
     if(order.status === orderStatusConstants.COMPLETE || order.status === orderStatusConstants.SHIPPED){
         trackingNumberDiv = <div>
                                 <div>
-                                    <div className="Homepage-Admin-Order-Text">Tracking Number: {order.tracking_number}</div>    
+                                    <div className="Homepage-Admin-Order-Text">Tracking Number: {order.tracking_number}</div>
                                 </div>
                                 <div>
-                                    <div className="Homepage-Admin-Order-Text">Carrier: {order.carrier}</div>    
+                                    <div className="Homepage-Admin-Order-Text">Carrier: {order.carrier}</div>
                                 </div>
                             </div>
-        
-        
+
+
     }
 
 
 
 
-    
+
     return (
         <div id="homepage-admin-order-container">
-            
+
             <div className="Homepage-Admin-Order-Text">Order Number: {order.po_number}</div>
             <div className="Homepage-Admin-Order-Text">Status: {order.status}</div>
             <div className="Homepage-Admin-Order-Text">CustomerID: {order.c_email}</div>
             <div className="Homepage-Admin-Order-Text">Date Issued: { dateString }</div>
                 {trackingNumberDiv}
             <div id="homepage-admin-order-icon-container">
-                <DeleteOutlined className="homepage-admin-order-icon" onClick={() => { deleteOrderConfirm(order.po_number, order.status, dispatch) }}/>
-                <EditOutlined className="homepage-admin-order-icon" onClick={() => { navigateEditOrder(order.po_number, order.status)}}/>
-            </div>  
+                <DeleteOutlined title="Delete Order" className="homepage-admin-order-icon" onClick={() => { deleteOrderConfirm(order.po_number, order.status, dispatch) }}/>
+                <EditOutlined title="Edit Order" className="homepage-admin-order-icon" onClick={() => { navigateEditOrder(order.po_number, order.status)}}/>
+            </div>
         </div>
     );
 };

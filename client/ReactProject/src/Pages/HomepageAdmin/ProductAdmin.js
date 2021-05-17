@@ -15,16 +15,16 @@ const Product = props => {
     const categoryName = props.categoryName;
 
 
-    
+
     const viewCategory = () => {
         console.log("View product info for " + product.name);
         //This will link to product info page
-    } 
+    }
 
 
 
 
-    
+
     return (
         <div id="admin-product-container">
             <img id="admin-product-image"
@@ -33,7 +33,7 @@ const Product = props => {
                 onClick={viewCategory}
                 style={{height: '310px', width:'310px'}}
             />
-        
+
             <table id="admin-product-text-container">
                 <tbody>
                     <tr>
@@ -52,9 +52,9 @@ const Product = props => {
             </table>
 
             <div id="admin-product-icon-container">
-                <DeleteOutlined onClick={() => {deleteConfirm(product.p_code, dispatch)}} className="admin-product-icon"/>
-                <EditOutlined onClick={() => { history.push(`/editAddProducts/${product.p_code}`)}} className="admin-product-icon"/>
-            </div>  
+                <DeleteOutlined onClick={() => {deleteConfirm(product.p_code, dispatch)}} title="Delete Product" className="admin-product-icon"/>
+                <EditOutlined onClick={() => { history.push(`/editAddProducts/${product.p_code}`)}} title="Edit Product" className="admin-product-icon"/>
+            </div>
         </div>
     );
 };
