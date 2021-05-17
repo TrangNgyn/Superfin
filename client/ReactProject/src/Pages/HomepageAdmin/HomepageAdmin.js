@@ -40,7 +40,9 @@ const HomepageAdmin = () => {
         dispatch: dispatch,
         productsList: productsList,
         errorLoading: errorLoading,
-        loading:loading
+        loading:loading,
+        updateAuth: updateAuth,
+        access_token: auth.access_token
     }
 
     let orders = [];

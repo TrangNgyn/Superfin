@@ -60,7 +60,6 @@ export default function Navbar(){
 
             const config = { headers:{ authorization : `Bearer ${auth.access_token}` }};
             axios.defaults.baseURL = baseURL;
-         
 
             axios.get('api/user/', config)
             .then(res => { setUserDetails(res.data) })
@@ -69,6 +68,7 @@ export default function Navbar(){
                 if(err.response.status === 401) _logout(updateAuth);
             });
         } 
+        else if(auth.roles[0] === userConstants.ROLE_GUEST && JSON.stringify(userDetails) !== '{}') setUserDetails({});   //very important condition
     }, [auth]);
  
     const logout = () => {         

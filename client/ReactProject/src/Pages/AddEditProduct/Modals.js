@@ -69,7 +69,6 @@ const addFail = p_code => {
 export const confirmEdit = (newProduct, formData, access_token, updateAuth, dispatch) => {                //confirms the edit
     const config = { headers:{ authorization : `Bearer ${access_token}` }};
 
-
     Modal.confirm({
         title: `Editing product: ${newProduct.p_code}`,
         content: 'Are you sure you want to make these edits?',
@@ -88,7 +87,8 @@ export const confirmEdit = (newProduct, formData, access_token, updateAuth, disp
                 })
                 .catch(err => {
                     console.log("Error", err);
-                    editFail(newProduct.p_code);
+                    if(err.response.status === 401) _logout(updateAuth);
+                    else editFail(newProduct.p_code);
                 });
             }
             else{                                               //else just push it to the db
@@ -96,17 +96,14 @@ export const confirmEdit = (newProduct, formData, access_token, updateAuth, disp
                 .then(res => {
                     if(res.data.success) editSuccess(newProduct.p_code);
                     else{
-                        console.log("Error here 1", res);
-                       // editFail(newProduct.p_code);
+                        console.log(res);
+                        editFail(newProduct.p_code);
                     }
-
                 })
                 .catch(err => {
-                    console.log("Error here", err);
-
-                    console.log(access_token);
-                   // if(err.response.status === 401) _logout(updateAuth);
-                  //  editFail(newProduct.p_code);
+                    console.log(err);
+                    if(err.response.status === 401) _logout(updateAuth);
+                    else editFail(newProduct.p_code);
                 });
             } 
         },

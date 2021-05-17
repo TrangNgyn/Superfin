@@ -5,19 +5,19 @@ import { deleteCompleteOrder } from '../../_actions/completeOrderActions';
 import { orderStatusConstants } from '../../_constants/orderStatus.constants';
 //All shared modals
 
-export const deleteConfirm = (p_code, dispatch) => {
+export const deleteConfirm = (p_code, dispatch, access_token, updateAuth) => {
     Modal.confirm({
         title: `Deleting product: ${p_code}`,
         content: 'Are you sure you wish to delete this product?',
         okText: 'Delete',
         okType: 'danger',
         onOk() {
-            dispatch(deleteProduct(p_code));
+            dispatch(deleteProduct(p_code, access_token, updateAuth));
         }
     });
 }
 
-const deleteOrderSuccess = po_number => {
+const deleteOrderSuccess = po_number => { 
     Modal.info({
         title: 'Success',
         content: `Deleted order: ${po_number}`,
