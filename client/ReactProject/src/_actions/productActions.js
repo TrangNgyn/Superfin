@@ -52,7 +52,6 @@ export const setDefaultOrder = () => {
 
 export const deleteProduct = (p_code, access_token, updateAuth) => dispatch => {
     const config = { headers:{ authorization : `Bearer ${access_token}` }};
-
     return axios.post('api/products/delete-product', {
         p_code: p_code
     }, config)

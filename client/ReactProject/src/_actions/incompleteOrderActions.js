@@ -30,8 +30,7 @@ export const setIncompleteOrdersLoading = val => {
     }
 }
 
-export const deleteIncompleteOrder = (po_number, token, updateAuth) => dispatch => {
-
+export const deleteIncompleteOrder = (po_number, token) => dispatch => {
     const config = { headers:{ authorization : `Bearer ${token}` }};
 
     return axios.post('api/orders/delete-order', {po_number: po_number}, config)
@@ -47,11 +46,6 @@ export const deleteIncompleteOrder = (po_number, token, updateAuth) => dispatch 
             console.log(res);
             return res;
         } 
-    })
-    .catch(err => {
-        console.log(err);
-        if(err.response.status === 401) _logout(updateAuth);
-        return err;
     });
 }
 

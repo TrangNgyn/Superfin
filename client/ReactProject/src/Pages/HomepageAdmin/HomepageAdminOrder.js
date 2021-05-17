@@ -111,7 +111,7 @@ const HomepageAdminOrder = props => {
             <div className="Homepage-Admin-Order-Text">Date Issued: { dateString }</div>
                 {trackingNumberDiv}
             <div id="homepage-admin-order-icon-container">
-                <DeleteOutlined className="homepage-admin-order-icon" onClick={() => { deleteOrderConfirm(order.po_number, order.status, dispatch) }}/>
+                <DeleteOutlined className="homepage-admin-order-icon" onClick={() => { deleteOrderConfirm(order.po_number, order.status, access_token, updateAuth, dispatch) }}/>
                 <EditOutlined className="homepage-admin-order-icon" onClick={() => { navigateEditOrder(order.po_number, order.status)}}/>
             </div>  
         </div>
