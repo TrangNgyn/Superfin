@@ -111,14 +111,16 @@ export const confirmEdit = (newProduct, formData, access_token, updateAuth, disp
     })
 }
 
-export const confirmAdd = (newProduct, formData, dispatch, access_token, updateAuth) => {
+export const confirmAdd = (newProduct, formData, access_token, updateAuth, dispatch) => {
+    const config = { headers:{ authorization : `Bearer ${access_token}` }};
+
     Modal.confirm({
         title: `Adding product: ${newProduct.p_code}`,
         content: 'Are you sure you want to add this product?',
 
         onOk() {
             if(dispatch !== undefined){                                             //if dispatch is defined need to send it to the redux store (as well as the db)
-                return dispatch(addProduct(formData, newProduct))
+                return dispatch(addProduct(formData, newProduct, access_token))
                 .then(res => {
                     if(res.data.success) addSuccess(newProduct.p_code);
                     else { 
@@ -128,11 +130,12 @@ export const confirmAdd = (newProduct, formData, dispatch, access_token, updateA
                 })
                 .catch(err => {
                     console.log("Error", err);
-                    addFail(newProduct.p_code);
+                    if(err.response.status === 401) _logout(updateAuth);
+                    else addFail(newProduct.p_code);
                 });
             }
             else{                                                                 //else just push it directly to the db
-                return _addProduct(formData)
+                return _addProduct(formData, config)
                 .then(res => {
                     if(res.data.success) addSuccess(newProduct.p_code);
                     else{
@@ -143,7 +146,8 @@ export const confirmAdd = (newProduct, formData, dispatch, access_token, updateA
                 })
                 .catch(err => {
                     console.log("Error", err);
-                    addFail(newProduct.p_code);
+                    if(err.response.status === 401) _logout(updateAuth);
+                    else addFail(newProduct.p_code);
                 });
             } 
         },
