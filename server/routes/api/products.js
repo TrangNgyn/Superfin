@@ -10,6 +10,7 @@ router.get('/all-product', product_controller.get_all_products); // public
 router.post('/product-by-id',product_controller.post_product_by_id); // public
 router.post('/product-by-category', product_controller.post_product_by_category); // public 
 router.post('/product-by-category-price',product_controller.post_product_by_category_price); // public
+router.post('/validate-products',product_controller.post_validate_products); // public
 
 // product management routes
 router.post('/add-product', 

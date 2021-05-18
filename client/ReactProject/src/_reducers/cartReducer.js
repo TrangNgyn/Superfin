@@ -12,6 +12,7 @@ import {
   LOAD_STRIPE,
   INCREASE_QUANTITY,
   DECREASE_QUANTITY,
+  REMOVE_ITEMS,
   CLEAR_CART
 } from '../_constants/cart.constants'
 
@@ -112,6 +113,23 @@ const cartReducer= (state = initialState, action)=>{
     }
 
     return {...state, total: newTotal};
+  }
+  else if(action.type === REMOVE_ITEMS){
+    const valid_pcodes = action.valid_pcodes;
+
+    // remove items that are not in valid_pcodes
+    state.items = state.items
+      .filter((item) => valid_pcodes.includes(item.item_code))
+    console.log(state.items)
+    
+    // calc new total
+    let newTotal = 0;
+    state.items.forEach(item => {
+      newTotal += item.quantity * item.unit_price;
+    });
+
+    return {...state, total: newTotal};
+
   }
   else if(action.type === CLEAR_CART){
     return{
