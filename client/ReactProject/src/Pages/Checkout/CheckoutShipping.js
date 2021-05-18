@@ -1,4 +1,5 @@
 import '../../_assets/CSS/pages/Checkout/CheckoutShipping.css';
+import React, { useState } from 'react';
 import { Typography, Form, Input, Button, Row, Col, Steps, Select, InputNumber } from 'antd';
 import {CaretLeftOutlined} from '@ant-design/icons';
 import { Link, Redirect } from 'react-router-dom';
@@ -12,12 +13,14 @@ const { Step } = Steps;
 
 const CheckoutShipping = (props) =>{
   const [form] = Form.useForm();
+  const address = props.address;
+  const email = props.email;
 
   const onFinish = (values) => {
     const addressPayload = {
-      po_attention_to: values.po_attention_to,
-      po_address_line1: values.address_line_1,
-      po_address_line2: values.address_line_2,
+      po_attention_to: values.fullname,
+      po_address_line1: values.address_line1,
+      po_address_line2: values.address_line2,
       po_suburb: values.suburb,
       po_state: values.state,
       po_postcode: values.postcode,
@@ -63,10 +66,19 @@ const CheckoutShipping = (props) =>{
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           requiredMark={false}
+          initialValues={{
+            fullname: address.po_attention_to,
+            address_line1: address.po_address_line1,
+            address_line2: address.po_address_line2,
+            suburb: address.po_suburb,
+            state: address.po_state,
+            postcode: address.po_postcode,
+            email: email,
+          }}
       >
         <Row gutter={16}>
           <Col span={24}>
-            <Form.Item label="Full Name" name="po_attention_to" 
+            <Form.Item label="Full Name" name="fullname" 
               rules={[
                 { 
                   required: true,
@@ -88,14 +100,15 @@ const CheckoutShipping = (props) =>{
                   required: true,
                   message: 'Please enter your email!'
                 }
-              ]}>
-              <Input/>
+              ]}
+            >
+              <Input />
             </Form.Item>
           </Col>
         </Row>
         <Row gutter={16}>
           <Col span={24}>
-            <Form.Item label="Address Line 1" name="address_line_1" 
+            <Form.Item label="Address Line 1" name="address_line1" 
               rules={[
                 {
                   required: true, 
@@ -109,7 +122,7 @@ const CheckoutShipping = (props) =>{
 
         <Row gutter={16}>
         <Col span={24}>
-            <Form.Item label="Address Line 2" name="address_line_2" 
+            <Form.Item label="Address Line 2" name="address_line2" 
               rules={[
                 {
                   required: false,
@@ -195,10 +208,17 @@ const CheckoutShipping = (props) =>{
   );
 }
 
+const mapStateToProps = (state)=>{
+  return{
+    address: state.cartState.address,
+    email: state.cartState.c_email,
+  }
+}
+
 const mapDispatchToProps= (dispatch)=>{
   return{
     setShipping: (address, email) => {dispatch(setShipping(address, email))}
   }
 }
 
-export default connect(null, mapDispatchToProps)(CheckoutShipping);
+export default connect(mapStateToProps, mapDispatchToProps)(CheckoutShipping);

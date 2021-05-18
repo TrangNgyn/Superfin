@@ -32,7 +32,6 @@ const CartItem = (props) => {
     props.decrease(index);
     
   }
-  console.log(product);
 
   return (
     <tr>
@@ -70,5 +69,3 @@ const mapDispatchToProps= (dispatch)=>{
 }
 
 export default connect(null, mapDispatchToProps)(CartItem);
-
-// export default CartItem;

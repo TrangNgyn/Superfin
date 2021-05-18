@@ -20,9 +20,10 @@ import {
     addSizeOption
 } from './Functions';
 import { getAllCategories } from '../../_actions/categoryActions';
-import { onlyNumbers, removeSpaces } from '../../_services/SharedFunctions';
+import { removeSpaces } from '../../_services/SharedFunctions';
 import { confirmEdit, confirmAdd } from './Modals'; 
 import { createFormData, checkBlob } from './Functions';
+import { useAuth, useAuthUpdate } from '../../SharedComponents/AuthContext/AuthContext';
 
 const { Option, OptGroup } = Select;
 
@@ -33,7 +34,10 @@ const { Option, OptGroup } = Select;
 const AddEditProduct = () => {
 
     const { p_code } = useParams();
+
     const dispatch = useDispatch();
+    const updateAuth = useAuthUpdate();             //authorization data
+    const auth = useAuth();
 
     const productsList = useSelector(state => state.productState.products);
     const categories = useSelector(state => state.categoryState.categories);
@@ -95,7 +99,7 @@ const AddEditProduct = () => {
             addUriToFileList(product.p_image_uri, updateFileList);     //populates the file list
             
         } 
-    }, [categories, product, form, pageState]);
+    }, [categories, product, form, pageState, newPage]);
 
 
 
@@ -142,8 +146,8 @@ const AddEditProduct = () => {
 
             if(!checkProductsEqual(newProduct, product, number_of_new_images, originalImageListLength)){
                 setNewPage(false);
-                if(productsList.length !== 0) confirmEdit(newProduct, formData, dispatch);    //if the Store contains the products, need to update this as well as do API call                                                                                 
-                else confirmEdit(newProduct, formData);    //if the Store does not contain products, just need to do API call. do not need to update store   
+                if(productsList.length !== 0) confirmEdit(newProduct, formData, auth.access_token, updateAuth, dispatch);    //if the Store contains the products, need to update this as well as do API call                                                                                 
+                else confirmEdit(newProduct, formData, auth.access_token, updateAuth);    //if the Store does not contain products, just need to do API call. do not need to update store   
             }
         }
 
@@ -153,11 +157,8 @@ const AddEditProduct = () => {
             
             for(let i = 0; i < fileList.length; i++)  newProduct.p_image_uri[i] = URL.createObjectURL(fileList[i].originFileObj);
            
-            if(productsList.length !== 0) confirmAdd(newProduct, formData, dispatch);       //if there are products in redux store, add product there as well
-            else{
-                console.log("here");
-                confirmAdd(newProduct, formData);              //else just make the request as usual
-            } 
+            if(productsList.length !== 0) confirmAdd(newProduct, formData, auth.access_token, updateAuth, dispatch,);       //if there are products in redux store, add product there as well
+            else confirmAdd(newProduct, formData, auth.access_token, updateAuth);              //else just make the request as usual
         };
     }
 
@@ -226,9 +227,18 @@ const AddEditProduct = () => {
                                         message: 'Please add value to this field',
                                         validateTrigger: "onSubmit",
                                         whitespace: true
+                                    },
+                                    {
+                                        validator: async (_, p_unit) => {
+                                            const reg = /^\d+?\s\w+?\/\w+$/;
+                                            if (!reg.test(p_unit) && p_unit !== "" && p_unit !== undefined){
+                                                return Promise.reject(new Error("Please user the correct formatting"));
+                                            }
+                                        },
+                                        validateTrigger: "onSubmit"
                                     }
                             ]}>
-                                <Input maxLength={6} onChange={e => {onlyNumbers(e, form, 'p_unit')}} style ={{width:"500px"}}/>
+                                <Input placeholder="Valid input e.g., 10 items/box, 20 bags/container" maxLength={30}/>
                             </Form.Item>
                         </div>
                         
@@ -264,6 +274,7 @@ const AddEditProduct = () => {
                                 name="p_size"
                                 rules={[
                                     {
+
                                         validator: async (_,) => {
                                             if (sizeOptions.length <= 0){
                                                 return Promise.reject(new Error('Must have at least 1 size option'));

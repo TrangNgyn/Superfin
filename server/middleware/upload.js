@@ -10,16 +10,6 @@ aws.config.update({
     region: 'ap-southeast-2'
 })
 
-var storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-      cb(null, 'uploads')
-    },
-    filename: function(req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, uniqueSuffix);
-    }
-  })
-
 var upload = multer({
     fileFilter: function (req, file, cb) {
         if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
@@ -41,5 +31,30 @@ var upload = multer({
     })
 })
 
-module.exports = upload
+const any_upload = upload.any()
+
+upload_any = (req,res,next) => {
+    any_upload(req,res, function (err) {
+      if(err) {
+        return res.json({
+          success: false,
+          message: err.message
+        })
+      }
+      var array = []
+      for (var i = 0; i<req.files.length; i++) {
+        array.push(req.files[i].location)
+      }
+      req.images = array
+      next()
+    }) 
+  }
+    
+
+
+const upload_files = {
+    upload_any
+}
+
+module.exports = upload_files
 

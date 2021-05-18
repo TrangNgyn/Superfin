@@ -2,6 +2,8 @@ import Product from './Product';
 import { List } from 'antd';
 
 const ProductsList = props => {
+    const productDetails = props.productDetails;
+
     return (
         <>
             <List className="container"
@@ -12,12 +14,13 @@ const ProductsList = props => {
                     showSizeChanger: true,
                     position: 'both',
                 }}
-                dataSource={Object.values(props)}
-                renderItem={item => (
-                    <List.Item>
-                        <Product {...item} />
+                dataSource={Object.values(productDetails)}
+                renderItem={item => {
+                  return(
+                    <List.Item>                        
+                        <Product key={item} productDetails={item} />
                     </List.Item>
-                )}
+                )}}
             />
         </>
     );

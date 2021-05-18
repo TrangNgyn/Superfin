@@ -80,20 +80,25 @@ const CheckoutReviewOrder = (props) =>{
 
         <div id="checkout-review-order-summary">
           <Row>
-            <Col span={12}><Title level={4}>Order Summary ({itemCount} items)</Title></Col>
+            <Col span={12}>
+              <Title level={4}>Order Summary ({itemCount} items)</Title>
+            </Col>
           </Row>
           {
             itemCount === 0 ? 
               <div>Your cart is empty</div>
             : <>
               <Row>
-                <Col span={6}>
+                <Col span={4}>
                   <div style={{fontWeight:"bold"}}>Product</div>
                 </Col>
-                <Col span={6}>
-                  <div style={{textAlign: "center", fontWeight:"bold"}}>Price</div>
+                <Col span={4}>
+                  <div style={{textAlign: "center", fontWeight:"bold"}}>Unit Price</div>
                 </Col>
                 <Col span={3}>
+                  <div style={{textAlign: "center", fontWeight:"bold"}}>Size</div>
+                </Col>
+                <Col span={4}>
                   <div style={{textAlign: "center", fontWeight:"bold"}}>Quantity</div>
                   </Col>
                 <Col span={9}>
@@ -107,7 +112,7 @@ const CheckoutReviewOrder = (props) =>{
                   </div>
                 </Col>
               </Row>
-              <CartProducts editable={false} />
+              <CartProducts key={itemCount} editable={false} />
             </>
           }          
         </div>
@@ -121,14 +126,7 @@ const CheckoutReviewOrder = (props) =>{
               <div style={{textAlign: "right"}}>{formatNumber(total)}</div>
             </Col>
           </Row>
-          <Row>
-            <Col offset={11} span={7}>
-              <div style={{textAlign: "left"}}>Freight charge:</div>
-            </Col>
-            <Col span={6}>
-              <div style={{textAlign: "right"}}>{formatNumber(total*0.05)}</div>
-            </Col>
-          </Row>
+          
           <Row>
             <Col offset={11} span={7}>
               <div style={{textAlign: "left"}}>GST:</div>
@@ -137,6 +135,16 @@ const CheckoutReviewOrder = (props) =>{
               <div style={{textAlign: "right"}}>{formatNumber(total*0.01)}</div>
             </Col>
           </Row>
+
+          <Row>
+            <Col offset={11} span={7}>
+              <div style={{textAlign: "left"}}>Freight charge:</div>
+            </Col>
+            <Col span={6}>
+              <div style={{textAlign: "right"}}>{formatNumber(total*0.05)}</div>
+            </Col>
+          </Row>
+          
           <Row>
             <Col offset={11} span={7}>
               <div style={{textAlign: "left",fontWeight:"bold"}}>Total:</div>

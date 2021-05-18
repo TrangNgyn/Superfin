@@ -2,8 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import {connect} from 'react-redux';
 import CartProducts from './CartProducts';
 import { formatNumber } from '../../_helpers/utils';
-import '../../_assets/CSS/pages/Cart.css';
-import { Typography, Button, Row, Col,Layout  } from 'antd';
+import { Button } from 'antd';
 import { Link } from 'react-router-dom';
 import visa from "../../_assets/Images/visa.png"
 import mastercard from "../../_assets/Images/mastercard.jpg"
@@ -12,6 +11,10 @@ import { clearCart } from '../../_actions/cartActions';
 
 const Cart = (props) =>{
     const itemCount = props.cartItems.length;
+    const subTotal = props.total;
+    const GST = subTotal / 11;
+    const freightCharge = subTotal * 0.1;
+    const grandTotal = subTotal + freightCharge;
 
     const clearCart = () => {
         props.clearCart();
@@ -58,19 +61,19 @@ const Cart = (props) =>{
                         </tr>
                         <tr className="non-hover">
                             <td><strong>Subtotal:</strong></td>
-                            <td>{formatNumber(props.total)}</td>
+                            <td>{formatNumber(subTotal)}</td>
                         </tr>
                         <tr className="non-hover">
                             <td><strong>Freight charge:</strong></td>
-                            <td>{formatNumber(props.total*0.05)}</td>
+                            <td>{formatNumber(freightCharge)}</td>
                         </tr>
                         <tr className="non-hover">
                             <td><strong>GST:</strong></td>
-                            <td>{formatNumber(props.total*0.01)}</td>
+                            <td>{formatNumber(GST)}</td>
                         </tr>
                         <tr className="non-hover">
                             <td><strong>Total:</strong></td>
-                            <td>{formatNumber(props.total*1.06)}</td>
+                            <td>{formatNumber(grandTotal)}</td>
                         </tr>
                     </tbody>
                 </table>

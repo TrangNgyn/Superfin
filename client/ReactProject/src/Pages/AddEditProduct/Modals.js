@@ -3,6 +3,7 @@ import { onRemove } from './Functions';
 import { history } from '../../_helpers/history';
 import { _editProduct, _addProduct } from './Functions';
 import { editProduct, addProduct } from '../../_actions/productActions'; 
+import { _logout } from '../../_services/SharedFunctions';
 
 export const imageModal = (src, file, fileList, updateFileList, product, setProduct) => {           //displays the preview of the image
     Modal.confirm({
@@ -65,14 +66,16 @@ const addFail = p_code => {
 
  
 
-export const confirmEdit = (newProduct, formData, dispatch) => {                //confirms the edit
+export const confirmEdit = (newProduct, formData, access_token, updateAuth, dispatch) => {                //confirms the edit
+    const config = { headers:{ authorization : `Bearer ${access_token}` }};
+
     Modal.confirm({
         title: `Editing product: ${newProduct.p_code}`,
         content: 'Are you sure you want to make these edits?',
         onOk() {
             if(dispatch !== undefined){                                     //if dispatch is defined then need to send product to the redux store (as well as the db)
                 
-                return dispatch(editProduct(newProduct, formData))
+                return dispatch(editProduct(newProduct, formData, access_token, updateAuth))
                 .then(res => {
                     if(res.data.success){
                         editSuccess(newProduct.p_code);
@@ -84,22 +87,23 @@ export const confirmEdit = (newProduct, formData, dispatch) => {                
                 })
                 .catch(err => {
                     console.log("Error", err);
-                    editFail(newProduct.p_code);
+                    if(err.response.status === 401) _logout(updateAuth);
+                    else editFail(newProduct.p_code);
                 });
             }
             else{                                               //else just push it to the db
-                return _editProduct(formData)
+                return _editProduct(formData, config)
                 .then(res => {
                     if(res.data.success) editSuccess(newProduct.p_code);
                     else{
-                        console.log("Error", res);
+                        console.log(res);
                         editFail(newProduct.p_code);
                     }
-
                 })
                 .catch(err => {
-                    console.log("Error", err);
-                    editFail(newProduct.p_code);
+                    console.log(err);
+                    if(err.response.status === 401) _logout(updateAuth);
+                    else editFail(newProduct.p_code);
                 });
             } 
         },
@@ -107,14 +111,16 @@ export const confirmEdit = (newProduct, formData, dispatch) => {                
     })
 }
 
-export const confirmAdd = (newProduct, formData, dispatch) => {
+export const confirmAdd = (newProduct, formData, access_token, updateAuth, dispatch) => {
+    const config = { headers:{ authorization : `Bearer ${access_token}` }};
+
     Modal.confirm({
         title: `Adding product: ${newProduct.p_code}`,
         content: 'Are you sure you want to add this product?',
 
         onOk() {
             if(dispatch !== undefined){                                             //if dispatch is defined need to send it to the redux store (as well as the db)
-                return dispatch(addProduct(formData, newProduct))
+                return dispatch(addProduct(formData, newProduct, access_token))
                 .then(res => {
                     if(res.data.success) addSuccess(newProduct.p_code);
                     else { 
@@ -124,11 +130,12 @@ export const confirmAdd = (newProduct, formData, dispatch) => {
                 })
                 .catch(err => {
                     console.log("Error", err);
-                    addFail(newProduct.p_code);
+                    if(err.response.status === 401) _logout(updateAuth);
+                    else addFail(newProduct.p_code);
                 });
             }
             else{                                                                 //else just push it directly to the db
-                return _addProduct(formData)
+                return _addProduct(formData, config)
                 .then(res => {
                     if(res.data.success) addSuccess(newProduct.p_code);
                     else{
@@ -139,7 +146,8 @@ export const confirmAdd = (newProduct, formData, dispatch) => {
                 })
                 .catch(err => {
                     console.log("Error", err);
-                    addFail(newProduct.p_code);
+                    if(err.response.status === 401) _logout(updateAuth);
+                    else addFail(newProduct.p_code);
                 });
             } 
         },

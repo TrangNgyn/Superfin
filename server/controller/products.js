@@ -3,6 +3,7 @@ const categories_model = require('../models/categories')
 const fs = require('fs');
 const path = require('path');
 const delete_object = require('../middleware/delete');
+const {stripe_update_price} = require('../middleware/stripe_util');
 
 var empty_field = { 
     succes: false,
@@ -129,14 +130,13 @@ class Product {
     // @desc    Create a product
     // @access  Public
 
-
-    // need to add category to this - and implement categories across the database
-
-    async post_add_product(req,res,images) {
+    async post_add_product(req,res) {
         try {
 
             var { p_code, p_name, p_price, p_unit, 
                  p_size, p_categories, p_description } =  req.body  
+
+            var images = req.images
 
             if(images.length <= 0) {
                 Product.delete_images(images)
@@ -206,6 +206,7 @@ class Product {
             }
         }
         catch (err) {
+            Product.delete_images(images)
             return res.json({
                 success: false,
                 message: err.message
@@ -216,15 +217,16 @@ class Product {
     // @route   POST api/products/edit-product
     // @desc    edit an existing product
     // @access  Public
- 
-    async post_edit_product(req, res, locations) {
+
+    async post_edit_product(req, res) {
         try {
 
             var { p_code, p_name, p_price, p_unit, p_size,
                  p_image_uri, p_categories, p_description } = req.body
 
-            // create array to hold images
-            const array = [];
+            var locations = req.images
+
+            const array = []
 
             // check that the image url has been defined
             if(typeof p_image_uri === 'undefined') {
@@ -309,8 +311,8 @@ class Product {
             // unlink images from the array as they are read in 
             if(array.length > 0){
                 for(var i = 0; i < found_product.p_image_uri.length; i++){
-                    var image = found_product.p_image_uri[i];
-                    var found = false;
+                    var image = found_product.p_image_uri[i]
+                    var found = false
 
                     // loop through all sent images with the url of the saved images
                     // if found break otherwise delete it from the array
@@ -356,11 +358,31 @@ class Product {
                 array.push(locations[i])
             }
 
+            // init edited price to old price
+            var edited_price = {
+                success: false,
+                p_price_id: found_product.p_price_id,
+            };
+            var p_price_id = found_product.p_price_id;
+
+            // update price if p_price changes
+            if(found_product.p_price !== p_price){
+                edited_price = stripe_update_price(p_code, p_price, found_product.p_price_id);
+
+                if(edited_price.success){
+                    p_price_id = edited_price.p_price_id;
+                }else{
+                    Product.delete_images(locations)
+                    return res.json(edited_price)
+                }
+            }
+
             var edited_product = product_model.findByIdAndUpdate(found_product._id, {
                 p_code,
                 p_image_uri: array,
                 p_name,
                 p_price,
+                p_price_id,
                 p_unit,
                 p_size,
                 p_categories,
@@ -375,6 +397,8 @@ class Product {
                         message: err.message
                     })
                 }
+
+                // if success
                 return res.json({ 
                     success: true,
                     message: `Product ${p_code} was edited`})
@@ -415,7 +439,7 @@ class Product {
                 var delete_product = await product_model.findOne({ p_code: p_code })
                 if(delete_product) {
                     if(delete_product.p_image_uri){
-                        Product.delete_images(delete_product.p_image_uri);
+                        Product.delete_images(delete_product.p_image_uri)
                     }
                     product_model.deleteOne({ p_code: p_code }, (err,result) => {
                         if(err){
@@ -431,7 +455,7 @@ class Product {
                                 res.send(result)
                             }
                         }
-                    });
+                    })
                 } 
                 else {
                     return res.json({ 
@@ -490,4 +514,4 @@ class Product {
 }
 
 const product_controller = new Product
-module.exports = product_controller;
+module.exports = product_controller

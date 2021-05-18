@@ -5,12 +5,13 @@ import {
   from '../_constants/cart.constants'
 
 // add item to cart action
-export const addToCart = (product, quantity, special_requirements) => {
+export const addToCart = (product, quantity, special_requirements, p_size) => {
   return {
     type: ADD_TO_CART,
     product,
     quantity,
     special_requirements,
+    p_size,
   }
 }
 

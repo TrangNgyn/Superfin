@@ -1,4 +1,11 @@
-import { GET_COMPLETE_ORDERS, ERROR_COMPLETE_ORDERS, LOADING_COMPLETE_ORDERS, DELETE_COMPLETE_ORDER, ADD_COMPLETE_ORDER, EDIT_COMPLETE_ORDER } from '../_actions/actionTypes';
+import { 
+    GET_COMPLETE_ORDERS, 
+    ERROR_COMPLETE_ORDERS, 
+    LOADING_COMPLETE_ORDERS, 
+    DELETE_COMPLETE_ORDER, 
+    ADD_COMPLETE_ORDER, 
+    EDIT_COMPLETE_ORDER 
+} from '../_constants/actionTypes.constants';
 
 const initState = {
     completeOrders: [],

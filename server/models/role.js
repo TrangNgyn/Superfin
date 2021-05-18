@@ -1,22 +1,12 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-// There are two types of roles, including "customer_role" and "admin_role"
 const role_schema = new Schema({
-  name : {
-    type: String,
-    required: true,
-    index:{
-			unique:true,
+    name: {
+        type: String,
+        unique: true,
+        required: true 
     }
-  },
-  privileges : {
-    type: [String]
-  }
-},
-{
-  collection: 'roles',
-  versionKey: false
-});
+})
 
-module.exports = role = mongoose.model('roles',role_schema);
+module.exports = role = mongoose.model('role', role_schema)

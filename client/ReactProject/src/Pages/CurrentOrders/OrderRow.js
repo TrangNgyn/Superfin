@@ -4,10 +4,13 @@ import { CheckCircleOutlined } from '@ant-design/icons';
 import { useForm } from 'antd/lib/form/Form';
 import { orderStatusConstants } from '../../_constants/orderStatus.constants';
 import { addTracking } from '../../_actions/incompleteOrderActions';
+import { _logout } from '../../_services/SharedFunctions';
 
 const OrderRow = props => {
     const o = props.order;
     const dispatch = props.dispatch;
+    const access_token = props.access_token;
+    const updateAuth = props.updateAuth;
 
     const [form_1] = useForm();
     const [form_2] = useForm();
@@ -26,11 +29,17 @@ const OrderRow = props => {
                 carrier: values[1].carrier,
                 po_number: o.po_number
             }
-            dispatch(addTracking(trackingDetails));
-            console.log(trackingDetails);
+            dispatch(addTracking(trackingDetails, access_token, updateAuth))
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                console.log(err);
+                if(err.response.status === 401) _logout(updateAuth);
+            });
         })
-        .catch(errorInfo => {
-            console.log(errorInfo);
+        .catch(err => {
+            console.log(err);
         })
     }
 

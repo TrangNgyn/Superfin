@@ -1,4 +1,8 @@
-import { GET_COMPANY_INFO, SET_COMPANY_INFO, LOADING_COMPANY_INFO } from '../_actions/actionTypes';
+import { 
+    GET_COMPANY_INFO,
+    SET_COMPANY_INFO, 
+    LOADING_COMPANY_INFO 
+} from '../_constants/actionTypes.constants';
 
 const initState = {
     companyInfo: {},

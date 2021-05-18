@@ -1,4 +1,6 @@
-import { emailNotFound } from './SharedModals'; 
+import { emailNotFound } from './SharedModals';
+import { userConstants } from '../_constants/user.constants'; 
+import { history } from '../_helpers/history';
 
 export const getCategoryName = (id, categories) => {
     const category = categories.find(category => {
@@ -72,3 +74,26 @@ export const removeSpaceLogic = str => {
     }
     return str;
 }
+
+export const isWhiteSpace = s => {
+    for(let i = 0; i < s.length; i++) if(s[i] !== ' ') return false;
+    return true;
+}
+
+export const validateEmail = email => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+export const checkPasswordStrength = password => {
+    const re = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/
+    return re.test(password);
+}
+
+export const _logout = updateAuth => {
+   // localStorage.setItem('SUPERFIN_USER', JSON.stringify({roles: [userConstants.ROLE_GUEST]}));
+   // updateAuth({roles: [userConstants.ROLE_GUEST]});
+   // history.push('/login');
+}
+
+

@@ -5,12 +5,15 @@ import { getIncompleteOrders } from '../../_actions/incompleteOrderActions';
 import { handleOrder } from './Functions';
 import { filterEmail } from '../../_services/SharedFunctions';
 import OrderRow from './OrderRow';
+import { useAuthUpdate, useAuth } from '../../SharedComponents/AuthContext/AuthContext';
 
 const itemsPerPage = 10;
 const { Option, OptGroup } = Select;
 
 const CurrentOrders = () => {
     const dispatch = useDispatch();
+    const updateAuth = useAuthUpdate();             //authorization data
+    const auth = useAuth();
 
     const orders = useSelector(state => state.incompleteOrdersState.incompleteOrders);
     const error = useSelector(state => state.incompleteOrdersState.error);
@@ -22,7 +25,7 @@ const CurrentOrders = () => {
     let row = <></>
 
     useEffect(() => {
-        if(!orders.length) dispatch(getIncompleteOrders());
+        if(!orders.length) dispatch(getIncompleteOrders(auth.access_token, updateAuth));
         else setOrdersList(orders);      
     }, [orders.length, orders, dispatch]);
     
@@ -33,8 +36,15 @@ const CurrentOrders = () => {
             ((page + 1) * itemsPerPage) > ordersList.length ? ordersList.length : ((page + 1) * itemsPerPage));
         
         row = renderableProducts.map((o) => {
+            const orderProps = {
+                order: o,
+                dispatch: dispatch,
+                access_token: auth.access_token,
+                updateAuth: updateAuth
+            }
+        
             return (
-               <OrderRow key={o.po_number} order={o} dispatch={dispatch}/>
+               <OrderRow key={o.po_number} {...orderProps}/>
             );
         });
     }
