@@ -4,6 +4,7 @@ import { history } from '../../_helpers/history';
 import { getCategoryName } from '../../_services/SharedFunctions';
 import { getAllCategories } from '../../_actions/categoryActions';
 import { useEffect } from 'react';
+import { useAuthUpdate, useAuth } from '../../SharedComponents/AuthContext/AuthContext';
 
 //All rows for the Product table
 
@@ -13,6 +14,8 @@ const ProductTableRows = props => {
     const dispatch = props.dispatch;
     const page = props.page;
     const itemsPerPage = 10;
+    const updateAuth = useAuthUpdate();             //authorization data
+    const auth = useAuth();
 
     useEffect(() => {             
         if(!categories.length) dispatch(getAllCategories());
@@ -41,7 +44,7 @@ const ProductTableRows = props => {
                         <EditOutlined props={p.p_code} className="manage-products-icon" onClick={() => {
                             history.push(`/editAddProducts/${p.p_code}`);
                         }}/> 
-                        <DeleteOutlined className="manage-products-icon" onClick={() => { deleteConfirm(p.p_code, dispatch) }} style = {{paddingLeft: "15px"}}/> 
+                        <DeleteOutlined className="manage-products-icon" onClick={() => { deleteConfirm(p.p_code, dispatch, auth.access_token, updateAuth) }} style = {{paddingLeft: "15px"}}/> 
                     </td>
                 </tr>
             );

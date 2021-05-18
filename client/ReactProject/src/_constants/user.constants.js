@@ -1,5 +1,5 @@
 export const userConstants = {
-    GUEST: "GUEST",
-    CUSTOMER: "CUSTOMER",
-    ADMIN: "ADMIN"
+    ROLE_GUEST: "ROLE_GUEST",
+    ROLE_ADMIN: "ROLE_ADMIN",
+    ROLE_CUSTOMER: "ROLE_CUSTOMER"
 };

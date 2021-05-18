@@ -1,4 +1,12 @@
-import { GET_PRODUCTS, GET_PRODUCT, LOADING_PRODUCTS, DELETE_PRODUCT, EDIT_PRODUCT, ADD_PRODUCT, ERROR, DEFAULT_ORDER } from '../_actions/actionTypes';
+import { 
+    GET_PRODUCTS, 
+    LOADING_PRODUCTS,
+    DELETE_PRODUCT, 
+    EDIT_PRODUCT, 
+    ADD_PRODUCT, 
+    ERROR, 
+    DEFAULT_ORDER
+} from '../_constants/actionTypes.constants';
 
 const initState = {
     products: [],

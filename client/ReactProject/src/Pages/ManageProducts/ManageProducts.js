@@ -2,10 +2,8 @@ import '../../_assets/CSS/pages/ManageProducts/ManageProducts.css';
 import { Select, Pagination, Spin } from 'antd';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { history } from '../../_helpers/history';
 import { getAllProducts, setDefaultOrder } from '../../_actions/productActions';
-
 import { handleFilter, handleOrder } from './Functions';
 import ProductTableRows from './ProductTableRows';
 
@@ -15,24 +13,7 @@ const { Option, OptGroup } = Select;
 
 
 
-/*
-    Tasks if time:
-    Implement loading circle for the delete modal
-    Implement 'item not deleted' modal
-    Implement 'item deleted successful' message
-*/
-
-/*
-    Tasks that still need to be done
-    Upadate spelling error in 'productActions.js'. (Check the comments in that file)
-*/
-
-
-
-
-
 const ManageProducts = () => {
-    
     const dispatch = useDispatch();
 
     const productsList = useSelector(state => state.productState.products);                 //Redux store product list

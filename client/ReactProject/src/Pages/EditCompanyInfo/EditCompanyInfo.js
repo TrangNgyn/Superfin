@@ -3,17 +3,10 @@ import '../../_assets/CSS/pages/EditCompanyInfo/EditCompanyInfo.css';
 import { Form, Input, Button, Spin } from 'antd';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import { useAuthUpdate, useAuth } from '../../SharedComponents/AuthContext/AuthContext'; 
 import { layout, tailLayout } from './FormLayout';
 import { setFormValues } from './Functions';
 import { errorLoading, confirmEdit } from './Modals';
-
-
-/*
-    IMORTANT
-    if client wants to have footer in the admin view,
-    this page should be changed to receive its data from redux.
-*/
 
 
 const EditCompanyInfo = () => {
@@ -21,6 +14,8 @@ const EditCompanyInfo = () => {
     const [form] = Form.useForm();
     const [companyInfo, setCompanyInfo] = useState(null);
     const [dataLoading, setDataLoading] = useState(true);
+    const updateAuth = useAuthUpdate();             //authorization data
+    const auth = useAuth();
 
     useEffect(() => {
         axios.get('/api/aboutus/')
@@ -42,8 +37,9 @@ const EditCompanyInfo = () => {
 
     //form functions
     const onFinish = newInfo => {
+        newInfo.c_about = "_";                 //about us has been removed. This stops backend from breaking
         if(JSON.stringify(newInfo) !== JSON.stringify(companyInfo)){
-            confirmEdit(newInfo);
+            confirmEdit(newInfo, auth.access_token, updateAuth);
         } 
     };
     
@@ -114,18 +110,6 @@ const EditCompanyInfo = () => {
                         <Form.Item 
                             label="Terms and Conditions" 
                             name="c_TandC"
-                            rules={[{
-                                whitespace: true, 
-                                required: true, 
-                                message: 'Please provide data' 
-                            }]}
-                        >
-                            <Input.TextArea style = {{width: "500px"}} rows = {6} maxLength={30000}/>
-                        </Form.Item>
-
-                        <Form.Item 
-                            label="About Page Text" 
-                            name="c_about"
                             rules={[{
                                 whitespace: true, 
                                 required: true, 

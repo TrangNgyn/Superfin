@@ -3,10 +3,18 @@ import NewItemForm from '../Forms/NewItemForm/NewItemForm';
 import { orderStatusConstants } from '../../../_constants/orderStatus.constants';
 import { Modal } from 'antd';
 import MODE from './PageConstants';
-import { addCompleteOrder } from '../../../_actions/completeOrderActions'; 
 import { addIncompleteOrder } from '../../../_actions/incompleteOrderActions';
 import { history } from '../../../_helpers/history';
 import axios from 'axios';
+import { 
+    DELETE_INCOMPLETE_ORDERS, 
+    ADD_INCOMPLETE_ORDER, 
+    ADD_COMPLETE_ORDER, 
+    DELETE_COMPLETE_ORDER, 
+    EDIT_COMPLETE_ORDER, 
+    EDIT_INCOMPLETE_ORDER 
+} from '../../../_constants/actionTypes.constants';
+import { _logout } from '../../../_services/SharedFunctions';
 
 
 
@@ -61,19 +69,6 @@ export const showNoItemsPresent = setNewItemFormVisible => {
     });
 }
 
- //Modal for confirming edits. Calls the API
- export const showEditConfirmation = (values, confirmSubmit) => {
-    Modal.confirm({
-        title: "Submit Order",
-        icon: <ExclamationCircleOutlined />,
-        content: "Are you sure you want to submit this order?",
-        okText: 'Submit',
-        cancelText: 'Cancel',
-
-        onOk() { confirmSubmit(values) }
-    });
-}
-
 //Appears when email can't be found in PO form part 1
 export const emailDoesNotExist = () => {
     Modal.info({
@@ -117,42 +112,6 @@ export const AddItemModal = props => {
         </Modal>
     );
 }   
-
-export const _addCompleteOrder = (order, dispatch) => {
-    Modal.confirm({
-        title: 'Add Order?',
-        icon: <ExclamationCircleOutlined />,
-        content: 'Are you sure you want to add this order?',
-        okText: 'Yes',
-        cancelText: 'No',
-        onOk() { 
-            if(dispatch !== undefined){
-                    return dispatch(addCompleteOrder(order))
-                    .then(res => {
-                        if(res.data.success) addSuccess();
-                        else addFail();
-                    })
-                    .catch(() => {
-                        addFail();
-                    });
-            }
-            else{
-                axios.post('/api/orders/create-order', order)
-                .then(res => {
-                    if(res.data.success) addSuccess();
-                    else{
-                        console.log(res);
-                        addFail();
-                    } 
-                })
-                .catch(err => {
-                    console.log(err);
-                    addFail();
-                });
-            }
-        }
-    });
-}
 
 export const _addIncompleteOrder = (order, dispatch) => {
     Modal.confirm({
@@ -205,6 +164,114 @@ const addFail = () => {
     Modal.info({
         title: "ERROR",
         content: 'There was a problem adding this order. Please try again or contact support.',
+        okText: "Ok",
+        onOk(){ 
+            history.push('/order');
+            window.location.reload();
+        }
+    });
+}
+
+export const _editOrder = (order, dispatch, prev, curr, completeLength, incompleteLength, setOrder, setOrderOriginal, setMode, access_token, updateAuth) => {
+    const config = { headers:{ authorization : `Bearer ${access_token}` }};
+
+    Modal.confirm({
+        title: 'Edit Order?',
+        icon: <ExclamationCircleOutlined />,
+        content: 'Are you sure you want to edit this order?',
+        okText: 'Yes',
+        cancelText: 'No',
+        onOk() { 
+            return axios.post('/api/orders/edit-order', order, config)
+            .then(res => {
+                if(res.data.success){
+                    if((prev === orderStatusConstants.NEW || prev === orderStatusConstants.SHIPPED) && curr === orderStatusConstants.COMPLETE){
+                        //then remove from current order list... add to complete order list
+                        if(incompleteLength > 0){
+                            //remove
+                            dispatch({
+                                type: DELETE_INCOMPLETE_ORDERS,
+                                payload: order.po_number
+                            });
+                        }
+                        if(completeLength > 0){
+                            //add
+                            dispatch({
+                                type: ADD_COMPLETE_ORDER,
+                                payload: order
+                            });
+                        }
+                    }
+                    else if(prev === orderStatusConstants.COMPLETE && (curr === orderStatusConstants.SHIPPED || curr === orderStatusConstants.NEW)){
+                        //remove from complete order list and add to current order list
+                        if(incompleteLength > 0){
+                            //add to current list
+                            dispatch({
+                                type: ADD_INCOMPLETE_ORDER,
+                                payload: order
+                            });
+                        }
+                        if(completeLength > 0){
+                            dispatch({
+                                type: DELETE_COMPLETE_ORDER,
+                                payload: order.po_number
+                            });
+                        }
+                    }
+                    else if((curr === orderStatusConstants.SHIPPED || curr === orderStatusConstants.NEW) 
+                    && (prev === orderStatusConstants.SHIPPED || prev === orderStatusConstants.NEW)){
+                        //need to replace in current order
+                        if(incompleteLength > 0){
+                            dispatch({
+                                type: EDIT_INCOMPLETE_ORDER,
+                                payload: order
+                            });
+                        }
+                    }
+                    else{
+                        //need to replace in complete orders
+                        if(completeLength > 0){
+                            dispatch({
+                                type: EDIT_COMPLETE_ORDER,
+                                payload: order
+                            });
+                        }
+                    }
+                    setOrder(order);
+                    setOrderOriginal(order);
+                    setMode(MODE.VIEW);
+                    editSuccess(order);
+                }
+                else{
+                    console.log(res);
+                    editFail();
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                if(err.response.status === 401) _logout(updateAuth);
+                else editFail();
+            });
+        }
+    });
+}
+
+const editSuccess = order => {
+    Modal.info({
+        title: "Edit Successful",
+        content: 'Successfully edited order',
+        okText: "Ok",
+        onOk(){
+            history.push(`/order/${order.po_number}/${order.status}`);
+        }
+    });
+}
+
+
+const editFail = () => {
+    Modal.info({
+        title: "ERROR",
+        content: 'There was a problem editing this order. Please try again or contact support.',
         okText: "Ok",
         onOk(){ 
             history.push('/order');

@@ -15,8 +15,6 @@ const Product = props => {
     const categoryName = props.categoryName;
 
 
-
-
     
     const viewCategory = () => {
         console.log("View product info for " + product.name);
@@ -54,7 +52,7 @@ const Product = props => {
             </table>
 
             <div id="admin-product-icon-container">
-                <DeleteOutlined onClick={() => {deleteConfirm(product.p_code, dispatch)}} className="admin-product-icon"/>
+                <DeleteOutlined onClick={() => {deleteConfirm(product.p_code, dispatch, props.access_token, props.updateAuth)}} className="admin-product-icon"/>
                 <EditOutlined onClick={() => { history.push(`/editAddProducts/${product.p_code}`)}} className="admin-product-icon"/>
             </div>  
         </div>

@@ -1,4 +1,11 @@
-import { GET_COMPLETE_ORDERS, ERROR_COMPLETE_ORDERS, LOADING_COMPLETE_ORDERS, DELETE_COMPLETE_ORDER, ADD_COMPLETE_ORDER } from '../_actions/actionTypes';
+import { 
+    GET_COMPLETE_ORDERS, 
+    ERROR_COMPLETE_ORDERS, 
+    LOADING_COMPLETE_ORDERS, 
+    DELETE_COMPLETE_ORDER, 
+    ADD_COMPLETE_ORDER, 
+    EDIT_COMPLETE_ORDER 
+} from '../_constants/actionTypes.constants';
 
 const initState = {
     completeOrders: [],
@@ -38,6 +45,20 @@ const completeOrdersReducer = (state = initState, {type, payload}) => {
             return {
                 ...state,
                 completeOrders: newArray
+            }
+        }
+        case EDIT_COMPLETE_ORDER: {
+            const index = state.completeOrders.findIndex(o => {
+                return o.po_number === payload.po_number;
+            });
+            
+            return {
+                ...state,
+                completeOrders: [
+                    ...state.completeOrders.slice(0, index),
+                    payload,
+                    ...state.completeOrders.slice(index + 1)
+                ]
             }
         }
         default:

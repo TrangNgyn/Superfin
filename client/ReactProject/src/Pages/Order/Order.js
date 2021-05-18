@@ -5,15 +5,17 @@ import { useParams } from 'react-router-dom';
 import { setUndefinedValues } from './Helpers/Functions';
 import { useState, useEffect } from 'react';
 import { orderStatusConstants } from '../../_constants/orderStatus.constants';
-//import { history } from '../../_helpers/history';
+import { useAuth, useAuthUpdate } from '../../SharedComponents/AuthContext/AuthContext';
 import MODE from './Helpers/PageConstants';
-import { showNoItemsPresent, showEditConfirmation, AddItemModal, showUndo} from './Helpers/Modals';
+import { showNoItemsPresent, AddItemModal, showUndo} from './Helpers/Modals';
 import POForm2 from './Forms/POForm/POForm2';
 import POForm1 from './Forms/POForm/POForm1';
 import POForm1View from './Forms/POForm/POForm1View';
 import axios from 'axios';
-import { _addCompleteOrder, _addIncompleteOrder } from './Helpers/Modals';
-import { createAddress, createOrderAdd } from './Helpers/Functions';
+import { _addIncompleteOrder, _editOrder } from './Helpers/Modals';
+import { createAddress, createOrderAdd, createOrderEdit } from './Helpers/Functions';
+import { _logout } from '../../_services/SharedFunctions';
+
 
 
 
@@ -25,6 +27,8 @@ import { createAddress, createOrderAdd } from './Helpers/Functions';
 
 const Order = () => {
     const dispatch = useDispatch();
+    const updateAuth = useAuthUpdate();             //authorization data
+    const auth = useAuth();
     const { po_number, status } = useParams();
     const incompleteOrders = useSelector(state => state.incompleteOrdersState.incompleteOrders);
     const compeletOrders = useSelector(state => state.completeOrdersState.completeOrders);
@@ -36,41 +40,39 @@ const Order = () => {
     const [form_2] = Form.useForm();
 
 
-
-
     //for refreshing the item list
     useEffect(() => {     
         form_1.setFieldsValue({items: [...order.items]}); 
     });
 
     useEffect(() => {
+        const config = { headers:{ authorization : `Bearer ${auth.access_token}` }};
+
         if(status === orderStatusConstants.COMPLETE){
             if(!incompleteOrders.length){
-                axios.post('/api/orders/single-order', { po_number: po_number })
+                axios.post('/api/orders/single-order', { po_number: po_number }, config)
                 .then(res => {
                     if(res.data.success !== false){
                         let order = setUndefinedValues(res.data);
                         setOrder(order);
                         setOrderOriginal(order);
-                        //form_1.setFieldsValue(order);
-                       // form_1.setFieldsValue(order.address);
-                        console.log(order.address);
                         setMode(MODE.VIEW);
                     }
                     else console.log(res);
                 })
-                .catch(err => console.log(err) );
+                .catch(err => {
+                    console.log(err);
+                    if(err.response.status === 401) _logout(updateAuth);
+                });
             }
             else{
-                let order = compeletOrders.filter(o => {
+                let order = compeletOrders.find(o => {
                     return o.po_number === po_number;
                 });
                 if(order !== undefined){
                     order = setUndefinedValues(order);
                     setOrder(order);
                     setOrderOriginal(order);
-                    //form_1.setFieldsValue(order);
-                    //form_1.setFieldsValue(order.address);
                     setMode(MODE.VIEW);
                 }
             }
@@ -78,19 +80,20 @@ const Order = () => {
         else if(status === orderStatusConstants.NEW || status === orderStatusConstants.SHIPPED){
 
             if(!incompleteOrders.length){
-                axios.post('/api/orders/single-order', { po_number: po_number })
+                axios.post('/api/orders/single-order', { po_number: po_number }, config)
                 .then(res => {
                     if(res.data.success !== false){
                         let order = setUndefinedValues(res.data);
                         setOrder(order);
                         setOrderOriginal(order);
-                       // form_1.setFieldsValue(order);
-                        //form_1.setFieldsValue(order.address);
                         setMode(MODE.VIEW);
                     }
                     else console.log(res);
                 })
-                .catch(err => console.log(err) );
+                .catch(err => {
+                    console.log(err);
+                    if(err.response.status === 401) _logout(updateAuth);
+                });
             }
             else{
                 let order = incompleteOrders.find(o => {
@@ -101,8 +104,6 @@ const Order = () => {
                     order = setUndefinedValues(order);
                     setOrder(order);
                     setOrderOriginal(order);
-                    //form_1.setFieldsValue(order);
-                    //form_1.setFieldsValue(order.address);
                     setMode(MODE.VIEW);
                 }
             }
@@ -130,43 +131,23 @@ const Order = () => {
     //after validating fields, this function submits the forms
     const confirmSubmit = values => {
         const editedOrder = JSON.stringify(order) !== JSON.stringify(orderOriginal);
-
         let address = createAddress(values);
 
         if(mode===MODE.ADD){
             let order = createOrderAdd(values, address);
-            if(order.status === orderStatusConstants.COMPLETE){
-                if(compeletOrders.length > 0){
-                    order.issued_date = new Date();
-                    _addCompleteOrder(order, dispatch);
-                }
-                else _addCompleteOrder(order);
+            console.log(order);
+            if(incompleteOrders.length > 0){
+                order.issued_date = new Date();
+                _addIncompleteOrder(order, dispatch);
             }
-            else{
-                if(incompleteOrders.length > 0){
-                    order.issued_date = new Date();
-                    _addIncompleteOrder(order, dispatch);
-                }
-                else {
-                    _addIncompleteOrder(order);
-                }
-            }
+            else _addIncompleteOrder(order);
         }
         else if(mode===MODE.EDIT){
             if(editedOrder){
-                                            //This code is so the item names are not posted
-                let order = {};
-                    order.po_number = values.po_number;
-                    order.c_email = values.c_email;
-                    order.carrier = values.carrier;
-                    order.items = [...values.items];
-                    order.status = values.status;
-                    order.tracking_number = values.tracking_number;
-                    order.address = address;
-
-                console.log("submitting order details in edit mode", order);
-                setOrder(order);
-                setOrderOriginal(order);
+                let order = createOrderEdit(values, address, orderOriginal);
+                const prev = orderOriginal.status;
+                const curr = values.status;
+                _editOrder(order, dispatch, prev, curr, compeletOrders.length, incompleteOrders.length, setOrder, setOrderOriginal, setMode, auth.access_token, updateAuth);
             }
         }
     }
@@ -177,7 +158,6 @@ const Order = () => {
             setMode(MODE.EDIT);
             form_1.setFieldsValue(order);
             form_1.setFieldsValue(order.address);
-
         } 
         else setMode(MODE.VIEW);
     }
@@ -249,12 +229,6 @@ const Order = () => {
     //HTML Main
     return (
         <div>
-            <button onClick = {() => {
-                console.log('redux', incompleteOrders);
-            }}>view incomplete </button>
-            <button onClick = {() => {
-                console.log('redux', compeletOrders);
-            }}>view complete </button>
             {mode===MODE.EDIT || mode===MODE.VIEW   ?   toggleButton    :   <></>}
 
             <h1 className="view-order-text">Order Details</h1>

@@ -16,15 +16,7 @@ const Promocode = () =>{
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
-    const validateMessages = {
-      required: '${label} is required',
-      types: {
-        number: '${label} is not a valid number!',
-      },
-      number: {
-        range: '${label} must be between ${min} and ${max}',
-      },
-    };
+  
 
     function onChange(date, dateString) {
       console.log(date, dateString);

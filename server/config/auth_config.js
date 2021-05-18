@@ -1,4 +1,6 @@
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+
 module.exports = {
-    email: "tttn941@uowmail.edu.au",
-    secret: "trang's password"
-  };
+    secret: process.env.SECRET
+}

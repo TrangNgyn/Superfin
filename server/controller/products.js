@@ -6,7 +6,8 @@ const delete_object = require('../middleware/delete');
 
 var empty_field = { 
     succes: false,
-    message: "All fields must be filled and present" }
+    message: "All fields must be filled and present" 
+}
 class Product {
 
     // delete images referenced by product
@@ -128,13 +129,13 @@ class Product {
     // @desc    Create a product
     // @access  Public
 
-
-    // need to add category to this - and implement categories across the database
-
-    async post_add_product(req,res,images) {
+    async post_add_product(req,res) {
         try {
 
-            var { p_code, p_name, p_price, p_units_sold, p_categories, p_description } =  req.body  
+            var { p_code, p_name, p_price, p_unit, 
+                 p_size, p_categories, p_description } =  req.body  
+
+            var images = req.images
 
             if(images.length <= 0) {
                 Product.delete_images(images)
@@ -145,14 +146,23 @@ class Product {
             }
             
             // validate that input was recieved
-            if( !p_code | !p_name | !p_categories | !p_price){
+            if( !p_code | !p_name | !p_categories | !p_price | !p_size | !p_unit){
                 Product.delete_images(images)
                 return res.json(empty_field)
             }
-            // validate that name and code
-            if( p_code.length > 255 || p_name.length > 255 || p_description > 511) {
+            // validate name and code
+            if( p_code.length > 255 || p_name.length > 255 || p_description.length > 512) {
                 Product.delete_images(images)
-                return res.json({ error: "Name and Code cannot be longer than 255 characters and description cannot be larger than 511 "})
+                return res.json({ 
+                    error: "Name and Code cannot be longer than 255 characters and description cannot be larger than 512 "
+                })
+            }
+            // validate p_size type
+            if(!Array.isArray(p_size)){
+                Product.delete_images(images)
+                return res.json({ 
+                    error: "The product's size needs to be an array of all possible sizes (e.g. S, M, L or (W x H x D))"
+                })
             }
 
             var found_category = await categories_model.findOne({ _id: p_categories })
@@ -170,7 +180,6 @@ class Product {
                 return res.json({ success: false,
                                   message: `Product was not added, the p_code ${p_code} is already in use` })
             }
-            
             // need too clean input here potentially to ensure that product addition is not corrupting the database
 
             const new_product = new product_model({
@@ -178,23 +187,25 @@ class Product {
                 p_code,
                 p_name,
                 p_price,
-                p_units_sold,
+                p_unit,
+                p_size,
                 p_categories,
                 p_description
             })
 
             var saved_product = await new_product.save()
-            if (saved_product) {
+            if (saved_product) {    
                 return res.json({ success: true,
-                                    message: `The product with code ${p_code} was added.` })
+                                message: `The product with code ${p_code} was added.` })
             }
             else {
                 Product.delete_images(images)
                 return res.json({ success: false,
-                                    message: "Product was not added"})
+                                message: "Product was not added"})
             }
         }
         catch (err) {
+            Product.delete_images(images)
             return res.json({
                 success: false,
                 message: err.message
@@ -206,26 +217,45 @@ class Product {
     // @desc    edit an existing product
     // @access  Public
 
-    async post_edit_product(req, res, locations) {
+    async post_edit_product(req, res) {
         try {
 
-            var { p_code, p_name, p_price, p_units_sold, p_image_uri, p_categories, p_description } = req.body
+            var { p_code, p_name, p_price, p_unit, p_size,
+                 p_image_uri, p_categories, p_description } = req.body
 
-            var images = req.files
+            var locations = req.images
 
+            const array = []
+
+            // check that the image url has been defined
             if(typeof p_image_uri === 'undefined') {
+                Product.delete_images(locations)
                 return res.json(empty_field)
             }
 
-            if(images.length <= 0 && p_image_uri.length == 0) {
+            // make sure that there is at least an image for the edited product
+            if(locations.length <= 0 && p_image_uri.length == 0) {
+                Product.delete_images(locations)
                 return res.json({ 
                     success: false,
                     message: `An image must be present in the edited product`
                 })
             }
 
+            // push images supplied from post to the array 
+            if(typeof p_image_uri === 'string') {
+                if(p_image_uri !== "")
+                    array[0] = p_image_uri
+            }
+            else {
+                for(var i = 0; i < p_image_uri.length; i++){
+                    if(p_image_uri[i] !== "")
+                        array.push(p_image_uri[i])
+                }
+            }
+
             // ensure all the required fields are present 
-            if( !p_code | !p_name | !p_categories | !p_price ){
+            if( !p_code | !p_name | !p_categories | !p_price | !p_unit | !p_size){
                 Product.delete_images(locations)
                 return res.json(empty_field)
             }
@@ -248,6 +278,14 @@ class Product {
                 })
             }
 
+            // p_size must be an array
+            if(!Array.isArray(p_size)){
+                Product.delete_images(images)
+                return res.json({ 
+                    error: "The product's size needs to be an array of all possible sizes (e.g. S, M, L or (W x H x D))"
+                })
+            }
+
             var found_product = await product_model.findOne({ p_code: p_code })
 
             if(!found_product){
@@ -258,15 +296,27 @@ class Product {
                 })
             }
 
+            // ensure that the image links are all part of the original product
+            const array_include_test = array.every(val => found_product.p_image_uri.includes(val));
+
+            if(array_include_test == false) {
+                return res.json({
+                    success: false,
+                    message: `Cannot include image_links that are not inside the editied product`
+                })
+            }
+
+
             // unlink images from the array as they are read in 
-            if(p_image_uri != 0){
+            if(array.length > 0){
                 for(var i = 0; i < found_product.p_image_uri.length; i++){
-                    var image = found_product.p_image_uri[i];
-                    var found = false;
+                    var image = found_product.p_image_uri[i]
+                    var found = false
 
                     // loop through all sent images with the url of the saved images
                     // if found break otherwise delete it from the array
-                    for(var s_image in p_image_uri){
+                    for(var j = 0; j<array.length;j++){
+                        var s_image = array[j];
                         if(image === s_image){
                             found = true
                             break
@@ -277,7 +327,7 @@ class Product {
                             delete_object(image)
                         }
                         catch(err) {
-                            delete_object(locations)
+                            Product.delete_images(locations)
                             return res.json({
                                 succes: false,
                                 message: err.message
@@ -286,7 +336,7 @@ class Product {
                     }
                 }
             }
-            else if(found_product.p_image_uri.length != 0){
+            else if(found_product.p_image_uri.length > 0){
                 for(var i = 0; i < found_product.p_image_uri.length; i++){
                     var image = found_product.p_image_uri[i];
                     try {
@@ -296,21 +346,44 @@ class Product {
                         Product.delete_images(locations)
                         return res.json({
                             succes: false,
-                            message: err.message
+                            message:  message
                         })
                     }
                 }
             }
 
 
-            p_image_uri += locations;
+            for(var i = 0;i < locations.length; i++) {
+                array.push(locations[i])
+            }
+
+            // init edited price to old price
+            var edited_price = {
+                success: false,
+                p_price_id: found_product.p_price_id,
+            };
+            var p_price_id = found_product.p_price_id;
+
+            // update price if p_price changes
+            if(found_product.p_price !== p_price){
+                edited_price = stripe_update_price(p_code, p_price, found_product.p_price_id);
+
+                if(edited_price.success){
+                    p_price_id = edited_price.p_price_id;
+                }else{
+                    Product.delete_images(locations)
+                    return res.json(edited_price)
+                }
+            }
 
             var edited_product = product_model.findByIdAndUpdate(found_product._id, {
                 p_code,
-                p_image_uri,
+                p_image_uri: array,
                 p_name,
                 p_price,
-                p_units_sold,
+                p_price_id,
+                p_unit,
+                p_size,
                 p_categories,
                 p_description,
             })
@@ -323,6 +396,8 @@ class Product {
                         message: err.message
                     })
                 }
+
+                // if success
                 return res.json({ 
                     success: true,
                     message: `Product ${p_code} was edited`})
@@ -363,11 +438,11 @@ class Product {
                 var delete_product = await product_model.findOne({ p_code: p_code })
                 if(delete_product) {
                     if(delete_product.p_image_uri){
-                        Product.delete_images(delete_product.p_image_uri);
+                        Product.delete_images(delete_product.p_image_uri)
                     }
                     product_model.deleteOne({ p_code: p_code }, (err,result) => {
                         if(err){
-                            res.send(err)
+                            res.json(err)
                         }
                         else {
                             if(result.deletedCount === 1){
@@ -379,7 +454,7 @@ class Product {
                                 res.send(result)
                             }
                         }
-                    });
+                    })
                 } 
                 else {
                     return res.json({ 
@@ -396,44 +471,46 @@ class Product {
         }
     }
 
+    //====== Do we even need this?? ==============//
+
     // @route   POST api/products/product-sold
     // @desc    Increase the products sold count
     // @access  Public
 
-    async post_product_sold(req,res) {
-        try{
-            var { p_code, count } = req.body
+    // async post_product_sold(req,res) {
+    //     try{
+    //         var { p_code, count } = req.body
 
-            // find the code and matching product
-            var found_product = await product_model.findOne({ p_code: p_code })
+    //         // find the code and matching product
+    //         var found_product = await product_model.findOne({ p_code: p_code })
 
-            if(!found_product){
-                res.status(404)
-                return res.json({ success: false,
-                                  message: "No product was found" })
-            }
+    //         if(!found_product){
+    //             res.status(404)
+    //             return res.json({ success: false,
+    //                               message: "No product was found" })
+    //         }
 
-            var updated_product = product_model.findByIdAndUpdate(found_product._id,{
-                p_units_sold: Number(count) + found_product.p_units_sold
-            })
-            updated_product.exec(err => {
-                if(err)
-                    console.log(err)
-                return res.json({ success: true,
-                                  message: `Product ${1111} sales has been updated` })
-            })
-            // how do i ensure concistency?!
-            // need to update this if there is something more i need to do 
+    //         var updated_product = product_model.findByIdAndUpdate(found_product._id,{
+    //             p_units_sold: Number(count) + found_product.p_units_sold
+    //         })
+    //         updated_product.exec(err => {
+    //             if(err)
+    //                 console.log(err)
+    //             return res.json({ success: true,
+    //                               message: `Product ${1111} sales has been updated` })
+    //         })
+    //         // how do i ensure concistency?!
+    //         // need to update this if there is something more i need to do 
             
-        }
-        catch(err){
-            return res.json({
-                success: false,
-                message: err.message
-            })
-        }
-    }
+    //     }
+    //     catch(err){
+    //         return res.json({
+    //             success: false,
+    //             message: err.message
+    //         })
+    //     }
+    // }
 }
 
 const product_controller = new Product
-module.exports = product_controller;
+module.exports = product_controller

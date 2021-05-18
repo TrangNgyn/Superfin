@@ -1,13 +1,12 @@
 import '../../_assets/CSS/pages/CurrentOrders/CurrentOrders.css';
 import { Select, Pagination, Input, Button, Spin } from 'antd';
-//import { CheckCircleOutlined } from '@ant-design/icons';
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getIncompleteOrders } from '../../_actions/incompleteOrderActions';
 import { handleOrder } from './Functions';
 import { filterEmail } from '../../_services/SharedFunctions';
-//import { orderStatusConstants } from '../../_constants/orderStatus.constants';
 import OrderRow from './OrderRow';
+import { useAuthUpdate, useAuth } from '../../SharedComponents/AuthContext/AuthContext';
 
 const itemsPerPage = 10;
 const { Option, OptGroup } = Select;
@@ -16,18 +15,11 @@ const { Option, OptGroup } = Select;
 
 
 
-/*
-    Tasks left
-    Implement issued date ordering
-    tracking number updating
-*/
-
-
-
-
 
 const CurrentOrders = () => {
     const dispatch = useDispatch();
+    const updateAuth = useAuthUpdate();             //authorization data
+    const auth = useAuth();
 
     const orders = useSelector(state => state.incompleteOrdersState.incompleteOrders);
     const error = useSelector(state => state.incompleteOrdersState.error);
@@ -45,12 +37,13 @@ const CurrentOrders = () => {
 
 
     useEffect(() => {
-        if(!orders.length) dispatch(getIncompleteOrders());
+        if(!orders.length) dispatch(getIncompleteOrders(auth.access_token, updateAuth));
         else setOrdersList(orders);      
     }, [orders.length, orders, dispatch]);
     
     const onChange = p => { setPage(p - 1) };
 
+    
 
 
 
@@ -60,8 +53,15 @@ const CurrentOrders = () => {
             ((page + 1) * itemsPerPage) > ordersList.length ? ordersList.length : ((page + 1) * itemsPerPage));
         
         row = renderableProducts.map((o) => {
+            const orderProps = {
+                order: o,
+                dispatch: dispatch,
+                access_token: auth.access_token,
+                updateAuth: updateAuth
+            }
+        
             return (
-               <OrderRow key={o.po_number} order={o} dispatch={dispatch}/>
+               <OrderRow key={o.po_number} {...orderProps}/>
             );
         });
     }

@@ -4,7 +4,8 @@ import { history } from '../../_helpers/history';
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getCompleteOrders } from '../../_actions/completeOrderActions';
-import { filterEmail, setOrder } from './Functions'; 
+import { filterEmail, setOrder } from './Functions';
+import { useAuthUpdate, useAuth } from '../../SharedComponents/AuthContext/AuthContext'; 
 
 const { Option, OptGroup } = Select;
 
@@ -14,22 +15,10 @@ const itemsPerPage = 10;
 
 
 
-/*
-    Tasks left
-    Check filters work with larger amounts of data
-*/
-
-/*
-    If time
-    Could use some optimization
-*/
-
-
-
-
-
 const ProcessedOrders = () => {
     const dispatch = useDispatch();
+    const updateAuth = useAuthUpdate();             //authorization data
+    const auth = useAuth();
 
     const orders = useSelector(state => state.completeOrdersState.completeOrders);
     const error = useSelector(state => state.completeOrdersState.error);
@@ -48,7 +37,7 @@ const ProcessedOrders = () => {
 
 
     useEffect(() => {
-        if(!orders.length) dispatch(getCompleteOrders());
+        if(!orders.length) dispatch(getCompleteOrders(auth.access_token, updateAuth));
         else setOrdersList(orders);      
     }, [orders.length, orders, dispatch]);
     

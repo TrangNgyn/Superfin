@@ -1,8 +1,9 @@
-import { Carousel, Button } from 'antd';
+import { Carousel } from 'antd';
 import placeholderImg from '../../_assets/Images/No_Image.jpg';
 
 const ProductImagesCarousel = props => {
-    const productDetails = props;
+    const productDetails = props.productDetails;
+    
     const contentCarousel = () => {
         var returnVal = [];
         if (productDetails && productDetails.p_image_uri && productDetails.p_image_uri.length > 0){
@@ -14,7 +15,9 @@ const ProductImagesCarousel = props => {
         } else {
             returnVal.push(
                 <div>
-                    <img src={placeholderImg} alt={productDetails.p_code} />
+                    <img src={placeholderImg} 
+                        alt={`Product Number: ${productDetails.p_code}`} 
+                    />
                 </div>
             )
         }

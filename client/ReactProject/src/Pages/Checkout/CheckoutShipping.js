@@ -1,97 +1,167 @@
 import '../../_assets/CSS/pages/Checkout/CheckoutShipping.css';
+import React, { useState } from 'react';
 import { Typography, Form, Input, Button, Row, Col, Steps, Select, InputNumber } from 'antd';
 import {CaretLeftOutlined} from '@ant-design/icons';
-import { Link } from 'react-router-dom';
-
-
-
-
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { history } from '../../_helpers/history';
+import { setShipping } from '../../_actions/cartActions';
 
 const { Title } = Typography;
+const { Option } = Select;
 const { Step } = Steps;
 
+const CheckoutShipping = (props) =>{
+  const [form] = Form.useForm();
+  const address = props.address;
+  const email = props.email;
 
-const CheckoutShipping = () =>{
-      const [form] = Form.useForm();
-      const onFinish = (values) => {
-        console.log('Success:', values);
-      };
-      const onFinishFailed = (errorInfo) => {
-          console.log('Failed:', errorInfo);
-      };
-      const validateMessages = {
-        required: '${label} is required',
-        types: {
-          email: '${label} is not a valid email',
-          number: '${label} is not a valid number!',
-        },
-        number: {
-          range: '${label} must be between ${min} and ${max}',
-        },
-      };
-      const { Option } = Select;
+  const onFinish = (values) => {
+    const addressPayload = {
+      po_attention_to: values.fullname,
+      po_address_line1: values.address_line1,
+      po_address_line2: values.address_line2,
+      po_suburb: values.suburb,
+      po_state: values.state,
+      po_postcode: values.postcode,
+    };
 
-      return(
-        <body>
-        <div id="checkout-shipping-head">
-        <Title level={3}>CHECK OUT</Title>
-        </div>
-        <div id="checkout-shipping-status">
-        <div>
+    const emailPayload = values.email;
+    console.log(addressPayload)
+    // update cart state
+    props.setShipping(addressPayload, emailPayload);
+
+    // store input address to local storage
+    localStorage.setItem("address", JSON.stringify(addressPayload));
+    localStorage.setItem("email", JSON.stringify(emailPayload));
+
+    // redirect to review order page
+    history.push('/checkoutReviewOrder');
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };      
+
+  return(
+    <>
+      <br/>
+      <div id="checkout-shipping-head">
+        <Title level={3}>Checkout</Title>
+      </div>
+      <div id="checkout-shipping-status">
+      <div>
         <Steps current={0}>
-            <Step title="Shipping Address"/>
-            <Step title="Secure Payment" />
-            <Step title="Review Order"/>
-            <Step title="Order Complete"/>
-          </Steps>,
-        </div>
-        <div id="checkout-shipping-content">
-        <Form
-              layout={'vertical'}
-              form={form}
-              name="basic"
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-              requiredMark={false}
-              validateMessages={validateMessages}
+          <Step title="Shipping Address"/>
+          <Step title="Review Order"/>
+          <Step title="Secure Payment" />
+          <Step title="Order Complete"/>
+        </Steps>,
+      </div>
+      <div id="checkout-shipping-content">
+      <Form
+          layout={'vertical'}
+          form={form}
+          name="basic"
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          requiredMark={false}
+          initialValues={{
+            fullname: address.po_attention_to,
+            address_line1: address.po_address_line1,
+            address_line2: address.po_address_line2,
+            suburb: address.po_suburb,
+            state: address.po_state,
+            postcode: address.po_postcode,
+            email: email,
+          }}
+      >
+        <Row gutter={16}>
+          <Col span={24}>
+            <Form.Item label="Full Name" name="fullname" 
+              rules={[
+                { 
+                  required: true,
+                  message: "Please enter your full name!"
+                }
+            ]}>
+              <Input />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={24}>
+            <Form.Item 
+              label="Email Address" 
+              name="email" 
+              rules={[
+                { 
+                  type: 'email',
+                  required: true,
+                  message: 'Please enter your email!'
+                }
+              ]}
             >
-            <Row gutter={16}>
-              <Col span={12}>
-              <Form.Item label="First Name" name="firstname" rules={[{ required: true}]}>
               <Input />
-              </Form.Item>
-              </Col>
-              <Col span={12}>
-              <Form.Item label="Last Name" name="lastname" rules={[{ required: true }]}>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={24}>
+            <Form.Item label="Address Line 1" name="address_line1" 
+              rules={[
+                {
+                  required: true, 
+                  message: "Please enter your address line 1"
+                }
+              ]}>
               <Input />
-              </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-              <Form.Item label="Company Name" name="companyname">
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row gutter={16}>
+        <Col span={24}>
+            <Form.Item label="Address Line 2" name="address_line2" 
+              rules={[
+                {
+                  required: false,
+                }
+              ]}>
               <Input />
-              </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-              <Form.Item label="Address" name="address" rules={[{ required: true }]}>
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row gutter={16}>
+          <Col span={24}>
+            <Form.Item 
+              label="Suburb" 
+              name="suburb" 
+              rules={[
+                { 
+                  required: true,
+                  message: 'Please enter your suburb'
+                }
+              ]}>
               <Input />
-              </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-              <Form.Item label="Suburb" name="suburb" rules={[{ required: true}]}>
-              <Input />
-              </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col >
-              <Form.Item label="State/Province" name="stateprovince" rules={[{ required: true}]}>
-              <Select  style={{ width: 120 }} >
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row gutter={16}>
+          <Col >
+            <Form.Item 
+              label="State" 
+              name="state"
+              rules={[
+                { 
+                  required: true,
+                  message: 'Please select a state!'
+                }
+              ]}
+            >
+              <Select style={{ width: 120 }} >
                 <Option value="NSW">NSW</Option>
                 <Option value="VIC">VIC</Option>
                 <Option value="ACT">ACT</Option>
@@ -101,45 +171,54 @@ const CheckoutShipping = () =>{
                 <Option value="TAS">TAS</Option>
                 <Option value="WA">WA</Option>
               </Select>
-              </Form.Item>
-              </Col>
-              <Col span={12}>
-              <Form.Item label="Postcode" name="Postcode"  rules={[{ type: 'number',min: 200, max: 9729,},{required: true}]}>
-                <InputNumber min={200} max={9729} />
-              </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-              <Form.Item name="Phone Number" label="Phone Number" rules={[{ type: 'number'},{required: true}]}>
-                <InputNumber  style={{ width: 226 }}/>
-              </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={24}>
-              <Form.Item label="Email Address" name="emailaddress" rules={[{ required: true},{ type: 'email'}]}>
-              <Input/>
-              </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={10}>
-              <Form.Item>
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item 
+              label="Postcode" 
+              name="postcode"  
+              rules={[
+                { 
+                  required: true,
+                  type: 'number',
+                  message: "Please enter your postcode"
+                }
+              ]}>
+              <InputNumber min={200} max={9729} />
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row gutter={16}>
+          <Col span={10}>
+            <Form.Item>
               <Button type="text"><Link to="/Cart"><CaretLeftOutlined />Return to cart</Link></Button>
-              </Form.Item>
-              </Col>
-              <Col span={12}>
-              <Form.Item >
-              <Button type="primary" htmlType="submit"><Link to="/CheckoutSecurePayment">Continue</Link></Button>
-              </Form.Item>
-              </Col>
-            </Row>
-        </Form>
-        </div>
-        </div>
-        </body>
-      );
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item >
+              <Button type="primary" htmlType="submit">Continue</Button>
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
+      </div>
+    </div>
+    </>
+  );
 }
 
-export default CheckoutShipping
+const mapStateToProps = (state)=>{
+  return{
+    address: state.cartState.address,
+    email: state.cartState.c_email,
+  }
+}
+
+const mapDispatchToProps= (dispatch)=>{
+  return{
+    setShipping: (address, email) => {dispatch(setShipping(address, email))}
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CheckoutShipping);

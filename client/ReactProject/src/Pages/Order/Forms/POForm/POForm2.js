@@ -18,7 +18,7 @@ const POForm2 = props => {
         po_address_line2: props.orderOriginal.po_address_line2,
         po_suburb: props.orderOriginal.po_suburb,
         po_state: props.orderOriginal.po_state,
-        po_postal_code: props.orderOriginal.po_postal_code,
+        po_postcode: props.orderOriginal.po_postcode,
         po_country: props.orderOriginal.po_country,
         mobile_number: props.orderOriginal.mobile_number
     }*/
@@ -54,7 +54,7 @@ const POForm2 = props => {
     //Dynamic production of item forms
     const itemRow = props.order.items.map((item, index) => {
         return (
-            <tr key = {item.item_code} className="view-order-table-row">
+            <tr key = {index} className="view-order-table-row">
                 <td>
                     {item.item_code}
                     <Form.Item hidden name={['items', index, 'item_code']} ><Input /></Form.Item>
@@ -89,6 +89,22 @@ const POForm2 = props => {
                         :   item.special_requirements
                     } 
                 </td>
+                <td>
+                    {props.mode===MODE.EDIT || props.mode===MODE.ADD
+                        ?   <Form.Item 
+                                name ={['items', index, 'p_size']}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Please input a size"
+                                    }
+                                ]}
+                            >
+                                <Input maxLength={50} style={{width: "100px"}} />
+                            </Form.Item>
+                        :   item.p_size
+                    } 
+                </td>
                 {props.mode===MODE.EDIT || props.mode===MODE.ADD
                     ?   <td onClick={() => showDeleteConfirm(index, deleteOrderItem)}><DeleteOutlined className="view-order-icon"/></td> 
                     :   <></>
@@ -106,9 +122,10 @@ const POForm2 = props => {
             <table id="view-order-table-wrapper">
                 <tbody>
                     <tr style = {{border: "solid black 1px"}}>
-                        <th>Item Code</th> 
-                        <th>Quantity</th>
+                        <th><span style={{color: 'red'}}>*</span>Item Code</th> 
+                        <th><span style={{color: 'red'}}>*</span>Quantity</th>
                         <th>Special Requirements</th>
+                        <th><span style={{color: 'red'}}>*</span>Size</th>
                         {props.mode===MODE.EDIT || props.mode===MODE.ADD 
                             ?   <th onClick = {() => {props.onClick(true)}} className="view-order-icon" style ={{fontSize: "30px"}}>+</th>
                             : <></>

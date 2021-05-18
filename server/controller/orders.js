@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
+const { db } = require('../models/customer');
 
 const customer_model = require('../models/customer');
 const order_model = require('../models/purchased_order');
 
 var empty_field = { error: "All fields must be filled" }
 var incorrect_status = { error: "Status must be one of, NEW, SENT, or COMPLETE" }
-var stat = ['SENT','COMPLETE','NEW'];
+var stat = ['SHIPPED','COMPLETE','NEW'];
 
 mongoose.set('useFindAndModify', false);
 
@@ -32,30 +33,127 @@ class Purchased_Order {
     
     // @route   POST api/orders/order-by-email
     // @desc    Get all orders of a customer through their email
-    // @access  Public
+    // @access  Admin
 
     async post_order_by_email(req, res) {
-        // Using fetch
-        let {email} = req.body;
-        if(!email){
-            return res.json(empty_field)
+        try{
+            let { email } = req.body;
+            if(!email){
+                return res.json(empty_field)
+            }
+            order_model
+                .find({c_email: email})
+                .orFail( new Error(`${email} has no orders`))
+                .then((order) => {
+                    res.json(order)
+                })
+                .catch(err => {
+                    res.json({
+                        success: false,
+                        message: err.message
+                    })
+                })
         }
-        order_model
-            .find({CustomerEmail: email})
-            .exec()
-            .then((order) => {
-                if (!order) {
-                    res.status(404)
-                    return res.json({success: false})
-                }
-                return res.json(order)
-            })
-            .catch(err => res.json({
+        catch(err) {
+            res.json({
                 success: false,
                 message: err._message
-            }))
-    } 
+            })
+        }
+    }
 
+    async get_customer_orders (req,res) {
+        try {
+            if(!req.user_id)
+                return res.status(400).send({
+                    success: false,
+                    message: "No user_id supplied"
+                })
+            db.customer.findById(req.user_id, (err,user) =>{
+                if(err)
+                    return res.status(500).send({
+                        success: false,
+                        message: err.message
+                    })
+                if(!user)
+                    return res.status(404).send({
+                        success: false,
+                        message: "User with provided ID does not exist"
+                    })
+                db.order.find({email: user.email}, (err, orders) => {
+                    if(err) 
+                        return res.status(500).send({
+                            success: false,
+                            message: err.message
+                        })
+                    return res.send(orders)    
+                })
+            })
+        } catch (err) {
+            return res.status(500).send({
+                success: false,
+                message: err.message
+            })
+        }
+    }
+    
+    // @route   GET api/orders/single-order-for-user
+    // @desc    Gets a single order from a user's collection
+    // @access  Customer
+
+    async get_single_order_customer(req,res) {
+        try{
+            if(!req.user_id)
+                return res.status(400).send({
+                    success: false,
+                    message: "No user_id was supplied"
+                })
+            if(!req.query.po_number) 
+                return res.status(400).send({
+                    success: false,
+                    message: "No po_number supplied"
+                })
+            db.user.findById(req.user_id, (err,user) => {
+                if(err)
+                    return res.status(500).send({
+                        success: false,
+                        message: err.message
+                    })
+                if(!user)
+                    return res.status(404).send({
+                        success: false,
+                        message: "No user was found"
+                    })
+                db.order.find({email: user.email},(err,orders) => {
+                    if(err)
+                        return res.status(500).send({
+                            success: false,
+                            message: err.message
+                        })
+                    if(!orders)
+                        return res.status(404).send({
+                            succcess: true,
+                            message: "The user has no orders"
+                        })
+                    orders.forEach(order => {
+                        if(order.po_number == req.query.po_number)
+                            return res.send(order)
+                    })
+                    return res.status(404).send({
+                        success: false
+                    })
+                })
+            })
+            
+        } catch(err) {
+            return res.status(500).send({
+                success: false,
+                message: err.message
+            })
+        }
+    }
+
+    
     // @route   POST api/orders/add-tracking
     // @desc    add tracking number to an existing order
     // @access  Public
@@ -148,37 +246,62 @@ class Purchased_Order {
         try {
 
             let { c_email, status, items, address } = req.body
-
+            
+            // check for empty fields
             if( !c_email | !status | !items | !address) {
                 return res.json(empty_field)
             }
 
-            var issued_date = new Date()
+            // ensuring items has at least one product with the required fields
+            if(!Array.isArray(items) || items.length === 0){
+                return {
+                    success: false,
+                    message: "The order must include as least one product"
+                }
+            }
 
-            const new_order = new order_model({
-                c_email,
-                issued_date,
-                status,
-                items,
-                address
+            items.forEach(element => {
+                if(!element.item_code | !element.p_size | !element.quantity | !element.special_requirements){
+                    return {
+                        success: false,
+                        message: "The ordered items must specify the product code, product size, quantity, and special requirements (blank if not applicable)"
+                    }
+                }
             })
 
-            var saved_order = await new_order.save()
-            if(saved_order){
-                return res.json({ success: true,
-                                  message: "Order was saved" })
+            var issued_date = new Date()
+
+            try {
+                const doc = await order_model.create({
+                    c_email,
+                    issued_date,
+                    status,
+                    items,
+                    address
+                })
+
+                return res.json({
+                    success:true,
+                    message: "Order was added",
+                    po_number: doc.po_number
+                })
             }
-            else {
-                return res.json({ success: false,
-                                  message: "Order was not saved" })
-            }
+            catch(err) {
+                return res.json({
+                    success: false,
+                    message: "Order was not saved",
+                    error: err._message
+                })
+            }     
         
         }
         catch(err){
+            console.log(err)
             return res.json({
                 success: false,
                 message: err
             })
+            
         }
     }
 
@@ -190,14 +313,33 @@ class Purchased_Order {
         try{
             let { po_number, c_email, status, items, tracking_number, carrier, address} = req.body
 
+            // check for empty fields
             if( !po_number | !c_email | !status | !items | !address) {
                 return res.json(empty_field)
             }
 
+            // check if the status is correct
             if(stat.indexOf(status) === -1){
                 return res.json(incorrect_status)
             }
             
+            // ensuring items has at least one product with the required fields
+            if(!Array.isArray(items) || items.length === 0){
+                return {
+                    success: false,
+                    message: "The order must include as least one product"
+                }
+            }
+            items.forEach(element => {
+                if(!element.item_code | !element.p_size | !element.quantity | !element.special_requirements){
+                    return {
+                        success: false,
+                        message: "The ordered items must specify the product code, product size, quantity, and special requirements (blank if not applicable)"
+                    }
+                }
+            })
+
+            // update the order
             order_model.findOneAndUpdate({ po_number: po_number }, {
                 c_email,
                 status,
@@ -208,8 +350,8 @@ class Purchased_Order {
             })
             .orFail( new Error(`Order ${po_number} not found`))
             .then(() => {
-                res.json({ success: true,
-                                  message: `Order ${po_number} was edited`})
+                res.json({  success: true,
+                            message: `Order ${po_number} was edited`})
             })
             .catch(error => {
                 res.json({ error: error.message })
