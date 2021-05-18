@@ -6,9 +6,7 @@ import completeOrdersReducer from './completeOrdersReducer';
 import incompleteOrdersReducer from './incompleteOrdersReducer';
 import cartReducer from './cartReducer';
 import { combineReducers } from 'redux';
-//import { authReducer } from './authReducer';
 
-import { GET_PRODUCT } from '../_constants/actionTypes.constants';
 
 const allReducers = combineReducers({
     productState: productReducer,
@@ -17,7 +15,6 @@ const allReducers = combineReducers({
     companyInfoState: companyInfoReducer,
     completeOrdersState: completeOrdersReducer,
     incompleteOrdersState: incompleteOrdersReducer,
-    //authReducer: authReducer,
     cartState: cartReducer,
 });
 

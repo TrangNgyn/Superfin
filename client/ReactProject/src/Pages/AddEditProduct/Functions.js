@@ -4,11 +4,12 @@ import { history } from '../../_helpers/history';
 import { imageModal } from './Modals';
 import { message } from 'antd';
 
+/*
 const config = {            
     headers: {
         'content-type': 'multipart/form-data'
     }
-}
+}*/
 
 export const getProduct = (p_code, setProduct, setPageState) => {               //returns an individual product
     axios.post('/api/products/product-by-id', { 
@@ -35,7 +36,7 @@ export const _editProduct = (product, config) => {                              
     return axios.post('/api/products/edit-product', product, config);
 }
 
-export const _addProduct = formData => {                                        //api for add a product
+export const _addProduct = (formData, config) => {                                        //api for add a product
     return axios.post('api/products/add-product', formData, config);
 }
 

@@ -12,11 +12,12 @@ import {
 import axios from 'axios';
 import { _logout } from '../_services/SharedFunctions';
 
+/*
 const config = {
     headers: {
         'content-type': 'multipart/form-data'
     }
-}
+}*/
 
 export const getAllProducts = () => dispatch  => {
     dispatch(setIsLoading(true));
@@ -83,7 +84,7 @@ export const deleteProduct = (p_code, access_token, updateAuth) => dispatch => {
     });
 }
 
-export const editProduct = (newProduct, formData, access_token, updateAuth) => dispatch => {
+export const editProduct = (newProduct, formData, access_token) => dispatch => {
     const config = { headers:{ authorization : `Bearer ${access_token}` }};
     return axios.post('api/products/edit-product', formData, config)
         .then(res => {
@@ -97,7 +98,9 @@ export const editProduct = (newProduct, formData, access_token, updateAuth) => d
         })
 }
 
-export const addProduct = (formData, newProduct) => dispatch => {
+export const addProduct = (formData, newProduct, access_token) => dispatch => {
+    const config = { headers:{ authorization : `Bearer ${access_token}` }};
+    
     return axios.post('api/products/add-product', formData, config)
         .then(res => {
             if(res.data.success){
