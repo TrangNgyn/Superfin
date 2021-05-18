@@ -52,8 +52,8 @@ const Product = props => {
             </table>
 
             <div id="admin-product-icon-container">
-                <DeleteOutlined onClick={() => {deleteConfirm(product.p_code, dispatch)}} title="Delete Product" className="admin-product-icon"/>
-                <EditOutlined onClick={() => { history.push(`/editAddProducts/${product.p_code}`)}} title="Edit Product" className="admin-product-icon"/>
+                <DeleteOutlined title="Delete product" onClick={() => {deleteConfirm(product.p_code, dispatch, props.access_token, props.updateAuth)}} className="admin-product-icon"/>
+                <EditOutlined titel="Edit product"onClick={() => { history.push(`/editAddProducts/${product.p_code}`)}} className="admin-product-icon"/>
             </div>
         </div>
     );

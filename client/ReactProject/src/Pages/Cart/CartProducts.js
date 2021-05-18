@@ -9,12 +9,15 @@ const CartProducts = (props) => {
       var items = [];
       for(var i = 0; i < props.line_items.length; i++){
         items.push(
-          <CartItem 
-            key={i} 
-            product={props.line_items[i]}
-            editable={editable}
-            index={i}
-          />
+          <>
+            <br/>
+            <CartItem 
+              key={props.line_items[i]}
+              product={props.line_items[i]}
+              editable={editable}
+              index={i}
+            />
+          </>
         )
       }
       return items;

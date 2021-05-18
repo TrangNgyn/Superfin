@@ -1,1 +1,1 @@
-{"c_number":"Hello","c_address":"Company Address","c_email":"superfin@gmail.com","c_TandC":"Company Terms and conditions","c_delivery":"Company delivery and dispatch information","c_blog":"This is the placeholder text for the company blog","c_about":"_"}
+{"c_number":"0383665433673","c_address":"Company Address","c_email":"superfinpkg@gmail.com","c_TandC":"Company Terms and conditions","c_delivery":"Company delivery and dispatch information","c_blog":"This is the placeholder text for the company blog","c_about":"_"}

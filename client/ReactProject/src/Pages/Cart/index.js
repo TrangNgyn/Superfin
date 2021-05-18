@@ -7,14 +7,19 @@ import { Typography, Button, Row, Col,Layout  } from 'antd';
 import { Link } from 'react-router-dom';
 import visa from "../../_assets/Images/visa.png"
 import mastercard from "../../_assets/Images/mastercard.jpg"
-import alipay from "../../_assets/Images/Alipay.png"
+import alipay from "../../_assets/Images/alipay.png"
 import { clearCart } from '../../_actions/cartActions';
 
 const { Title } = Typography;
 const { Sider, Content } = Layout;
 
 const Cart = (props) =>{
+  // cart stats variables
   const itemCount = props.cartItems.length;
+  const subTotal = props.total;
+  const GST = subTotal / 11;
+  const frieghtCharge = subTotal * 0.1;
+  const grandTotal = subTotal + frieghtCharge;
 
   const clearCart = () => {
     props.clearCart();
@@ -52,13 +57,16 @@ const Cart = (props) =>{
             <Content style={{ background: '#fff',paddingRight: '2%'}}>
             <div id="cart-summary">
               <Row>
-                <Col span={6}>
+                <Col span={4}>
                   <div style={{fontWeight:"bold"}}>Product</div>
                 </Col>
-                <Col span={6}>
+                <Col span={4}>
                   <div style={{textAlign: "center",fontWeight:"bold"}}>Unit Price</div>
                 </Col>
                 <Col span={3}>
+                  <div style={{textAlign: "center",fontWeight:"bold"}}>Size</div>
+                </Col>
+                <Col span={4}>
                   <div style={{textAlign: "center",fontWeight:"bold"}}>Quantity</div>
                 </Col>
                 <Col span={9}>
@@ -77,7 +85,7 @@ const Cart = (props) =>{
             </div>
             {
               itemCount > 0 ?
-                <CartProducts editable={true} /> 
+                <CartProducts key={props.cartItems} editable={true} /> 
               :
                 <div >
                   Your cart is empty
@@ -86,19 +94,11 @@ const Cart = (props) =>{
             </Content>
             <Sider  width={300} style={{ background: 'lightgrey', padding:"10px",fontWeight:"bold" }} >
               <Row>
-                <Col span={12}>
-                  <div style={{textAlign: "left"}}>Subtotal:</div>
+                <Col span={14}>
+                  <div style={{textAlign: "left"}}>Subtotal (incl. GST):</div>
                 </Col>
-                <Col span={12}>
-                  <div style={{textAlign: "right"}}>{formatNumber(props.total)}</div>
-                </Col>
-              </Row>
-              <Row>
-                <Col span={12}>
-                  <div style={{textAlign: "left"}}>Freight charge:</div>
-                </Col>
-                <Col span={12}>
-                  <div style={{textAlign: "right"}}>{formatNumber(props.total*0.05)}</div>
+                <Col span={10}>
+                  <div style={{textAlign: "right"}}>{formatNumber(subTotal)}</div>
                 </Col>
               </Row>
               <Row>
@@ -106,15 +106,23 @@ const Cart = (props) =>{
                   <div style={{textAlign: "left"}}>GST:</div>
                 </Col>
                 <Col span={12}>
-                  <div style={{textAlign: "right"}}>{formatNumber(props.total*0.01)}</div>
+                  <div style={{textAlign: "right"}}>{formatNumber(GST)}</div>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={12}>
+                  <div style={{textAlign: "left"}}>Freight charge:</div>
+                </Col>
+                <Col span={12}>
+                  <div style={{textAlign: "right"}}>{formatNumber(frieghtCharge)}</div>
                 </Col>
               </Row>
               <Row gutter={[16, 18]}>
                 <Col span={12}>
-                  <div style={{textAlign: "left"}}>Total:</div>
+                  <div style={{textAlign: "left"}}>Grand Total:</div>
                 </Col>
                 <Col span={12}>
-                  <div style={{textAlign: "right"}}>{formatNumber(props.total*1.06)}</div>
+                  <div style={{textAlign: "right"}}>{formatNumber(grandTotal)}</div>
                 </Col>
               </Row>
               <br/>

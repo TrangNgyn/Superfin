@@ -1,6 +1,16 @@
-import { GET_PRODUCTS, GET_PRODUCT, DEFAULT_ORDER, LOADING_PRODUCTS,
-    DELETE_PRODUCT, ERROR, EDIT_PRODUCT, ADD_PRODUCT } from './actionTypes';
+import { 
+    GET_PRODUCTS, 
+    GET_PRODUCT, 
+    DEFAULT_ORDER, 
+    LOADING_PRODUCTS,
+    DELETE_PRODUCT, 
+    ERROR, 
+    EDIT_PRODUCT, 
+    ADD_PRODUCT,
+    SET_LOADING,
+} from '../_constants/actionTypes.constants';
 import axios from 'axios';
+import { _logout } from '../_services/SharedFunctions';
 
 const config = {
     headers: {
@@ -27,7 +37,7 @@ export const getAllProducts = () => dispatch  => {
 };
 
 export const getProductDetails = p_code => dispatch => {
-    dispatch(setIsLoading(true));
+    dispatch(setLoadingProductDetails(true));
     axios.post('api/products/product-by-id', {
         p_code: p_code
     }).then(res => {
@@ -37,12 +47,16 @@ export const getProductDetails = p_code => dispatch => {
         })
     })
     .catch(() => {
-        dispatch(setIsLoading(false));
+        dispatch(setLoadingProductDetails(false));
         dispatch({
             type: ERROR
         })
     });
 };
+
+export const setLoadingProductDetails = () => {
+    return {type: SET_LOADING}
+}
 
 export const setDefaultOrder = () => {
     return {
@@ -50,10 +64,11 @@ export const setDefaultOrder = () => {
     }
 }
 
-export const deleteProduct = p_code => dispatch => {
+export const deleteProduct = (p_code, access_token, updateAuth) => dispatch => {
+    const config = { headers:{ authorization : `Bearer ${access_token}` }};
     return axios.post('api/products/delete-product', {
         p_code: p_code
-    })
+    }, config)
     .then(res => {
         if(res.data.succes){                            //This may need to be changed to 'success'
             dispatch({
@@ -64,11 +79,13 @@ export const deleteProduct = p_code => dispatch => {
     })
     .catch(err => {
         console.log(err);
+        if(err.response.status === 401) _logout(updateAuth);
     });
 }
 
-export const editProduct = (newProduct, formData) => dispatch => {
-    return axios.post('/api/products/edit-product', formData)
+export const editProduct = (newProduct, formData, access_token, updateAuth) => dispatch => {
+    const config = { headers:{ authorization : `Bearer ${access_token}` }};
+    return axios.post('api/products/edit-product', formData, config)
         .then(res => {
             if(res.data.success){
                 dispatch({
@@ -77,11 +94,11 @@ export const editProduct = (newProduct, formData) => dispatch => {
                 })
             }
             return res;
-        });
+        })
 }
 
 export const addProduct = (formData, newProduct) => dispatch => {
-    return axios.post('/api/products/add-product', formData, config)
+    return axios.post('api/products/add-product', formData, config)
         .then(res => {
             if(res.data.success){
                 dispatch({

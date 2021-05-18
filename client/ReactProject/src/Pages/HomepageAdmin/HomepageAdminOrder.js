@@ -14,6 +14,9 @@ import { useForm } from "antd/lib/form/Form";
 const HomepageAdminOrder = props => {
     const order = props.order;
     const dispatch = props.dispatch;
+    const access_token = props.access_token;
+    const updateAuth = props.updateAuth;
+
     const [form] = useForm();
 
     const date = new Date(order.issued_date);
@@ -23,7 +26,7 @@ const HomepageAdminOrder = props => {
         form.validateFields()
         .then(values => {
             values.po_number = order.po_number;
-            confirmSubmitTracking(values, dispatch);
+            confirmSubmitTracking(values, dispatch, access_token, updateAuth);
         });
     }
 
@@ -108,9 +111,15 @@ const HomepageAdminOrder = props => {
             <div className="Homepage-Admin-Order-Text">Date Issued: { dateString }</div>
                 {trackingNumberDiv}
             <div id="homepage-admin-order-icon-container">
+<<<<<<< HEAD
                 <DeleteOutlined title="Delete Order" className="homepage-admin-order-icon" onClick={() => { deleteOrderConfirm(order.po_number, order.status, dispatch) }}/>
                 <EditOutlined title="Edit Order" className="homepage-admin-order-icon" onClick={() => { navigateEditOrder(order.po_number, order.status)}}/>
             </div>
+=======
+                <DeleteOutlined className="homepage-admin-order-icon" onClick={() => { deleteOrderConfirm(order.po_number, order.status, access_token, updateAuth, dispatch) }}/>
+                <EditOutlined className="homepage-admin-order-icon" onClick={() => { navigateEditOrder(order.po_number, order.status)}}/>
+            </div>
+>>>>>>> b9b95a482ab7333c65c3d093f065544973967f0b
         </div>
     );
 };
