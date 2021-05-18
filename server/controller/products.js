@@ -3,6 +3,7 @@ const categories_model = require('../models/categories')
 const fs = require('fs');
 const path = require('path');
 const delete_object = require('../middleware/delete');
+const stripe_update_price = require('../middleware/stripe_util');
 
 var empty_field = { 
     succes: false,
