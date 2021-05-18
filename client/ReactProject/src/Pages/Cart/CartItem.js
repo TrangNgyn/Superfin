@@ -34,33 +34,25 @@ const CartItem = (props) => {
 
     return (
       <Row justify="space-around" align="middle">
-        <Col span={6} >
+        <Col span={4} >
           <Row justify="left">
             <img alt={"No Image Available"} 
               src= {product.p_image_uri} 
-              width="80%" height="80%"
+              width="70%" height="70%"
             />
           </Row>
-          <Row justify="left">{product.p_name}</Row>
+          <Row justify="left">
+            <strong>{product.p_name}</strong>
+          </Row>
         </Col>
-        <Col span={6}>
+        <Col span={4}>
           <div style={{textAlign: "center"}}>{formatNumber(product.unit_price)}</div>
+        </Col>        
+        <Col span={3}>
+          <div style={{textAlign: "center"}}>{product.p_size}</div>
         </Col>
-        
-        <Col span={2}>
-          <div style={{textAlign: "center"}}>{quantityState}</div>
-        </Col>
-        <Col span={1}>
-          <div style={{textAlign: "left"}}>  
-            {
-              editable &&
-              <Button onClick={() => increase()}
-                shape="circle"
-                icon={<PlusOutlined />}
-                style={{color: "#EB6E00"}}
-              />
-            }
-            <br/> <br/>      
+        <Col span={4}>
+          <div style={{textAlign: "center"}}>  
             {
               editable &&
               <Button onClick={() => decrease()}
@@ -69,6 +61,19 @@ const CartItem = (props) => {
                 style={{color: "#EB6E00"}}
               />
             }
+
+            &nbsp;
+            <span>{quantityState}</span>
+            &nbsp;
+            
+            {
+              editable &&
+              <Button onClick={() => increase()}
+                shape="circle"
+                icon={<PlusOutlined />}
+                style={{color: "#EB6E00"}}
+              />
+            } 
           </div>
         </Col>
         <Col span={9} justify="right">
@@ -105,5 +110,3 @@ const mapDispatchToProps= (dispatch)=>{
 }
 
 export default connect(null, mapDispatchToProps)(CartItem);
-
-// export default CartItem;

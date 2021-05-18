@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { setUndefinedValues } from './Helpers/Functions';
 import { useState, useEffect } from 'react';
 import { orderStatusConstants } from '../../_constants/orderStatus.constants';
-//import { history } from '../../_helpers/history';
+import { useAuth, useAuthUpdate } from '../../SharedComponents/AuthContext/AuthContext';
 import MODE from './Helpers/PageConstants';
 import { showNoItemsPresent, AddItemModal, showUndo} from './Helpers/Modals';
 import POForm2 from './Forms/POForm/POForm2';
@@ -14,6 +14,7 @@ import POForm1View from './Forms/POForm/POForm1View';
 import axios from 'axios';
 import { _addIncompleteOrder, _editOrder } from './Helpers/Modals';
 import { createAddress, createOrderAdd, createOrderEdit } from './Helpers/Functions';
+import { _logout } from '../../_services/SharedFunctions';
 
 
 
@@ -26,6 +27,8 @@ import { createAddress, createOrderAdd, createOrderEdit } from './Helpers/Functi
 
 const Order = () => {
     const dispatch = useDispatch();
+    const updateAuth = useAuthUpdate();             //authorization data
+    const auth = useAuth();
     const { po_number, status } = useParams();
     const incompleteOrders = useSelector(state => state.incompleteOrdersState.incompleteOrders);
     const compeletOrders = useSelector(state => state.completeOrdersState.completeOrders);
@@ -37,17 +40,17 @@ const Order = () => {
     const [form_2] = Form.useForm();
 
 
-
-
     //for refreshing the item list
     useEffect(() => {     
         form_1.setFieldsValue({items: [...order.items]}); 
     });
 
     useEffect(() => {
+        const config = { headers:{ authorization : `Bearer ${auth.access_token}` }};
+
         if(status === orderStatusConstants.COMPLETE){
             if(!incompleteOrders.length){
-                axios.post('/api/orders/single-order', { po_number: po_number })
+                axios.post('/api/orders/single-order', { po_number: po_number }, config)
                 .then(res => {
                     if(res.data.success !== false){
                         let order = setUndefinedValues(res.data);
@@ -57,7 +60,10 @@ const Order = () => {
                     }
                     else console.log(res);
                 })
-                .catch(err => console.log(err) );
+                .catch(err => {
+                    console.log(err);
+                    if(err.response.status === 401) _logout(updateAuth);
+                });
             }
             else{
                 let order = compeletOrders.find(o => {
@@ -74,7 +80,7 @@ const Order = () => {
         else if(status === orderStatusConstants.NEW || status === orderStatusConstants.SHIPPED){
 
             if(!incompleteOrders.length){
-                axios.post('/api/orders/single-order', { po_number: po_number })
+                axios.post('/api/orders/single-order', { po_number: po_number }, config)
                 .then(res => {
                     if(res.data.success !== false){
                         let order = setUndefinedValues(res.data);
@@ -84,7 +90,10 @@ const Order = () => {
                     }
                     else console.log(res);
                 })
-                .catch(err => console.log(err) );
+                .catch(err => {
+                    console.log(err);
+                    if(err.response.status === 401) _logout(updateAuth);
+                });
             }
             else{
                 let order = incompleteOrders.find(o => {
@@ -100,7 +109,7 @@ const Order = () => {
             }
         }
         
-    }, [compeletOrders, form_1, incompleteOrders, po_number, status]);
+    }, [compeletOrders, form_1, incompleteOrders, po_number, status, auth.access_token]);
 
     
     
@@ -122,27 +131,23 @@ const Order = () => {
     //after validating fields, this function submits the forms
     const confirmSubmit = values => {
         const editedOrder = JSON.stringify(order) !== JSON.stringify(orderOriginal);
-
         let address = createAddress(values);
 
         if(mode===MODE.ADD){
             let order = createOrderAdd(values, address);
-      
+            console.log(order);
             if(incompleteOrders.length > 0){
                 order.issued_date = new Date();
                 _addIncompleteOrder(order, dispatch);
             }
-            else {
-                _addIncompleteOrder(order);
-            }
-    
+            else _addIncompleteOrder(order);
         }
         else if(mode===MODE.EDIT){
             if(editedOrder){
                 let order = createOrderEdit(values, address, orderOriginal);
                 const prev = orderOriginal.status;
                 const curr = values.status;
-                _editOrder(order, dispatch, prev, curr, compeletOrders.length, incompleteOrders.length, setOrder, setOrderOriginal, setMode);
+                _editOrder(order, dispatch, prev, curr, compeletOrders.length, incompleteOrders.length, setOrder, setOrderOriginal, setMode, auth.access_token, updateAuth);
             }
         }
     }

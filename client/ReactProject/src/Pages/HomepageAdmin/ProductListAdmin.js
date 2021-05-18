@@ -24,7 +24,9 @@ const ProductList = props => {
             const productProps = {
                 product: p,
                 dispatch: props.dispatch,
-                categoryName: getCategoryName(p.p_categories, categories)
+                categoryName: getCategoryName(p.p_categories, categories),
+                updateAuth: props.updateAuth,
+                access_token: props.access_token
             }
             return <div key={p._id}><ProductAdmin {...productProps}/></div>
         });

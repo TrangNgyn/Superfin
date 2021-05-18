@@ -1,5 +1,9 @@
 import axios from 'axios';
-import { GET_COMPANY_INFO, SET_COMPANY_INFO, LOADING_COMPANY_INFO } from './actionTypes';
+import { 
+    GET_COMPANY_INFO, 
+    SET_COMPANY_INFO, 
+    LOADING_COMPANY_INFO 
+} from '../_constants/actionTypes.constants';
 
 export const getCompanyInfo = () => dispatch => {
     dispatch({

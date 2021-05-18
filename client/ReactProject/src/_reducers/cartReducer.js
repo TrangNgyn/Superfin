@@ -52,6 +52,7 @@ const cartReducer= (state = initialState, action)=>{
       .findIndex(p =>
         p.item_code === addedItem.p_code 
           && p.special_requirements === action.special_requirements
+          && p.p_size === action.p_size
       );
     
     if(i !== -1) // if item's already existed
@@ -72,8 +73,10 @@ const cartReducer= (state = initialState, action)=>{
         items: [...state.items, 
           {
             item_code: addedItem.p_code,
+            p_name: addedItem.p_name,
             price_id: addedItem.p_price_id,
             unit_price: addedItem.p_price,
+            p_size: action.p_size,
             quantity: action.quantity,
             special_requirements: action.special_requirements,
             p_image_uri: addedItem.p_image_uri[0],

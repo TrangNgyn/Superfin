@@ -1,4 +1,10 @@
-import { GET_CATEGORIES, GET_SUB_CATEGORIES, LOADING_CATEGORIES, ERROR_CATEGORIES, EMPTY_CATEGORIES } from '../_actions/actionTypes';
+import { 
+    GET_CATEGORIES, 
+    GET_SUB_CATEGORIES, 
+    LOADING_CATEGORIES, 
+    ERROR_CATEGORIES,
+    EMPTY_CATEGORIES 
+} from '../_constants/actionTypes.constants';
 
 const initState = {
     categories: [],

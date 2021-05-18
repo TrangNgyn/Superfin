@@ -2,6 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const {stripe_add_product, stripe_deactivate_product} = require('../middleware/stripe_util');
 
+// function to validate the unit quantity
+var validateProductUnit = function(unit) {
+    var re = /^\d+?\s\w+?\/\w+$/;
+    return re.test(unit)
+};
+
 //Create schema
 const productSchema = new Schema({
     p_code : {
@@ -22,8 +28,12 @@ const productSchema = new Schema({
     },
     p_unit: { // unit per item (e.g. 100 bags per item)
         type: String,
-        default: "",
         required: true,
+        validate: [validateProductUnit, 
+            'Please fill a valid unit quantity (e.g. 10 bags/box)'],
+        match: [/^\d+?\s\w+?\/\w+$/,
+            'Please fill a valid unit quantity (e.g. 10 bags/box)'],
+        trim: true
     },
     p_size: { // Small, Medium, Large or (W x H x D)
         type: [String],

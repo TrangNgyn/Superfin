@@ -4,6 +4,7 @@ import { getAllCategories } from '../../_actions/categoryActions';
 import { useEffect } from 'react';
 import { confirmAddingCategory, confirmDeleteCategory } from './Helpers/Modals';
 import { getCategoriesHierarchy } from '../../SharedComponents/Categories/CategoriesFunctions';
+import { useAuth, useAuthUpdate } from '../../SharedComponents/AuthContext/AuthContext';
 
 const { TextArea } = Input;
 
@@ -12,11 +13,14 @@ const ManageCategories = () => {
     const categories = useSelector(state => state.categoryState.categories);
     const [form_add_category] = Form.useForm();
     const [form_delete_category] = Form.useForm();
+    const updateAuth = useAuthUpdate();             //authorization data
+    const auth = useAuth();
+
     const onSubmitAddCategoryForm = values => {
-        confirmAddingCategory(values, form_add_category);
+        confirmAddingCategory(values, form_add_category, auth.access_token, updateAuth);
     }
     const onSubmitDeleteCategoryForm = values => {
-        confirmDeleteCategory(values, form_delete_category);
+        confirmDeleteCategory(values, auth.access_token, updateAuth);
     }
     const createPathForCategory = (node) => {
         if(node === null){
@@ -52,7 +56,7 @@ const ManageCategories = () => {
                 <div className="box-item-xs-12 box-item-sm-12 box-item-md-6 box-item-lg-6 box-item-xl-4 box-shadow" id="manage-categories-add-category-panel">
                     <h3>Add Category</h3>
                     <Form form={form_add_category} onFinish={onSubmitAddCategoryForm}
-                    initialValues={{"categoryParentPath": 'root'}}>
+                      initialValues={{"categoryParentPath": 'root'}}>
                         <label htmlFor="categoryParentPath">Select parent category</label>
                         <Form.Item name="categoryParentPath"
                             rules={[

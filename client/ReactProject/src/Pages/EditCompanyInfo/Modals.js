@@ -26,12 +26,12 @@ export const editFail = () => {
     });    
 }
 
-export const confirmEdit = newInfo => {
+export const confirmEdit = (newInfo, access_token, updateAuth) => {
     Modal.confirm({
         title: 'Confirm',
         content: 'Are you sure you want to edit the company information?',
         onOk(){
-            return postCompanyInfo(newInfo);
+            return postCompanyInfo(newInfo, access_token, updateAuth);
         }
     });
 }

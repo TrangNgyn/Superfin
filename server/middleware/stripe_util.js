@@ -102,14 +102,18 @@ async function stripe_update_price(p_code, new_p_price, old_p_price_id){
         if(!old_price.active) // if update fails
             console.log(price)
 
-        return {success: true,
-            price_id: new_price.id,
-            message: 'Price object created in Stripe'};
+        return {
+            success: true,
+            p_price_id: new_price.id,
+            message: 'Price object created in Stripe'
+        };
 
     }else{ // if new price's creation fails
         console.log(new_price);
-        return {success: false,
-            message: 'Error creating price object in Stripe'};
+        return {
+            success: false,
+            message: 'Error creating price object in Stripe'
+        };
     }
 }
 

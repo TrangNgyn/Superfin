@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { editSuccess, editFail } from './Modals';
+import { _logout } from '../../_services/SharedFunctions';
 
 export const setFormValues = (info, form) => {
     form.setFieldsValue({
@@ -13,8 +14,10 @@ export const setFormValues = (info, form) => {
     });
 }
 
-export const postCompanyInfo = newInfo => {
-    return axios.post('/api/aboutus/edit-info', newInfo)
+export const postCompanyInfo = (newInfo, access_token, updateAuth) => {
+    const config = { headers:{ authorization : `Bearer ${access_token}` }};
+
+    return axios.post('/api/aboutus/edit-info', newInfo, config)
         .then(res => {
             if(res.data.success)editSuccess();
             else{
@@ -24,6 +27,7 @@ export const postCompanyInfo = newInfo => {
         })
         .catch(err => {
             console.log(err);
-            editFail();
+            if(err.response.status === 401) _logout(updateAuth);
+            else editFail();
         });
 }

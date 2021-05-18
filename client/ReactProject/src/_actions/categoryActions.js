@@ -1,5 +1,11 @@
 import axios from 'axios';
-import { GET_CATEGORIES, GET_SUB_CATEGORIES, LOADING_CATEGORIES, ERROR_CATEGORIES, EMPTY_CATEGORIES } from './actionTypes';
+import { 
+    GET_CATEGORIES, 
+    GET_SUB_CATEGORIES, 
+    LOADING_CATEGORIES, 
+    ERROR_CATEGORIES, 
+    EMPTY_CATEGORIES 
+} from '../_constants/actionTypes.constants';
 
 export const getAllCategories = () => dispatch => {
     dispatch(setCategoriesLoading());
