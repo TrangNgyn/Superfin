@@ -104,7 +104,7 @@ const ManageProducts = () => {
                             <th>Product Name</th>
                             <th>Product Code</th> 
                             <th>Price</th>
-                            <th>Units Sold</th>
+                            <th>Unit</th>
                             <th>Category</th> 
                             <th className="manage-products-icon" style ={{fontSize: "30px"}} onClick={() => {
                                 history.push('/editAddProducts');

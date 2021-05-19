@@ -67,7 +67,12 @@ const addFail = p_code => {
  
 
 export const confirmEdit = (newProduct, formData, access_token, updateAuth, dispatch) => {                //confirms the edit
-    const config = { headers:{ authorization : `Bearer ${access_token}` }};
+    const config = { 
+        headers:{ 
+            authorization : `Bearer ${access_token}`,
+            'content-type': 'multipart/form-data'
+        }
+    };
 
     Modal.confirm({
         title: `Editing product: ${newProduct.p_code}`,

@@ -1,6 +1,6 @@
 import { 
   ADD_TO_CART, SET_LOADING, SET_ERROR, LOAD_STRIPE,
-  SET_SHIPPING_INFO, INCREASE_QUANTITY, DECREASE_QUANTITY, CLEAR_CART,
+  SET_SHIPPING_INFO, INCREASE_QUANTITY, DECREASE_QUANTITY, CLEAR_CART, REMOVE_ITEMS,
 } 
   from '../_constants/cart.constants'
 
@@ -34,6 +34,13 @@ export const decreaseQuantity = (index) => {
   return {
     type: DECREASE_QUANTITY,
     index,
+  }
+}
+
+export const removeItems = (valid_pcodes) => {
+  return {
+    type: REMOVE_ITEMS,
+    valid_pcodes,
   }
 }
 

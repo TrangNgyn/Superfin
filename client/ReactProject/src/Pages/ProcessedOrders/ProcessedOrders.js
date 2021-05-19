@@ -39,7 +39,7 @@ const ProcessedOrders = () => {
     useEffect(() => {
         if(!orders.length) dispatch(getCompleteOrders(auth.access_token, updateAuth));
         else setOrdersList(orders);      
-    }, [orders.length, orders, dispatch, auth.access_token]);
+    }, [orders.length, orders, dispatch, auth.access_token, updateAuth]);
     
     const onChange = p => { setPage(p - 1) };
 

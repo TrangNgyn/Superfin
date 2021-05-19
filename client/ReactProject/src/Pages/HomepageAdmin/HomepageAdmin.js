@@ -80,7 +80,7 @@ const HomepageAdmin = () => {
 
         if(!incompleteOrders.length && !radioState) dispatch(getIncompleteOrders(auth.access_token, updateAuth));
 
-    }, [productsList.length, completeOrders.length, incompleteOrders.length, radioState, dispatch]);
+    }, [productsList.length, completeOrders.length, incompleteOrders.length, radioState, dispatch, auth.access_token, updateAuth]);
     
     const radioToggle = () => {
         radioState ? setRadioState(false) : setRadioState(true);
