@@ -856,14 +856,22 @@ th, td {
 	padding: 8px;
 }
 
-table.center-content * th,
-table.center-content * td {
+table.center-content * * th,
+table.center-content * * td {
 	text-align: center;
 	vertical-align: middle;
 }
 
-tbody tr td:last-child {
+table.left-content * * th,
+table.left-content * * td {
 	text-align: left;
+	vertical-align: middle;
+}
+
+table.right-content * * th,
+table.right-content * * td {
+	text-align: right;
+	vertical-align: middle;
 }
 
 th {
@@ -945,6 +953,17 @@ td:last-child {
 
 /* ====================================== */
 /* =========== End Card Styling ========= */
+/* ====================================== */
+
+/* ====================================== */
+/* ============ Form Styling ============ */
+/* ====================================== */
+.div-box {
+	padding: 16px 8px 16px 8px;
+	border-radius: 4px;
+}
+/* ====================================== */
+/* =========== End Form Styling ========= */
 /* ====================================== */
 
 /* ====================================== */

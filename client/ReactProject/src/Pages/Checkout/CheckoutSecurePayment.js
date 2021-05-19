@@ -1,13 +1,12 @@
-import '../../_assets/CSS/pages/Checkout/CheckoutSecurePayment.css';
-import { Typography, Form,  Button, Row, Col, Steps, Radio, DatePicker, InputNumber  } from 'antd';
-import React, { useEffect, useReducer } from 'react';
+import { Form,  Button, Steps } from 'antd';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { loadStripe } from '@stripe/stripe-js';
+import { CaretLeftOutlined } from '@ant-design/icons';
 import { loadStripeAction, setLoading, setError } from '../../_actions/cartActions';
 import axios from 'axios';
 
-const { Title } = Typography;
 const { Step } = Steps;
 
 const fetchCheckoutSession = async ({ line_items }) => {
@@ -70,49 +69,31 @@ const CheckoutSecurePayment = (props) =>{
   };
 
   return(
-    <div>
-      <br/>
-      <div id="checkout-payment-head">
-        <Title level={3}>Checkout</Title>
-      </div>
-      <div id="checkout-payment-content">
-        <div>
-          <Steps current={2}>
-            <Step title="Shipping Address"/>
-            <Step title="Review Order"/>
-            <Step title="Secure Payment"/>
-            <Step title="Order Complete"/>
-          </Steps>,
-        </div>
-        <div>
-          <Form
-              layout={'vertical'}
-              form={form}
-              name="basic"
-              requiredMark={false}
-          >
-            <Row gutter={16}>
-              <Col span={2} offset={7}>
-                <Form.Item >
-                  <Button type="primary" htmlType="submit">
-                    <Link to="/checkoutReviewOrder">Back</Link>
-                  </Button>
-                </Form.Item>
-              </Col>
-              <Col >
-                <Form.Item >
-                  <Button type="primary" 
-                      htmlType="submit" 
-                      onClick={paymentOnClick}>
-                    Continue to Payment Gateway
-                  </Button>
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
-        </div>
-      </div>
-    </div>
+    <>
+		<div className="page-title-holder fill">
+			<h2>Checkout</h2>
+		</div>
+
+		<div className="container flex-horizontal-box-container">
+			<Steps current={2} direction="vertical" size="small"
+			className="box-item-xs-12 box-item-sm-12 box-item-md-3 box-item-lg-2 box-item-xl-2">
+				<Step title="Shipping Address"/>
+				<Step title="Review Order"/>
+				<Step title="Secure Payment" />
+				<Step title="Order Complete"/>
+			</Steps>
+			<div className="box-item-xs-12 box-item-sm-12 box-item-md-9 box-item-lg-10 box-item-xl-10 div-box box-shadow">
+				<Button type="secondary"><Link to="/checkoutReviewOrder"><CaretLeftOutlined />Back to Review Order</Link></Button>
+				<h4>Secure Payment</h4>
+				<p>You are about to be redirected to our payment gateway to perform the transaction.</p>
+				<Form layout={'vertical'} form={form} name="basic" requiredMark={false} className="flex-horizontal-box-container">
+					<Form.Item className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-12">
+						<Button style={{float: 'right'}} type="primary"  htmlType="submit" onClick={paymentOnClick}>Continue to Payment Gateway</Button>
+					</Form.Item>
+				</Form>
+			</div>
+		</div>
+    </>
   );
 
 }

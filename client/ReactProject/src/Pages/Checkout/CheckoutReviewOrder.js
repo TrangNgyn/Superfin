@@ -1,16 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import '../../_assets/CSS/pages/Checkout/CheckoutReviewOrder.css';
-import { Typography, Button, Row, Col, Steps } from 'antd';
-import {EditFilled} from '@ant-design/icons';
+import { Button, Steps, Divider } from 'antd';
+import { CaretLeftOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import img from "../../_assets/Images/Temp_Images/product_image_1.jpg"
 import CartProducts from '../Cart/CartProducts';
 import { formatNumber } from '../../_helpers/utils';
 
-
-
-const { Title } = Typography;
 const { Step } = Steps;
 
 
@@ -21,157 +16,76 @@ const CheckoutReviewOrder = (props) =>{
   const email = props.email;
 
   return(
-    <div>
-      <br/>
-      <div id="checkout-review-order-head">
-        <Title level={3}>Checkout</Title>
-      </div>
+    <>
+		<div className="page-title-holder fill">
+			<h2>Checkout</h2>
+		</div>
 
-      <div id="checkout-review-order-content">
+		<div className="container flex-horizontal-box-container">
+			<Steps current={1} direction="vertical" size="small"
+			className="box-item-xs-12 box-item-sm-12 box-item-md-3 box-item-lg-2 box-item-xl-2">
+				<Step title="Shipping Address"/>
+				<Step title="Review Order"/>
+				<Step title="Secure Payment" />
+				<Step title="Order Complete"/>
+			</Steps>
+			<div className="box-item-xs-12 box-item-sm-12 box-item-md-9 box-item-lg-10 box-item-xl-10 div-box box-shadow flex-horizontal-box-container">
+				<div className="box-item-xs-1 box-item-sm-1 box-item-md-1 box-item-lg-1 box-item-xl-1">
+					<Button type="secondary">
+						<Link to="/checkoutShipping"><CaretLeftOutlined />Back to Shipping Address</Link>
+					</Button>
+				</div>
+				<div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-12">
+					<h4>Shipping Information</h4>
+					{ address ? <>
+							<p><strong>Recipient's Name:&ensp;</strong>{address.po_attention_to}</p>
+							<p><strong>Recipient's Address:&ensp;</strong>{ address.po_address_line2 ? <>{address.po_address_line2}/</>: <></>}{address.po_address_line1}, {address.po_suburb}, {address.po_state} {address.po_postcode}</p>
+							<p><strong>Recipient's Email:&ensp;</strong>{email}</p>
+						</>
+						:
+						<h5>Shipping Address not available.<br/>Please go back to the previous step!</h5>
+					}
+					<Divider/>
+				</div>
+				<div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-12">
+					<h4>Order Summary ({itemCount} items)</h4>
+					<div className="table-container">
+						<table className="center-content">
+							<thead>
+								<tr>
+									<th>Product</th>
+									<th>Unit Price</th> 
+									<th>Size</th>
+									<th>Quantity</th> 
+									<th>Special Requirements</th>
+								</tr>
+							</thead>
+							<tbody>
+								{ itemCount === 0 ? <tr><td colSpan={5}><h3 style={{textAlign: 'center'}}>Your cart is empty! :(</h3></td></tr> :<CartProducts key={itemCount} editable={false} />}
+							</tbody>
+						</table>
+					</div>
+					<Divider/>
+				</div>
+				<div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-12">
+					<table className="right-content">
+						<tbody>
+							<tr className="non-hover"><td><strong>Subtotal:&ensp;</strong>{formatNumber(total)}</td></tr>
+							<tr className="non-hover"><td><strong>GST:&ensp;</strong>{formatNumber(total*0.01)}</td></tr>
+							<tr className="non-hover"><td><strong>Freight Charge:&ensp;</strong>{formatNumber(total*0.05)}</td></tr>
+							<tr className="non-hover"><td><strong>Total:&ensp;</strong>{formatNumber(total*1.06)}</td></tr>
+						</tbody>
+					</table>
+				</div>
+				<div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-12">
+					<Button type="primary" style={{float:'right'}}>
+						<Link to="/checkoutSecurePayment">Go to payment</Link>
+					</Button>
+				</div>
 
-        <div>
-          <Steps current={1}>
-              <Step title="Shipping Address"/>
-              <Step title="Review Order"/>
-              <Step title="Secure Payment"/>
-              <Step title="Order Complete"/>
-            </Steps>,
-        </div>
-
-        <div id="checkout-review-order-summary">
-          <Row>
-            <Col span={12}><Title level={4}>Shipping Information</Title></Col>
-          </Row>
-          {
-            address ?
-              <>
-                <Row>
-                  <strong>The items are to be delivered to:</strong> &nbsp;
-                  {address.po_attention_to}
-                </Row>
-                {
-                  address.po_address_line2 ?
-                    <Row>
-                      <strong>Receiver's address:</strong> &nbsp;
-                      {address.po_address_line2}/{address.po_address_line1}, &nbsp;
-                      {address.po_suburb}, {address.po_state} {address.po_postcode}
-                    </Row>
-                  :
-                    <Row>
-                      <strong>Receiver's address: </strong> &nbsp;
-                      {address.po_address_line1}, {address.po_suburb}, &nbsp;
-                      {address.po_state} {address.po_postcode}
-                    </Row>
-                }
-                <Row>
-                  <strong>Receiver's email:</strong> &nbsp;
-                  {email}
-                </Row>
-              </>
-            :
-              <>
-                <Row>
-                  Shipping Address not available.
-                  Please go back to the previous Step (Step 1)!
-                </Row>
-              </>
-          }
-        </div>
-
-        <div id="checkout-review-order-summary">
-          <Row>
-            <Col span={12}>
-              <Title level={4}>Order Summary ({itemCount} items)</Title>
-            </Col>
-          </Row>
-          {
-            itemCount === 0 ? 
-              <div>Your cart is empty</div>
-            : <>
-              <Row>
-                <Col span={4}>
-                  <div style={{fontWeight:"bold"}}>Product</div>
-                </Col>
-                <Col span={4}>
-                  <div style={{textAlign: "center", fontWeight:"bold"}}>Unit Price</div>
-                </Col>
-                <Col span={3}>
-                  <div style={{textAlign: "center", fontWeight:"bold"}}>Size</div>
-                </Col>
-                <Col span={4}>
-                  <div style={{textAlign: "center", fontWeight:"bold"}}>Quantity</div>
-                  </Col>
-                <Col span={9}>
-                  <div 
-                    style={{
-                      textAlign: "left", 
-                      paddingRight: "10px", 
-                      fontWeight:"bold"
-                    }}>
-                      Special Requirements
-                  </div>
-                </Col>
-              </Row>
-              <CartProducts key={itemCount} editable={false} />
-            </>
-          }          
-        </div>
-
-        <div id="checkout-review-order-total">
-          <Row>
-            <Col offset={11} span={6}>
-              <div style={{textAlign: "left"}}>Subtotal:</div>
-            </Col>
-            <Col span={7}>
-              <div style={{textAlign: "right"}}>{formatNumber(total)}</div>
-            </Col>
-          </Row>
-          
-          <Row>
-            <Col offset={11} span={7}>
-              <div style={{textAlign: "left"}}>GST:</div>
-            </Col>
-            <Col span={6}>
-              <div style={{textAlign: "right"}}>{formatNumber(total*0.01)}</div>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col offset={11} span={7}>
-              <div style={{textAlign: "left"}}>Freight charge:</div>
-            </Col>
-            <Col span={6}>
-              <div style={{textAlign: "right"}}>{formatNumber(total*0.05)}</div>
-            </Col>
-          </Row>
-          
-          <Row>
-            <Col offset={11} span={7}>
-              <div style={{textAlign: "left",fontWeight:"bold"}}>Total:</div>
-            </Col>
-            <Col span={6}>
-              <div style={{textAlign: "right",fontWeight:"bold"}}>{formatNumber(total*1.06)}</div>
-            </Col>
-          </Row>
-        </div>
-
-        <div id="checkout-review-order-button">
-          <Row>
-            <Col  offset={8} span={6}>
-              <Button type="primary">
-                <Link to="/checkoutShipping">Back</Link>
-              </Button>
-            </Col>
-            <Col  span={6}>
-              <Button type="primary">
-                <Link to="/checkoutSecurePayment">Go to payment</Link>
-              </Button>
-            </Col>
-          </Row>
-        </div>
-
-      </div>
-    </div>
+			</div>
+		</div> 
+    </>
   );
 
 }

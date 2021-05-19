@@ -36,18 +36,19 @@ const Cart = (props) =>{
             <h2>Shopping Cart</h2>
         </div>
         <div className="container flex-horizontal-box-container" id="cart-content-page">
-            <div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-8 box-item-xl-9 box-shadow">
-                <table className="table-container center-content">
+            <div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-8 box-item-xl-9 box-shadow table-container">
+                <table className="center-content">
                     <thead>
                         <tr>
                             <th>Product</th>
-                            <th>Unit Price</th> 
+                            <th>Unit Price</th>
+                            <th>Size</th>
                             <th>Quantity</th>
                             <th>Special Requirements</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {itemCount > 0 ? <CartProducts editable={true} /> : <tr><td colSpan={4}><h3 style={{textAlign: 'center'}}>Your cart is empty! :(</h3></td></tr> }
+                        {itemCount > 0 ? <CartProducts editable={true} /> : <tr><td colSpan={5}><h3 style={{textAlign: 'center'}}>Your cart is empty! :(</h3></td></tr> }
                     </tbody>
                 </table>
             </div>

@@ -39,7 +39,8 @@ const CartItem = (props) => {
             <img alt={(product.item_code === undefined || (product.item_code !== undefined && product.item_code.length === 0)) ? "image of paper bag" : product.item_code + "\'s image"}
             src= {(product.p_image_uri === null || (product.p_image_uri !== null && product.p_image_uri.length === 0)) ? placeholderImg : product.p_image_uri} height="160px" width="120px" style={{objectFit:'scale-down'}}/>
         </td>
-        <td>{formatNumber(product.unit_price)}</td> 
+        <td>{formatNumber(product.unit_price)}</td>
+        <td>{product.p_size}</td>
         <td>
             { editable &&
                 <Button onClick={() => increase()}
@@ -52,9 +53,10 @@ const CartItem = (props) => {
             }
         </td>
         <td>
-          <TextArea placeholder="Please input any special requirements that you have here"
+          <TextArea placeholder={editable ? "Please input any special requirements that you have here" : "No Special Requirements"}
           rows={4} maxLength={100}
           autoSize={{ minRows: 4, maxRows: 4 }}
+          disabled={!editable}
           value={(product.special_requirements === null || (product.special_requirements !== null && product.special_requirements.length === 0)) ? "" : product.special_requirements}></TextArea>
         </td>
     </tr>
