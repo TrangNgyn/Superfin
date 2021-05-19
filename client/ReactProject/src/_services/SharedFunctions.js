@@ -91,9 +91,9 @@ export const checkPasswordStrength = password => {
 }
 
 export const _logout = updateAuth => {
-   // localStorage.setItem('SUPERFIN_USER', JSON.stringify({roles: [userConstants.ROLE_GUEST]}));
-   // updateAuth({roles: [userConstants.ROLE_GUEST]});
-   // history.push('/login');
+    localStorage.setItem('SUPERFIN_USER', JSON.stringify({roles: [userConstants.ROLE_GUEST]}));
+    updateAuth({roles: [userConstants.ROLE_GUEST]});
+    history.push('/login');
 }
 
 
