@@ -472,45 +472,67 @@ class Product {
         }
     }
 
-    //====== Do we even need this?? ==============//
+    // @route   POST api/products/validate-products
+    // @desc    Validate if the products have matching info compared to input
+    // @access  Public 
 
-    // @route   POST api/products/product-sold
-    // @desc    Increase the products sold count
-    // @access  Public
+    async post_validate_products(req,res) {
+        try{
+            let { 
+                p_codes, p_names, unit_prices,
+                price_ids, images, p_sizes
+            } = req.body
 
-    // async post_product_sold(req,res) {
-    //     try{
-    //         var { p_code, count } = req.body
+            // if field is empty
+            if(!p_codes || !p_names || !unit_prices 
+                || !price_ids || !images || !p_sizes) 
+            {
+                return res.json(empty_field)
+            }
 
-    //         // find the code and matching product
-    //         var found_product = await product_model.findOne({ p_code: p_code })
+            // p_codes needs to be an array of at least size 1
+            if(!Array.isArray(p_codes) || p_codes.length === 0){
+                return res.json({
+                    success: false,
+                    message: "p_codes needs to be an array of at least size 1",
+                })
+            }
 
-    //         if(!found_product){
-    //             res.status(404)
-    //             return res.json({ success: false,
-    //                               message: "No product was found" })
-    //         }
+            // find the valid products that contain matching info
+            product_model
+                .find({
+                    'p_code': { $in: p_codes },
+                    'p_name': { $in: p_names },
+                    'p_price': { $in: unit_prices },
+                    'p_price_id': { $in: price_ids },
+                    'p_image_uri': { $in: images },
+                    'p_size': { $in: p_sizes }
+                }, 'p_code') // only return product code
+                .then(docs => {
+                    
 
-    //         var updated_product = product_model.findByIdAndUpdate(found_product._id,{
-    //             p_units_sold: Number(count) + found_product.p_units_sold
-    //         })
-    //         updated_product.exec(err => {
-    //             if(err)
-    //                 console.log(err)
-    //             return res.json({ success: true,
-    //                               message: `Product ${1111} sales has been updated` })
-    //         })
-    //         // how do i ensure concistency?!
-    //         // need to update this if there is something more i need to do 
-            
-    //     }
-    //     catch(err){
-    //         return res.json({
-    //             success: false,
-    //             message: err.message
-    //         })
-    //     }
-    // }
+                    return res.json({
+                        success: true,
+                        valid_pcodes: docs
+                    });
+                })
+                .catch(err => {
+                    res.status(404)
+                    return res.json({ 
+                        success: false,
+                        valid_pcodes: [],
+                        message: err.message 
+                    });
+                })
+        }
+        catch (err) {
+            return res.json({
+                success: false,
+                message: err.message
+            })
+        }
+    }
+
 }
 
 const product_controller = new Product

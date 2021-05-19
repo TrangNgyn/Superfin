@@ -1,6 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
-async function stripe_add_product(p_code, p_name, p_price){
+async function stripe_add_product(p_code, p_name, p_price, callback){
     // add product to stripe
     const stripe_product = await stripe.products.create({
         id: p_code,
@@ -9,26 +9,23 @@ async function stripe_add_product(p_code, p_name, p_price){
 
     // create price object
     if(stripe_product){
-        const stripe_price = await stripe.prices.create({
+        stripe.prices.create({
             product: p_code,
             unit_amount: p_price*100,
-            currency: 'aud',
-        });
-
-        if(stripe_price){
-            return {success: true,
+            currency: 'aud'
+        }, (err, stripe_price) => {
+            if(err) {
+                stripe_delete_product(p_code);
+                return callback(new Error(`Error creating price object in Stripe - ${err.message}`))
+            }
+            return callback(null,{
                 price_id: stripe_price.id,
-                message: 'Price object created in Stripe'};
-        }else{
-            await stripe_delete_product(p_code);
-            return {success: false,
-                message: 'Error creating price object in Stripe'};
-        }
-            
+                message: 'Price object created in Stripe'
+            });
+        })     
     }
     else{
-        return {success: false,
-            message: 'Error creating product object in Stripe'};
+        return callback(new Error('Error creating product object in Stripe'));
     }
 }
 async function stripe_deactivate_product(p_code, p_price_id){

@@ -39,7 +39,7 @@ const CurrentOrders = () => {
     useEffect(() => {
         if(!orders.length) dispatch(getIncompleteOrders(auth.access_token, updateAuth));
         else setOrdersList(orders);      
-    }, [orders.length, orders, dispatch]);
+    }, [orders.length, orders, dispatch, auth.access_token]);
     
     const onChange = p => { setPage(p - 1) };
 
