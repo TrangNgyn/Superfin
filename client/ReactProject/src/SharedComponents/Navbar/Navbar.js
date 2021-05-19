@@ -94,7 +94,7 @@ export default function Navbar(){
             <Link to="/manageOrders"> Manage Orders </Link>
         </Menu.Item>
         <Menu.Item>
-            <Link to="/editProfile"> Edit Profile </Link>
+            <Link to="/editCustomer"> Edit Profile </Link>
         </Menu.Item>
         </>
     );
