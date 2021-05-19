@@ -20,16 +20,16 @@ const Cart = (props) =>{
         props.clearCart();
     }
 
-    useEffect(() => {
-        if(props.total === 0){ // if cart cleared
-            localStorage.clear();
-        }
-        else {
-            localStorage.setItem("items", JSON.stringify(props.cartItems));
-            localStorage.setItem("total", JSON.stringify(props.total));
-        }
+    // useEffect(() => {
+    //     if(props.total === 0){ // if cart cleared
+    //         localStorage.clear();
+    //     }
+    //     else {
+    //         localStorage.setItem("items", JSON.stringify(props.cartItems));
+    //         localStorage.setItem("total", JSON.stringify(props.total));
+    //     }
         
-    }, [props.cartItems, props.total])
+    // }, [props.cartItems, props.total])
   
     return(<>
         <div className="page-title-holder fill">
