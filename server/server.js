@@ -50,6 +50,9 @@ db.mongoose
 
 app.use(cors())
 
+// Sanitize against NoSQL query injections
+app.use(mongoSanitize())
+
 // allow Cross origin 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "http://localhost:3000")

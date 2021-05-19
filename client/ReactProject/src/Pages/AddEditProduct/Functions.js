@@ -129,8 +129,7 @@ export const checkProductsEqual = (product_a, product_b, numberOfNewImages, orig
             product_a.p_image_uri.length + numberOfNewImages === product_b.p_image_uri.length &&
             product_a.p_image_uri.length === originalFileLength &&
             product_a.p_unit === product_b.p_unit &&
-            JSON.stringify(product_a.p_size) === JSON.stringify(product_b.p_size) &&
-            product_a.p_units_sold === product_b.p_units_sold.toString()){
+            JSON.stringify(product_a.p_size) === JSON.stringify(product_b.p_size)){
                 return true
             }
             return false;   
