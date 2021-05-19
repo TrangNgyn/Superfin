@@ -28,7 +28,7 @@ import ManageProducts from '../Pages/ManageProducts/ManageProducts';
 import AddEditProduct from '../Pages/AddEditProduct/AddEditProduct';
 import ManageCategories from '../Pages/ManageCategories/ManageCategories';
 
-//if we dont have change password page for customer, will need to add Cutomer roll to forgotpassword pages
+//if we dont have change password page for customer, will need to add Cutomer role to forgotpassword pages
 
 const config =  {
     routes: [
