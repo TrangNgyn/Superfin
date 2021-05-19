@@ -77,7 +77,7 @@ const Cart = (props) =>{
                         </tr>
                     </tbody>
                 </table>
-                <Button type="secondary" disabled={itemCount > 0} onClick={clearCart}>Clear Cart</Button>
+                <Button type="secondary" disabled={itemCount < 1} onClick={clearCart}>Clear Cart</Button>
                 &emsp;
                 <Button type="primary" disabled={itemCount < 1}>
                     <Link to="/CheckoutShipping">Checkout</Link>
