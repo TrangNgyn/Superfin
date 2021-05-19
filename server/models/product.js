@@ -59,15 +59,16 @@ const productSchema = new Schema({
 
 });
 
-productSchema.pre("save", async function(next) {
+productSchema.pre("save", function(next) {
     var doc = this
-    var stripe_product = await stripe_add_product(doc.p_code, doc.p_name, doc.p_price);
-    if(!stripe_product.success)
-        return next(new Error(stripe_product.message))
-    else{
+    stripe_add_product(doc.p_code, doc.p_name, doc.p_price, (err, stripe_product) => {
+        if(err) {
+            return next(new Error(err))
+        }
         doc.p_price_id = stripe_product.price_id
         next(); 
-    }
+        
+    });
 })
 
 productSchema.post("remove", async function(next){
