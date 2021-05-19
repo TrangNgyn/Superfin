@@ -4,7 +4,8 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 const express = require('express'),
     bodyParser = require('body-parser'),
     db = require('./models/db'),
-    cors = require('cors')
+    cors = require('cors'),
+    mongoSanitize = require('express-mongo-sanitize');
 
 // Imported routers
 
