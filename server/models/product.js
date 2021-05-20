@@ -63,7 +63,7 @@ productSchema.pre("save", async function(next) {
     var doc = this
     var stripe_product = await stripe_add_product(doc.p_code, doc.p_name, doc.p_price);
     if(!stripe_product.success)
-        return next(new Error(stripe_product.message))
+        return new Error(stripe_product.message)
     else{
         doc.p_price_id = stripe_product.price_id
         next(); 

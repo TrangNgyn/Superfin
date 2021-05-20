@@ -484,8 +484,7 @@ class Product {
             } = req.body
 
             // if field is empty
-            if(!p_codes || !p_names || !unit_prices 
-                || !price_ids || !images || !p_sizes) 
+            if(!p_codes) 
             {
                 return res.json(empty_field)
             }
@@ -501,16 +500,9 @@ class Product {
             // find the valid products that contain matching info
             product_model
                 .find({
-                    'p_code': { $in: p_codes },
-                    'p_name': { $in: p_names },
-                    'p_price': { $in: unit_prices },
-                    'p_price_id': { $in: price_ids },
-                    'p_image_uri': { $in: images },
-                    'p_size': { $in: p_sizes }
-                }, 'p_code') // only return product code
+                    'p_code': { '$in': p_codes }
+                })
                 .then(docs => {
-                    
-
                     return res.json({
                         success: true,
                         valid_pcodes: docs

@@ -7,3 +7,4 @@ export const SET_SHIPPING_INFO = 'SET_SHIPPING_INFO';
 export const SET_LOADING = 'SET_LOADING';
 export const SET_ERROR = 'SET_ERROR';
 export const LOAD_STRIPE = 'LOAD_STRIPE';
+export const UPDATE_ITEM_INFO = 'UPDATE_ITEM_INFO';

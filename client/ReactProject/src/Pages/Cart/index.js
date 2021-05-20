@@ -27,16 +27,21 @@ const Cart = (props) =>{
     props.clearCart();
   }
   
-  // useEffect(() => {
-  //   if(props.total === 0){ // if cart cleared
-  //     localStorage.clear();
-  //   }
-  //   else{
-  //     localStorage.setItem("items", JSON.stringify(props.cartItems));
-  //     localStorage.setItem("total", JSON.stringify(props.total));
-  //   }
+  useEffect(() => {
+    // get only user input values
+    const items = props.cartItems.map(i => {
+      return {
+        item_code: i.item_code,
+        p_size: i.p_size,
+        quantity: i.quantity,
+        special_requirements: i.special_requirements,
+      }
+    });
+
+    // store cart state to local storage
+    localStorage.setItem("items", JSON.stringify(items));
     
-  // }, [props.cartItems, props.total])
+  }, [props.cartItems, props.total])
 
   return(
       <div>

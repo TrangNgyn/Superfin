@@ -4,6 +4,7 @@ import { Row, Col, Button, Input } from 'antd';
 import {PlusOutlined, MinusOutlined, RestOutlined } from '@ant-design/icons';
 import { formatNumber } from '../../_helpers/utils';
 import { decreaseQuantity, increaseQuantity } from '../../_actions/cartActions'
+import altImage from "../../_assets/Images/No_Image.jpg"
 
 const { TextArea } = Input;
 
@@ -36,7 +37,7 @@ const CartItem = (props) => {
       <Row justify="space-around" align="middle">
         <Col span={4} >
           <Row justify="left">
-            <img alt={"No Image Available"} 
+            <img alt={altImage} 
               src= {product.p_image_uri} 
               width="70%" height="70%"
             />
