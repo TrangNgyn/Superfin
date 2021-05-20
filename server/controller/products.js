@@ -378,7 +378,6 @@ class Product {
             
             // create the query object with the supplied data
             var edited_product = product_model.findByIdAndUpdate(found_product._id, {
-                p_code,
                 p_image_uri: array,
                 p_name,
                 p_price,
@@ -430,36 +429,35 @@ class Product {
             }
 
             //should use findOneAndDelete here -> prevent other commands changing the document
-            else {
-                var delete_product = await product_model.findOne({ p_code: p_code })
-                if(delete_product) {
-                    if(delete_product.p_image_uri){
-                        Product.delete_images(delete_product.p_image_uri)
-                    }
-                    product_model.deleteOne({ p_code: p_code }, (err,result) => {
-                        if(err){
-                            res.json(err)
-                        }
-                        else {
-                            if(result.deletedCount === 1){
-                                return res.json({ 
-                                    succes: true,
-                                    message: `The product with code ${p_code} was deleted` })
-                            }
-                            else {
-                                res.send(result)
-                            }
-                        }
-                    })
-                } 
-                else {
-                    return res.json({ 
-                        success: false,
-                        message: `Product with code ${p_code} not found, no product was deleted`})
+            var delete_product = await product_model.findOne({ p_code: p_code })
+            if(delete_product) {
+                if(delete_product.p_image_uri){
+                    Product.delete_images(delete_product.p_image_uri)
                 }
+                delete_product.deleteOne((err,result) => {
+                    if(err){
+                        res.send({
+                            success: false,
+                            message: err.message
+                        })
+                    }
+                    else {
+                        res.send({
+                            success: true,
+                            message: `Product with p_code ${p_code} was deleted`
+                        })
+                    }
+                })
+            } 
+            else {
+                return res.json({ 
+                    success: false,
+                    message: `Product with code ${p_code} not found, no product was deleted`})
             }
+            
         }
         catch (err) {
+            console.log(err)
             return res.json({
                 success: false,
                 message: err.message

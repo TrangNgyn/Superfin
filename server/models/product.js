@@ -71,14 +71,13 @@ productSchema.pre("save", function(next) {
     });
 })
 
-productSchema.post("remove", async function(next){
+productSchema.pre("deleteOne", {document: true, query: false},function(next) {
     var doc = this
-    var stripe_product = await stripe_deactivate_product(doc.p_code, doc.p_price_id);
-    if(!stripe_product.success)
-        return next(new Error(stripe_product.message))
-    else{
-        next(); 
-    }
+    stripe_deactivate_product(doc.p_code, doc.p_price_id,(err) => {
+        if(err) 
+            return new Error(err)
+    })
+    next()
 })
 
 module.exports = product = mongoose.model("products", productSchema)

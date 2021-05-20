@@ -1,63 +1,95 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 async function stripe_add_product(p_code, p_name, p_price, callback){
+
+    // could try and create first and if it throws an error on the create that is product already exists
+    // could then instead set it to active and assign the new price instead of searching first 
+    // it would prevent an unneccessary potential entire collection search from occuring before the system 
+    // even attempts to add a price and a new product.
+
+
     // add product to stripe
-    const stripe_product = await stripe.products.create({
-        id: p_code,
-        name: p_name,
-    });
-
-    // create price object
-    if(stripe_product){
-        stripe.prices.create({
-            product: p_code,
-            unit_amount: Math.round(p_price*100),
-            currency: 'aud'
-        }, (err, stripe_price) => {
-            if(err) {
-                stripe_delete_product(p_code);
-                return callback(new Error(`Error creating price object in Stripe - ${err.message}`))
-            }
-            // return price object id in the callback
-            return callback(null,{
-                price_id: stripe_price.id,
-                message: 'Price object created in Stripe'
+    stripe.products.retrieve(p_code,(err,product) => {
+        if(err)
+            return callback(new Error(`Error searching for product object in stripe - ${err.message}`))
+        if(product) {
+            stripe.products.update(p_code,{active: true},(err,reactiveated_product) => {
+                if(err)
+                    return callback(new Error(`Error reactivating product object in Stripe - ${err.message}`))
+                stripe.prices.create({
+                    product: reactiveated_product.id,
+                    unit_amount: Math.round(p_price*100),
+                    currency: 'aud'
+                },(err, stripe_price) => {
+                    if(err) {
+                        stripe_delete_product(p_code);
+                        return callback(new Error(`Error creating price object in Stripe - ${err.message}`))
+                    }
+                    // return price object id in the callback
+                    return callback(null,{
+                        price_id: stripe_price.id,
+                        message: 'Price object created in Stripe'
+                    });
+                })
+            })
+        }
+        else {
+            stripe.products.create({
+                id: p_code,
+                name: p_name,
+            },(err,stripe_product) => {
+                if(err) {
+                    //if(err.message == "Product already exists")
+                    return callback(new Error(`Error creating product object in Stripe - ${err.message}`))
+                }
+                // create price object
+                stripe.prices.create({
+                        product: stripe_product.id,
+                        unit_amount: Math.round(p_price*100),
+                        currency: 'aud'
+                    }, (err, stripe_price) => {
+                        if(err) {
+                            stripe_delete_product(p_code);
+                            return callback(new Error(`Error creating price object in Stripe - ${err.message}`))
+                        }
+                        // return price object id in the callback
+                        return callback(null,{
+                            price_id: stripe_price.id,
+                            message: 'Price object created in Stripe'
+                        });
+                    })     
             });
-        })     
-    }
-    else{
-        return callback(new Error('Error creating product object in Stripe'));
-    }
+        }
+    })
 }
-async function stripe_deactivate_product(p_code, p_price_id){
-    // deactivate price
-    const price = await stripe.prices.update(
-        p_price_id,
-        {active: false}
-    );
 
-    if(price.active){ // if update fails
-        return {success: false,
-            message: 'Error deactivating price object'}
-    }
+
+async function stripe_deactivate_product(p_code, p_price_id, callback){
     
-    //deactivate product
-    const product = await stripe.products.update(
-        p_code,
-        {active: false}
-    );
+    stripe.prices.update(p_price_id,{active: false}, (err) => {
+        if(err)
+            return callback(new Error(`Error updating price on stripe - ${err.message}`))
+        stripe.products.update(p_code, {active: false}, (err) => {
+            if(err)
+                return callback(new Error(`Error updating product on stripe - ${err.message}`))
+            return callback(null)
+        })
+    })
 
-    if(product.active){ // if update fails
-        await stripe.prices.update(
-            p_price_id,
-            {active: false}
-        );
-        return {success: false,
-            message: 'Error deactivating product object.'}
-    }
+    // const pending = Promise.all([
+    //     stripe.prices.update(
+    //         p_price_id,
+    //         {active: false}
+    //     ),
+    //     stripe.products.update(
+    //         p_code,
+    //         {active: false}
+    //     )
+    // ])
 
-    return {success: true,
-        message: 'Product deactivated.'}
+    // const [price, product ] = await pending
+    // return {success: true,
+    //         message: 'Product deactivated.'}
 }
 
 async function stripe_delete_product(p_code){
@@ -105,38 +137,6 @@ async function stripe_update_price(p_code, new_p_price, old_p_price_id, callback
             })
         })
     })
-
-    // trang's old code
-
-    // create new price associated with the p_code
-    // const new_price = await stripe.prices.create({
-    //     product: p_code,
-    //     unit_amount: new_p_price*100,
-    //     currency: 'aud',
-    // });
-
-    // if(new_price){
-    //     // deactivate old price
-    //     const old_price = await stripe.prices.update(
-    //         old_p_price_id,
-    //         {active: false}
-    //     );
-    //     if(!old_price.active) // if update fails
-    //         console.log('test')
-
-    //     return {
-    //         success: true,
-    //         p_price_id: new_price.id,
-    //         message: 'Price object created in Stripe'
-    //     };
-
-    // }else{ // if new price's creation fails
-    //     console.log(new_price);
-    //     return {
-    //         success: false,
-    //         message: 'Error creating price object in Stripe'
-    //     };
-    // }
 }
 
 async function stripe_post_charge(req, res) {
