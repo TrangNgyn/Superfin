@@ -94,10 +94,11 @@ async function stripe_update_price(p_code, new_p_price, old_p_price_id, callback
         if(err) 
             return callback(new Error(`Error creating price object in Stripe - ${err.message}`))
         // if there is no error attempt to update the price object stored on stripe to be deactivated
-        stripe.prices.update(old_p_price_id,{active:false},(err)=>{
+        stripe.prices.update(old_p_price_id,{active:false},(err,old_price)=>{
             if(err)
                 return callback(new Error(`Error updating price object in Stripe - ${err.message}`))
             // return the created price object id to the callback
+            console.log(old_price)
             return callback(null, {
                 p_price_id: new_price.id,
                 message: 'Price object created in Stripe'

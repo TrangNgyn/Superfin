@@ -358,15 +358,11 @@ class Product {
                 array.push(locations[i])
             }
 
-            // init edited price to old price
-            // var edited_price = {
-            //     success: false,
-            //     p_price_id: found_product.p_price_id,
-            // }
-
+            // assign the existing price_id 
             var p_price_id = found_product.p_price_id;
 
-            if(found_product.p_price !== p_price) {
+            // if the price changes update the price in the stored field
+            if(found_product.p_price != p_price) {
                 stripe_update_price(p_code,p_price,found_product.p_price_id,(err,edited_price) => {
                     if(err) {
                         Product.delete_images(locations)
@@ -379,19 +375,8 @@ class Product {
                     
                 })
             }
-
-            // update price if p_price changes
-            // if(found_product.p_price !== p_price){
-            //     edited_price = await stripe_update_price(p_code, p_price, found_product.p_price_id);
-
-            //     if(edited_price.success){
-            //         p_price_id = edited_price.p_price_id;
-            //     }else{
-            //         Product.delete_images(locations)
-            //         return res.json(edited_price)
-            //     }
-            // }
-
+            
+            // create the query object with the supplied data
             var edited_product = product_model.findByIdAndUpdate(found_product._id, {
                 p_code,
                 p_image_uri: array,
@@ -404,6 +389,7 @@ class Product {
                 p_description,
             })
             
+            // attempt to execute the query 
             edited_product.exec(err => {
                 if(err){
                     Product.delete_images(locations)
@@ -418,12 +404,6 @@ class Product {
                     success: true,
                     message: `Product ${p_code} was edited`})
             })
-
-
-
-            // need to set up response
-            
-
         }
         catch (err) {
             Product.delete_images(locations)
