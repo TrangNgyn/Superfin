@@ -434,7 +434,7 @@ class Product {
                 if(delete_product.p_image_uri){
                     Product.delete_images(delete_product.p_image_uri)
                 }
-                delete_product.deleteOne((err,result) => {
+                delete_product.deleteOne((err) => {
                     if(err){
                         res.send({
                             success: false,

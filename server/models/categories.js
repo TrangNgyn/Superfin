@@ -25,7 +25,19 @@ const categories_schema = new Schema({
 
 
 categories_schema.pre('deleteOne', {document:true, query:false}, async function() {
-    await products_model.deleteMany({p_categories: this._id })
+    //await products_model.deleteMany({p_categories: this._id })
+
+    // hacky fix - > will refactor if have time (Ollie)
+
+    var children_products = await products_model.find({p_categories: this._id})
+    children_products.forEach(element => {
+        element.deleteOne((err) => {
+            if(err)
+                return new Error(err)
+        })
+    })
+
+
 })
 
 
