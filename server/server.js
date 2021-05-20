@@ -4,7 +4,8 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 const express = require('express'),
     bodyParser = require('body-parser'),
     db = require('./models/db'),
-    cors = require('cors')
+    cors = require('cors'),
+    mongoSanitize = require('express-mongo-sanitize');
 
 // Imported routers
 
@@ -49,6 +50,9 @@ db.mongoose
     .catch(err => console.log(err))
 
 app.use(cors())
+
+// Sanitize against NoSQL query injections
+app.use(mongoSanitize())
 
 // allow Cross origin 
 app.use(function(req, res, next) {

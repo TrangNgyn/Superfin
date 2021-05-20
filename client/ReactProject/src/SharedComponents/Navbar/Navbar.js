@@ -24,7 +24,7 @@ export default function Navbar(){
     const updateAuth = useAuthUpdate();             //authorization data
     const auth = useAuth();
 
-  //  const [userDetails, setUserDetails] = useState({});             //stores users detials to access their name
+    const [userDetails, setUserDetails] = useState({});             //stores users detials to access their name
 
     const [parentCategoires, setParentCategories] = useState([]);         //categories in local state
     const [childCategories, setChildCategories] = useState([]);
@@ -56,20 +56,20 @@ export default function Navbar(){
     }, [categories.length, dispatch, categories, childCategories.length, emptyCategories, parentCategoires.length]);
 
     useEffect(() => {   //for populating the welcome name    
-        if(auth.roles[0] !== userConstants.ROLE_GUEST /*&& JSON.stringify(userDetails) === '{}'*/){
+        if(auth.roles[0] !== userConstants.ROLE_GUEST && JSON.stringify(userDetails) === '{}'){
 
             const config = { headers:{ authorization : `Bearer ${auth.access_token}` }};
             axios.defaults.baseURL = baseURL;
 
-           /* axios.get('api/user/', config)
+            axios.get('api/user/', config)
             .then(res => { setUserDetails(res.data) })
             .catch(err => {
                 console.log(err);
                 if(err.response.status === 401) _logout(updateAuth);
-            });*/
+            });
         } 
-        else if(auth.roles[0] === userConstants.ROLE_GUEST /*&& JSON.stringify(userDetails) !== '{}') setUserDetails({}*/);   //very important condition
-    }, [auth, updateAuth, /*userDetails*/]);
+        else if(auth.roles[0] === userConstants.ROLE_GUEST && JSON.stringify(userDetails) !== '{}') setUserDetails({});   //very important condition
+    }, [auth, updateAuth, userDetails]);
  
     const logout = () => {         
         _logout(updateAuth);
@@ -94,7 +94,7 @@ export default function Navbar(){
             <Link to="/manageOrders"> Manage Orders </Link>
         </Menu.Item>
         <Menu.Item>
-            <Link to="/editProfile"> Edit Profile </Link>
+            <Link to="/editCustomer"> Edit Profile </Link>
         </Menu.Item>
         </>
     );
@@ -116,7 +116,7 @@ export default function Navbar(){
             key="AccountMenuMobile" 
             className="submenu-background"  
             icon={<UserOutlined />} 
-            title={"Welcome, "/* + userDetails.first_name*/}
+            title={"Welcome, " + userDetails.first_name}
         >
             {accountSpecificMenu}
             <Menu.Item onClick={logout}>Logout</Menu.Item>
@@ -179,7 +179,7 @@ export default function Navbar(){
         login = (
             <Menu.Item key = "Welcome"  icon={<UserOutlined />}>
                 <Dropdown overlay={accountMenu}>
-                    <span> Welcome, {/*userDetails.first_name*/} </span>
+                    <span> Welcome, {userDetails.first_name} </span>
                 </Dropdown>
             </Menu.Item>
         );
