@@ -359,23 +359,38 @@ class Product {
             }
 
             // init edited price to old price
-            var edited_price = {
-                success: false,
-                p_price_id: found_product.p_price_id,
-            };
+            // var edited_price = {
+            //     success: false,
+            //     p_price_id: found_product.p_price_id,
+            // }
+
             var p_price_id = found_product.p_price_id;
 
-            // update price if p_price changes
-            if(found_product.p_price !== p_price){
-                edited_price = stripe_update_price(p_code, p_price, found_product.p_price_id);
-
-                if(edited_price.success){
-                    p_price_id = edited_price.p_price_id;
-                }else{
-                    Product.delete_images(locations)
-                    return res.json(edited_price)
-                }
+            if(found_product.p_price !== p_price) {
+                stripe_update_price(p_code,p_price,found_product.p_price_id,(err,edited_price) => {
+                    if(err) {
+                        Product.delete_images(locations)
+                        return res.send({
+                            success: false,
+                            message: err.message
+                        })
+                    }
+                    p_price_id = edited_price.p_price_id
+                    
+                })
             }
+
+            // update price if p_price changes
+            // if(found_product.p_price !== p_price){
+            //     edited_price = await stripe_update_price(p_code, p_price, found_product.p_price_id);
+
+            //     if(edited_price.success){
+            //         p_price_id = edited_price.p_price_id;
+            //     }else{
+            //         Product.delete_images(locations)
+            //         return res.json(edited_price)
+            //     }
+            // }
 
             var edited_product = product_model.findByIdAndUpdate(found_product._id, {
                 p_code,
