@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {connect} from 'react-redux';
-import { Row, Col, Button, Input } from 'antd';
+import { Button, Input } from 'antd';
 import {PlusOutlined, MinusOutlined, RestOutlined } from '@ant-design/icons';
 import { formatNumber } from '../../_helpers/utils';
 import { decreaseQuantity, increaseQuantity } from '../../_actions/cartActions'
-import altImage from "../../_assets/Images/No_Image.jpg"
+import placeholderImg from '../../_assets/Images/No_Image.jpg';
 
 const { TextArea } = Input;
 
@@ -33,75 +33,36 @@ const CartItem = (props) => {
     
   }
 
-    return (
-      <Row justify="space-around" align="middle">
-        <Col span={4} >
-          <Row justify="left">
-            <img alt={altImage} 
-              src= {product.p_image_uri} 
-              width="70%" height="70%"
-            />
-          </Row>
-          <Row justify="left">
-            <strong>{product.p_name}</strong>
-          </Row>
-        </Col>
-        <Col span={4}>
-          <div style={{textAlign: "center"}}>{formatNumber(product.unit_price)}</div>
-        </Col>        
-        <Col span={3}>
-          <div style={{textAlign: "center"}}>{product.p_size}</div>
-        </Col>
-        <Col span={4}>
-          <div style={{textAlign: "center"}}>  
-            {
-              editable &&
-              <Button onClick={() => decrease()}
-                shape="circle"
-                icon={<MinusOutlined />}
-                style={{color: "#EB6E00"}}
-              />
+  return (
+    <tr>
+        <td>
+            <img alt={(product.item_code === undefined || (product.item_code !== undefined && product.item_code.length === 0)) ? "image of paper bag" : product.item_code + "\'s image"}
+            src= {(product.p_image_uri === null || (product.p_image_uri !== null && product.p_image_uri.length === 0)) ? placeholderImg : product.p_image_uri} height="160px" width="120px" style={{objectFit:'scale-down'}}/>
+            <br/><span><em>{product.p_name}</em></span>
+        </td>
+        <td>{formatNumber(product.unit_price)}</td>
+        <td>{product.p_size}</td>
+        <td>
+            { editable &&
+                <Button onClick={() => increase()}
+                icon={<PlusOutlined />} type="primary"/>
+            }<br/>
+            {quantityState}
+            <br/>{ editable &&
+                <Button onClick={() => decrease()}
+                icon={<MinusOutlined />} type="secondary"/>
             }
-
-            &nbsp;
-            <span>{quantityState}</span>
-            &nbsp;
-            
-            {
-              editable &&
-              <Button onClick={() => increase()}
-                shape="circle"
-                icon={<PlusOutlined />}
-                style={{color: "#EB6E00"}}
-              />
-            } 
-          </div>
-        </Col>
-        <Col span={9} justify="right">
-          <div 
-            style={{
-              textAlign: "right",
-              paddingRight: "10px",
-            }}
-          >
-            { product.special_requirements.length > 0 ? 
-                <TextArea style={{width: 270}}
-                  value={product.special_requirements}
-                  rows={4}
-                  maxLength={100}
-                  autoSize={{ minRows: 4, maxRows: 4 }}
-                />
-              : <TextArea style={{width: 270}}
-                  value={"N/A"}
-                  rows={4}
-                  maxLength={100}
-                  autoSize={{ minRows: 4, maxRows: 4 }}
-                />
-              }
-          </div>
-        </Col>
-      </Row>
-)}
+        </td>
+        <td>
+          <TextArea placeholder={editable ? "Please input any special requirements that you have here" : "No Special Requirements"}
+          rows={4} maxLength={100}
+          autoSize={{ minRows: 4, maxRows: 4 }}
+          disabled={!editable}
+          value={(product.special_requirements === null || (product.special_requirements !== null && product.special_requirements.length === 0)) ? "" : product.special_requirements}></TextArea>
+        </td>
+    </tr>
+  );
+}
 
 const mapDispatchToProps= (dispatch)=>{
   return{
