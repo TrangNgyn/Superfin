@@ -16,7 +16,7 @@ var upload = multer({
             cb(null, true);
         }
         else {
-            console.log('invlid');
+            console.log('invalid');
             cb(new Error("Invalid File Type"), false);
         }
     },

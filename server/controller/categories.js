@@ -168,6 +168,7 @@ class Category {
                             process++
                             deleted.push(result)
                         }
+                        // this needs to be refactored
                         if(process === children.length) {
                             return res.json({
                                 success: true,

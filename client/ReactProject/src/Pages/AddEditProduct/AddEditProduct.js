@@ -176,7 +176,7 @@ const AddEditProduct = () => {
                 encType='multipart/form-data'
                 form = {form}
                 onFinish={onFinish}
-                onFinishFailed={err => { console.log("Failed submit", err) }}
+                onFinishFailed={err => ("Failed submit", err)}
             >
                 <div id="ae-product-form-wrapper">
                     <div className="ae-product-form">

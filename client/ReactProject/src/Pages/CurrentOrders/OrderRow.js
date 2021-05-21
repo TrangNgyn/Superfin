@@ -18,10 +18,6 @@ const OrderRow = props => {
     const date = new Date(o.issued_date);
     const dateString = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
 
-
-
-
-
     const onFinish = () => {
         const promise_1 = form_1.validateFields();
         const promise_2 = form_2.validateFields();
@@ -49,41 +45,35 @@ const OrderRow = props => {
 
     return(
         <>
-            <tr className="current-orders-table-row" key = {o.po_number}>
+            <tr key = {o.po_number}>
                 <td>{o.po_number}</td>
                 <td>{o.c_email}</td>
                 <td>{o.status}</td>
                 <td>{dateString}</td>
-
                 {
                     o.status === orderStatusConstants.NEW
                     ?
                     <>
                         <td>
                             <Form form = {form_1}>
-                                <div style={{display: 'inline-block'}}>
-                                    <Form.Item
-                                        style = {{marginBottom: 0}}
-                                        name="tracking_number"
-                                        rules={[
-                                            { required: true, 
-                                                message: 'Invalid Input', 
-                                                whitespace: true, 
-                                                validateTrigger: 'onSubmit',
-                                                max: 100,
-                                            }
-                                        ]}>
-                                        <Input id={o.po_number}/>
-                                    </Form.Item>
-                                </div>
+                                <Form.Item
+                                    name="tracking_number"
+                                    rules={[
+                                        { required: true, 
+                                            message: 'Invalid Input', 
+                                            whitespace: true, 
+                                            validateTrigger: 'onSubmit',
+                                            max: 100,
+                                        }
+                                    ]}>
+                                        <Input id={o.po_number} placeholder="Input Tracking Number"/>
+                                </Form.Item>
                             </Form>
                         </td>
 
                         <td>
                             <Form form = {form_2}>
-                                <div style={{display: 'inline-block'}}>
                                     <Form.Item
-                                        style = {{marginBottom: 0}}
                                         name="carrier"
                                         rules={[
                                             { required: true, 
@@ -93,30 +83,23 @@ const OrderRow = props => {
                                                 max: 100,
                                             }
                                         ]}>
-                                        <Input id={o.po_number}/>
+                                        <Input id={o.po_number} placeholder="Input Carrier of choice"/>
                                     </Form.Item>
-                                </div>
                             </Form>
                         </td>
 
                         <td>
-                            <div style={{display: 'inline-block'}}>
-                                <Button type="primary" onClick={onFinish}>Send</Button>
-                            </div>
+                            <Button type="primary" onClick={onFinish}>Send</Button>
                         </td>
                     </>
                     :
                     <>
-                        <td>{o.tracking_number}</td>
-                        <td>{o.carrier}</td>
-                        <td>details sent <CheckCircleOutlined style = {{color: "green"}}/></td>
+                        <td><strong>{(o.tracking_number === null || (o.tracking_number !== null && o.tracking_number.length === 0)) ? <em>Not Available</em> : o.tracking_number}</strong></td>
+                        <td>{(o.carrier === null || (o.carrier !== null && o.carrier.length === 0)) ? <em>Not Available</em> : o.carrier}</td>
+                        <td>Details Sent <CheckCircleOutlined style = {{color: "green"}}/></td>
                     </>
                 }
-                
-                <td><b className="current-orders-view" onClick={() => {
-                        history.push(`/order/${o.po_number}/${o.status}`);
-                    }}>View</b>
-                </td>
+                <td><Button type="secondary" onClick={() => { history.push(`/order/${o.po_number}/${o.status}`); }}> View </Button></td>
              </tr>
         </>
     );

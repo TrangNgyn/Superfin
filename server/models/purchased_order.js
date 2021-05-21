@@ -108,7 +108,7 @@ order_schema.pre("save", function(next) {
         { "$inc": { "seq": 1 }},
         function(error, counters) {
             if(error) 
-                return next(error)
+                return error
             doc.po_number = counters.seq.toString();
             next();
         }

@@ -1,6 +1,7 @@
 import { 
   ADD_TO_CART, SET_LOADING, SET_ERROR, LOAD_STRIPE,
-  SET_SHIPPING_INFO, INCREASE_QUANTITY, DECREASE_QUANTITY, CLEAR_CART, REMOVE_ITEMS,
+  SET_SHIPPING_INFO, INCREASE_QUANTITY, DECREASE_QUANTITY,
+  CLEAR_CART, REMOVE_ITEMS, UPDATE_ITEM_INFO,
 } 
   from '../_constants/cart.constants'
 
@@ -37,10 +38,10 @@ export const decreaseQuantity = (index) => {
   }
 }
 
-export const removeItems = (valid_pcodes) => {
+export const removeItems = (invalid_pcodes) => {
   return {
     type: REMOVE_ITEMS,
-    valid_pcodes,
+    invalid_pcodes,
   }
 }
 
@@ -50,6 +51,12 @@ export const clearCart = () => {
   }
 }
 
+export const updateItemInfo = (items = []) => {
+  return {
+    type: UPDATE_ITEM_INFO,
+    items,
+  }
+}
 
 export const setLoading  = (loading) => {
   return {
