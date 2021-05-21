@@ -27,6 +27,7 @@ import EditCompanyInfo from '../Pages/EditCompanyInfo/EditCompanyInfo';
 import ManageProducts from '../Pages/ManageProducts/ManageProducts';
 import AddEditProduct from '../Pages/AddEditProduct/AddEditProduct';
 import ManageCategories from '../Pages/ManageCategories/ManageCategories';
+import Signup from '../Pages/Signup/Signup';
 
 //if we dont have change password page for customer, will need to add Cutomer role to forgotpassword pages
 
@@ -65,6 +66,12 @@ const config =  {
         {
             component: ReenterPassword,
             url: '/user/reset-password-email/token/:token/email/:email',
+            roles: [userConstants.ROLE_GUEST],
+            exact: false
+        },
+        {
+            component: Signup,
+            url: '/signup',
             roles: [userConstants.ROLE_GUEST],
             exact: false
         },
