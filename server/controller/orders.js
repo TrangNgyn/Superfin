@@ -80,7 +80,8 @@ class Purchased_Order {
                         success: false,
                         message: "User with provided ID does not exist"
                     })
-                db.order.find({email: user.email}, (err, orders) => {
+                console.log(user.email)
+                db.order.find({c_email: user.email}, (err, orders) => {
                     if(err) 
                         return res.status(500).send({
                             success: false,
