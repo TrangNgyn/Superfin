@@ -13,7 +13,7 @@ import Blog from '../Pages/Blog/Blog';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ReenterPassword from '../Pages/ReenterPassword/ReenterPassword';
 import MyAccount from '../Pages/MyAccount/MyAccount';
-import Cart from '../Pages/Cart/index';
+import Cart from '../Pages/Cart/CartPage';
 import CheckoutShipping from '../Pages/Checkout/CheckoutShipping';
 import CheckoutSecurePayment from '../Pages/Checkout/CheckoutSecurePayment';
 import CheckoutReviewOrder from '../Pages/Checkout/CheckoutReviewOrder';

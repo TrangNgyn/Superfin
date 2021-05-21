@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'; 
 import { connect } from 'react-redux';
-import '../../_assets/CSS/pages/Checkout/CheckoutOrderComplete.css';
-import { Typography, Button, Row, Col, Steps, Spin } from 'antd';
-import { CheckCircleFilled } from '@ant-design/icons';
+import { Divider, Steps, Spin } from 'antd';
+import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import { formatNumber } from '../../_helpers/utils';
 import CartProducts from '../Cart/CartProducts';
 import { clearCart, setError, setLoading } from '../../_actions/cartActions';
 import axios from 'axios';
 
-const { Title } = Typography;
 const { Step } = Steps;
 
 
@@ -52,178 +50,87 @@ const CheckoutOrderComplete = (props) =>{
   }, [isLoading])
 
   return(<>
-    {
-      isLoading ?
-      <>
-        <br/>
-        <div align="center">
-          <Spin size='large'/> <br/>
-          We are processing your order. <br/>
-          Please do <strong>NOT</strong> close this tab!
-        </div>
-      </>
-      :
-      (
-        !items ?
-        <>
-          <div className="page-title-holder fill">
-            <h2>Page Not Found</h2>
-          </div>
-          <div style={{textAlign: "center"}} >
-            <br/>
-            <Row justify="space-around" align="middle" >
-              <p>The page you're looking for is unavailable.</p>
-            </Row>
-            <Row justify="space-around" align="middle" >
-              <p>Please click <Link to="/" >here</Link> to continue shopping.</p>
-            </Row>
-          </div>
-        </> :
-        <div>
-          <br/>
-          <div id="checkout-order-complete-head">
-            <Title level={3}>Order Placed</Title>
-          </div>
-      
-          <div id="checkout-order-complete-content">
-            <div>
-              <Steps current={3}>
-              <Step title="Shipping Address"/>
-              <Step title="Review Order"/>
-              <Step title="Secure Payment"/>
-              <Step title="Order Complete"/>
-              </Steps>,
-            </div>
-      
-            <div id="checkout-order-complete-confirmation">
-              <Row justify="space-around" align="middle">
-                <Title level={4}>Order Placed</Title>
-              </Row>
-              <Row justify="space-around" align="middle">
-                <CheckCircleFilled style={{ fontSize: '400%', color: 'green'}} />
-              </Row>
-              <Row justify="space-around" align="middle">
-                <div>Your order has been received and will be processed soon.</div>
-              </Row>
-                <Row justify="space-around" align="middle">
-                  <div>Thank you for choosing us.</div>
-                </Row>
-            </div>
-      
-            {/* Address */}
-            <div id="checkout-order-complete-summary">
-              <Row>
-                <Col span={12}><Title level={4}>Shipping Information</Title></Col>
-              </Row>
-              {
-                address ?
-                  <>
-                    <Row>
-                      <strong>The items are to be delivered to:</strong> &nbsp;
-                      {address.po_attention_to}
-                    </Row>
-                    {
-                      address.po_address_line2 ?
-                        <Row>
-                          <strong>Receiver's address:</strong> &nbsp;
-                          {address.po_address_line2}/{address.po_address_line1}, &nbsp;
-                          {address.po_suburb}, {address.po_state} {address.po_postcode}
-                        </Row>
-                      :
-                        <Row>
-                          <strong>Receiver's address: </strong> &nbsp;
-                          {address.po_address_line1}, {address.po_suburb}, &nbsp;
-                          {address.po_state} {address.po_postcode}
-                        </Row>
-                    }
-                    <Row>
-                      <strong>Receiver's email:</strong> &nbsp;
-                      {c_email}
-                    </Row>
-                  </> :
-                  <>
-                    <Row>
-                      Shipping Address not available.
-                      Please go back to the previous Step (Step 1)!
-                    </Row>
-                  </>
-              }
-            </div>
-      
-            <div id="checkout-order-complete-summary">
-              <Row>
-                <Col span={12}><Title level={4}>Order Summary</Title></Col>
-              </Row>
-              <Row>
-                <Col span={4}>
-                  <div style={{fontWeight:"bold"}}>Product</div>
-                </Col>
-                <Col span={4}>
-                  <div style={{textAlign: "center", fontWeight:"bold"}}>Unit Price</div>
-                </Col>
-                <Col span={3}>
-                  <div style={{textAlign: "center", fontWeight:"bold"}}>Size</div>
-                </Col>
-                <Col span={4}>
-                  <div style={{textAlign: "center", fontWeight:"bold"}}>Quantity</div>
-                </Col>
-                <Col span={9}>
-                  <div 
-                    style={{
-                    textAlign: "left", 
-                    paddingRight: "10px", 
-                    fontWeight:"bold"
-                  }}>
-                    Special Requirements
-                  </div>
-                </Col>
-              </Row>
-            </div>
-      
-            {/* Purchased Products */}
-            <div id="checkout-order-complete-summary">
-              <CartProducts key={items} editable={false} />
-            </div>
-      
-            <div id="checkout-order-complete-payment">
-              <Row>
-                <Col offset={11} span={6}>
-                  <div style={{textAlign: "left"}}>Subtotal:</div>
-                </Col>
-                <Col span={7}>
-                  <div style={{textAlign: "right"}}>{formatNumber(total)}</div>
-                </Col>
-              </Row>
-              <Row>
-                <Col offset={11} span={7}>
-                  <div style={{textAlign: "left"}}>Freight charge:</div>
-                </Col>
-                <Col span={6}>
-                  <div style={{textAlign: "right"}}>{formatNumber(total*0.05)}</div>
-                </Col>
-              </Row>
-              <Row>
-                <Col offset={11} span={7}>
-                  <div style={{textAlign: "left"}}>GST:</div>
-                </Col>
-                <Col span={6}>
-                  <div style={{textAlign: "right"}}>{formatNumber(total*0.01)}</div>
-                </Col>
-              </Row>
-              <Row>
-                <Col offset={11} span={7}>
-                  <div style={{textAlign: "left",fontWeight:"bold"}}>Total:</div>
-                </Col>
-                <Col span={6}>
-                  <div style={{textAlign: "right",fontWeight:"bold"}}>{formatNumber(total*1.06)}</div>
-                </Col>
-              </Row>
-            </div>
-      
-          </div>
-        </div>
-      )
-    }
+		<div className="page-title-holder fill">
+			<h2>Checkout</h2>
+		</div>
+		<div className="container flex-horizontal-box-container">
+			<Steps current={3} direction="vertical" size="small"
+			className="box-item-xs-12 box-item-sm-12 box-item-md-3 box-item-lg-2 box-item-xl-2">
+				<Step title="Shipping Address"/>
+				<Step title="Review Order"/>
+				<Step title="Secure Payment" />
+				<Step title="Order Complete"/>
+			</Steps>
+			<div className="box-item-xs-12 box-item-sm-12 box-item-md-9 box-item-lg-10 box-item-xl-10 div-box box-shadow flex-horizontal-box-container">
+				{ isLoading ? 
+					<div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-12" align="center">
+						<p><Spin size='large'/></p>
+						<p>We are processing your order.</p>
+						<p>Please wait and kindly <strong>do not close this tab</strong> until your order is processed!</p>
+					</div> :
+					(
+						!items ?
+							<div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-12" align="center">
+								<p><CloseCircleFilled style={{ fontSize: '400%', color: 'red'}} /></p>
+								<h2>Page Not Found</h2>
+								<p>The page you're looking for is unavailable.</p>
+								<p>Please click <Link to="/" >here</Link> to continue shopping.</p>
+							</div> :
+							<>
+								<div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-12" align="center">
+									<h3>Order Placed</h3>
+									<CheckCircleFilled style={{ fontSize: '400%', color: 'green'}} />
+									<h4><em>Your order has been received and will be processed soon.</em></h4>
+									<h4>Thank you for choosing us!</h4>
+									<Divider/>
+								</div>
+								<div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-12">
+									<h4>Shipping Information</h4>
+									{ address ? <>
+											<p><strong>Recipient's Name:&ensp;</strong>{address.po_attention_to}</p>
+											<p><strong>Recipient's Address:&ensp;</strong>{ address.po_address_line2 ? <>{address.po_address_line2}/</>: <></>}{address.po_address_line1}, {address.po_suburb}, {address.po_state} {address.po_postcode}</p>
+											<p><strong>Recipient's Email:&ensp;</strong>{c_email}</p>
+										</>
+										:
+										<h5>Shipping Address not available.<br/>Please go back to the previous step!</h5>
+									}
+									<Divider/>
+								</div>
+								<div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-12">
+									<h4>Order Summary</h4>
+									<div className="table-container">
+										<table className="center-content">
+										<thead>
+											<tr>
+												<th>Product</th>
+												<th>Unit Price</th> 
+												<th>Size</th>
+												<th>Quantity</th> 
+												<th>Special Requirements</th>
+											</tr>
+										</thead>
+										<tbody>
+											<CartProducts key={items} editable={false} />
+										</tbody>
+									</table>
+									</div>
+									<Divider/>
+								</div>
+								<div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-12">
+									<table className="right-content">
+										<tbody>
+											<tr className="non-hover"><td><strong>Subtotal:&ensp;</strong>{formatNumber(total)}</td></tr>
+											<tr className="non-hover"><td><strong>GST:&ensp;</strong>{formatNumber(total*0.01)}</td></tr>
+											<tr className="non-hover"><td><strong>Freight Charge:&ensp;</strong>{formatNumber(total*0.05)}</td></tr>
+											<tr className="non-hover"><td><strong>Total:&ensp;</strong>{formatNumber(total*1.06)}</td></tr>
+										</tbody>
+									</table>
+								</div>
+							</>
+					)
+				}
+			</div>
+		</div>
   </>)
 };
 
