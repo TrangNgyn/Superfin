@@ -77,19 +77,19 @@ const Products = () => {
                 (loading ? <Spin size='large' /> : <>
                     <div className="container flex-horizontal-box-container">
                         <TreeSelect 
-                          className="box-item-xs-6 box-item-sm-4 box-item-md-4 box-item-lg-4 box-item-xl-3" 
-                          treeData={getCategoriesHierarchy(categories, true)} 
-                          placeholder="Filter Category" 
-                          defaultValue="allCategories" 
-                          treeDefaultExpandAll 
-                          onChange={e => {
-                            setFilter(e); 
-                            filterAndSortProduct()
-                          }}
+                            className="box-item-xs-12 box-item-sm-6 box-item-md-4 box-item-lg-4 box-item-xl-3" 
+                            treeData={getCategoriesHierarchy(categories, true)} 
+                            placeholder="Filter Category" 
+                            defaultValue="allCategories" 
+                            treeDefaultExpandAll 
+                            onChange={e => {
+                                setFilter(e); 
+                                filterAndSortProduct()
+                            }}
                         />
 
                         <Select 
-                            className="box-item-xs-6 box-item-sm-4 box-item-md-4 box-item-lg-4 box-item-xl-3" 
+                            className="box-item-xs-12 box-item-sm-6 box-item-md-4 box-item-lg-4 box-item-xl-3" 
                             defaultValue="priceAsc" 
                             onSelect={e => {
                                 setSorted(e);

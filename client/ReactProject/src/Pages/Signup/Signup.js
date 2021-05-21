@@ -1,8 +1,9 @@
 import { Form, Input, Button, Tooltip } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
-import { layout2, tailLayout } from './Layouts';
 import { emailTakenModal, signupSuccess } from './Modals';
+import { history } from '../../_helpers/history';
 import { useState } from 'react';
+import { layout, actionButtonsLayout } from './layouts'; 
 import { onlyNumbers, checkPasswordStrength } from '../../_services/SharedFunctions';
 import axios from 'axios';
 
@@ -28,12 +29,11 @@ const Signup = () => {
     }
 
     return(
-        <div>
-            <div style={{textAlign: 'center', padding: '3%'}}>
-                <h1>Create an Account</h1>
+        <>
+            <div className="page-title-holder with-divider center-page">
+                <h2>Sign Up</h2>
             </div>
-
-            <Form {...layout2} form={form} onFinish={submit} onFinishFailed={e => console.log(e)}>
+            <Form className="container" {...layout} form={form} onFinish={submit} onFinishFailed={e => console.log(e)}>
                 <Form.Item
                     label="First Name"
                     name="first_name"
@@ -151,12 +151,14 @@ const Signup = () => {
                 >
                     <Input.Password maxLength={30}/>
                 </Form.Item>
-
-                <Form.Item {...tailLayout}>
-                    <Button loading={loading} type="primary" htmlType="submit">Sign up</Button>
+                <Form.Item {...actionButtonsLayout}>
+                    <Button style={{float: 'right'}} loading={loading} type="primary" htmlType="submit">Sign up</Button>
+                </Form.Item>
+                <Form.Item {...actionButtonsLayout}>
+                    <span style={{float: 'right'}}>Already had an account ? &nbsp; <Button type="link" onClick={() => history.push('/login')}>Login</Button></span>
                 </Form.Item>
             </Form>
-        </div>
+        </>
     );
 }
 

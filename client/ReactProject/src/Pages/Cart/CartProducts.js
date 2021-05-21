@@ -157,7 +157,7 @@ const CartProducts = (props) => {
     return (<>
         {
           isLoading ?
-            <tr><td colSpan={4}><h3 style={{textAlign: 'center'}}>Fetching your Cart Items. . .<br/>Thank you for your patience!<br/><Spin size='large'/></h3></td></tr>
+            <tr><td colSpan={5}><h3 style={{textAlign: 'center'}}>Fetching your Cart Items. . .<br/>Thank you for your patience!<br/><Spin size='large'/></h3></td></tr>
           :
           (        
             !invalidRemoved ?

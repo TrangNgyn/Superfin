@@ -1,18 +1,14 @@
-
-export const layout2 = {
+export const layout = {
     labelCol: {
-        span: 8,
+      span: 8
     },
     wrapperCol: {
-      span: 7,
-    },
+      span: 12
+    }
 };
 
-
-  
-export const tailLayout = {
+export const actionButtonsLayout = {
     wrapperCol: {
-        offset: 8,
-        span: 16,
+        span: 20
     }
 };
