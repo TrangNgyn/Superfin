@@ -74,58 +74,58 @@ exports.sign_up =  (req,res) => {
 
 
 // this is only for inserting admins for test/dev will not be available in production
-exports.sign_up_admin =  (req,res) => {
-    try{    
-    const found =  req.body.password.match(db.passwordRegex)
-    if(found == null)
-        return res.status(400).send({
-            success: false,
-            message: "Password does not meet the criteria"
-        })
-    const admin = new db.admin({
-        email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, salt_rounds),
-        acc_name: req.body.acc_name
-    });
-    admin.save((err,customer) => {
-        if(err) {
-            console.log(err)
-            return res.status(500).send({
-                success: false,
-                message: err
-            })
-        }
-        db.role.find({ name: {$in: ['admin']} }, (err, roles) => {
-            if(err) {
-                console.log(err)
-                return res.status(500).send({
-                    success: false,
-                    message: err
-                })
-            }
-            admin.roles = roles.map(role => role._id)
-            admin.save(err => {
-                if(err) {
-                    console.log(err)
-                    return res.status(500).send({
-                        success: false,
-                        message: err
-                    })
-                }
-                return res.send({
-                    success: true,
-                    message: "Admin was registered Successfully"
-                })
-            })
-        })
-    })
-    } catch (err) {
-        return res.status(500).send({
-            success: false,
-            message: err.message
-        })
-    }
-}
+// exports.sign_up_admin =  (req,res) => {
+//     try{    
+//     const found =  req.body.password.match(db.passwordRegex)
+//     if(found == null)
+//         return res.status(400).send({
+//             success: false,
+//             message: "Password does not meet the criteria"
+//         })
+//     const admin = new db.admin({
+//         email: req.body.email,
+//         password: bcrypt.hashSync(req.body.password, salt_rounds),
+//         acc_name: req.body.acc_name
+//     });
+//     admin.save((err,customer) => {
+//         if(err) {
+//             console.log(err)
+//             return res.status(500).send({
+//                 success: false,
+//                 message: err
+//             })
+//         }
+//         db.role.find({ name: {$in: ['admin']} }, (err, roles) => {
+//             if(err) {
+//                 console.log(err)
+//                 return res.status(500).send({
+//                     success: false,
+//                     message: err
+//                 })
+//             }
+//             admin.roles = roles.map(role => role._id)
+//             admin.save(err => {
+//                 if(err) {
+//                     console.log(err)
+//                     return res.status(500).send({
+//                         success: false,
+//                         message: err
+//                     })
+//                 }
+//                 return res.send({
+//                     success: true,
+//                     message: "Admin was registered Successfully"
+//                 })
+//             })
+//         })
+//     })
+//     } catch (err) {
+//         return res.status(500).send({
+//             success: false,
+//             message: err.message
+//         })
+//     }
+// }
 
 
 exports.sign_in = (req,res) => {
