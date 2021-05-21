@@ -62,7 +62,7 @@ const Cart = (props) =>{
                 <table>
                     <tbody>
                         <tr className="non-hover">
-                            <td><strong>Distinct items:</strong></td>
+                            <td><strong>Total items:</strong></td>
                             <td>{itemCount}</td>
                         </tr>
                         <tr className="non-hover">
