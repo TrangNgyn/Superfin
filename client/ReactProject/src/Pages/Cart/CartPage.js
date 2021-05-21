@@ -20,16 +20,21 @@ const Cart = (props) =>{
         props.clearCart();
     }
 
-    // useEffect(() => {
-    //     if(props.total === 0){ // if cart cleared
-    //         localStorage.clear();
-    //     }
-    //     else {
-    //         localStorage.setItem("items", JSON.stringify(props.cartItems));
-    //         localStorage.setItem("total", JSON.stringify(props.total));
-    //     }
-        
-    // }, [props.cartItems, props.total])
+    useEffect(() => {
+        // get only user input values
+        const items = props.cartItems.map(i => {
+            return {
+                item_code: i.item_code,
+                p_size: i.p_size,
+                quantity: i.quantity,
+                special_requirements: i.special_requirements,
+            }
+        });
+
+        // store cart state to local storage
+        localStorage.setItem("items", JSON.stringify(items));
+
+    }, [props.cartItems, props.total])
   
     return(<>
         <div className="page-title-holder fill">
@@ -61,19 +66,19 @@ const Cart = (props) =>{
                             <td>{itemCount}</td>
                         </tr>
                         <tr className="non-hover">
-                            <td><strong>Subtotal:</strong></td>
+                            <td><strong>Subtotal (incl. GST):</strong></td>
                             <td>{formatNumber(subTotal)}</td>
-                        </tr>
-                        <tr className="non-hover">
-                            <td><strong>Freight charge:</strong></td>
-                            <td>{formatNumber(freightCharge)}</td>
                         </tr>
                         <tr className="non-hover">
                             <td><strong>GST:</strong></td>
                             <td>{formatNumber(GST)}</td>
                         </tr>
                         <tr className="non-hover">
-                            <td><strong>Total:</strong></td>
+                            <td><strong>Freight charge:</strong></td>
+                            <td>{formatNumber(freightCharge)}</td>
+                        </tr>
+                        <tr className="non-hover">
+                            <td><strong>Grand total:</strong></td>
                             <td>{formatNumber(grandTotal)}</td>
                         </tr>
                     </tbody>

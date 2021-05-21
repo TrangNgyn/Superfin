@@ -12,7 +12,6 @@ const ProductMainTitle = props => {
     const { Option } = Select;
     const { TextArea } = Input;
     const productDetails = props.productDetails;
-    console.log(productDetails)
     
     // line items' variables
     const [quantity, setQuantity] = useState((!productDetails) ? 0 : 1);
@@ -63,9 +62,19 @@ const ProductMainTitle = props => {
     );
 
     useEffect(() => {
+        // get only user input values
+        const items = props.items.map(i => {
+            return {
+                item_code: i.item_code,
+                p_size: i.p_size,
+                quantity: i.quantity,
+                special_requirements: i.special_requirements,
+            }
+        });
+
         // store cart state to local storage
-        localStorage.setItem("items", JSON.stringify(props.items));
-        localStorage.setItem("total", JSON.stringify(props.total));
+        localStorage.setItem("items", JSON.stringify(items));
+
     }, [props.total, props.items]);
 
     return (

@@ -1,64 +1,100 @@
+/*
+  - Author: Trang Nguyen
+  - A list of Cart Items that will be validated and updated on render.
+*/
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Modal, Spin } from 'antd';
 import axios from 'axios';
 import CartItem from './CartItem';
-// import { getProductDetails } from '../../_actions/productActions';
-import { removeItems, setLoading, setError } from '../../_actions/cartActions';
-
+import { removeItems, updateItemInfo, setLoading, setError } from '../../_actions/cartActions';
 
 const CartProducts = (props) => {
     const editable = props.editable
 
-    // products that are in cart but no longer available (deleted)
+    // up-to-date product codes
     const [validPCodes, setValidPCodes] = useState(
       // init pCodes with all product codes in cart
       props.line_items.map(li => li.item_code)
     );
-    const [invalidPCodes, setInvalidPCodes] = useState([]);
-    console.log({valid: validPCodes})
-    console.log({invalid: invalidPCodes})
-    console.log({itens: props.line_items})
+    // products that are in cart but no longer available (deleted)
+    const [invalidProducts, setInvalidProducts] = useState([]);
+    // product info pulled from database using product codes in cart
+    const [productInfo, setProductInfo] = useState([]);
 
     // component states
     const [isLoading, setLoadingState] = useState(true);
-    const [popupVisible, setPopupVisible] = useState(false);
+    // state if the invalid products have been removed from cart
+    const [invalidRemoved, setInvalidRemoved] = useState(false);
+
+    function filterInavlidProducts() {
+      if(validPCodes 
+          && validPCodes.length !== props.line_items.length)
+      {
+        let invalid1 = props.line_items
+          .filter((li) => {
+            return !validPCodes.includes(li.item_code);
+          })
+          .map(li => {return {item_code: li.item_code, p_size: li.p_size}});
+        
+        // add to invalid array
+        setInvalidProducts(invalid1);
+
+        // find products that have correct p_code but incorrect p_size
+        let invalid2 = [];
+        productInfo.forEach(p => {
+          props.line_items
+            .filter(li => {
+              return (li.item_code === p.p_code && !p.p_size.includes(li.p_size))
+            })
+            .forEach(li => {
+              invalid2 = [...invalid2, {item_code: li.item_code, p_size: li.p_size}];
+            });
+        }); 
+
+        // add to invalid array
+        invalid2.forEach(element => {
+          setInvalidProducts([...invalidProducts, element]);
+        });
+        
+      }
+    }
 
     useEffect(() => {
+      // update cart items' info
       axios
         .post('/api/products/validate-products', {
-          p_codes: validPCodes,
-          p_names: props.line_items.map(li => li.p_name),
-          unit_prices: props.line_items.map(li => li.unit_price),
-          price_ids: props.line_items.map(li => li.price_id), 
-          images: props.line_items.map(li => li.p_image_uri), 
-          p_sizes: props.line_items.map(li => li.p_size)
+          p_codes: props.line_items.map(li => li.item_code)
         })
         .then(res => {
-          setValidPCodes(res.data.valid_pcodes.map(p => p.p_code));
+          // update information in cart
+          props.updateItemInfo(res.data.valid_pcodes);
+          setProductInfo(res.data.valid_pcodes);
+
+          if(res.data.valid_pcodes){
+            setValidPCodes(res.data.valid_pcodes.map(p => p.p_code));
+            
+          }else{
+            setValidPCodes([]);
+          }
+          console.log({res: res})
           setLoadingState(false);
+
         })
         .catch(err => {
           console.log(err);
           setLoadingState(false);
         })
 
+
     }, []);
 
     useEffect(() => {
-      if(validPCodes 
-          && validPCodes.length !== props.line_items.length)
-      {
-        let invalid = props.line_items
-          .filter((li) => {
-            return !validPCodes.includes(li.item_code);
-          })
-          .map(li => li.p_name);
 
-        setInvalidPCodes(invalid);
-      }
-      
+      filterInavlidProducts();
+
     }, [validPCodes])
    
     const itemList = () => {
@@ -81,10 +117,13 @@ const CartProducts = (props) => {
       return items;
     }
 
-    // on confirming, keep valid products in cart
-    const removeItems = (validProds) => {
+    // on confirming, remove invalid products in cart
+    const removeItems = (invalidProds) => {
+      // remove invalid products
       console.log("OK");
-      props.removeItems(validProds);      
+      props.removeItems(invalidProds);
+      setInvalidRemoved(true);
+      
     };
 
     // popup for when an invalid product exists in cart
@@ -99,9 +138,9 @@ const CartProducts = (props) => {
             </p>
             <ul>
               {
-                invalidProds.map((p_name, index) => (
-                  <li key={`${p_name} ${index}`} >
-                    {p_name}
+                invalidProds.map((prod, index) => (
+                  <li key={`${prod.item_code} ${index}`} >
+                    {`Product Code: ${prod.item_code} (Product Size: ${prod.p_size})`}
                   </li>
                 ))
               }
@@ -111,7 +150,7 @@ const CartProducts = (props) => {
           
         ),
         okText: 'Remove Items',
-        onOk () { removeItems(validProds) }
+        onOk () { removeItems(invalidProds) }
       });
     }
 
@@ -120,14 +159,15 @@ const CartProducts = (props) => {
           isLoading ?
             <tr><td colSpan={4}><h3 style={{textAlign: 'center'}}>Fetching your Cart Items. . .<br/>Thank you for your patience!<br/><Spin size='large'/></h3></td></tr>
           :
-          <>
-            {
+          (        
+            !invalidRemoved ?
+              (
+                (invalidProducts.length > 0) ? 
+                 infoModal(invalidProducts, validPCodes) : 
+                 itemList()
+              ) : 
               itemList()
-            }
-            {
-              (invalidPCodes.length > 0) ? infoModal(invalidPCodes, validPCodes) : <></>
-            }
-          </>
+          )
         }
         </>
     );
@@ -144,7 +184,8 @@ const mapDispatchToProps= (dispatch)=>{
   return{
     // setLoading: (isLoading) => {dispatch(setLoading(isLoading))},
     // setError: (err) => {dispatch(setError(err))},
-    removeItems: (valid_pcodes) => {dispatch(removeItems(valid_pcodes))},
+    removeItems: (invalid_pcodes) => {dispatch(removeItems(invalid_pcodes))},
+    updateItemInfo: (items) => {dispatch(updateItemInfo(items))},
   }
 }
 
