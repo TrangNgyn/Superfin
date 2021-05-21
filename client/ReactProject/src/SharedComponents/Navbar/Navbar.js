@@ -245,7 +245,7 @@ export default function Navbar(){
                     </Badge>          
                 }
             >
-                <Link to="/cart"> Cart hello </Link>
+                <Link to="/cart"> Cart </Link>
             </Menu.Item>
         </>
     );
@@ -348,7 +348,7 @@ export default function Navbar(){
                         {mainMenuMobile}
 
                         <Menu.Item key="Cart" icon = {<ShoppingCartOutlined/>}>
-                            <Link to="/cart"> Cart hello </Link>
+                            <Link to="/cart"> Cart </Link>
                         </Menu.Item>
 
                         {loginMobile}
