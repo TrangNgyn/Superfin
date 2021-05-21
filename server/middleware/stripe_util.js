@@ -10,9 +10,16 @@ async function stripe_add_product(p_code, p_name, p_price, callback){
 
     // add product to stripe
     stripe.products.retrieve(p_code,(err,product) => {
-        if(err)
-            return callback(new Error(`Error searching for product object in stripe - ${err.message}`))
-        if(product) {
+        // this is really really bad and should be done differently - Ollie
+        let con = true
+        if(err) {
+            if(err.message == `No such product: '${p_code}'`)
+                con = false
+            else   
+                return callback(new Error(`Error searching for product object in stripe - ${err.message}`))
+
+        }
+        if(con) {
             stripe.products.update(p_code,{active: true},(err,reactiveated_product) => {
                 if(err)
                     return callback(new Error(`Error reactivating product object in Stripe - ${err.message}`))
