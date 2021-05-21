@@ -8,10 +8,11 @@ async function stripe_add_product(p_code, p_name, p_price, callback){
     // even attempts to add a price and a new product.
 
 
-    // add product to stripe
+    // attempt to find the product 
     stripe.products.retrieve(p_code,(err,product) => {
         // this is really really bad and should be done differently - Ollie
         let con = true
+        // if error is thrown check if it is the product not found error 
         if(err) {
             if(err.message == `No such product: '${p_code}'`)
                 con = false
@@ -19,6 +20,7 @@ async function stripe_add_product(p_code, p_name, p_price, callback){
                 return callback(new Error(`Error searching for product object in stripe - ${err.message}`))
 
         }
+        // if con is still true update the found product to active and create a new price for the product 
         if(con) {
             stripe.products.update(p_code,{active: true},(err,reactiveated_product) => {
                 if(err)
@@ -40,13 +42,14 @@ async function stripe_add_product(p_code, p_name, p_price, callback){
                 })
             })
         }
+        // if con is no longer true (i.e. the product doesn't alread exist) then create a new product and new 
+        // price and assign it to the price 
         else {
             stripe.products.create({
                 id: p_code,
                 name: p_name,
             },(err,stripe_product) => {
                 if(err) {
-                    //if(err.message == "Product already exists")
                     return callback(new Error(`Error creating product object in Stripe - ${err.message}`))
                 }
                 // create price object
@@ -56,6 +59,7 @@ async function stripe_add_product(p_code, p_name, p_price, callback){
                         currency: 'aud'
                     }, (err, stripe_price) => {
                         if(err) {
+                            // delete the newly created product if the price creation fails
                             stripe_delete_product(p_code);
                             return callback(new Error(`Error creating price object in Stripe - ${err.message}`))
                         }
