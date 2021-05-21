@@ -669,29 +669,6 @@ div#copyright-background{
 /* =========== END MEDIA QUERIES ======== */
 /* ====================================== */
 
-
-/* ====================================== */
-/* ============ Contact Us Page ========= */
-/* ====================================== */
-div#contact-us-content > div {
-	border: 1px solid #000000;
-	padding: 20px;
-}
-
-div#contact-us-content > div:nth-child(1) > form > div:nth-last-child(1) {
-	margin-top: 12px;
-	text-align: center;
-}
-
-div#contact-us-content > div:nth-child(2) {
-	background-color: $gray-light;
-	text-align: center;
-}
-
-/* ====================================== */
-/* ========== End Contact Us Page ======= */
-/* ====================================== */
-
 /* ====================================== */
 /* ======== Authentication Pages ======== */
 /* ====================================== */
