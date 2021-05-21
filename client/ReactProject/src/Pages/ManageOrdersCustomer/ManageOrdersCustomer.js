@@ -4,13 +4,15 @@ import axios from 'axios';
 import { filterOrders, sortOrders } from './Functions';
 import { orderStatusConstants } from '../../_constants/orderStatus.constants';
 import OrderView from './OrderView';
+import { useAuth, useAuthUpdate } from '../../SharedComponents/AuthContext/AuthContext';
+import { _logout } from '../../_services/SharedFunctions';
 
 const {OptGroup, Option} = Select;
 const itemsPerPage = 10;
 
-const mockEmail = "its488@uowmail.edu.au";
-
 const ManageOrdersCustomer = () => {
+    const auth = useAuth();
+    const updateAuth = useAuthUpdate();
 
     const [orders, setOrders] = useState([]);
     const [ordersOriginal, setOrdersOriginal] = useState([]);
@@ -19,6 +21,7 @@ const ManageOrdersCustomer = () => {
     const [error, setError] = useState(false);
     const [noOrders, setNoOrders] = useState(false);
     const [page, setPage] = useState(0);
+
 
     const maxNumberOfPages = (Math.ceil(orders.length/itemsPerPage) - 1);
     let row = <></>;
@@ -30,8 +33,9 @@ const ManageOrdersCustomer = () => {
     useEffect(() => {
         if(!orders.length){
             setLoading(true);
-
-            axios.post('api/orders/order-by-email', { email: mockEmail })
+            const config = { headers:{ authorization : `Bearer ${auth.access_token}` }};
+            
+            axios.get('api/orders/orders-for-user', config)
             .then(res => {
                 if(res.data.hasOwnProperty('success')){
                     console.log(res);
@@ -47,11 +51,14 @@ const ManageOrdersCustomer = () => {
             })
             .catch(err => {
                 console.log(err);
-                setError(true);
-                setLoading(false);
+                if(err.response.status === 401) _logout(updateAuth);
+                else{
+                    setError(true);
+                    setLoading(false);
+                }
             });
         }
-    }, [orders.length])
+    }, [orders.length, auth.access_token, updateAuth])
 
 
     if(orders.length !== 0){
