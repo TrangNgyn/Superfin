@@ -129,8 +129,11 @@ exports.sign_up_admin =  (req,res) => {
 
 
 exports.sign_in = (req,res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
     db.user.findOne({
-        email: req.body.email
+        email: email
     }).populate("roles").exec((err,user) => {
         if(err){
             console.log(err)
@@ -145,7 +148,7 @@ exports.sign_in = (req,res) => {
                 access_token: null,
                 message: "User not found"
             })
-        var pass_is_valid = bcrypt.compareSync(req.body.password, user.password)
+        var pass_is_valid = bcrypt.compareSync(password, user.password)
 
         if(!pass_is_valid) {
             return res.status(401).send({
@@ -168,7 +171,7 @@ exports.sign_in = (req,res) => {
             access_token: token,
             token_type: "Bearer",
             roles: authorities,
-            expires_in: ":1800"
+            expires_in: ":1800",
         })
     })
 }

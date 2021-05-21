@@ -32,8 +32,8 @@ router.post('/single-order',
 
 // CUSTOMER ORDER ROUTES //
 router.get('/orders-for-user',
-[auth_jwt.verify_token, auth_jwt.is_customer]
-,order_controller.get_customer_orders) 
+    [auth_jwt.verify_token, auth_jwt.is_customer],
+    order_controller.get_customer_orders) 
 router.post('/single-order-for-user', 
     [auth_jwt.verify_token, auth_jwt.is_customer],
     order_controller.get_single_order_customer) 

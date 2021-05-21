@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { db } = require('../models/customer');
+const db = require('../models/db');
 
 const customer_model = require('../models/customer');
 const order_model = require('../models/purchased_order');
