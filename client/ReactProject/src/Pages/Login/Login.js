@@ -100,7 +100,7 @@ const Login = () => {
                 </Form.Item>
 
                 <Form.Item {...actionButtonsLayout}>
-                    <span>Don't have an account yet ? &nbsp; <Button type="link" >Create an Account</Button></span>
+                    <span>Don't have an account yet ? &nbsp; <Button type="link" onClick={() => history.push('/signup')}>Create an Account</Button></span>
                 </Form.Item>
             </Form>
         </div>

@@ -119,7 +119,7 @@ const POForm2 = props => {
 
     return(
         <Form onBlur={updateOrder} form={props.form}>
-            <table id="view-order-table-wrapper">
+            <table id="view-order-table-wrapper" className="center-content">
                 <tbody>
                     <tr style = {{border: "solid black 1px"}}>
                         <th><span style={{color: 'red'}}>*</span>Item Code</th> 

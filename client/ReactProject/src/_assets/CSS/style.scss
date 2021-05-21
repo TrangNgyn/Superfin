@@ -711,6 +711,7 @@ form#authentication-form > div:nth-last-child(1) {
 div#manage-categories-current-panel, div#manage-categories-add-category-panel,
 div#manage-categories-delete-category-panel {
 	padding: 16px 8px 16px 8px;
+	border-radius: 5px;
 }
 
 div#manage-categories-current-panel div.ant-tree {
@@ -773,11 +774,119 @@ div#manage-categories-current-panel div.ant-tree {
 /* ====================================== */
 
 /* ====================================== */
-/* =========== Tree Component  ========== */
+/* ====== Manage Orders Component  ====== */
+/* ====================================== */
+tbody tr td:last-child button {
+	width: 100%;
+}
+
+div#manage-order-details-panel {
+	padding: 16px;
+	border-radius: 5px;
+}
+
+tr.ant-descriptions-row:hover,
+tr.ant-descriptions-row:focus {
+	background-color: transparent;
+}
+
+div.ant-descriptions {
+	margin-top: 16px;
+	margin-bottom: 16px;
+}
+
+div.ant-descriptions-header {
+	margin: 0;
+}
+
+span.ant-descriptions-item-label {
+	font-weight: bolder;
+}
+
+textarea#manage-order-details-panel-special-spec {
+	width: 100%;
+	min-height: 56px;
+	height: fit-content;
+	resize: none;
+}
+/* ====================================== */
+/* ==== End Manage Orders Component  ==== */
 /* ====================================== */
 
 /* ====================================== */
-/* ========= End Tree Component  ======== */
+/* ============  Cart Details  ========== */
+/* ====================================== */
+div#cart-content-page div:last-child {
+	padding: 16px;
+}
+
+div#cart-content-page-accept-payment img{
+	height: 38px;
+	margin: 4px;
+}
+/* ====================================== */
+/* =========  End Cart Details  ========= */
+/* ====================================== */
+
+/* ====================================== */
+/* ========== Table Component  ========== */
+/* ====================================== */
+table {
+	width: 100%;
+	border-radius: 5px;
+	margin: 16px 0;
+
+}
+
+div.table-container {
+	overflow-x: auto;
+	padding: 4px;
+}
+
+
+tbody tr:hover, tbody tr:focus{
+	background-color: rgba(0, 0, 0, 0.14);
+}
+
+tbody tr.non-hover:hover, tbody tr.non-hover:focus{
+	background-color: transparent;
+}
+
+th, td {
+	padding: 8px;
+}
+
+table.center-content * * th,
+table.center-content * * td {
+	text-align: center;
+	vertical-align: middle;
+}
+
+table.left-content * * th,
+table.left-content * * td {
+	text-align: left;
+	vertical-align: middle;
+}
+
+table.right-content * * th,
+table.right-content * * td {
+	text-align: right;
+	vertical-align: middle;
+}
+
+th {
+	border-bottom: solid 0.5px black;
+}
+
+td:first-child {
+	border-left: 0;
+}
+
+td:last-child {
+	border-right: 0;
+}
+/* ====================================== */
+/* ========= End Table Component  ======= */
 /* ====================================== */
 
 /* ====================================== */
@@ -844,6 +953,17 @@ div#manage-categories-current-panel div.ant-tree {
 
 /* ====================================== */
 /* =========== End Card Styling ========= */
+/* ====================================== */
+
+/* ====================================== */
+/* ============ Form Styling ============ */
+/* ====================================== */
+.div-box {
+	padding: 16px 8px 16px 8px;
+	border-radius: 4px;
+}
+/* ====================================== */
+/* =========== End Form Styling ========= */
 /* ====================================== */
 
 /* ====================================== */

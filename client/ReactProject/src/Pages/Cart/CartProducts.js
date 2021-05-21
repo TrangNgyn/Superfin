@@ -103,7 +103,6 @@ const CartProducts = (props) => {
         for(var i = 0; i < props.line_items.length; i++){
           items.push(
             <>
-              <br/>
               <CartItem 
                 key={props.line_items[i]}
                 product={props.line_items[i]}
@@ -155,18 +154,11 @@ const CartProducts = (props) => {
       });
     }
 
-    return (
-      <div>
+    return (<>
         {
           isLoading ?
-          <>
-            <br/>
-            <div align="center">
-              <Spin size='large'/> <br/>
-              Fetching your Cart Items. <br/>
-              Thank you for your patience!
-            </div>
-          </> :
+            <tr><td colSpan={4}><h3 style={{textAlign: 'center'}}>Fetching your Cart Items. . .<br/>Thank you for your patience!<br/><Spin size='large'/></h3></td></tr>
+          :
           (        
             !invalidRemoved ?
               (
@@ -177,8 +169,7 @@ const CartProducts = (props) => {
               itemList()
           )
         }
-        
-      </div>
+        </>
     );
 }
 

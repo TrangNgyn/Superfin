@@ -1,227 +1,163 @@
-import '../../_assets/CSS/pages/Signup.css';
-import {Typography } from 'antd';
-import { Row, Col } from 'antd';
-import { Form, Input, InputNumber, Button, Select } from 'antd';
+import { Form, Input, Button, Tooltip } from 'antd';
+import { useForm } from 'antd/lib/form/Form';
+import { layout2, tailLayout } from './Layouts';
+import { emailTakenModal, signupSuccess } from './Modals';
+import { useState } from 'react';
+import { onlyNumbers, checkPasswordStrength } from '../../_services/SharedFunctions';
+import axios from 'axios';
 
+const Signup = () => {
+    const [form] = useForm();
+    const [loading, setLoading] = useState(false);
+    const [tooltipVisible, setTooltipVisible] = useState(false);
 
-const { Title } = Typography;
+    const submit = v => {
+        console.log(v);
+        setLoading(true);
 
+        axios.post('api/auth/sign_up', v)
+        .then(() => {
+            setLoading(false);
+            signupSuccess(v.first_name);
+        })
+        .catch(err => {
+            console.log(err);
+            setLoading(false);
+            emailTakenModal();
+        })
+    }
 
-const Signup = () =>{
-      const [form] = Form.useForm();
-      const onFinish = (values) => {
-        console.log('Success:', values);
-        alert("Account created");
-      };
-      const onFinishFailed = (errorInfo) => {
-          console.log('Failed:', errorInfo);
-      };
-     
+    return(
+        <div>
+            <div style={{textAlign: 'center', padding: '3%'}}>
+                <h1>Create an Account</h1>
+            </div>
 
-      const { Option } = Select;
+            <Form {...layout2} form={form} onFinish={submit} onFinishFailed={e => console.log(e)}>
+                <Form.Item
+                    label="First Name"
+                    name="first_name"
+                    style={{color: "#0E5F76"}}
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your first name!',
+                            whitespace: true
+                        }
+                    ]}
+                >
+                    <Input maxLength={30}/>
+                </Form.Item>
+        
+                <Form.Item
+                    label="Last Name"
+                    name="last_name"
+                    style={{color: "#0E5F76"}}
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your last name!',
+                            whitespace: true
+                        }
+                    ]}
+                >
+                    <Input maxLength={30}/>
+                </Form.Item>
 
-      return(
-        <body>
-        <div id="signup-head">
-        <Title level={3}>Sign Up</Title>
+                <Form.Item
+                    label="Email"
+                    name="email"
+                    style={{color: "#0E5F76"}}
+                    validateTrigger={['onBlur']}
+                    rules={[
+                        {
+                            required: true,
+                            type: 'email',
+                            message: 'Please input a valid email!',
+                            whitespace: true,
+                        }     
+                    ]}
+                >
+                    <Input maxLength={30}/>
+                </Form.Item>
+
+                <Form.Item 
+                        label="Phone" 
+                        name="mobile" 
+                        style={{color: "#0E5F76"}}
+                        validateTrigger={['onBlur']}
+                        
+                        rules={[
+                            {
+                                validator: async (_, phone) => {
+                                    if(phone !== undefined && phone !== "" && phone.length < 10){
+                                        return Promise.reject(new Error('Phone number must be valid!'));
+                                    }
+                                },
+                            },
+                            {
+                                required: true,
+                                message: 'Please input a valid phone number!',
+                                whitespace: true
+                            }
+                        ]}
+                    >
+                    <Input onChange={e => {onlyNumbers(e, form, 'phone')}} maxLength={10}/>
+                </Form.Item>
+                
+                <Tooltip visible={tooltipVisible} title="Password must contain at least 8 characters, a special character, a number and an uppercase letter">
+                    <Form.Item
+                        label="Password"
+                        name="password"
+                        style={{color: "#0E5F76"}}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your password!',
+                                whitespace: true
+                            },
+                            {
+                                validator: async (_, password) => {
+                                    if(password !== undefined && password !== "" && !checkPasswordStrength(password)){
+                                        setTooltipVisible(true);
+                                        return Promise.reject(new Error('Password not strong enough'));
+                                    }
+                                },
+                                validateTrigger: 'onSubmit'
+                            }
+                        ]}
+                    >
+                        <Input.Password onFocus={() => {setTooltipVisible(false)}} maxLength={50}/>
+                    </Form.Item>
+                </Tooltip>
+
+                <Form.Item
+                    label="Confirm Password"
+                    name="passwordConfirm"
+                    style={{color: "#0E5F76"}}
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please confirm your password!',
+                        },
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                if (!value || getFieldValue('password') === value) return Promise.resolve();
+                                return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                            },
+                            validateTrigger: 'onSubmit'
+                        })
+                    ]}
+                >
+                    <Input.Password maxLength={30}/>
+                </Form.Item>
+
+                <Form.Item {...tailLayout}>
+                    <Button loading={loading} type="primary" htmlType="submit">Sign up</Button>
+                </Form.Item>
+            </Form>
         </div>
-        <div id="signup-content">
-        <Form
-              labelCol={{
-                span: 9,
-              }}
-              wrapperCol={{
-                span: 12,
-              }}
-              layout={'horizontal'}
-              form={form}
-              name="basic"
-              onFinish={onFinish}
-              onFinishFailed={onFinishFailed}
-            >
-            <Row gutter={[16,32]}>
-              <Col span={6} offset={6}>Account Details</Col>
-              <Col span={6} offset={6}>Delivery Details</Col>
-            </Row>
-            <Row gutter={16} >
-              <Col span={12}>
-              <Form.Item
-                label="First Name"
-                name="firstname"
-                rules={[{ required: true}]}>
-              <Input />
-              </Form.Item>
-              </Col>
-              <Col span={12}>
-              <Form.Item
-                name="phoneNumber"
-                label="Phone Number"
-                rules={[{ type: 'number'},{required: true}]}>
-                <InputNumber  style={{ width:"100%" }}/>
-              </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-              <Form.Item
-                label="Last Name"
-                name="lastname"
-                rules={[{ required: true}]}>
-              <Input/>
-              </Form.Item>
-              </Col>
-              <Col span={12}>
-              <Form.Item
-                label="Delivery Address"
-                name="deliveryAddress"
-                rules={[{ required: true}]}>
-              <Input />
-              </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-              <Form.Item
-                label="Email"
-                name="email"
-                rules={[
-                  {
-                    type: 'email',
-                    message: 'The input is not valid E-mail!',
-                  },
-                  {
-                    required: true,
-                    message: 'Please input your E-mail!',
-                  },
-                ]}
-                hasFeedback
-              >
-              <Input/>
-              </Form.Item>
-              </Col>
-              <Col span={12}>
-              <Form.Item
-                label="Billing Address"
-                name="billingAddress"
-                rules={[{ required: true}]}>
-              <Input />
-              </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-              <Form.Item
-                label="Confirm Email"
-                name="confirmEmail"
-                dependencies={['email']}
-                hasFeedback
-                rules={[
-                  {
-                    type: 'email',
-                    message: 'The input is not valid E-mail!',
-                  },
-                  {
-                    required: true,
-                    message: 'Please confirm your email!',
-                  },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (!value || getFieldValue('email') === value) {
-                        return Promise.resolve();
-                      }
-
-                      return Promise.reject(new Error('The two emails that you entered do not match!'));
-                    },
-                  }),
-                ]}
-
-              >
-              <Input/>
-              </Form.Item>
-              </Col>
-              <Col span={12}>
-              <Form.Item
-                label="Suburb"
-                name="suburb"
-                rules={[{ required: true}]}>
-              <Input />
-              </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-              <Form.Item
-                label="Password"
-                name="password"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your password!',
-                  },
-                ]}
-                hasFeedback
-              >
-              <Input.Password/>
-              </Form.Item>
-              </Col>
-              <Col span={12}>
-              <Form.Item label="State/Province" name="stateprovince" rules={[{ required: true}]}>
-              <Select  >
-                <Option value="NSW">NSW</Option>
-                <Option value="VIC">VIC</Option>
-                <Option value="ACT">ACT</Option>
-                <Option value="NT">NT</Option>
-                <Option value="QLD">QLD</Option>
-                <Option value="SA">SA</Option>
-                <Option value="TAS">TAS</Option>
-                <Option value="WA">WA</Option>
-              </Select>
-              </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-              <Form.Item
-                label="Confirm Password"
-                name="confirmPassword"
-                dependencies={['password']}
-                hasFeedback
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please confirm your password!',
-                  },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (!value || getFieldValue('password') === value) {
-                        return Promise.resolve();
-                      }
-                      return Promise.reject(new Error('The two passwords that you entered do not match!'));
-                    },
-                  }),
-                ]}
-              >
-              <Input.Password/>
-              </Form.Item>
-              </Col>
-              <Col span={12}>
-              <Form.Item label="Postcode" name="Postcode"  rules={[{ type: 'number',min: 200, max: 9729,},{ required: true}]}>
-                <InputNumber min={200} max={9729} />
-              </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16} >
-              <Col offset={20}span={4}>
-              <Form.Item>
-              <Button type="primary" htmlType="submit" >Sign Up</Button>
-              </Form.Item>
-              </Col>
-            </Row>
-        </Form>
-        </div>
-        </body>
-      );
-
+    );
 }
 
-export default Signup
+export default Signup;
