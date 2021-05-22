@@ -2,14 +2,13 @@ import React from "react";
 import '../../_assets/CSS/pages/HomepageAdmin/HomepageAdminOrder.css';
 import { orderStatusConstants } from '../../_constants/orderStatus.constants';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Button, Input, Form } from 'antd';
+import { Button, Input, Form, Card } from 'antd';
 import { navigateEditOrder } from './Functions';
 import { deleteOrderConfirm } from '../../SharedComponents/Modals/Modals';
 import { confirmSubmitTracking } from './Modals';
 import { useForm } from "antd/lib/form/Form";
 
-
-
+const { Meta } = Card;
 
 const HomepageAdminOrder = props => {
     const order = props.order;
@@ -34,7 +33,7 @@ const HomepageAdminOrder = props => {
         console.log(err);
     }
 
-    let trackingNumberDiv =  <div>
+    let trackingNumberDiv =  <>
                                 <Form
                                 form={form}
                                 name="submit-tracking-form"
@@ -43,7 +42,7 @@ const HomepageAdminOrder = props => {
                                 >
                                     <div className="Homepage-Admin-Order-Text"><b>Enter Tracking Number</b></div>
 
-                                    <div className="Homepage-Admin-Order-Text" style = {{paddingTop:"15px"}}>
+                                    <div className="Homepage-Admin-Order-Text">
                                         <Form.Item
                                             name="tracking_number"
                                             rules={[
@@ -54,13 +53,13 @@ const HomepageAdminOrder = props => {
                                               }
                                             ]}
                                         >
-                                            <Input maxLength='40' placeholder="Enter tracking number here" style = {{width:"300px"}}/>
+                                            <Input maxLength='40' placeholder="Enter tracking number here"/>
                                         </Form.Item> 
                                     </div>
 
                                     <div className="Homepage-Admin-Order-Text"><b>Enter Carrier</b></div>
 
-                                    <div className="Homepage-Admin-Order-Text" style = {{paddingTop:"15px"}}>
+                                    <div className="Homepage-Admin-Order-Text">
                                         <Form.Item
                                              name="carrier"
                                              rules={[
@@ -71,7 +70,7 @@ const HomepageAdminOrder = props => {
                                                }
                                              ]}
                                         >
-                                            <Input maxLength='40' placeholder="Enter carrier name here" style = {{width:"300px"}}/>
+                                            <Input maxLength='40' placeholder="Enter carrier name here"/>
                                         </Form.Item>   
                                     </div>
                                     
@@ -81,21 +80,19 @@ const HomepageAdminOrder = props => {
                                         </Form.Item>
                                     </div>
                                 </Form>
-                            </div>
+                            </>
 
 
     //if the order is complete it will contain the tracking number 
     if(order.status === orderStatusConstants.COMPLETE || order.status === orderStatusConstants.SHIPPED){
-        trackingNumberDiv = <div>
+        trackingNumberDiv = <>
                                 <div>
                                     <div className="Homepage-Admin-Order-Text">Tracking Number: {order.tracking_number}</div>    
                                 </div>
                                 <div>
                                     <div className="Homepage-Admin-Order-Text">Carrier: {order.carrier}</div>    
                                 </div>
-                            </div>
-        
-        
+                            </>
     }
 
 
@@ -103,18 +100,22 @@ const HomepageAdminOrder = props => {
 
     
     return (
-        <div id="homepage-admin-order-container">
-            
-            <div className="Homepage-Admin-Order-Text">Order Number: {order.po_number}</div>
-            <div className="Homepage-Admin-Order-Text">Status: {order.status}</div>
-            <div className="Homepage-Admin-Order-Text">CustomerID: {order.c_email}</div>
-            <div className="Homepage-Admin-Order-Text">Date Issued: { dateString }</div>
-                {trackingNumberDiv}
-            <div id="homepage-admin-order-icon-container">
-                <DeleteOutlined className="homepage-admin-order-icon" onClick={() => { deleteOrderConfirm(order.po_number, order.status, access_token, updateAuth, dispatch) }}/>
-                <EditOutlined className="homepage-admin-order-icon" onClick={() => { navigateEditOrder(order.po_number, order.status)}}/>
-            </div>  
-        </div>
+        <Card className="card-shadow-hoverable"
+            tabIndex={0}
+            actions={[
+                <DeleteOutlined onClick={() => { deleteOrderConfirm(order.po_number, order.status, access_token, updateAuth, dispatch) }} style={{color: 'red'}}/>,
+                <EditOutlined onClick={() => { navigateEditOrder(order.po_number, order.status)}}/>
+            ]}
+            title={<b>Order Number: {order.po_number}</b>}>
+            <Meta
+                description={<>
+                    <p><b>Status: </b>{order.status}</p>
+                    <p><b>CustomerID: </b>{order.c_email}</p>
+                    <p><b>Date Issued: </b>{ dateString }</p>
+                    {trackingNumberDiv}
+                </>}
+            />
+        </Card>
     );
 };
 
