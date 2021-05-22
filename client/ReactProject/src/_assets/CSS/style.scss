@@ -266,7 +266,7 @@ div.Website-Footer {
 /* ====================================== */
 ul.Navbar {
 	text-align: center;
-	background-color: gray-light;
+	background-color: $gray-light;
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -996,4 +996,44 @@ main.ant-layout-content > div.ant-row.my-account-details > form {
 main.ant-layout-content > div.ant-row.my-account-details > form > * {
 	flex: 0 45%;
 	margin: .5em;
+}
+
+
+
+
+.homepage-carousel-button {
+    position: absolute;
+    left: 50%;
+    top: 55%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, 200%);
+    z-index: 2;
+    background-color: $orange-light;
+    color: white;
+    font-weight: bold;
+}
+
+.homepage-carousel-background {
+    position: relative;
+    height: 300px;
+    background: #F5AE85;
+}
+
+.homepage-carousel-text {
+    position: absolute;
+    color:black;
+    left: 12%;
+    right: 88%;
+    top: 20%;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.homepage-carousel-image {
+    position: absolute;
+    left: 62%;
+    right: 38%;
+    top: 0%;
+    height: 400px;
+    width: 700px;
 }
