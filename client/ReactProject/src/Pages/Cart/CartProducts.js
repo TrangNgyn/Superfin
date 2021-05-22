@@ -182,8 +182,6 @@ const mapStateToProps = (state)=>{
 
 const mapDispatchToProps= (dispatch)=>{
   return{
-    // setLoading: (isLoading) => {dispatch(setLoading(isLoading))},
-    // setError: (err) => {dispatch(setError(err))},
     removeItems: (invalid_pcodes) => {dispatch(removeItems(invalid_pcodes))},
     updateItemInfo: (items) => {dispatch(updateItemInfo(items))},
   }
