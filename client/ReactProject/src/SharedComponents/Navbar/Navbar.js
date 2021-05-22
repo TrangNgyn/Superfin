@@ -69,7 +69,7 @@ export default function Navbar(){
             });
         } 
         else if(auth.roles[0] === userConstants.ROLE_GUEST && JSON.stringify(userDetails) !== '{}') setUserDetails({});   //very important condition
-    }, [auth]);
+    }, [auth, updateAuth, userDetails]);
  
     const logout = () => {         
         _logout(updateAuth);
@@ -82,9 +82,6 @@ export default function Navbar(){
     const customerMenu = (                  //menus to be conditionally rendered 
         <>
         <Menu.Item>
-            <Link to="/myAccount"> My Account </Link>
-        </Menu.Item>
-        <Menu.Item>
             <Link to="/products"> Browse Products </Link>
         </Menu.Item>
         <Menu.Item>
@@ -94,7 +91,7 @@ export default function Navbar(){
             <Link to="/manageOrders"> Manage Orders </Link>
         </Menu.Item>
         <Menu.Item>
-            <Link to="/editProfile"> Edit Profile </Link>
+            <Link to="/editCustomer"> Edit Profile </Link>
         </Menu.Item>
         </>
     );
@@ -127,10 +124,10 @@ export default function Navbar(){
         const sub_categories = childCategories
             .filter(c => { return c.path === `,${p.c_name},`})
             .map(c => {
-                return <Menu.Item key={c._id}>{c.c_name}</Menu.Item>
+                return <Menu.Item onClick={() => {history.push(`/products/${c._id}`)}} key={c._id}>{c.c_name}</Menu.Item>
             });
             return (
-                <SubMenu key={p._id} title={p.c_name}>{sub_categories}</SubMenu>
+                <SubMenu key={p._id} title={<div onClick={() => {history.push(`/products/${p._id}`)}}>{p.c_name}</div>}>{sub_categories}</SubMenu>
             );
     })
 
@@ -143,19 +140,17 @@ export default function Navbar(){
             </Menu.Item>
                 {categoriesMenu}
             <Menu.Item>
-            <Link to="/products">
-                <b>{"View all Products  >"}</b>
-            </Link>
+                <Link to="/products">
+                    <b>{"View all Products  >"}</b>
+                </Link>
             </Menu.Item>
         </Menu>
     );
 
   const ourProductsSubmenuMobile = ( //Our Products Submenu
         <SubMenu key="OurProductsSubmenu" className="submenu-background" title="Our Products">
-            <Menu.Item>
-                <Link to="/products/categories">
-                    <b>Shop By Category</b>
-                </Link>
+            <Menu.Item disabled>
+                <b>Shop By Category</b>
             </Menu.Item>
             {categoriesMenu}
             <Menu.Item>
@@ -330,8 +325,8 @@ export default function Navbar(){
                         {login}
                     </Menu>
 
-                    <Menu className="Navbar-Mobile" mode="inline" selectable={false} onClick={() => {history.push(logoLink)}}>
-                        <Menu.Item key="Logo" id="Logo">
+                    <Menu className="Navbar-Mobile" mode="inline" selectable={false}>
+                        <Menu.Item key="Logo" id="Logo" onClick={() => {history.push(logoLink)}}>
                             {
                                 auth.roles[0] === userConstants.ROLE_ADMIN
                                 ?
@@ -347,7 +342,11 @@ export default function Navbar(){
 
                         {mainMenuMobile}
 
-                        <Menu.Item key="Cart" icon = {<ShoppingCartOutlined/>}>
+                        <Menu.Item key="Cart" icon = {
+                            <Badge count={itemCount} showZero style={{backgroundColor: "#EB6E00"}} >
+                                <ShoppingCartOutlined />
+                            </Badge>          
+                        }>
                             <Link to="/cart"> Cart </Link>
                         </Menu.Item>
 

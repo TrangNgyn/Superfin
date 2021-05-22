@@ -14,7 +14,7 @@ ReactDOM.render(
   <Provider store = {store}>
     <HelmetProvider>
       <App />
-    </HelmetProvider>,
+    </HelmetProvider>
   </Provider>,
   document.getElementById('main')
 );

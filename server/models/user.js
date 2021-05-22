@@ -1,11 +1,13 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
+// set base schema options so taht admin and customer can inherit the common fields
 const base_options = {
     discriminator_key: 'user_type',
     collection: 'users'
 }
 
+// user schema
 const user_schema = new Schema({
     email: {
         type: String,

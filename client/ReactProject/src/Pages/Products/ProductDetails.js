@@ -4,7 +4,7 @@ import { getProductDetails, setLoadingProductDetails } from '../../_actions/prod
 import ProductImagesCarousel from './ProductImagesCarousel';
 import ProductMainTitle from './ProductMainTitle';
 import ProductDescription from './ProductDescription';
-import { Spin } from 'antd';
+import { Spin, Divider } from 'antd';
 
 const ProductDetails = props => {
     // current product detail state
@@ -68,6 +68,7 @@ const ProductDetails = props => {
                         <ProductMainTitle key={productDetails}
                             productDetails={productDetails} />
                     </div>
+                    <Divider/>
                     <div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-12">
                         <ProductDescription key={productDetails}
                             productDetails={productDetails}/>

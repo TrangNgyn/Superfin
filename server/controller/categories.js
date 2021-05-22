@@ -14,6 +14,7 @@ class Category {
 
     async get_all_categories(req,res) {
         try{
+            // find all categories
             categories_model.find({},function (err,result) {
                 if(!err)
                     res.json(result)
@@ -40,15 +41,19 @@ class Category {
                 return res.json(empty_field)
             }
 
+            // if no path set path to null
             if(path === "") {
                 path = null;
             }
 
+            // create new category
             var new_category = new categories_model({
                 c_name,
                 c_description,
                 path
             })
+
+            // save new category
             new_category.save((err) => {
                 if(err) {
                     return res.json({
@@ -77,13 +82,15 @@ class Category {
 
     async get_all_children(req,res) {
         try{
-            var c_name  = req.query.c_name
 
+            var c_name  = req.query.c_name
             var found = await categories_model.find({ c_name })
 
             if(found) {
                 var search = `,${c_name},`
+                // do a regex search on the path's of all categories
                 var children = await categories_model.find({ path: new RegExp(search) })
+                // return the found categories
                 res.json({
                     children
                 })
@@ -111,11 +118,11 @@ class Category {
     async get_immediate_children(req,res) {
         try{
             var c_name  = req.query.c_name
-
             var found = await categories_model.find({ c_name })
 
             if(found) {
                 var search = `,${c_name},$`
+                // do a regex search for all categories that are immediate children of the provided 
                 var children = await categories_model.find({ path: new RegExp(search) })
                 res.json({
                     children
@@ -149,13 +156,17 @@ class Category {
                 res.json(empty_field)
             }
 
+            // find a category
             var delete_category = await categories_model.findOne({c_name})
 
             if(delete_category){
+                // find all categoriges that are children of the specified category
                 var children = await categories_model.find({ path: new RegExp(`,${c_name},`)})
+                // add the found category to the children array
                 children.push(delete_category)
                 var deleted = [];
                 var process = 0;
+                // delete each category
                 children.forEach(element => {
                     element.deleteOne((err,result) => {
                         if(err){

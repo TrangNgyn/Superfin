@@ -3,11 +3,13 @@ const jwt = require('jsonwebtoken'),
     config = require('../config/auth_config'),
     db = require('../models/db')
 
+
+// method to verify any sent tokens for controlling access to endpoints
 verify_token = (req,res,next) => {
     let auth_header = req.headers.authorization
     let token
 
-    // need to send back the different header
+    // if no header don't give away what is required and send a bare auth header
     if(!auth_header){
         res.setHeader("WWW-Authenticate","Bearer")
         return res.status(401).json({
@@ -15,10 +17,13 @@ verify_token = (req,res,next) => {
             message: "Unauthorized"
         })
     }
+    // split the header to just get the token
     else
         token = auth_header.split(' ')[1]
+    // verify the token with the secret
     jwt.verify(token,config.secret,(err,decoded) => {
         if(err) {
+            // return different error messages and status' based on the type of error
             res.status(401)
             if(err.message=="jwt expired") {
                 res.setHeader("WWW-Authenticate","Bearer error='invalid_token',error_description='The access token has expired'")
@@ -41,12 +46,16 @@ verify_token = (req,res,next) => {
             })
                 
         }
+        // set the req.user_id to the id that was contianed inside the token to be used
+        // in other middleware and methods
         req.user_id =  decoded._id
         next()
     })
 }
 
+// function to confirm that the signed in user is an admin
 is_admin = (req,res,next) => {
+    // find user by the req.user_id
     db.user.findById(req.user_id).exec((err,user) => {
         if(err)
             return res.status(500).send({
@@ -58,6 +67,7 @@ is_admin = (req,res,next) => {
                 success: false,
                 message: "No user found"
             })
+        // find roles based on the roles in the found user's array
         db.role.find({
             _id: {$in: user.roles }
         },(err, roles) => {
@@ -66,11 +76,13 @@ is_admin = (req,res,next) => {
                     success: false,
                     message: err
                 })
+            // if role is admin return out of func
             for(let i = 0; i < roles.length; i++) {
                 if(roles[i].name === "admin"){
                     return next()
                 }
             }
+            // if role is not admin return error in the auth header and a res body
             res.setHeader("WWW-Authenticate","Bearer realm='is_admin',error='insufficient_scope',error_description='Access token not valid for this resource'")
             res.status(403).send({
                 success: false,
@@ -80,6 +92,7 @@ is_admin = (req,res,next) => {
     })
 }
 
+// same as admin func but instead checks you are a customer instead 
 is_customer = (req,res,next) => {
     db.user.findById(req.user_id).exec((err,user) => {
         if(err)

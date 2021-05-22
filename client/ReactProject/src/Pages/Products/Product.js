@@ -1,6 +1,7 @@
 import { Card } from 'antd';
 import { history } from '../../_helpers/history';
 import { formatNumber } from '../../_helpers/utils';
+import placeholderImg from '../../_assets/Images/No_Image.jpg'
 const { Meta } = Card;
 
 const Product = props => {
@@ -32,12 +33,12 @@ const Product = props => {
         <Card className="card-shadow-hoverable"
             tabIndex={0}
             cover={
-                <img className="cover-img fixed-size"
-                    style={{ cursor: 'pointer' }}
-                    alt={productDetails.p_name}
-                    src={productDetails.p_image_uri[0]}
-                    onClick={() => {
-                        history.push(`productDetails?p_code=${productDetails.p_code}`)
+                <img className="cover-img fixed-size" 
+                    style={{ cursor: 'pointer' }} 
+                    alt={(productDetails.p_name === null || (productDetails.p_name !== null && productDetails.p_name.length === 0)) ? "image for paper bag" : productDetails.p_name}
+                    src={(productDetails.p_image_uri[0] === null || (productDetails.p_image_uri[0] !== null && productDetails.p_image_uri[0].length === 0)) ? placeholderImg : productDetails.p_image_uri[0]}
+                    onClick={() => { 
+                        history.push(`/productDetails?p_code=${productDetails.p_code}&price_id=${productDetails.p_price_id}`) 
                     }}
                 />
             }>

@@ -99,7 +99,7 @@ const AddEditProduct = () => {
             addUriToFileList(product.p_image_uri, updateFileList);     //populates the file list
             
         } 
-    }, [categories, product, form, pageState]);
+    }, [categories, product, form, pageState, newPage]);
 
 
 
@@ -157,7 +157,7 @@ const AddEditProduct = () => {
             
             for(let i = 0; i < fileList.length; i++)  newProduct.p_image_uri[i] = URL.createObjectURL(fileList[i].originFileObj);
            
-            if(productsList.length !== 0) confirmAdd(newProduct, formData, dispatch, auth.access_token, updateAuth);       //if there are products in redux store, add product there as well
+            if(productsList.length !== 0) confirmAdd(newProduct, formData, auth.access_token, updateAuth, dispatch,);       //if there are products in redux store, add product there as well
             else confirmAdd(newProduct, formData, auth.access_token, updateAuth);              //else just make the request as usual
         };
     }
@@ -176,7 +176,7 @@ const AddEditProduct = () => {
                 encType='multipart/form-data'
                 form = {form}
                 onFinish={onFinish}
-                onFinishFailed={err => { console.log("Failed submit", err) }}
+                onFinishFailed={err => console.log(err)}
             >
                 <div id="ae-product-form-wrapper">
                     <div className="ae-product-form">

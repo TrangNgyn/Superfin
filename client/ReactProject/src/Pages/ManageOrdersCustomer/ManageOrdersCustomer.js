@@ -1,21 +1,18 @@
 import { useEffect, useState } from "react";
-import '../../_assets/CSS/pages/ManageOrdersCustomer/ManageOrdersCustomer.css';
 import { Select, Button, Pagination, Spin } from 'antd';
 import axios from 'axios';
 import { filterOrders, sortOrders } from './Functions';
 import { orderStatusConstants } from '../../_constants/orderStatus.constants';
 import OrderView from './OrderView';
+import { useAuth, useAuthUpdate } from '../../SharedComponents/AuthContext/AuthContext';
+import { _logout } from '../../_services/SharedFunctions';
 
 const {OptGroup, Option} = Select;
 const itemsPerPage = 10;
 
-const mockEmail = "its488@uowmail.edu.au";
-
-
-
-
-
 const ManageOrdersCustomer = () => {
+    const auth = useAuth();
+    const updateAuth = useAuthUpdate();
 
     const [orders, setOrders] = useState([]);
     const [ordersOriginal, setOrdersOriginal] = useState([]);
@@ -25,11 +22,10 @@ const ManageOrdersCustomer = () => {
     const [noOrders, setNoOrders] = useState(false);
     const [page, setPage] = useState(0);
 
+
     const maxNumberOfPages = (Math.ceil(orders.length/itemsPerPage) - 1);
     let row = <></>;
     let renderableProducts = []
-
-
 
 
     const onPageChange = p => { setPage(p - 1) };
@@ -37,8 +33,9 @@ const ManageOrdersCustomer = () => {
     useEffect(() => {
         if(!orders.length){
             setLoading(true);
-
-            axios.post('api/orders/order-by-email', { email: mockEmail })
+            const config = { headers:{ authorization : `Bearer ${auth.access_token}` }};
+            
+            axios.get('api/orders/orders-for-user', config)
             .then(res => {
                 if(res.data.hasOwnProperty('success')){
                     console.log(res);
@@ -49,19 +46,20 @@ const ManageOrdersCustomer = () => {
                     const sortedOrders = res.data.sort((a,b) => { return new Date(b.issued_date) - new Date(a.issued_date)});
                     setOrders(sortedOrders);
                     setOrdersOriginal(sortedOrders);
+                    if(sortedOrders.length <= 0) setNoOrders(true);
                     setLoading(false);
                 }
             })
             .catch(err => {
                 console.log(err);
-                setError(true);
-                setLoading(false);
+                if(err.response.status === 401) _logout(updateAuth);
+                else{
+                    setError(true);
+                    setLoading(false);
+                }
             });
         }
-    }, [orders.length])
-
-
-
+    }, [orders.length, auth.access_token, updateAuth])
 
 
     if(orders.length !== 0){
@@ -73,70 +71,52 @@ const ManageOrdersCustomer = () => {
             const dateString = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
 
             return (
-                <tr id="manage-orders-table-row" key = {o._id}>
+                <tr key = {o._id}>
                     <td>{o.po_number}</td>
-                    <td><b>{o.status}</b></td>
+                    <td><strong>{o.status}</strong></td>
                     <td>{dateString}</td>
-                    <td><b>{o.tracking_number}</b></td>
-                    <td>{o.carrier}</td>
+                    <td><strong>{(o.tracking_number === null || (o.tracking_number !== null && o.tracking_number.length === 0)) ? <em>Not Available</em> : o.tracking_number}</strong></td>
+                    <td>{(o.carrier === null || (o.carrier !== null && o.carrier.length === 0)) ? <em>Not Available</em> : o.carrier}</td>
                     <td>
-                        <span className="manage-orders-view" onClick={() => {
-                            setCurrentOrder(o);
-                        }}>view</span>
+                        <Button type="secondary" onClick={() => {setCurrentOrder(o);}}> View Order Details </Button>
                     </td>
                 </tr>
             );
         });
     }
-
-
-
-
-
    
     return (
-        <div >
-            <div id="manage-orders-header">Manage Orders</div>
-
+        <>
+            <div className="page-title-holder fill">
+                <h2>Manage Orders</h2>
+            </div>
             {
-                currentOrder === null
-                ? <div>
-                    <div>
-                        <div id="manage-order-filters" style={{paddingLeft: "1%"}}>
-                            <div style={{fontSize: "30px", fontWeight: "bold"}}>Orders</div>
-                        </div>
-
-                        <div id="manage-order-filters">
-                            <Select style={{width: "300px"}} placeholder="Filter By" onSelect={ v => {
-                                filterOrders(v, ordersOriginal, setOrders);
-                                setPage(0);
-                            }}>
-                                    <Option value={orderStatusConstants.NEW}>New</Option>
-                                    <Option value={orderStatusConstants.SHIPPED}>Shipped</Option>
-                                    <Option value={orderStatusConstants.COMPLETE}>Complete</Option>
-                            </Select>
-                        </div>
-
-                        <div id="manage-order-filters">
-                            <Select style={{width: "300px"}} placeholder="Order By" onSelect={ v => {
-                                sortOrders(v, orders, setOrders);
-                                setPage(0);
-                            }}>
-                                <OptGroup label="Data Issued">
-                                    <Option value="d_decending">Latest</Option>
-                                    <Option value="d_ascending">Earliest</Option>
-                                </OptGroup>
-                            </Select>
-                        </div >
-
-                        <div id="manage-order-filters">
-                            <Button onClick={() => {
-                                setOrders(ordersOriginal);
-                            }}>Reset Filters</Button>
-                        </div>
+                currentOrder === null ?
+                <>
+                    <div className="container flex-horizontal-box-container">
+                        <Select className="box-item-xs-6 box-item-sm-4 box-item-md-4 box-item-lg-4 box-item-xl-3" placeholder="Filter By" onSelect={ v => {
+                            filterOrders(v, ordersOriginal, setOrders);
+                            setPage(0);
+                        }}>
+                                <Option value={orderStatusConstants.NEW}>New</Option>
+                                <Option value={orderStatusConstants.SHIPPED}>Shipped</Option>
+                                <Option value={orderStatusConstants.COMPLETE}>Complete</Option>
+                        </Select>
+                        <Select className="box-item-xs-6 box-item-sm-4 box-item-md-4 box-item-lg-4 box-item-xl-3" placeholder="Order By" onSelect={ v => {
+                            sortOrders(v, orders, setOrders);
+                            setPage(0);
+                        }}>
+                            <OptGroup label="Data Issued">
+                                <Option value="d_decending">Latest</Option>
+                                <Option value="d_ascending">Earliest</Option>
+                            </OptGroup>
+                        </Select>
+                        <Button className="box-item-xs-3 box-item-sm-4 box-item-md-3 box-item-lg-2 box-item-xl-2" type="secondary" onClick={() => {
+                            setOrders(ordersOriginal);
+                        }}>Reset Filters</Button>
                     </div>
 
-                    <div id="manage-order-table-wrapper">
+                    <div className="container table-container">
                         {
                             loading 
                             ? <div style = {{textAlign: 'center'}}><Spin size='large'/></div> 
@@ -145,29 +125,28 @@ const ManageOrdersCustomer = () => {
                             : noOrders
                             ? <h1 style = {{textAlign: 'center', color: 'green'}}>You have no current order history</h1>
                             :
-                            <table className="manage-order-table">
-                                <tbody>
-                                    <tr style = {{border: "solid black 1px", padding: "8px"}}>
+                            <table className="box-shadow center-content">
+                                <thead>
+                                    <tr>
                                         <th>PO Number</th>
                                         <th>Status</th> 
                                         <th>Date Issued</th>
                                         <th>Tracking Number</th> 
                                         <th>Carrier</th>
-                                        <th>View Order Details</th>
+                                        <th>Actions</th>
                                     </tr>
+                                </thead>
+                                <tbody>
                                     {row}
                                 </tbody>
                             </table>
                         }
                     </div>
-
-                    <div style={{textAlign: "center"}}>
-                        <Pagination current={page + 1} defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange={onPageChange}/>
-                    </div>
-                </div>
+                    <Pagination current={page + 1} defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange={onPageChange} className="text-center"/>
+                </>
                 :   <OrderView order={currentOrder} setCurrentOrder={setCurrentOrder} setPage={setPage}/>
             }
-        </div>
+        </>
     );
 }
 

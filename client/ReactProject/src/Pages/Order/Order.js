@@ -109,7 +109,7 @@ const Order = () => {
             }
         }
         
-    }, [compeletOrders, form_1, incompleteOrders, po_number, status]);
+    }, [compeletOrders, form_1, incompleteOrders, po_number, status, auth.access_token, updateAuth]);
 
     
     

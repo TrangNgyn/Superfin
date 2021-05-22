@@ -1,14 +1,13 @@
-import '../../_assets/CSS/pages/TermsConditions.css';
 const TermsConditions = () =>{
     return (
-      <body>
-      <div id="terms-conditions-window">
-        Terms & Conditions
-      </div>
-      <div id="terms-conditions-text">
-        Placeholder text
-      </div>
-      </body>
+		<>
+			<div className="page-title-holder fill">
+				<h2>Terms {"&"} Conditions</h2>
+			</div>
+			<div className="container">
+				<p style={{textAlign: 'center'}}>Sorry :( this feature is being implemented!</p>
+			</div>
+		</>
     )
 }
 
