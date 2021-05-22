@@ -11,6 +11,9 @@ import {
 } from '../_constants/actionTypes.constants';
 import axios from 'axios';
 import { _logout } from '../_services/SharedFunctions';
+import {baseURL} from '../_helpers/axiosBaseURL';
+
+axios.defaults.baseURL = baseURL;
 
 /*
 const config = {
