@@ -46,6 +46,7 @@ const ManageOrdersCustomer = () => {
                     const sortedOrders = res.data.sort((a,b) => { return new Date(b.issued_date) - new Date(a.issued_date)});
                     setOrders(sortedOrders);
                     setOrdersOriginal(sortedOrders);
+                    if(sortedOrders.length <= 0) setNoOrders(true);
                     setLoading(false);
                 }
             })
