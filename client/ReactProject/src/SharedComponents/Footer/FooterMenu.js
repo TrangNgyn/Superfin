@@ -15,10 +15,6 @@ export default function FooterMenu(){
               <Link to="/termsConditions"> Terms and Conditions </Link>
             </Menu.Item >
 
-            <Menu.Item key="Support" className="item">
-              Support
-            </Menu.Item >
-
             <Menu.Item key="Contact" className="item">
               <Link to="/contactUs"> Contact Us </Link>
             </Menu.Item>
