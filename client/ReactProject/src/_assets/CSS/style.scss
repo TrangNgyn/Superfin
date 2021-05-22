@@ -760,6 +760,12 @@ div#manage-categories-current-panel div.ant-tree {
 	margin-top: 8px;
 }
 
+.product-details-images > .ant-carousel > .slick-slider > .slick-list > .slick-track > div > div > div > img{
+	width: 100%;
+	height: 100%;
+	object-fit: scale-down;
+}
+
 /* ====================================== */
 /* ======== End Product Details  ======== */
 /* ====================================== */

@@ -114,7 +114,7 @@ const ProductMainTitle = props => {
                 />
             </div>
             <br/>
-            <Button type="primary" icon={<ShoppingOutlined />}
+            <Button type="primary" icon={<ShoppingOutlined />} size="large"
                 onClick={()=>
                     {
                         addToCart(productDetails, quantity, specialRequirements, productSize)
