@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { db } = require('../models/customer');
+const db = require('../models/db');
 
 const customer_model = require('../models/customer');
 const order_model = require('../models/purchased_order');
@@ -80,7 +80,7 @@ class Purchased_Order {
                         success: false,
                         message: "User with provided ID does not exist"
                     })
-                db.order.find({email: user.email}, (err, orders) => {
+                db.order.find({c_email: user.email}, (err, orders) => {
                     if(err) 
                         return res.status(500).send({
                             success: false,
