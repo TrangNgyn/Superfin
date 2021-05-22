@@ -66,7 +66,7 @@ const Products = () => {
     // filter and sort product if product list changes
     useEffect(() => {
         filterAndSortProduct();
-    }, [products]);
+    }, [products, filter, sorted]);
 
     return (
       <>
@@ -98,7 +98,7 @@ const Products = () => {
                         >
                             <Option value="noSort" disabled><SortAscendingOutlined />Sort By</Option>
                             <Option value="alphaAsc"><SortAscendingOutlined />Sort By: Alphabetically Ascending</Option>
-                            <Option value="alphaDesc"><SortDescendingOutlined />AscendingSort By: Alphabetically Descending</Option>
+                            <Option value="alphaDesc"><SortDescendingOutlined />Sort By: Alphabetically Descending</Option>
                             <Option value="priceAsc"><RiseOutlined />Sort By: Price Ascending</Option>
                             <Option value="priceDesc"><FallOutlined />Sort By: Price Descending</Option>
                         </Select>

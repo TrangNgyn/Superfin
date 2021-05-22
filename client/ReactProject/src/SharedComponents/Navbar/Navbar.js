@@ -82,9 +82,6 @@ export default function Navbar(){
     const customerMenu = (                  //menus to be conditionally rendered 
         <>
         <Menu.Item>
-            <Link to="/myAccount"> My Account </Link>
-        </Menu.Item>
-        <Menu.Item>
             <Link to="/products"> Browse Products </Link>
         </Menu.Item>
         <Menu.Item>
@@ -143,19 +140,17 @@ export default function Navbar(){
             </Menu.Item>
                 {categoriesMenu}
             <Menu.Item>
-            <Link to="/products">
-                <b>{"View all Products  >"}</b>
-            </Link>
+                <Link to="/products">
+                    <b>{"View all Products  >"}</b>
+                </Link>
             </Menu.Item>
         </Menu>
     );
 
   const ourProductsSubmenuMobile = ( //Our Products Submenu
         <SubMenu key="OurProductsSubmenu" className="submenu-background" title="Our Products">
-            <Menu.Item>
-                <Link to="/products/categories">
-                    <b>Shop By Category</b>
-                </Link>
+            <Menu.Item disabled>
+                <b>Shop By Category</b>
             </Menu.Item>
             {categoriesMenu}
             <Menu.Item>
@@ -330,8 +325,8 @@ export default function Navbar(){
                         {login}
                     </Menu>
 
-                    <Menu className="Navbar-Mobile" mode="inline" selectable={false} onClick={() => {history.push(logoLink)}}>
-                        <Menu.Item key="Logo" id="Logo">
+                    <Menu className="Navbar-Mobile" mode="inline" selectable={false}>
+                        <Menu.Item key="Logo" id="Logo" onClick={() => {history.push(logoLink)}}>
                             {
                                 auth.roles[0] === userConstants.ROLE_ADMIN
                                 ?
@@ -347,7 +342,11 @@ export default function Navbar(){
 
                         {mainMenuMobile}
 
-                        <Menu.Item key="Cart" icon = {<ShoppingCartOutlined/>}>
+                        <Menu.Item key="Cart" icon = {
+                            <Badge count={itemCount} showZero style={{backgroundColor: "#EB6E00"}} >
+                                <ShoppingCartOutlined />
+                            </Badge>          
+                        }>
                             <Link to="/cart"> Cart </Link>
                         </Menu.Item>
 

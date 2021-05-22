@@ -95,159 +95,153 @@ const EditCustomer = () => {
     }
 
     return(
-        <div>
-            <div id="edit-customer-header">Edit Customer Details</div>
-
-            <div style={{textAlign: 'center', paddingBottom: '2%'}}>
-                <h3>Customer Information</h3>
+        <>
+            <div className="page-title-holder fill">
+                <h2>Edit Customer Details</h2>
             </div>
-        
+
+            <div className="container flex-horizontal-box-container">
             {
                 loading
                 ?
-                <div style={{textAlign: 'center'}}>
+                <div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-12" style={{textAlign: 'center'}}>
                     <Spin size='large'/>
                 </div>
                 :
                 error
                 ?
                 <h1 style = {{textAlign: 'center', color: 'red'}}>Could not load data, please try refreshing page</h1>
-                :
-                <div>
-                    <Form 
-                        {...layout}
-                        form={form}
-                        onFinish={submitEdit}
-                    >
-                        <Form.Item
-                            label="First Name"
-                            name="first_name"
-                            rules={[
-                                {
-                                    whitespace: true,
-                                    required: true, 
-                                    message: 'Please input your first name!' 
-                                }
-                            ]}
-                        >
-                            <Input maxLength={50} style={{width: '500px'}}/>
-                        </Form.Item>
+                :<>
+                    <div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-6 div-box box-shadow">
+                        <h3>Customer Information</h3>
+                        <Form  {...layout} form={form} onFinish={submitEdit}>
+                            <Form.Item
+                                label="First Name"
+                                name="first_name"
+                                rules={[
+                                    {
+                                        whitespace: true,
+                                        required: true, 
+                                        message: 'Please input your first name!' 
+                                    }
+                                ]}
+                            >
+                                <Input maxLength={50}/>
+                            </Form.Item>
 
-                        <Form.Item
-                            label="Last Name"
-                            name="last_name"
-                            rules={[
-                                {
-                                    whitespace: true,
-                                    required: true, 
-                                    message: 'Please input your last name!' 
-                                }
-                            ]}
-                        >
-                            <Input maxLength={50}  style={{width: '500px'}}/>
-                        </Form.Item>
+                            <Form.Item
+                                label="Last Name"
+                                name="last_name"
+                                rules={[
+                                    {
+                                        whitespace: true,
+                                        required: true, 
+                                        message: 'Please input your last name!' 
+                                    }
+                                ]}
+                            >
+                                <Input maxLength={50}/>
+                            </Form.Item>
 
-                        <Form.Item
-                            label="Phone"
-                            name="mobile"
-                            validateTrigger={['onBlur']}
-                            rules={[
-                                {
-                                    validator: async (_, phone) => {
-                                        if(phone !== undefined && phone !== "" && phone.length < 10){
-                                            return Promise.reject(new Error('Phone number must be valid!'));
-                                        }
+                            <Form.Item
+                                label="Phone"
+                                name="mobile"
+                                validateTrigger={['onBlur']}
+                                rules={[
+                                    {
+                                        validator: async (_, phone) => {
+                                            if(phone !== undefined && phone !== "" && phone.length < 10){
+                                                return Promise.reject(new Error('Phone number must be valid!'));
+                                            }
+                                        },
                                     },
-                                },
-                                {
-                                    required: true,
-                                    message: 'Please input a valid phone number!',
-                                    whitespace: true
-                                }
-                            ]}
-                        >
-                            <Input maxLength={10} onChange={e => {onlyNumbers(e, form, 'mobile')}} style={{width: '500px'}}/>
-                        </Form.Item>
+                                    {
+                                        required: true,
+                                        message: 'Please input a valid phone number!',
+                                        whitespace: true
+                                    }
+                                ]}
+                            >
+                                <Input maxLength={10} onChange={e => {onlyNumbers(e, form, 'mobile')}}/>
+                            </Form.Item>
 
-                        <Form.Item {...tailLayout}>
-                            <Button type="primary" htmlType="submit">Edit</Button>
-                        </Form.Item>
-                    </Form>
-
-                    <div style={{textAlign: 'center', paddingBottom: '2%'}}>
-                        <h3>Change password</h3>
+                            <Form.Item {...tailLayout}>
+                                <Button style={{float:'right'}} type="primary" htmlType="submit">Edit</Button>
+                            </Form.Item>
+                        </Form>
                     </div>
 
-                    <Form 
-                        {...layout}
-                        onFinish={submitNewPassword}
-                        form={form2}
-                    >
-                        <Form.Item
-                            label="Old Password"
-                            name="verify_password"
-                            rules={[
-                                {
-                                    whitespace: true,
-                                    required: true, 
-                                    message: 'Please input your old password!' 
-                                }
-                            ]}
-                        >
-                            <Input.Password maxLength={30} style={{width: '500px'}}/>
-                        </Form.Item>
+            
+                    <div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-6 div-box box-shadow">
+                        <h3>Change password</h3>
+                        <Form  {...layout} onFinish={submitNewPassword} form={form2}>
+                            <Form.Item
+                                label="Old Password"
+                                name="verify_password"
+                                rules={[
+                                    {
+                                        whitespace: true,
+                                        required: true, 
+                                        message: 'Please input your old password!' 
+                                    }
+                                ]}
+                            >
+                                <Input.Password maxLength={30}/>
+                            </Form.Item>
 
-                        <Form.Item
-                            label="New Password"
-                            name="new_password"
-                            validateTrigger={['onBlur']}
-                            rules={[
-                                {
-                                    whitespace: true,
-                                    required: true, 
-                                    message: 'Please input your new password!' 
-                                },
-                                {
-                                    validator: async (_, new_password) => {
-                                        if(!checkPasswordStrength(new_password) && new_password !== undefined && !isWhiteSpace(new_password)){
-                                            return Promise.reject(new Error('Password not strong enough!'));
-                                        }
+                            <Form.Item
+                                label="New Password"
+                                name="new_password"
+                                validateTrigger={['onBlur']}
+                                rules={[
+                                    {
+                                        whitespace: true,
+                                        required: true, 
+                                        message: 'Please input your new password!' 
                                     },
-                                },
-                            ]}
-                        >
-                            <Input.Password maxLength={30}  style={{width: '500px'}}/>
-                        </Form.Item>
-
-                        <Form.Item
-                            label="Confirm password"
-                            name="password_confirm"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please confirm your password!',
-                                    whitespace: true
-                                },
-                                ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                        if(getFieldValue('new_password') === value || value === undefined) return Promise.resolve();
-                                        if(isWhiteSpace(value)) return Promise.resolve();
-                                        return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                    {
+                                        validator: async (_, new_password) => {
+                                            if(!checkPasswordStrength(new_password) && new_password !== undefined && !isWhiteSpace(new_password)){
+                                                return Promise.reject(new Error('Password not strong enough!'));
+                                            }
+                                        },
                                     },
-                                    validateTrigger: 'onSubmit'
-                                })
-                            ]}
-                        >
-                            <Input.Password maxLength={30} style={{width: '500px'}}/>
-                        </Form.Item>
+                                ]}
+                            >
+                                <Input.Password maxLength={30}/>
+                            </Form.Item>
 
-                        <Form.Item {...tailLayout}>
-                            <Button type="primary" htmlType="submit">Edit</Button>
-                        </Form.Item>
-                    </Form>
-                </div>
-            }  
-        </div>
+                            <Form.Item
+                                label="Confirm password"
+                                name="password_confirm"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please confirm your password!',
+                                        whitespace: true
+                                    },
+                                    ({ getFieldValue }) => ({
+                                        validator(_, value) {
+                                            if(getFieldValue('new_password') === value || value === undefined) return Promise.resolve();
+                                            if(isWhiteSpace(value)) return Promise.resolve();
+                                            return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                        },
+                                        validateTrigger: 'onSubmit'
+                                    })
+                                ]}
+                            >
+                                <Input.Password maxLength={30}/>
+                            </Form.Item>
+
+                            <Form.Item {...tailLayout}>
+                                <Button style={{float: 'right'}} type="primary" htmlType="submit">Edit</Button>
+                            </Form.Item>
+                        </Form>
+                    </div>
+                </>
+            }
+            </div>
+        </>
     );
 }
 

@@ -3,7 +3,7 @@ import { useForm } from 'antd/lib/form/Form';
 import { emailTakenModal, signupSuccess } from './Modals';
 import { history } from '../../_helpers/history';
 import { useState } from 'react';
-import { layout, actionButtonsLayout } from './layouts'; 
+import { layout, actionButtonsLayout } from './Layouts'; 
 import { onlyNumbers, checkPasswordStrength } from '../../_services/SharedFunctions';
 import axios from 'axios';
 
