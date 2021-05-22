@@ -550,7 +550,7 @@ div#copyright-background{
 	}
 
 	.page-title-holder.center-page {
-		margin: 0;
+		margin: 0 32px 0 32px;
 	}
 
 	ul[class*="footer-menubar"]:after,
@@ -1025,7 +1025,7 @@ main.ant-layout-content > div.ant-row.my-account-details > form > * {
     left: 12%;
     right: 88%;
     top: 20%;
-    font-size: 40px;
+    font-size: 32px;
     font-weight: bold;
 }
 
