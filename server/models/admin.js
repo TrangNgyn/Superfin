@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const user = require('./user')
 
+// admin schema
 const admin_schema = new Schema({
     acc_name: {
         type: String,

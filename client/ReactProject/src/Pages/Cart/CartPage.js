@@ -58,7 +58,7 @@ const Cart = (props) =>{
                         </tr>
                     </thead>
                     <tbody>
-                        {itemCount > 0 ? <CartProducts key={props.cartItems} editable={true} /> : <tr><td colSpan={5}><h3 style={{textAlign: 'center'}}>Your cart is empty! :(</h3></td></tr> }
+                        {itemCount > 0 ? <CartProducts key={props.cartItems} editable={false} /> : <tr><td colSpan={5}><h3 style={{textAlign: 'center'}}>Your cart is empty! :(</h3></td></tr> }
                     </tbody>
                 </table>
             </div>
@@ -67,7 +67,7 @@ const Cart = (props) =>{
                 <table>
                     <tbody>
                         <tr className="non-hover">
-                            <td><strong>Distinct items:</strong></td>
+                            <td><strong>Total items:</strong></td>
                             <td>{itemCount}</td>
                         </tr>
                         <tr className="non-hover">

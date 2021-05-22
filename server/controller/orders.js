@@ -41,6 +41,7 @@ class Purchased_Order {
             if(!email){
                 return res.json(empty_field)
             }
+            // find orders that match the email
             order_model
                 .find({c_email: email})
                 .orFail( new Error(`${email} has no orders`))
@@ -62,6 +63,9 @@ class Purchased_Order {
         }
     }
 
+    // @route   /api/orders/orders-for-user
+    // @desc    gets orders of the user based on their id
+    // @access  Protected
     async get_customer_orders (req,res) {
         try {
             if(!req.user_id)
@@ -80,7 +84,7 @@ class Purchased_Order {
                         success: false,
                         message: "User with provided ID does not exist"
                     })
-                db.order.find({email: user.email}, (err, orders) => {
+                db.order.find({c_email: user.email}, (err, orders) => {
                     if(err) 
                         return res.status(500).send({
                             success: false,
@@ -113,6 +117,7 @@ class Purchased_Order {
                     success: false,
                     message: "No po_number supplied"
                 })
+            // find user by their id 
             db.user.findById(req.user_id, (err,user) => {
                 if(err)
                     return res.status(500).send({
@@ -124,6 +129,7 @@ class Purchased_Order {
                         success: false,
                         message: "No user was found"
                     })
+                // use the found user to find orders for that customer
                 db.order.find({email: user.email},(err,orders) => {
                     if(err)
                         return res.status(500).send({
@@ -135,6 +141,7 @@ class Purchased_Order {
                             succcess: true,
                             message: "The user has no orders"
                         })
+                    // search the found orders for one matching the the provided po_number
                     orders.forEach(order => {
                         if(order.po_number == req.query.po_number)
                             return res.send(order)
@@ -156,7 +163,7 @@ class Purchased_Order {
     
     // @route   POST api/orders/add-tracking
     // @desc    add tracking number to an existing order
-    // @access  Public
+    // @access  Admin
 
     async add_tracking(req, res) {
         try {
@@ -174,6 +181,7 @@ class Purchased_Order {
                                   message: `No order with code ${po_number} was found`})
             }
 
+            // set the found order to shipped
             if(found_order.status === "SHIPPED"){
                 return res.json({ success: false,
                                   message: `Order ${po_number} is already SHIPPED`})
@@ -199,10 +207,11 @@ class Purchased_Order {
 
     // @route   GET api/orders/all-complete
     // @desc    get all orders that are complete
-    // @access  Public 
+    // @access  Admin 
 
     async all_complete(req,res) {
         try {
+            // find all orders that are complete
             order_model
                 .find({ status: "COMPLETE" })
                 .sort({ po_number: 1 })
@@ -220,7 +229,7 @@ class Purchased_Order {
 
     // @route   GET api/orders/all-uncomplete
     // @desc    get all orders that are not COMPLETE
-    // @access  Public
+    // @access  Admin
 
     async all_uncomplete(req,res) {
         try {
@@ -260,6 +269,7 @@ class Purchased_Order {
                 }
             }
 
+            // ensure that all items contain the correct information
             items.forEach(element => {
                 if(!element.item_code | !element.p_size | !element.quantity | !element.special_requirements){
                     return {
@@ -269,9 +279,11 @@ class Purchased_Order {
                 }
             })
 
+            // create date that is set to the current time
             var issued_date = new Date()
 
             try {
+                // create a new order 
                 const doc = await order_model.create({
                     c_email,
                     issued_date,
@@ -307,7 +319,7 @@ class Purchased_Order {
 
     // @route   POST api/orders/edit-order
     // @desc    edit an existing order
-    // @access  Public
+    // @access  Admin
 
     async edit_order(req, res){
         try{
@@ -330,6 +342,7 @@ class Purchased_Order {
                     message: "The order must include as least one product"
                 }
             }
+            // check each item has the required information
             items.forEach(element => {
                 if(!element.item_code | !element.p_size | !element.quantity | !element.special_requirements){
                     return {
@@ -370,17 +383,20 @@ class Purchased_Order {
 
     // @route   POST api/orders/delete-order
     // @desc    delete an existing order
-    // @access  Public
+    // @access  Admin
 
     async delete_order(req,res){
         try{
             let { po_number } = req.body
 
+            // ensure all fields are provided
             if(!po_number){
                 return res.json(empty_field)
             }
 
+            // find the order and remove it from the db
             order_model.findOneAndRemove({ po_number: po_number })
+            // if the find fails return an error
             .orFail(new Error(`Order ${po_number} not found`))
             .then(() => {
                 res.json({ success: true,
@@ -400,17 +416,19 @@ class Purchased_Order {
     }
 
     // @route   POST api/orders/single-order
-    // @desc    get a single order
-    // @acces   Public
+    // @desc    get a single order as an admin
+    // @acces   Admin
 
     async single_order(req,res){
         try{
             let { po_number } = req.body
 
+            // enure all fields are provided
             if(!po_number){
                 return res.json(empty_field)
             }
 
+            // find an order by po_number
             var found_order = await order_model.findOne({ po_number: po_number })
 
             if(!found_order){
@@ -419,6 +437,7 @@ class Purchased_Order {
                     message: `There was no order with po_number ${po_number}`})
             }
 
+            // return the order
             return res.json(found_order)
         }
         catch(err){

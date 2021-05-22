@@ -8,7 +8,6 @@ const express = require('express'),
     mongoSanitize = require('express-mongo-sanitize');
 
 // Imported routers
-
 const product = require('./routes/api/products')
 const categories = require('./routes/api/categories')
 const user = require('./routes/api/user')
@@ -16,9 +15,12 @@ const order = require('./routes/api/orders')
 const about = require('./routes/api/aboutus')
 const stripe = require('./routes/api/stripe')
 
+// declare the express app
 const app = express();
 
+// function to initialize necessary information in the db 
 function initial() {
+    // ensure that all the role docs are inserted
     db.role.estimatedDocumentCount((err, count)=> {
       if(!err && count === 0) {  
         for(let i = 0; i < db.ROLES.length; i++){
@@ -29,6 +31,20 @@ function initial() {
               console.log("error", err)
             }
             console.log(`added ${db.ROLES[i]} to roles collection`)
+          })
+        }
+      }
+    })
+    // ensure that all counters are inserted
+    db.counters.estimatedDocumentCount((err,count) => {
+      if(!err && count===0) {
+        for(let i = 0; i < db.COUNTERS.length; i++) {
+          new db.counters({
+            _id: db.COUNTERS[i].toLowerCase()
+          }).save(err => {
+            if(err) 
+              console.log("error", err)
+            console.log(`added ${db.COUNTERS[i]} to the counters collection`)
           })
         }
       }
@@ -49,6 +65,7 @@ db.mongoose
     })
     .catch(err => console.log(err))
 
+// set up cors
 app.use(cors())
 
 // Sanitize against NoSQL query injections

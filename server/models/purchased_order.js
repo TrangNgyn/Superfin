@@ -101,6 +101,7 @@ const order_schema = new Schema({
 
 });
 
+// pre save hook to assign a incremental id to the order
 order_schema.pre("save", function(next) {
     var doc = this;
     counters.findByIdAndUpdate(

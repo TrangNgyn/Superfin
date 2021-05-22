@@ -74,7 +74,7 @@ const ReenterPassword = () => {
         setLoading(true);
 
         return axios.post('/api/user/reset-password-email', body)
-        .then(res => {
+        .then(() => {
             setLoading(false);
             successReset();
         })

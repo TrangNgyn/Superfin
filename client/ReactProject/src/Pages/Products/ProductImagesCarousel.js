@@ -24,7 +24,7 @@ const ProductImagesCarousel = props => {
         return returnVal;
     }
     return (
-        <div className="product-details-images">
+        <div className="product-details-images box-shadow div-box">
             <Carousel dotPosition="bottom">
                 {contentCarousel()}
             </Carousel>

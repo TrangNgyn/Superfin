@@ -12,7 +12,6 @@ import TermsConditions from '../Pages/TermsConditions/TermsConditions';
 import Blog from '../Pages/Blog/Blog';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ReenterPassword from '../Pages/ReenterPassword/ReenterPassword';
-import MyAccount from '../Pages/MyAccount/MyAccount';
 import Cart from '../Pages/Cart/CartPage';
 import CheckoutShipping from '../Pages/Checkout/CheckoutShipping';
 import CheckoutSecurePayment from '../Pages/Checkout/CheckoutSecurePayment';
@@ -46,14 +45,6 @@ const config =  {
             roles: [userConstants.ROLE_CUSTOMER],
             exact: false
         },
-        {
-            component: MyAccount,
-            url: '/myAccount',
-            roles: [userConstants.ROLE_CUSTOMER],
-            exact: false
-        },
-
-
 
 
         //GUEST
