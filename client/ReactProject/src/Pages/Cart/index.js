@@ -11,7 +11,7 @@ import { Button } from 'antd';
 import { Link } from 'react-router-dom';
 import visa from "../../_assets/Images/visa.png"
 import mastercard from "../../_assets/Images/mastercard.jpg"
-import alipay from "../../_assets/Images/alipay.png"
+import alipay from "../../_assets/Images/Alipay.png"
 import { clearCart } from '../../_actions/cartActions';
 
 const Cart = (props) =>{
