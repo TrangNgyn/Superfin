@@ -36,29 +36,49 @@ const CartItem = (props) => {
   return (
     <tr>
         <td>
-            <img alt={(product.item_code === null || product.item_code === undefined || (product.item_code !== null && product.item_code !== undefined && product.item_code.length === 0)) ? "image of paper bag" : product.item_code + "\'s image"}
-            src= {(product.p_image_uri === null || product.p_image_uri === undefined || (product.p_image_uri !== null && product.p_image_uri !== undefined && product.p_image_uri.length === 0)) ? placeholderImg : product.p_image_uri} height="160px" width="120px" style={{objectFit:'scale-down'}}/>
-            <br/><span><em>{product.p_name}</em></span>
+          <img alt={(!product.item_code) ? "image of paper bag" : product.item_code + "\'s image"}
+            src= {(!product.p_image_uri) ? placeholderImg : product.p_image_uri} 
+            height="160px" width="120px" 
+            style={{objectFit:'scale-down'}}
+          />
+          <br/>
+          <span>
+            <em>{product.p_name}</em>
+          </span>
         </td>
         <td>{formatNumber(product.unit_price)}</td>
         <td>{product.p_size}</td>
         <td>
-            { editable &&
-                <Button onClick={() => increase()}
-                icon={<PlusOutlined />} type="primary"/>
-            }<br/>
+            { 
+              editable &&
+                <Button 
+                  onClick={() => increase()}
+                  icon={<PlusOutlined />} 
+                  type="primary"
+                />
+            }
+            <br/>
             {quantityState}
-            <br/>{ editable &&
-                <Button onClick={() => decrease()}
-                icon={<MinusOutlined />} type="secondary"/>
+            <br/>
+            {
+              editable &&
+                <Button 
+                  onClick={() => decrease()}
+                  icon={<MinusOutlined />} 
+                  type="secondary"
+                />
             }
         </td>
         <td>
-          <TextArea placeholder={editable ? "Please input any special requirements that you have here" : "No Special Requirements"}
-          rows={4} maxLength={100}
-          autoSize={{ minRows: 4, maxRows: 4 }}
-          disabled={!editable}
-          value={(product.special_requirements === null || product.special_requirements === undefined || (product.special_requirements !== null && product.special_requirements !== undefined && product.special_requirements.length === 0)) ? "" : product.special_requirements}></TextArea>
+          <TextArea 
+            placeholder={"No Special Requirements"}
+            rows={4} maxLength={100}
+            autoSize={{ minRows: 4, maxRows: 4 }}
+            disabled={true}
+            value={
+              (!product.special_requirements) ? "" : product.special_requirements}
+          >
+          </TextArea>
         </td>
     </tr>
   );

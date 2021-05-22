@@ -91,7 +91,7 @@ const CheckoutOrderComplete = (props) =>{
 					<div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-12" align="center">
 						<p><Spin size='large'/></p>
 						<p>We are processing your order.</p>
-						<p>Please wait and kindly <strong>do not close this tab</strong> until your order is processed!</p>
+						<p>Please wait abd <strong>do not close this tab</strong> until your order is processed!</p>
 					</div> :
 					(
 						!items ?
@@ -164,7 +164,7 @@ const mapStateToProps = (state)=>{
 	  items: state.cartState.items,
 	  total: state.cartState.total,
 	}
-  }
+}
   
 
 const mapDispatchToProps= (dispatch)=>{
