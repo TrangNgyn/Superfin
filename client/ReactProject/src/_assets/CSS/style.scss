@@ -19,6 +19,7 @@ html, body {
     margin: 0;
     padding: 0;
 }
+
 body {
 	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
 		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
@@ -119,6 +120,27 @@ h6 {
 /* ====================================== */
 /* ============= END FONT =============== */
 /* ====================================== */
+
+div#main {
+	min-height: 100%;
+	width: 100vw;
+	display: flex;
+	flex-direction: column;
+}
+
+div.Website-Header {
+	flex: 0 1 auto;
+	min-height: 50px;
+}
+div.Website-Body {
+	flex: 1 0 auto;
+	padding-bottom: 48px;
+}
+div.Website-Footer {
+	flex: 0 1 auto;
+	min-height: 72px;
+}
+
 
 
 /* ====================================== */
@@ -431,6 +453,7 @@ div#copyright-background{
 .page-title-holder {
 	height: 150px;
 	text-align: center;
+	margin-top: -16px;
 }
 
 .page-title-holder.fill {
@@ -563,16 +586,6 @@ div#copyright-background{
 		display: none;
 	}
 
-	div.Website-Body {
-		margin-top: 50px;
-	}
-
-	div.Website-Body:after {
-		height: 200px;
-		content:'';
-		display: block;
-	}
-
 	.container {
 		margin: 16px 10% auto;
 	}
@@ -656,29 +669,6 @@ div#copyright-background{
 /* =========== END MEDIA QUERIES ======== */
 /* ====================================== */
 
-
-/* ====================================== */
-/* ============ Contact Us Page ========= */
-/* ====================================== */
-div#contact-us-content > div {
-	border: 1px solid #000000;
-	padding: 20px;
-}
-
-div#contact-us-content > div:nth-child(1) > form > div:nth-last-child(1) {
-	margin-top: 12px;
-	text-align: center;
-}
-
-div#contact-us-content > div:nth-child(2) {
-	background-color: $gray-light;
-	text-align: center;
-}
-
-/* ====================================== */
-/* ========== End Contact Us Page ======= */
-/* ====================================== */
-
 /* ====================================== */
 /* ======== Authentication Pages ======== */
 /* ====================================== */
@@ -743,7 +733,8 @@ div#manage-categories-current-panel div.ant-tree {
 
 .product-details-main-title > div#quantity-selection,
 .product-details-main-title > div#quantity-selection > span,
-.product-details-main-title > div#special-requirements {
+.product-details-main-title > div#special-requirements,
+.product-details-main-title > div#size-selection {
 	margin-top: 8px;
 }
 
@@ -767,6 +758,12 @@ div#manage-categories-current-panel div.ant-tree {
 .product-details-description > span {
 	display: block;
 	margin-top: 8px;
+}
+
+.product-details-images > .ant-carousel > .slick-slider > .slick-list > .slick-track > div > div > div > img{
+	width: 100%;
+	height: 100%;
+	object-fit: scale-down;
 }
 
 /* ====================================== */

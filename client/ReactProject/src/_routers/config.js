@@ -12,7 +12,6 @@ import TermsConditions from '../Pages/TermsConditions/TermsConditions';
 import Blog from '../Pages/Blog/Blog';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ReenterPassword from '../Pages/ReenterPassword/ReenterPassword';
-import MyAccount from '../Pages/MyAccount/MyAccount';
 import Cart from '../Pages/Cart/CartPage';
 import CheckoutShipping from '../Pages/Checkout/CheckoutShipping';
 import CheckoutSecurePayment from '../Pages/Checkout/CheckoutSecurePayment';
@@ -27,6 +26,7 @@ import EditCompanyInfo from '../Pages/EditCompanyInfo/EditCompanyInfo';
 import ManageProducts from '../Pages/ManageProducts/ManageProducts';
 import AddEditProduct from '../Pages/AddEditProduct/AddEditProduct';
 import ManageCategories from '../Pages/ManageCategories/ManageCategories';
+import Signup from '../Pages/Signup/Signup';
 
 //if we dont have change password page for customer, will need to add Cutomer role to forgotpassword pages
 
@@ -45,14 +45,6 @@ const config =  {
             roles: [userConstants.ROLE_CUSTOMER],
             exact: false
         },
-        {
-            component: MyAccount,
-            url: '/myAccount',
-            roles: [userConstants.ROLE_CUSTOMER],
-            exact: false
-        },
-
-
 
 
         //GUEST
@@ -65,6 +57,12 @@ const config =  {
         {
             component: ReenterPassword,
             url: '/user/reset-password-email/token/:token/email/:email',
+            roles: [userConstants.ROLE_GUEST],
+            exact: false
+        },
+        {
+            component: Signup,
+            url: '/signup',
             roles: [userConstants.ROLE_GUEST],
             exact: false
         },
