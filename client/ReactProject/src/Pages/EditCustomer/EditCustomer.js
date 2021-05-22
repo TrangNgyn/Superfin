@@ -1,4 +1,3 @@
-import '../../_assets/CSS/pages/EditCustomer/EditCustomer.css';
 import { layout, tailLayout } from './FormLayout';
 import { onlyNumbers, _logout, checkPasswordStrength, isWhiteSpace } from '../../_services/SharedFunctions';
 import { Input, Form, Button, Spin } from 'antd';
