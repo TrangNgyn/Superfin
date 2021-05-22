@@ -142,18 +142,18 @@ const cartReducer= (state = initialState, action)=>{
   else if(action.type === UPDATE_ITEM_INFO){
     // set item info for each item in cart
     action.items.forEach(item => {
-      // get the item index
-      state.items
-        .filter(i => i.item_code === item.p_code)
-        .forEach((element, index) => {
-
-          // add updated info on item
-          state.items[index].p_name = item.p_name;
-          state.items[index].price_id = item.p_price_id;
-          state.items[index].unit_price = item.p_price;
-          state.items[index].p_image_uri = item.p_image_uri[0];
-
-        });      
+      if(state.items){
+        for(let i = 0; i < state.items.length; i++){
+          if(state.items[i].item_code === item.p_code){
+            // add updated info on item
+            state.items[i].p_name = item.p_name;
+            state.items[i].price_id = item.p_price_id;
+            state.items[i].unit_price = item.p_price;
+            state.items[i].p_image_uri = item.p_image_uri[0];
+          }
+  
+        }
+      }
     });
 
     // calc new total

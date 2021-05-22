@@ -98,7 +98,6 @@ const CheckoutSecurePayment = (props) =>{
 
 }
 
-//export default CheckoutSecurePayment
 
 const mapStateToProps = (state)=>{
   return{

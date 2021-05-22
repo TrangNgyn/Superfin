@@ -482,8 +482,9 @@ class Product {
     async post_validate_products(req,res) {
         try{
             let { 
-                p_codes, p_names, unit_prices,
-                price_ids, images, p_sizes
+                p_codes, 
+                // p_names, unit_prices,
+                // price_ids, images, p_sizes
             } = req.body
 
             // if field is empty

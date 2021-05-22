@@ -12,7 +12,7 @@ import TermsConditions from '../Pages/TermsConditions/TermsConditions';
 import Blog from '../Pages/Blog/Blog';
 import EmailRequest from '../Pages/EmailRequest/EmailRequest';
 import ReenterPassword from '../Pages/ReenterPassword/ReenterPassword';
-import Cart from '../Pages/Cart/CartPage';
+import Cart from '../Pages/Cart';
 import CheckoutShipping from '../Pages/Checkout/CheckoutShipping';
 import CheckoutSecurePayment from '../Pages/Checkout/CheckoutSecurePayment';
 import CheckoutReviewOrder from '../Pages/Checkout/CheckoutReviewOrder';
