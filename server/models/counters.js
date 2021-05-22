@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+//counters schema
 const counter_schema = new Schema({
     _id: {
         type: String,

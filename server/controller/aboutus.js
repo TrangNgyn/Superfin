@@ -1,6 +1,7 @@
 const { readFileSync, writeFileSync, write } =  require('fs')
 
 class aboutUs {
+    // read the company info file and return it in a json 
     async get_company_info(req,res) {
         try{
             var info = JSON.parse(readFileSync('./config/aboutus.txt', 'utf-8'))
@@ -11,6 +12,7 @@ class aboutUs {
         }
     }
 
+    // edit the company information by providing the important fields and stringifying the new content 
     async post_edit_company_info(req,res) {
         try{
             let { c_number, c_address, c_email, c_TandC, c_about, c_delivery, c_blog } = req.body
@@ -32,5 +34,6 @@ class aboutUs {
     }
 }
 
+// export the controller
 const about_controller = new aboutUs
 module.exports = about_controller

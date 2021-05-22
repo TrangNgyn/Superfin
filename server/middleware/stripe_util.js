@@ -1,5 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
+// function to add new product and price to stripe database
 async function stripe_add_product(p_code, p_name, p_price, callback){
 
     // could try and create first and if it throws an error on the create that is product already exists
@@ -25,6 +26,7 @@ async function stripe_add_product(p_code, p_name, p_price, callback){
             stripe.products.update(p_code,{active: true},(err,reactiveated_product) => {
                 if(err)
                     return callback(new Error(`Error reactivating product object in Stripe - ${err.message}`))
+                // attempt to create a price object and link it to the updated product
                 stripe.prices.create({
                     product: reactiveated_product.id,
                     unit_amount: Math.round(p_price*100),
@@ -45,6 +47,7 @@ async function stripe_add_product(p_code, p_name, p_price, callback){
         // if con is no longer true (i.e. the product doesn't alread exist) then create a new product and new 
         // price and assign it to the price 
         else {
+            // create a new product in stripe
             stripe.products.create({
                 id: p_code,
                 name: p_name,
@@ -52,7 +55,7 @@ async function stripe_add_product(p_code, p_name, p_price, callback){
                 if(err) {
                     return callback(new Error(`Error creating product object in Stripe - ${err.message}`))
                 }
-                // create price object
+                // create price object in stripe
                 stripe.prices.create({
                         product: stripe_product.id,
                         unit_amount: Math.round(p_price*100),
@@ -74,12 +77,14 @@ async function stripe_add_product(p_code, p_name, p_price, callback){
     })
 }
 
-
+// function to deactiveate products and any matching price associated with them 
 async function stripe_deactivate_product(p_code, p_price_id, callback){
     
+    // updatea price object setting it to false
     stripe.prices.update(p_price_id,{active: false}, (err) => {
         if(err)
             return callback(new Error(`Error updating price on stripe - ${err.message}`))
+        // update a product object setting it to false
         stripe.products.update(p_code, {active: false}, (err) => {
             if(err)
                 return callback(new Error(`Error updating product on stripe - ${err.message}`))
@@ -87,6 +92,7 @@ async function stripe_deactivate_product(p_code, p_price_id, callback){
         })
     })
 
+    // promise solution that could be implemented instead 
     // const pending = Promise.all([
     //     stripe.prices.update(
     //         p_price_id,
@@ -103,6 +109,7 @@ async function stripe_deactivate_product(p_code, p_price_id, callback){
     //         message: 'Product deactivated.'}
 }
 
+// this is never called 
 async function stripe_delete_product(p_code){
     const deleted = await stripe.products.del(p_code);
 
@@ -126,6 +133,7 @@ async function stripe_update_product(p_code, p_name){
         console.log(product)
 }
 
+// function to update the price of a stripe objet 
 async function stripe_update_price(p_code, new_p_price, old_p_price_id, callback){
     // create new stripe price object
     stripe.prices.create({
@@ -141,7 +149,6 @@ async function stripe_update_price(p_code, new_p_price, old_p_price_id, callback
             if(err)
                 return callback(new Error(`Error updating price object in Stripe - ${err.message}`))
             // return the created price object id to the callback
-            console.log(old_price)
             return callback(null, {
                 p_price_id: new_price.id,
                 message: 'Price object created in Stripe'
@@ -150,6 +157,7 @@ async function stripe_update_price(p_code, new_p_price, old_p_price_id, callback
     })
 }
 
+// function to post a charge to stripe
 async function stripe_post_charge(req, res) {
     try {
       const { amount, source, receipt_email } = req.body
