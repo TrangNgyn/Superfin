@@ -45,10 +45,12 @@ class Product {
         try{
             var { p_code } = req.body
             
+            // ensure all inputs are provided
             if(!p_code){
                 return res.json(empty_field)
             }
             else {
+                // find product by the provided p_code
                 var product = await product_model.findOne({ p_code: p_code })
                 if(product)
                     return res.json(product)
@@ -77,6 +79,7 @@ class Product {
                 return res.json(empty_field)
             }
             else {
+                // find all products by the cat_id
                 var categories = await product_model.find({ p_catagories: cat_id })
                                                     .populate('p_categores','c_name')
                 if(categories)
@@ -107,6 +110,7 @@ class Product {
                 return res.json(empty_field)
             }
             else {
+                // find all products in category sorted by price 
                 var categories = await product_model.find({ p_categories: cat_id }).sort({ p_price: 1 })
                 if(categories){
                     return res.json(categories)
@@ -128,16 +132,19 @@ class Product {
 
     // @route   POST api/products/add-product
     // @desc    Create a product
-    // @access  Public
+    // @access  Admin
 
     async post_add_product(req,res) {
         try {
 
+            // ensure all inputs are present
             var { p_code, p_name, p_price, p_unit, 
                  p_size, p_categories, p_description } =  req.body  
 
+            // save images 
             var images = req.images
 
+            // at least one image must be supplied for a product
             if(images.length <= 0) {
                 Product.delete_images(images)
                 return res.json({
@@ -166,6 +173,7 @@ class Product {
                 })
             }
 
+            // find the category from the supplied input
             var found_category = await categories_model.findOne({ _id: p_categories })
 
             if(!found_category){
@@ -174,6 +182,7 @@ class Product {
                                   message: `Product was not added - the category ${p_categories} is not valid`})
             }
 
+            // ensure that there are no matching p_codes
             var matching_code = await product_model.findOne({ p_code: p_code })
 
             if(matching_code){
@@ -181,8 +190,9 @@ class Product {
                 return res.json({ success: false,
                                   message: `Product was not added, the p_code ${p_code} is already in use` })
             }
-            // need too clean input here potentially to ensure that product addition is not corrupting the database
+            
 
+            // create a new product object
             const new_product = new product_model({
                 p_image_uri: images,
                 p_code,
@@ -194,6 +204,7 @@ class Product {
                 p_description
             })
 
+            // save product and return succes or failure
             var saved_product = await new_product.save()
             if (saved_product) {    
                 return res.json({ success: true,
@@ -216,11 +227,10 @@ class Product {
 
     // @route   POST api/products/edit-product
     // @desc    edit an existing product
-    // @access  Public
+    // @access  Admin
 
     async post_edit_product(req, res) {
         try {
-
             var { p_code, p_name, p_price, p_unit, p_size,
                  p_image_uri, p_categories, p_description } = req.body
 
@@ -337,6 +347,7 @@ class Product {
                     }
                 }
             }
+            // else remove all images from the uri
             else if(found_product.p_image_uri.length > 0){
                 for(var i = 0; i < found_product.p_image_uri.length; i++){
                     var image = found_product.p_image_uri[i];
@@ -415,9 +426,7 @@ class Product {
 
     // @route   POST api/products/delete-product
     // @desc    Delete a product
-    // @access  Public 
-
-    // need to somehow make this only accessible by admin user
+    // @access  Admin 
 
     async post_delete_product(req,res) {
         try{
@@ -428,9 +437,10 @@ class Product {
                 return res.json(empty_field)
             }
 
-            //should use findOneAndDelete here -> prevent other commands changing the document
+            // find the doc and delete it
             var delete_product = await product_model.findOne({ p_code: p_code })
             if(delete_product) {
+                // delete the images from the bucket for the 
                 if(delete_product.p_image_uri){
                     Product.delete_images(delete_product.p_image_uri)
                 }

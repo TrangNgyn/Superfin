@@ -1,6 +1,8 @@
 const db = require('../models/db')
 
+// ensure that the email doesn't already exist
 check_duplicate_email =  (req,res,next) => {
+    // find user by email
     db.user.findOne({
         email: req.body.email
     }).exec((err, result) => {
@@ -20,6 +22,7 @@ check_duplicate_email =  (req,res,next) => {
     })
 }
 
+// check submitted roles exist in the database
 check_roles_exist = (req,res,next) => {
     if(req.body.roles) {
         for(let i = 0; i < req.body.roles.length; i++) {

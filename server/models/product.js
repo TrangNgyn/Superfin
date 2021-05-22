@@ -8,7 +8,7 @@ var validateProductUnit = function(unit) {
     return re.test(unit)
 };
 
-//Create schema
+//product schema
 const productSchema = new Schema({
     p_code : {
         type: String,
@@ -59,6 +59,7 @@ const productSchema = new Schema({
 
 });
 
+// pre save hook to add the product to stripe and attach the price id to the product model
 productSchema.pre("save", function(next) {
     var doc = this
     stripe_add_product(doc.p_code, doc.p_name, doc.p_price, (err, stripe_product) => {
@@ -71,6 +72,7 @@ productSchema.pre("save", function(next) {
     });
 })
 
+// delete one pre hook to remove the product from stripe before removing from the db
 productSchema.pre("deleteOne", {document: true, query: false},function(next) {
     var doc = this
     stripe_deactivate_product(doc.p_code, doc.p_price_id,(err) => {

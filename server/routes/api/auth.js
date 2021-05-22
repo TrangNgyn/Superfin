@@ -13,9 +13,9 @@ module.exports = function(app) {
 
 
     // this is only for inserting admins for test/dev will not be available in production
-    app.post("/api/auth/sign_up_admin",
-    [
-        verify_sign_up.check_duplicate_email,
-        verify_sign_up.check_roles_exist
-    ], controller.sign_up_admin) 
+    // app.post("/api/auth/sign_up_admin",
+    // [
+    //     verify_sign_up.check_duplicate_email,
+    //     verify_sign_up.check_roles_exist
+    // ], controller.sign_up_admin) 
 }
