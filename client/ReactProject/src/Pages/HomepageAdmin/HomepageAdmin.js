@@ -1,4 +1,3 @@
-import '../../_assets/CSS/pages/HomepageAdmin/HomepageAdmin.css';
 import HomepageAdminOrderList from './HomepageAdminOrderList';
 import ProductListAdmin from './ProductListAdmin';
 import { getAllProducts, setDefaultOrder } from '../../_actions/productActions';

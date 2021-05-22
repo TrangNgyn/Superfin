@@ -1,5 +1,4 @@
 import React from "react";
-import '../../_assets/CSS/pages/HomepageAdmin/HomepageAdminOrder.css';
 import { orderStatusConstants } from '../../_constants/orderStatus.constants';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Button, Input, Form, Card } from 'antd';
