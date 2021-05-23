@@ -24,10 +24,14 @@ const HomepageAdmin = () => {
     const completeOrders = useSelector(state => state.completeOrdersState.completeOrders);
     const errorLoadingCompleteOrders = useSelector(state => state.completeOrdersState.error);
     const loadingCompleteOrders = useSelector(state => state.completeOrdersState.loading);
+    const emptyCompleteOrders = useSelector(state => state.completeOrdersState.empty);
 
     const incompleteOrders = useSelector(state => state.incompleteOrdersState.incompleteOrders);
     const errorLoadingIncompleteOrders = useSelector(state => state.incompleteOrdersState.error);
     const loadingIncompleteOrders = useSelector(state => state.incompleteOrdersState.loading);
+    const emptyIncomplateOrders = useSelector(state => state.incompleteOrdersState.empty);
+
+
 
     const productListProps = {
         dispatch: dispatch,
@@ -69,9 +73,9 @@ const HomepageAdmin = () => {
         if(!productsList.length) dispatch(getAllProducts());      
         else dispatch(setDefaultOrder());
 
-        if(!completeOrders.length && radioState) dispatch(getCompleteOrders(auth.access_token, updateAuth));
+        if(!completeOrders.length && radioState && !emptyCompleteOrders) dispatch(getCompleteOrders(auth.access_token, updateAuth));
 
-        if(!incompleteOrders.length && !radioState) dispatch(getIncompleteOrders(auth.access_token, updateAuth));
+        if(!incompleteOrders.length && !radioState && !emptyIncomplateOrders) dispatch(getIncompleteOrders(auth.access_token, updateAuth));
 
     }, [productsList.length, completeOrders.length, incompleteOrders.length, radioState, dispatch, auth.access_token, updateAuth]);
     

@@ -4,7 +4,8 @@ import {
     ERROR_INCOMPLETE_ORDERS, 
     DELETE_INCOMPLETE_ORDERS, 
     ADD_TRACKING,
-    ADD_INCOMPLETE_ORDER
+    ADD_INCOMPLETE_ORDER,
+    EMPTY_INCOMPLETE_ORDER
 } from '../_constants/actionTypes.constants';
 import axios from 'axios';
 import { _logout } from '../_services/SharedFunctions';
@@ -16,10 +17,17 @@ export const getIncompleteOrders = (token, updateAuth) => dispatch => {
 
     axios.get('api/orders/all-uncomplete', config)
     .then(res => {
-        dispatch({
-            type: GET_INCOMPLETE_ORDERS,
-            payload: res.data
-        });
+        if(res.data.length <= 0){
+            dispatch({
+                type: EMPTY_INCOMPLETE_ORDER
+            });
+        }
+        else{
+            dispatch({
+                type: GET_INCOMPLETE_ORDERS,
+                payload: res.data                   
+            });
+        }  
     })
     .catch(err => {
         console.log(err);

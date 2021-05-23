@@ -18,6 +18,7 @@ const ProcessedOrders = () => {
     const orders = useSelector(state => state.completeOrdersState.completeOrders);
     const error = useSelector(state => state.completeOrdersState.error);
     const loading = useSelector(state => state.completeOrdersState.loading);
+    const empty = useSelector(state => state.completeOrdersState.empty);
 
     const [page, setPage] = useState(0);
     const [ordersList, setOrdersList] = useState([]);
@@ -28,7 +29,7 @@ const ProcessedOrders = () => {
     let row = <></>
 
     useEffect(() => {
-        if(!orders.length) dispatch(getCompleteOrders(auth.access_token, updateAuth));
+        if(!orders.length && !empty) dispatch(getCompleteOrders(auth.access_token, updateAuth));
         else setOrdersList(orders);      
     }, [orders.length, orders, dispatch, auth.access_token, updateAuth]);
     
