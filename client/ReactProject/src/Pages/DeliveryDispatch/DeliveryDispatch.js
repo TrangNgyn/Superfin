@@ -19,7 +19,7 @@ const DeliveryDispatch = () =>{
                 <h2>Delivery and Dispatch</h2>
             </div>
             <div className="container">
-                <p style={{textAlign: 'center'}}>Sorry :( this feature is being implemented!</p>
+                <p style={{textAlign: 'center'}}>{companyInfo.c_delivery}</p>
             </div>
         </>
     )

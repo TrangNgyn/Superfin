@@ -34,6 +34,7 @@ const HomepageAdminOrderList = props => {
                     }}
                     pagination={{
                         position: 'bottom',
+                        defaultPageSize: 8
                     }}
                     dataSource={renderableOrders}
                     renderItem={orderProps => {

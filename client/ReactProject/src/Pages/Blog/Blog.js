@@ -18,7 +18,7 @@ const Blog = () => {
             <h2>Company Blog</h2>
         </div>
         <div className="container">
-            <p style={{textAlign: 'center'}}>Sorry :( this feature is being implemented!</p>
+            <p style={{textAlign: 'center'}}>{companyInfo.c_blog}</p>
         </div>
     </>)
 }

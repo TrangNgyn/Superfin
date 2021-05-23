@@ -17,16 +17,13 @@ const CategoryList = () => {
     const error = useSelector(state => state.categoryState.error);
     const emptyCategories = useSelector(state => state.categoryState.empty);
     const productsList = useSelector(state => state.productState.products);
-   
 
-    const [page, setPage] = useState(0);
+   
     const [currentCategories, setCurrentCategories] = useState([]);
     const [isChild, setIsChild] = useState(false);
     const [parentCategoires, setParentCategories] = useState([]);
     const [childCategories, setChildCategories] = useState([]);
 
-    
-    console.log(productsList);
 
     const underConstructionMessage = () => {
         message.info({
@@ -47,7 +44,6 @@ const CategoryList = () => {
             if(childrenOfParent.length === 0) underConstructionMessage();
             else{
                 setCurrentCategories(childrenOfParent);
-                setPage(0);
                 setIsChild(true);
             }
         }
@@ -75,7 +71,6 @@ const CategoryList = () => {
     const goBack = () => {
         setIsChild(false);
         setCurrentCategories(parentCategoires);
-        setPage(0);
     }
 
      useEffect(() => {    
@@ -100,8 +95,6 @@ const CategoryList = () => {
         }
     }, [categories.length, dispatch, categories, childCategories, emptyCategories, parentCategoires.length, productsList.length]);
 
-    const renderableArray = currentCategories.slice( page * itemsPerPage,
-        ((page + 1) * itemsPerPage) > currentCategories.length ? currentCategories.length : ((page + 1) * itemsPerPage));
 
     return (
         <>
@@ -124,8 +117,9 @@ const CategoryList = () => {
                                 }}
                                 pagination={{
                                     position: 'bottom',
+                                    defaultPageSize: 8,
                                 }}
-                                dataSource={renderableArray}
+                                dataSource={currentCategories}
                                 renderItem={item => {
                                 return(
                                     <List.Item>                        

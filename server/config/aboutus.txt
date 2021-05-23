@@ -1,1 +1,1 @@
-{"c_number":"0383665433673","c_address":"Company Address","c_email":"superfinpkg@gmail.com","c_TandC":"Company Terms and conditions yeaaaah","c_delivery":"Company delivery and dispatch information","c_blog":"This is the placeholder text for the company blog","c_about":"_"}
+{"c_number":"(02) 9681 6075","c_address":"3/34-36 Fairfield St, Fairfield East NSW 2165","c_email":"sungentpkg@bigpond.com","c_TandC":"T&C coming soon!","c_delivery":"D&D coming soon!","c_blog":"Blog coming soon!","c_about":"_"}
