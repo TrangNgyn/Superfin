@@ -212,7 +212,7 @@ class User {
                             template: 'forgot-password-email',
                             subject: 'Request to Reset Password',
                             context: {
-                                url: 'http://localhost:3000/user/reset-password-email/token/'+ buffer.toString('hex') + '/email/' + user.email,
+                                url: 'http://54.252.17.165/user/reset-password-email/token/'+ buffer.toString('hex') + '/email/' + user.email,
                                 name: user.first_name,
                                 // this is only temporary while the link doesnt work
                                 token: buffer.toString('hex')
