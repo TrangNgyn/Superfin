@@ -74,7 +74,7 @@ export const deleteProduct = (p_code, access_token, updateAuth) => dispatch => {
         p_code: p_code
     }, config)
     .then(res => {
-        if(res.data.succes){                            //This may need to be changed to 'success'
+        if(res.data.success){                            //This may need to be changed to 'success'
             dispatch({
                 type: DELETE_PRODUCT,
                 payload: p_code

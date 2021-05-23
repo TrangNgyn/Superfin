@@ -12,11 +12,7 @@ const Product = props => {
     const product = props.product;
     const categoryName = props.categoryName;
 
-    const viewCategory = () => {
-        console.log("View product info for " + product.name);
-        //This will link to product info page
-    }
-    
+
     return (
         <Card className="card-shadow-hoverable"
             tabIndex={0}
