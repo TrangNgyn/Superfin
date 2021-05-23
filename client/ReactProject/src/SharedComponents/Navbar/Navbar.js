@@ -124,10 +124,10 @@ export default function Navbar(){
         const sub_categories = childCategories
             .filter(c => { return c.path === `,${p.c_name},`})
             .map(c => {
-                return <Menu.Item key={c._id}>{c.c_name}</Menu.Item>
+                return <Menu.Item onClick={() => {history.push(`/products/${c._id}`)}} key={c._id}>{c.c_name}</Menu.Item>
             });
             return (
-                <SubMenu key={p._id} title={p.c_name}>{sub_categories}</SubMenu>
+                <SubMenu key={p._id} title={<div onClick={() => {history.push(`/products/${p._id}`)}}>{p.c_name}</div>}>{sub_categories}</SubMenu>
             );
     })
 

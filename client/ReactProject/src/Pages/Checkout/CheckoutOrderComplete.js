@@ -5,7 +5,7 @@ import { Divider, Steps, Spin } from 'antd';
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import { formatNumber } from '../../_helpers/utils';
 import CartProducts from '../Cart/CartProducts';
-import { clearCart, setError, setLoading } from '../../_actions/cartActions';
+import { clearCart, setError, setLoading, updateItemInfo } from '../../_actions/cartActions';
 import axios from 'axios';
 
 const { Step } = Steps;
@@ -14,17 +14,33 @@ const { Step } = Steps;
 const CheckoutOrderComplete = (props) =>{
 
   // order fields
-  const total = JSON.parse(localStorage.getItem("total"));
-  const items = JSON.parse(localStorage.getItem("items"));
+  const [total, setTotal] = useState(0);
+  const items = props.items;
   const address = JSON.parse(localStorage.getItem("address"));
   const c_email = JSON.parse(localStorage.getItem("email"));
 
   // component states
   const [isLoading, setLoadingState] = useState(true);
 
-  useEffect(() => {
-    // create an order on rendering
-    axios
+  function fetchItemInfo(){
+	axios
+        .post('/api/products/validate-products', {
+          p_codes: props.items.map(li => li.item_code)
+        })
+        .then(res => {
+          // update information in cart
+          props.updateItemInfo(res.data.valid_pcodes);
+
+		  return res;
+        })
+        .catch(err => {
+		  props.setError(err)
+          setLoadingState(false);
+        })
+  }
+
+  function fetchCreatOrder(){
+	axios
       .post('/api/orders/create-order', {
         c_email,
         status: "NEW",
@@ -36,13 +52,22 @@ const CheckoutOrderComplete = (props) =>{
         setLoadingState(false);
         return res;
       })
-      .catch(err => props.setError(err))
+      .catch(err => props.setError(err))   
+  }
 
-    // clean up before component unmount
-    return () => {
-      localStorage.clear();
-      props.clearCart()
-    }    
+  useEffect(() => {
+	// load product info
+	fetchItemInfo();
+
+    // create an order on rendering
+    fetchCreatOrder();
+
+	// clean up before component unmount
+	return () => {
+		localStorage.clear();
+		props.clearCart()
+	} 
+
   }, [])
 
   useEffect(() => {
@@ -66,7 +91,7 @@ const CheckoutOrderComplete = (props) =>{
 					<div className="box-item-xs-12 box-item-sm-12 box-item-md-12 box-item-lg-12 box-item-xl-12" align="center">
 						<p><Spin size='large'/></p>
 						<p>We are processing your order.</p>
-						<p>Please wait and kindly <strong>do not close this tab</strong> until your order is processed!</p>
+						<p>Please wait abd <strong>do not close this tab</strong> until your order is processed!</p>
 					</div> :
 					(
 						!items ?
@@ -134,12 +159,21 @@ const CheckoutOrderComplete = (props) =>{
   </>)
 };
 
+const mapStateToProps = (state)=>{
+	return{
+	  items: state.cartState.items,
+	  total: state.cartState.total,
+	}
+}
+  
+
 const mapDispatchToProps= (dispatch)=>{
   return{
     setLoading: (isLoading) => {dispatch(setLoading(isLoading))},
     setError: (err) => {dispatch(setError(err))},
-    clearCart: () => {dispatch(clearCart())}
+    clearCart: () => {dispatch(clearCart())},
+	updateItemInfo: (items) => {dispatch(updateItemInfo(items))},
   }
 }
 
-export default connect(null, mapDispatchToProps)(CheckoutOrderComplete);
+export default connect(mapStateToProps, mapDispatchToProps)(CheckoutOrderComplete);

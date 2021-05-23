@@ -29,6 +29,11 @@ const CartProducts = (props) => {
     // state if the invalid products have been removed from cart
     const [invalidRemoved, setInvalidRemoved] = useState(false);
 
+    console.log({items: props.line_items})
+    console.log({valid: validPCodes})
+    console.log({invalid: invalidProducts})
+    console.log({res: productInfo})
+
     function filterInavlidProducts() {
       if(validPCodes 
           && validPCodes.length !== props.line_items.length)
@@ -88,14 +93,32 @@ const CartProducts = (props) => {
           setLoadingState(false);
         })
 
-
     }, []);
 
     useEffect(() => {
 
       filterInavlidProducts();
 
-    }, [validPCodes])
+    }, [validPCodes]);
+
+    useEffect(() => {
+      // update information in cart
+      props.updateItemInfo(productInfo);
+
+      // get only user input values
+      const items = props.line_items.map(i => {
+          return {
+              item_code: i.item_code,
+              p_size: i.p_size,
+              quantity: i.quantity,
+              special_requirements: i.special_requirements,
+          }
+      });
+
+      // store cart state to local storage
+      localStorage.setItem("items", JSON.stringify(items));
+
+    }, [props.line_items, props.total])
    
     const itemList = () => {
       var items = [];
@@ -157,14 +180,21 @@ const CartProducts = (props) => {
     return (<>
         {
           isLoading ?
-            <tr><td colSpan={5}><h3 style={{textAlign: 'center'}}>Fetching your Cart Items. . .<br/>Thank you for your patience!<br/><Spin size='large'/></h3></td></tr>
+            <tr>
+              <td colSpan={5}>
+                <h3 style={{textAlign: 'center'}}>
+                  Fetching your Cart Items. . .
+                  <br/>
+                  Thank you for your patience!<br/><Spin size='large'/>
+                </h3>
+              </td>
+            </tr>
           :
           (        
             !invalidRemoved ?
               (
                 (invalidProducts.length > 0) ? 
-                 infoModal(invalidProducts, validPCodes) : 
-                 itemList()
+                 infoModal(invalidProducts, validPCodes) : itemList()
               ) : 
               itemList()
           )
@@ -182,8 +212,6 @@ const mapStateToProps = (state)=>{
 
 const mapDispatchToProps= (dispatch)=>{
   return{
-    // setLoading: (isLoading) => {dispatch(setLoading(isLoading))},
-    // setError: (err) => {dispatch(setError(err))},
     removeItems: (invalid_pcodes) => {dispatch(removeItems(invalid_pcodes))},
     updateItemInfo: (items) => {dispatch(updateItemInfo(items))},
   }

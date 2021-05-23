@@ -1,7 +1,0 @@
-#homepage-admin-orderlist-container {
-    display: grid;
-    grid-template-columns: 350px 350px 350px;
-    grid-column-gap: 20px;
-    width: 1090px;
-    grid-row-gap: 10px;
-  }

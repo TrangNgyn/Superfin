@@ -1,19 +1,33 @@
-import '../../_assets/CSS/pages/Homepage/Category.css';
 import altImage from "../../_assets/Images/No_Image.jpg"
+import { Card } from 'antd';
 
+const { Meta } = Card;
 const Category = props => {
     const category  = props;
     const onClick = props.onClick;
     const img = props.image;
 
     return (
-        <div className="Category-Container" onClick={() => {onClick(props.c_name)}}>
-            <img className = "Category-Image-Text"
-                src={img}
-                alt={altImage}
+        <Card className="card-shadow-hoverable"
+            tabIndex={0}
+            cover={
+                <img className="cover-img fixed-size" 
+                    style={{ cursor: 'pointer' }} 
+                    src={img}
+                    alt={altImage}
+                    onClick={() => {onClick(props.c_name)}}
+                />
+            }>
+            <Meta
+                title={
+                    <span
+                        id="view-product-title"
+                        onClick={() => {onClick(props.c_name)}}>
+                        {category.c_name}
+                    </span>
+                }
             />
-            <b className = "Category-Image-Text">{category.c_name}</b>
-        </div>
+        </Card>
     );
 };
 

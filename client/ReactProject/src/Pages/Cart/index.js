@@ -1,3 +1,8 @@
+/*
+    - Author: Trang Nguyen
+    - All child components of the Cart Page will be rendered here.
+*/
+
 import React, { useContext, useEffect } from 'react';
 import {connect} from 'react-redux';
 import CartProducts from './CartProducts';
@@ -20,21 +25,21 @@ const Cart = (props) =>{
         props.clearCart();
     }
 
-    useEffect(() => {
-        // get only user input values
-        const items = props.cartItems.map(i => {
-            return {
-                item_code: i.item_code,
-                p_size: i.p_size,
-                quantity: i.quantity,
-                special_requirements: i.special_requirements,
-            }
-        });
+    // useEffect(() => {
+    //     // get only user input values
+    //     const items = props.cartItems.map(i => {
+    //         return {
+    //             item_code: i.item_code,
+    //             p_size: i.p_size,
+    //             quantity: i.quantity,
+    //             special_requirements: i.special_requirements,
+    //         }
+    //     });
 
-        // store cart state to local storage
-        localStorage.setItem("items", JSON.stringify(items));
+    //     // store cart state to local storage
+    //     localStorage.setItem("items", JSON.stringify(items));
 
-    }, [props.cartItems, props.total])
+    // }, [props.cartItems, props.total])
   
     return(<>
         <div className="page-title-holder fill">
@@ -53,7 +58,18 @@ const Cart = (props) =>{
                         </tr>
                     </thead>
                     <tbody>
-                        {itemCount > 0 ? <CartProducts key={props.cartItems} editable={false} /> : <tr><td colSpan={5}><h3 style={{textAlign: 'center'}}>Your cart is empty! :(</h3></td></tr> }
+                        {
+                          itemCount > 0 ? 
+                            <CartProducts key={props.cartItems} editable={true} /> 
+                            : 
+                            <tr>
+                                <td colSpan={5}>
+                                    <h3 style={{textAlign: 'center'}}>
+                                        Your cart is empty! :(
+                                    </h3>
+                                </td>
+                            </tr> 
+                        }
                     </tbody>
                 </table>
             </div>
@@ -83,8 +99,14 @@ const Cart = (props) =>{
                         </tr>
                     </tbody>
                 </table>
-                <Button type="secondary" disabled={itemCount < 1} onClick={clearCart}>Clear Cart</Button>
+                <Button 
+                    type="secondary" 
+                    disabled={itemCount < 1} onClick={clearCart}>
+                        Clear Cart
+                </Button>
+
                 &emsp;
+
                 <Button type="primary" disabled={itemCount < 1}>
                     <Link to="/CheckoutShipping">Checkout</Link>
                 </Button>

@@ -6,11 +6,15 @@ import ProductsList from './ProductsList';
 import { getAllCategories } from '../../_actions/categoryActions';
 import { getAllProducts } from '../../_actions/productActions';
 import { getCategoriesHierarchy } from '../../SharedComponents/Categories/CategoriesFunctions';
+import { useParams } from 'react-router-dom';
 const { Option } = Select;
 // const { TreeNode } = TreeSelect;
 
 const Products = () => {
     const dispatch = useDispatch();
+    const { category } = useParams();
+
+    
 
     const categories = useSelector(state => state.categoryState.categories);
     const loadingCategory = useSelector(state => state.categoryState.loading);
@@ -22,6 +26,7 @@ const Products = () => {
     const [filteredAndSorted, setFilterAndSorted] = useState(products);
     const [filter, setFilter] = useState("allCategories");
     const [sorted, setSorted] = useState("priceAsc");
+
 
     const loading = (loadingCategory || loadingProduct) ? true : false; // If either are loading, set loading to true, if not, set to false
     const error = (errorCategory || errorProduct) ? true : false; // If either are errorneous, set error to true, if not, set to false
@@ -43,16 +48,36 @@ const Products = () => {
     }
 
     const filterAndSortProduct = () => {
-        // if (filter !== 0 && sorted !== 0) {
-        const filteredSortedProducts = products
-            .filter(e => { 
-                return (filter === "allCategories") ? 
-                    true : e.p_categories === filter; 
-            })
-            .sort((a, b) => { 
-                return sortProduct(a, b, sorted); 
-            });
-        setFilterAndSorted(filteredSortedProducts);
+        const parent = categories.find(c => {return c._id === filter});
+
+        const filterSortChildren = () => {
+            const filteredSortedProducts = products
+                .filter(e => { 
+                    return (filter === "allCategories") ? true : e.p_categories === filter; 
+                })
+                .sort((a, b) => { 
+                    return sortProduct(a, b, sorted); 
+                });
+            setFilterAndSorted(filteredSortedProducts);
+        }
+
+        if(parent !== undefined){
+            if(parent.path === null){
+                const children = categories.filter(c => {return c.path === `,${parent.c_name},`});
+
+                const prods = products
+                .filter(p => {
+                    if(children.find(c => { return c._id === p.p_categories; }) === undefined) return false;
+                    return true;
+                })
+                .sort((a, b) => { 
+                    return sortProduct(a, b, sorted); 
+                });
+                setFilterAndSorted(prods);
+            }
+            else filterSortChildren();
+        }
+        else filterSortChildren();   
     };
 
     // For preloading data
@@ -61,7 +86,12 @@ const Products = () => {
             dispatch(getAllCategories());
         // if (!products) 
             dispatch(getAllProducts());
-    }, []);
+        if(category !== undefined){
+            setFilter(category); 
+            filterAndSortProduct()
+        }
+
+    }, [category]);
 
     // filter and sort product if product list changes
     useEffect(() => {
@@ -83,6 +113,9 @@ const Products = () => {
                             defaultValue="allCategories" 
                             treeDefaultExpandAll 
                             onChange={e => {
+                           
+                                
+                         
                                 setFilter(e); 
                                 filterAndSortProduct()
                             }}

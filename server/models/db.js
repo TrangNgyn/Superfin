@@ -10,9 +10,11 @@ db.user = require('./user')
 db.customer = require('./customer')
 db.admin = require('./admin')
 db.order = require('./purchased_order')
+db.counters = require('./counters')
 
 // consistent information required accross multiple apis
 db.ROLES = ["customer", "admin"]
+db.COUNTERS = ["order_id"]
 db.passwordRegex = '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'
 
 module.exports = db
