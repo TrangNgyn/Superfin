@@ -108,7 +108,7 @@ const CategoryList = () => {
             }
             {
                 loading 
-                ?   <Spin size='large'/> 
+                ?   <div style={{textAlign: 'center'}}><Spin size='large'/> </div>
                 :   <>
                         <div className="container">
                             <List

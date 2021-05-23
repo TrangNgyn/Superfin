@@ -8,7 +8,7 @@ import { history } from '../../_helpers/history';
 export const HomepageCarousel = () => {
     return(
         <div style = {{ position:'relative'}}>
-                <Button onClick={() => history.push('/products')} Click type="default" className="homepage-carousel-button">SHOP NOW</Button>
+                <Button onClick={() => history.push('/products')} type="default" className="homepage-carousel-button">SHOP NOW</Button>
 
                 <Carousel autoplay>
                     <div>
