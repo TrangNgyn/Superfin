@@ -217,9 +217,7 @@ class User {
                             subject: 'Request to Reset Password',
                             context: {
                                 url: domain + '/user/reset-password-email/token/'+ buffer.toString('hex') + '/email/' + user.email,
-                                name: user.first_name,
-                                // this is only temporary while the link doesnt work
-                                token: buffer.toString('hex')
+                                name: user.first_name
                             }
                         }
             
