@@ -74,9 +74,7 @@ app.use(express.static('../client/ReactProject/build'))
 // Sanitize against NoSQL query injections
 app.use(mongoSanitize())
 
-app.get('*', (req,res) => {
-  res.sendFile(path.join(__dirname, '../client/ReactProject/build','index.html'))
-})
+
 
 // Routes
 app.use('/api/products', product)
@@ -87,6 +85,10 @@ app.use('/api/stripe', stripe)
 app.use('/api/user', user)
 // need to change this routing 
 require('./routes/api/auth')(app)
+
+app.get('*', (req,res) => {
+  res.sendFile(path.join(__dirname, '../client/ReactProject/build','index.html'))
+})
 
 
 // Run Server
