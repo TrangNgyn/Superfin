@@ -13,6 +13,10 @@ var empty_field = {
     message: "All fields must be filled and present" 
 }
 
+var domain = 'http://localhost:3000'
+if(process.env.NODE_ENV ==  'production')
+    domain = 'http://54.252.17.165'
+
 // set the trasnport object information
 var smtpTransport = nodemailer.createTransport({
     service: 'Gmail',
@@ -212,7 +216,7 @@ class User {
                             template: 'forgot-password-email',
                             subject: 'Request to Reset Password',
                             context: {
-                                url: 'http://localhost:3000/user/reset-password-email/token/'+ buffer.toString('hex') + '/email/' + user.email,
+                                url: domain + '/user/reset-password-email/token/'+ buffer.toString('hex') + '/email/' + user.email,
                                 name: user.first_name,
                                 // this is only temporary while the link doesnt work
                                 token: buffer.toString('hex')
