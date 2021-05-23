@@ -18,6 +18,7 @@ const CurrentOrders = () => {
     const orders = useSelector(state => state.incompleteOrdersState.incompleteOrders);
     const error = useSelector(state => state.incompleteOrdersState.error);
     const loading = useSelector(state => state.incompleteOrdersState.loading);
+    const empty = useSelector(state => state.incompleteOrdersState.empty);
     const [ordersList, setOrdersList] = useState([]);             
     const [page, setPage] = useState(0);
     const maxNumberOfPages = (Math.ceil(ordersList.length/itemsPerPage) - 1);
@@ -25,7 +26,7 @@ const CurrentOrders = () => {
     let row = <></>
 
     useEffect(() => {
-        if(!orders.length) dispatch(getIncompleteOrders(auth.access_token, updateAuth));
+        if(!orders.length && !empty) dispatch(getIncompleteOrders(auth.access_token, updateAuth));
         else setOrdersList(orders);      
     }, [orders.length, orders, dispatch, auth.access_token, updateAuth]);
     

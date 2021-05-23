@@ -3,7 +3,8 @@ import {
     LOADING_COMPLETE_ORDERS, 
     ERROR_COMPLETE_ORDERS, 
     DELETE_COMPLETE_ORDER, 
-    ADD_COMPLETE_ORDER 
+    ADD_COMPLETE_ORDER ,
+    EMPTY_COMPLETE_ORDER,
 } from '../_constants/actionTypes.constants';
 import axios from 'axios';
 import { _logout } from '../_services/SharedFunctions';
@@ -16,10 +17,17 @@ export const getCompleteOrders = (token, updateAuth) => dispatch => {
 
     return axios.get('api/orders/all-complete', config)
     .then(res => {
-        dispatch({
-            type: GET_COMPLETE_ORDERS,
-            payload: res.data
-        });
+        if(res.data.length <= 0){
+            dispatch({
+                type: EMPTY_COMPLETE_ORDER
+            });
+        }
+        else{
+            dispatch({
+                type: GET_COMPLETE_ORDERS,
+                payload: res.data
+            });
+        }
     })
     .catch(err => {
         console.log(err);
