@@ -40,6 +40,7 @@ const ProductList = props => {
                     }}
                     pagination={{
                         position: 'bottom',
+                        defaultPageSize: 8
                     }}
                     dataSource={renderableProducts}
                     renderItem={productProps => {

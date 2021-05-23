@@ -3,11 +3,12 @@ import image_1 from '../../_assets/Images/HomepageImages/Image_1.png';
 import image_2 from '../../_assets/Images/HomepageImages/Image_2.png';
 import image_3 from '../../_assets/Images/HomepageImages/Image_3.png';
 import altImage from '../../_assets/Images/No_Image.jpg';
+import { history } from '../../_helpers/history';
 
 export const HomepageCarousel = () => {
     return(
         <div style = {{ position:'relative'}}>
-                <Button type="default" className="homepage-carousel-button">SHOP NOW</Button>
+                <Button onClick={() => history.push('/products')} type="default" className="homepage-carousel-button">SHOP NOW</Button>
 
                 <Carousel autoplay>
                     <div>

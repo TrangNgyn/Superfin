@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { getProductDetails, setLoadingProductDetails } from '../../_actions/productActions';
+import { getProductDetails } from '../../_actions/productActions';
 import ProductImagesCarousel from './ProductImagesCarousel';
 import ProductMainTitle from './ProductMainTitle';
 import ProductDescription from './ProductDescription';

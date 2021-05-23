@@ -12,7 +12,7 @@ const ProductsList = props => {
                 }}
                 pagination={{
                     showSizeChanger: true,
-                    position: 'both',
+                    position: 'bottom',
                 }}
                 dataSource={Object.values(productDetails)}
                 renderItem={item => {

@@ -104,7 +104,7 @@ const Products = () => {
             <h2>Our product range</h2>
         </div>
             { error ? <div class="container"><h1 style={{ textAlign: 'center', color: 'red' }}>Could not load data, please try refreshing page!</h1></div> :
-                (loading ? <Spin size='large' /> : <>
+                (loading ? <div style={{textAlign: 'center'}}><Spin size="large"></Spin></div> : <>
                     <div className="container flex-horizontal-box-container">
                         <TreeSelect 
                             className="box-item-xs-12 box-item-sm-6 box-item-md-4 box-item-lg-4 box-item-xl-3" 
