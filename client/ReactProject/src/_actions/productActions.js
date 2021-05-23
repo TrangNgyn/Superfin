@@ -24,8 +24,8 @@ const config = {
 
 export const getAllProducts = () => dispatch  => {
     dispatch(setIsLoading(true));
-
-    axios.get('api/products/all-product')
+    console.log("called here");
+    axios.get('/api/products/all-product')
     .then(res => {
         dispatch({
             type: GET_PRODUCTS,
