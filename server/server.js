@@ -68,13 +68,13 @@ db.mongoose
 
 // set up cors
 app.use(cors())
-
-app.use(express.static('../client/ReactProject/build'))
-
 // Sanitize against NoSQL query injections
 app.use(mongoSanitize())
 
-
+// static build files if in prod
+if(process.env.NODE_ENV == 'production') {
+  app.use(express.static('../client/ReactProject/build'))
+}
 
 // Routes
 app.use('/api/products', product)
@@ -86,9 +86,11 @@ app.use('/api/user', user)
 // need to change this routing 
 require('./routes/api/auth')(app)
 
-app.get('*', (req,res) => {
-  res.sendFile(path.join(__dirname, '../client/ReactProject/build','index.html'))
-})
+if(process.env.NODE_ENV == 'production'){
+  app.get('*', (req,res) => {
+    res.sendFile(path.join(__dirname, '../client/ReactProject/build','index.html'))
+  })
+}
 
 
 // Run Server
