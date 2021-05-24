@@ -1,5 +1,6 @@
 const categories = require('../models/categories');
 const categories_model = require('../models/categories');
+const db = require('../models/db')
 
 var empty_field = { 
     success: false,
@@ -45,6 +46,13 @@ class Category {
             if(path === "") {
                 path = null;
             }
+
+            const found =  req.body.c_name.match(db.passwordRegex)
+            if(found == null)
+                return res.status(400).send({
+                    success: false,
+                    message: "Category names can only be alphanumeric"
+                })
 
             // create new category
             var new_category = new categories_model({
