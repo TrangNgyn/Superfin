@@ -77,7 +77,16 @@ const ManageCategories = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Please input the new category\'s name!'
+                                    message: "Please input the new category's name!"
+                                },
+                                {
+                                    validator: async (_, categoryName) => {
+                                        if(categoryName === undefined || categoryName === "") return Promise.resolve();
+                                        const re = /^[A-Za-z0-9]+$/;
+                                        if(!re.test(categoryName)){
+                                            return Promise.reject(new Error('Category name can only contain alphanumeric characters!'));
+                                        }
+                                    }    
                                 }
                             ]}>
                             <Input maxLength={30} placeholder="Type new category name here" />

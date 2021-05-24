@@ -15,12 +15,7 @@ import {baseURL} from '../_helpers/axiosBaseURL';
 
 axios.defaults.baseURL = baseURL;
 
-/*
-const config = {
-    headers: {
-        'content-type': 'multipart/form-data'
-    }
-}*/
+
 
 export const getAllProducts = () => dispatch  => {
     dispatch(setIsLoading(true));
