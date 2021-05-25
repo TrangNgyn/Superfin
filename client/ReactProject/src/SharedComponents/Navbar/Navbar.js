@@ -7,7 +7,7 @@ import { useAuthUpdate, useAuth } from '../AuthContext/AuthContext';
 import { _logout } from '../../_services/SharedFunctions';
 import { userConstants } from '../../_constants/user.constants';
 import { getAllCategories } from '../../_actions/categoryActions';
-import image from '../../_assets/Images/new_logo.jpg'
+import image from '../../_assets/Images/new_logo2.jpg'
 import { history } from '../../_helpers/history';
 import axios from 'axios';
 import { baseURL } from '../../_helpers/axiosBaseURL';
