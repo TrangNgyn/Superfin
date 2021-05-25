@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/static/css/main.f03704d8.chunk.css",
-    "main.js": "/static/js/main.1c6ab603.chunk.js",
-    "main.js.map": "/static/js/main.1c6ab603.chunk.js.map",
+    "main.js": "/static/js/main.17554a7a.chunk.js",
+    "main.js.map": "/static/js/main.17554a7a.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.cd679f35.js",
     "runtime-main.js.map": "/static/js/runtime-main.cd679f35.js.map",
     "static/js/2.37dbf4c7.chunk.js": "/static/js/2.37dbf4c7.chunk.js",
@@ -17,13 +17,13 @@
     "static/media/Image_3.e8c817bf.png": "/static/media/Image_3.e8c817bf.png",
     "static/media/No_Image.04e9798e.jpg": "/static/media/No_Image.04e9798e.jpg",
     "static/media/mastercard.e84e92d4.jpg": "/static/media/mastercard.e84e92d4.jpg",
-    "static/media/new_logo.462ce060.jpg": "/static/media/new_logo.462ce060.jpg",
+    "static/media/new_logo2.f2bef7fa.jpg": "/static/media/new_logo2.f2bef7fa.jpg",
     "static/media/visa.562a774f.png": "/static/media/visa.562a774f.png"
   },
   "entrypoints": [
     "static/js/runtime-main.cd679f35.js",
     "static/js/2.37dbf4c7.chunk.js",
     "static/css/main.f03704d8.chunk.css",
-    "static/js/main.1c6ab603.chunk.js"
+    "static/js/main.17554a7a.chunk.js"
   ]
 }
