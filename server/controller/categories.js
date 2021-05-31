@@ -47,7 +47,7 @@ class Category {
                 path = null;
             }
 
-            const found =  req.body.c_name.match(db.passwordRegex)
+            const found =  req.body.c_name.match(db.categoryRegex)
             if(found == null)
                 return res.status(400).send({
                     success: false,
