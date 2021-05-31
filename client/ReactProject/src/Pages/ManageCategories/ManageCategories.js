@@ -82,7 +82,7 @@ const ManageCategories = () => {
                                 {
                                     validator: async (_, categoryName) => {
                                         if(categoryName === undefined || categoryName === "") return Promise.resolve();
-                                        const re = /^[A-Za-z0-9]+$/;
+                                        const re = /^[A-Za-z0-9\s]+$/;
                                         if(!re.test(categoryName)){
                                             return Promise.reject(new Error('Category name can only contain alphanumeric characters!'));
                                         }
