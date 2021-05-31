@@ -16,6 +16,6 @@ db.counters = require('./counters')
 db.ROLES = ["customer", "admin"]
 db.COUNTERS = ["order_id"]
 db.passwordRegex = '^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$'
-db.categoryRegex = '^[A-Za-z0-9\s]+$'
+db.categoryRegex = '^[A-Za-z0-9\\s]+$'
 
 module.exports = db
