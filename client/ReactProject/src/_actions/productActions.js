@@ -19,7 +19,6 @@ axios.defaults.baseURL = baseURL;
 
 export const getAllProducts = () => dispatch  => {
     dispatch(setIsLoading(true));
-    console.log("called here");
     axios.get('/api/products/all-product')
     .then(res => {
         dispatch({
@@ -37,7 +36,7 @@ export const getAllProducts = () => dispatch  => {
 
 export const getProductDetails = p_code => dispatch => {
     dispatch(setLoadingProductDetails(true));
-    axios.post('api/products/product-by-id', {
+    axios.post('/api/products/product-by-id', {
         p_code: p_code
     }).then(res => {
         dispatch({

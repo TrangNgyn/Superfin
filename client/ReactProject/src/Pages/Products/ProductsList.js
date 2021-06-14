@@ -18,7 +18,7 @@ const ProductsList = props => {
                 renderItem={item => {
                   return(
                     <List.Item>                        
-                        <Product key={item} productDetails={item} />
+                        <Product key={item} productDetails={item} category={props.category}/>
                     </List.Item>
                 )}}
             />

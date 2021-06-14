@@ -91,7 +91,13 @@ const config =  {
         },
         {
             component: ProductDetails,
-            url: '/productDetails',
+            url: '/productDetails/:p_code',
+            roles: [userConstants.ROLE_CUSTOMER, userConstants.ROLE_GUEST],
+            exact: true
+        },
+        {
+            component: ProductDetails,
+            url: '/productDetails/:p_code/:category',
             roles: [userConstants.ROLE_CUSTOMER, userConstants.ROLE_GUEST],
             exact: false
         },

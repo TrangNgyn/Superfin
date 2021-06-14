@@ -1,43 +1,26 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { getProductDetails } from '../../_actions/productActions';
 import ProductImagesCarousel from './ProductImagesCarousel';
 import ProductMainTitle from './ProductMainTitle';
 import ProductDescription from './ProductDescription';
 import { Spin, Divider } from 'antd';
-
-const ProductDetails = props => {
+import { useParams } from "react-router";
+ 
+const ProductDetails = () => {
     // current product detail state
     const dispatch = useDispatch();
+    const {p_code} = useParams();
 
     const productDetails = useSelector(state => state.productDetailsState.product);
     const isLoading = useSelector(state => state.productDetailsState.isLoading);
-    const error = useSelector(state => state.productDetailsState.error);
     
-    // Function for retrieving product code from URL params
-    const getProductCode = () => {
-        // get the query string (e.g. ?p_code=123&price_id=)
-        const queryString = window.location.search;
-        // get param values
-        const urlParams = new URLSearchParams(queryString);
-        const p_code = urlParams.get('p_code');
 
-        // check if p_code is defined and is not an empty string
-        if (p_code && p_code !== "") {
-            // setProductCode(p_code);
-            return p_code;
-        }else{
-            return "";
-        }
-    }
-
-    // Init productCode based on URI's param
-    const [productCode, setProductCode] = useState(getProductCode());
 
     // Retrieving the details of the p_code
     useEffect(() => {
         window.scrollTo(0, 0); // scroll to top on page load
-        dispatch(getProductDetails(productCode));
+        dispatch(getProductDetails(p_code));
     }, []);
     
     return (<>

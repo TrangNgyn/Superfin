@@ -23,6 +23,7 @@ const Products = () => {
     const loadingProduct = useSelector(state => state.productState.loading);
     const errorProduct = useSelector(state => state.productState.error);
 
+
     const [filteredAndSorted, setFilterAndSorted] = useState(products);
     const [filter, setFilter] = useState("allCategories");
     const [sorted, setSorted] = useState("priceAsc");
@@ -98,6 +99,7 @@ const Products = () => {
         filterAndSortProduct();
     }, [products, filter, sorted]);
 
+
     return (
       <>
         <div className="page-title-holder fill">
@@ -136,7 +138,7 @@ const Products = () => {
                             <Option value="priceDesc"><FallOutlined />Sort By: Price Descending</Option>
                         </Select>
                     </div>
-                    <ProductsList key={filteredAndSorted} productDetails={filteredAndSorted} />
+                    <ProductsList key={filteredAndSorted} productDetails={filteredAndSorted} category={filter}/>
                 </>)}
       </>
     );

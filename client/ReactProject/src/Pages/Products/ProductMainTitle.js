@@ -1,17 +1,22 @@
 import { Select, Input, Button } from 'antd';
 import { ShoppingOutlined } from '@ant-design/icons';
-import { useDispatch, connect } from 'react-redux';
+import { connect } from 'react-redux';
 import React, {useEffect, useState} from 'react';
 import {addToCart} from '../../_actions/cartActions'
 import { formatNumber } from '../../_helpers/utils';
+import { useParams } from 'react-router';
+import { history } from '../../_helpers/history';
 
 // quantity can be upto 10
 const quantityOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const ProductMainTitle = props => {
     const { Option } = Select;
+    const {category} = useParams();
     const { TextArea } = Input;
     const productDetails = props.productDetails;
+
+ 
     
     // line items' variables
     const [quantity, setQuantity] = useState((!productDetails) ? 0 : 1);
@@ -121,6 +126,10 @@ const ProductMainTitle = props => {
                     }}
             >
                 Add to Cart
+            </Button>
+
+            <Button size="large" onClick={()=> history.push(`/products/${category}`)}>
+                Go back
             </Button>
         </div>
     );

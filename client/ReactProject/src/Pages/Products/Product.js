@@ -38,7 +38,7 @@ const Product = props => {
                     alt={(productDetails.p_name === null || (productDetails.p_name !== null && productDetails.p_name.length === 0)) ? "image for paper bag" : productDetails.p_name}
                     src={(productDetails.p_image_uri[0] === null || (productDetails.p_image_uri[0] !== null && productDetails.p_image_uri[0].length === 0)) ? placeholderImg : productDetails.p_image_uri[0]}
                     onClick={() => { 
-                        history.push(`/productDetails?p_code=${productDetails.p_code}&price_id=${productDetails.p_price_id}`) 
+                        history.push(`/productDetails/${productDetails.p_code}/${props.category}`) 
                     }}
                 />
             }>
@@ -46,9 +46,7 @@ const Product = props => {
                 title={
                     <span
                         id="view-product-title"
-                        onClick={() => {
-                            history.push(`productDetails?p_code=${productDetails.p_code}`)
-                        }}>
+                        onClick={() => history.push(`/productDetails/${productDetails.p_code}/${props.category}`) }>
                         {productDetails.p_name}
                     </span>
                 }
