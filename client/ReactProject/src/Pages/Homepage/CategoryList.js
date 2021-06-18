@@ -7,8 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import noImage from '../../_assets/Images/No_Image.jpg';
 import { history } from '../../_helpers/history';
 
-const itemsPerPage = 6;
-
 const CategoryList = () => {
     const dispatch = useDispatch();
 
@@ -17,13 +15,12 @@ const CategoryList = () => {
     const error = useSelector(state => state.categoryState.error);
     const emptyCategories = useSelector(state => state.categoryState.empty);
     const productsList = useSelector(state => state.productState.products);
-
    
     const [currentCategories, setCurrentCategories] = useState([]);
     const [isChild, setIsChild] = useState(false);
     const [parentCategoires, setParentCategories] = useState([]);
     const [childCategories, setChildCategories] = useState([]);
-
+    const [currerntCategory, setCurrentCategory] = useState(null);
 
     const underConstructionMessage = () => {
         message.info({
@@ -44,6 +41,7 @@ const CategoryList = () => {
             if(childrenOfParent.length === 0) underConstructionMessage();
             else{
                 setCurrentCategories(childrenOfParent);
+                setCurrentCategory(cat);
                 setIsChild(true);
             }
         }
@@ -71,6 +69,7 @@ const CategoryList = () => {
     const goBack = () => {
         setIsChild(false);
         setCurrentCategories(parentCategoires);
+        setCurrentCategory(null);
     }
 
      useEffect(() => {    
@@ -111,6 +110,18 @@ const CategoryList = () => {
                 ?   <div style={{textAlign: 'center'}}><Spin size='large'/> </div>
                 :   <>
                         <div className="container">
+                            <div style={{paddingBottom: "1%", cursor: "pointer"}}>
+                                <u>
+                                    <span onClick={() => window.location.reload()}>/home</span>
+                                    {
+                                        currerntCategory
+                                        ?
+                                        <span>/{currerntCategory.c_name}</span>
+                                        :
+                                        <></>
+                                    }
+                                </u>
+                            </div>
                             <List
                                 grid={{
                                     gutter: 6, xs: 1, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5

@@ -8,6 +8,7 @@ export default function Homepage(){
             <div className="page-title-holder">
                 <h2>Show by Category</h2>
             </div>
+           
             <CategoryList />
         </>
     );

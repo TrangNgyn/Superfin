@@ -7,6 +7,7 @@ import { getAllCategories } from '../../_actions/categoryActions';
 import { getAllProducts } from '../../_actions/productActions';
 import { getCategoriesHierarchy } from '../../SharedComponents/Categories/CategoriesFunctions';
 import { useParams } from 'react-router-dom';
+import {history} from '../../_helpers/history';
 const { Option } = Select;
 // const { TreeNode } = TreeSelect;
 
@@ -27,8 +28,8 @@ const Products = () => {
     const [filteredAndSorted, setFilterAndSorted] = useState(products);
     const [filter, setFilter] = useState("allCategories");
     const [sorted, setSorted] = useState("priceAsc");
-
-
+    const [parent, setParent] = useState(null);
+    const [child, setChild] = useState(null);
     const loading = (loadingCategory || loadingProduct) ? true : false; // If either are loading, set loading to true, if not, set to false
     const error = (errorCategory || errorProduct) ? true : false; // If either are errorneous, set error to true, if not, set to false
 
@@ -50,6 +51,20 @@ const Products = () => {
 
     const filterAndSortProduct = () => {
         const parent = categories.find(c => {return c._id === filter});
+        if(parent !== undefined && parent !== null){
+            if(parent.path != null){
+                setParent(parent.path.slice(1, parent.path.length -1));
+                setChild(parent.c_name);
+            }
+            else{
+                setParent(parent.c_name);
+                setChild(null);
+            }
+        }
+        else{
+            setParent(null);
+            setChild(null);
+        } 
 
         const filterSortChildren = () => {
             const filteredSortedProducts = products
@@ -105,9 +120,44 @@ const Products = () => {
         <div className="page-title-holder fill">
             <h2>Our product range</h2>
         </div>
+
+        <div className="container flex-horizontal-box-container" style={{paddingBottom: "1%", cursor: "pointer"}}>
+            <u>
+                <span onClick={() => {
+                    history.push('/');
+                    window.location.reload();
+                }}>/home</span>
+
+                <span onClick={() => {
+                    history.push('/products');
+                    window.location.reload();
+                }}>/products</span>
+                
+                {
+                    parent
+                    ?
+                    <span onClick={() => {
+                        var cat = categories.find(c => {return c.c_name === parent});
+                        history.push(`/products/${cat._id}`);
+                        setFilter(cat._id);
+                    }}>/{parent}</span>
+                    :
+                    <></>
+                }
+                {
+                    child
+                    ?
+                    <span>/{child}</span>
+                    :
+                    <></>
+                }
+            </u>
+        </div>
+
             { error ? <div class="container"><h1 style={{ textAlign: 'center', color: 'red' }}>Could not load data, please try refreshing page!</h1></div> :
                 (loading ? <div style={{textAlign: 'center'}}><Spin size="large"></Spin></div> : <>
                     <div className="container flex-horizontal-box-container">
+                        
                         <TreeSelect 
                             className="box-item-xs-12 box-item-sm-6 box-item-md-4 box-item-lg-4 box-item-xl-3" 
                             treeData={getCategoriesHierarchy(categories, true)} 
