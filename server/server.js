@@ -2,7 +2,6 @@ const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') })
 
 const express = require('express'),
-    bodyParser = require('body-parser'),
     db = require('./models/db'),
     cors = require('cors'),
     mongoSanitize = require('express-mongo-sanitize');
@@ -54,6 +53,8 @@ function initial() {
 // bodyparser middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+
 
 
 // connect to mongo

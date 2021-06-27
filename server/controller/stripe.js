@@ -59,6 +59,7 @@ class Stripe{
         const pmTypes = (payment_types || 'card').split(',').map((m) => m.trim());
 
         // Create new Checkout Session for the order
+        console.log('creating session')
         const session = await stripe.checkout.sessions.create({
             payment_method_types: pmTypes,
             mode: 'payment',
