@@ -130,7 +130,7 @@ export default function Navbar(){
                 return <Menu.Item key={c._id}>{c.c_name}</Menu.Item>
             });
             return (
-                <SubMenu key={p._id} title={p.c_name}>{sub_categories}</SubMenu>
+                <SubMenu expandIcon={<></>} key={p._id} title={p.c_name}>{sub_categories}</SubMenu>
             );
     })
 
