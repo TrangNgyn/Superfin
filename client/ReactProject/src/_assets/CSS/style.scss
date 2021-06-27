@@ -32,6 +32,17 @@ code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
+li#Logo:hover {
+	text-decoration: none!important;
+	color: rgba(0,0,0,0);
+	border-bottom: 0px;
+}
+
+li#Logo a:hover {
+	text-decoration: none!important;
+	color: rgba(0,0,0,0);
+}
+
 a:link { text-decoration: none; }
 
 
