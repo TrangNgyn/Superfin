@@ -5,14 +5,16 @@ import {
     DELETE_INCOMPLETE_ORDERS, 
     ADD_TRACKING, 
     ADD_INCOMPLETE_ORDER, 
-    EDIT_INCOMPLETE_ORDER 
+    EDIT_INCOMPLETE_ORDER,
+    EMPTY_INCOMPLETE_ORDER
 } from '../_constants/actionTypes.constants';
 import { orderStatusConstants } from '../_constants/orderStatus.constants'; 
 
 const initState = {
     incompleteOrders: [],
     loading: false,
-    error: false
+    error: false,
+    empty: false
 }
 
 const incompleteOrdersReducer = (state = initState, {type, payload}) => {
@@ -23,6 +25,12 @@ const incompleteOrdersReducer = (state = initState, {type, payload}) => {
                 incompleteOrders: payload.sort((a,b) => { return new Date(b.issued_date) - new Date(a.issued_date)}),
                 loading: false,
                 error: false
+            }
+        case EMPTY_INCOMPLETE_ORDER: 
+            return{
+                ...state,
+                loading: false,
+                empty: true
             }
         case ERROR_INCOMPLETE_ORDERS:
             return {

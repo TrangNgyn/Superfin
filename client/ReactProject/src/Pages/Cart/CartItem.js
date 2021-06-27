@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {connect} from 'react-redux';
-import { Row, Col, Button, Input } from 'antd';
+import { Button, Input } from 'antd';
 import {PlusOutlined, MinusOutlined, RestOutlined } from '@ant-design/icons';
 import { formatNumber } from '../../_helpers/utils';
 import { decreaseQuantity, increaseQuantity } from '../../_actions/cartActions'
+import placeholderImg from '../../_assets/Images/No_Image.jpg';
 
 const { TextArea } = Input;
 
@@ -32,75 +33,56 @@ const CartItem = (props) => {
     
   }
 
-    return (
-      <Row justify="space-around" align="middle">
-        <Col span={4} >
-          <Row justify="left">
-            <img alt={"No Image Available"} 
-              src= {product.p_image_uri} 
-              width="70%" height="70%"
-            />
-          </Row>
-          <Row justify="left">
-            <strong>{product.p_name}</strong>
-          </Row>
-        </Col>
-        <Col span={4}>
-          <div style={{textAlign: "center"}}>{formatNumber(product.unit_price)}</div>
-        </Col>        
-        <Col span={3}>
-          <div style={{textAlign: "center"}}>{product.p_size}</div>
-        </Col>
-        <Col span={4}>
-          <div style={{textAlign: "center"}}>  
-            {
+  return (
+    <tr>
+        <td>
+          <img alt={(!product.item_code) ? "image of paper bag" : product.item_code + "\'s image"}
+            src= {(!product.p_image_uri) ? placeholderImg : product.p_image_uri} 
+            height="160px" width="120px" 
+            style={{objectFit:'scale-down'}}
+          />
+          <br/>
+          <span>
+            <em>{product.p_name}</em>
+          </span>
+        </td>
+        <td>{formatNumber(product.unit_price)}</td>
+        <td>{product.p_size}</td>
+        <td>
+            { 
               editable &&
-              <Button onClick={() => decrease()}
-                shape="circle"
-                icon={<MinusOutlined />}
-                style={{color: "#EB6E00"}}
-              />
+                <Button 
+                  onClick={() => increase()}
+                  icon={<PlusOutlined />} 
+                  type="primary"
+                />
             }
-
-            &nbsp;
-            <span>{quantityState}</span>
-            &nbsp;
-            
+            <br/>
+            {quantityState}
+            <br/>
             {
               editable &&
-              <Button onClick={() => increase()}
-                shape="circle"
-                icon={<PlusOutlined />}
-                style={{color: "#EB6E00"}}
-              />
-            } 
-          </div>
-        </Col>
-        <Col span={9} justify="right">
-          <div 
-            style={{
-              textAlign: "right",
-              paddingRight: "10px",
-            }}
+                <Button 
+                  onClick={() => decrease()}
+                  icon={<MinusOutlined />} 
+                  type="secondary"
+                />
+            }
+        </td>
+        <td>
+          <TextArea 
+            placeholder={"No Special Requirements"}
+            rows={4} maxLength={100}
+            autoSize={{ minRows: 4, maxRows: 4 }}
+            disabled={true}
+            value={
+              (!product.special_requirements) ? "" : product.special_requirements}
           >
-            { product.special_requirements.length > 0 ? 
-                <TextArea style={{width: 270}}
-                  value={product.special_requirements}
-                  rows={4}
-                  maxLength={100}
-                  autoSize={{ minRows: 4, maxRows: 4 }}
-                />
-              : <TextArea style={{width: 270}}
-                  value={"N/A"}
-                  rows={4}
-                  maxLength={100}
-                  autoSize={{ minRows: 4, maxRows: 4 }}
-                />
-              }
-          </div>
-        </Col>
-      </Row>
-)}
+          </TextArea>
+        </td>
+    </tr>
+  );
+}
 
 const mapDispatchToProps= (dispatch)=>{
   return{

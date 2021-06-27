@@ -1,10 +1,6 @@
-import '../../_assets/CSS/pages/DeliveryDispatch.css';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getCompanyInfo } from '../../_actions/companyInfoActions';
-
-
-
 
 const DeliveryDispatch = () =>{
 
@@ -18,14 +14,14 @@ const DeliveryDispatch = () =>{
     }, [dispatch, companyInfo]);
 
     return (
-        <div>
-            <div id="deliverydispatch-window">
-                Delivery and Dispatch
+        <>
+            <div className="page-title-holder fill">
+                <h2>Delivery and Dispatch</h2>
             </div>
-            <div id="deliverydispatch-text">
-                {companyInfo.c_delivery}
+            <div className="container">
+                <p style={{textAlign: 'center'}}>{companyInfo.c_delivery}</p>
             </div>
-        </div>
+        </>
     )
 };
 

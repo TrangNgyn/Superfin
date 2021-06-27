@@ -45,10 +45,12 @@ class Product {
         try{
             var { p_code } = req.body
             
+            // ensure all inputs are provided
             if(!p_code){
                 return res.json(empty_field)
             }
             else {
+                // find product by the provided p_code
                 var product = await product_model.findOne({ p_code: p_code })
                 if(product)
                     return res.json(product)
@@ -77,6 +79,7 @@ class Product {
                 return res.json(empty_field)
             }
             else {
+                // find all products by the cat_id
                 var categories = await product_model.find({ p_catagories: cat_id })
                                                     .populate('p_categores','c_name')
                 if(categories)
@@ -107,6 +110,7 @@ class Product {
                 return res.json(empty_field)
             }
             else {
+                // find all products in category sorted by price 
                 var categories = await product_model.find({ p_categories: cat_id }).sort({ p_price: 1 })
                 if(categories){
                     return res.json(categories)
@@ -128,16 +132,19 @@ class Product {
 
     // @route   POST api/products/add-product
     // @desc    Create a product
-    // @access  Public
+    // @access  Admin
 
     async post_add_product(req,res) {
         try {
 
+            // ensure all inputs are present
             var { p_code, p_name, p_price, p_unit, 
                  p_size, p_categories, p_description } =  req.body  
 
+            // save images 
             var images = req.images
 
+            // at least one image must be supplied for a product
             if(images.length <= 0) {
                 Product.delete_images(images)
                 return res.json({
@@ -166,6 +173,7 @@ class Product {
                 })
             }
 
+            // find the category from the supplied input
             var found_category = await categories_model.findOne({ _id: p_categories })
 
             if(!found_category){
@@ -174,6 +182,7 @@ class Product {
                                   message: `Product was not added - the category ${p_categories} is not valid`})
             }
 
+            // ensure that there are no matching p_codes
             var matching_code = await product_model.findOne({ p_code: p_code })
 
             if(matching_code){
@@ -181,8 +190,9 @@ class Product {
                 return res.json({ success: false,
                                   message: `Product was not added, the p_code ${p_code} is already in use` })
             }
-            // need too clean input here potentially to ensure that product addition is not corrupting the database
+            
 
+            // create a new product object
             const new_product = new product_model({
                 p_image_uri: images,
                 p_code,
@@ -194,6 +204,7 @@ class Product {
                 p_description
             })
 
+            // save product and return succes or failure
             var saved_product = await new_product.save()
             if (saved_product) {    
                 return res.json({ success: true,
@@ -216,11 +227,10 @@ class Product {
 
     // @route   POST api/products/edit-product
     // @desc    edit an existing product
-    // @access  Public
+    // @access  Admin
 
     async post_edit_product(req, res) {
         try {
-
             var { p_code, p_name, p_price, p_unit, p_size,
                  p_image_uri, p_categories, p_description } = req.body
 
@@ -337,6 +347,7 @@ class Product {
                     }
                 }
             }
+            // else remove all images from the uri
             else if(found_product.p_image_uri.length > 0){
                 for(var i = 0; i < found_product.p_image_uri.length; i++){
                     var image = found_product.p_image_uri[i];
@@ -358,27 +369,26 @@ class Product {
                 array.push(locations[i])
             }
 
-            // init edited price to old price
-            var edited_price = {
-                success: false,
-                p_price_id: found_product.p_price_id,
-            };
+            // assign the existing price_id 
             var p_price_id = found_product.p_price_id;
 
-            // update price if p_price changes
-            if(found_product.p_price !== p_price){
-                edited_price = stripe_update_price(p_code, p_price, found_product.p_price_id);
-
-                if(edited_price.success){
-                    p_price_id = edited_price.p_price_id;
-                }else{
-                    Product.delete_images(locations)
-                    return res.json(edited_price)
-                }
+            // if the price changes update the price in the stored field
+            if(found_product.p_price != p_price) {
+                stripe_update_price(p_code,p_price,found_product.p_price_id,(err,edited_price) => {
+                    if(err) {
+                        Product.delete_images(locations)
+                        return res.send({
+                            success: false,
+                            message: err.message
+                        })
+                    }
+                    p_price_id = edited_price.p_price_id
+                    
+                })
             }
-
+            
+            // create the query object with the supplied data
             var edited_product = product_model.findByIdAndUpdate(found_product._id, {
-                p_code,
                 p_image_uri: array,
                 p_name,
                 p_price,
@@ -389,6 +399,7 @@ class Product {
                 p_description,
             })
             
+            // attempt to execute the query 
             edited_product.exec(err => {
                 if(err){
                     Product.delete_images(locations)
@@ -403,12 +414,6 @@ class Product {
                     success: true,
                     message: `Product ${p_code} was edited`})
             })
-
-
-
-            // need to set up response
-            
-
         }
         catch (err) {
             Product.delete_images(locations)
@@ -421,9 +426,7 @@ class Product {
 
     // @route   POST api/products/delete-product
     // @desc    Delete a product
-    // @access  Public 
-
-    // need to somehow make this only accessible by admin user
+    // @access  Admin 
 
     async post_delete_product(req,res) {
         try{
@@ -434,35 +437,89 @@ class Product {
                 return res.json(empty_field)
             }
 
-            //should use findOneAndDelete here -> prevent other commands changing the document
-            else {
-                var delete_product = await product_model.findOne({ p_code: p_code })
-                if(delete_product) {
-                    if(delete_product.p_image_uri){
-                        Product.delete_images(delete_product.p_image_uri)
+            // find the doc and delete it
+            var delete_product = await product_model.findOne({ p_code: p_code })
+            if(delete_product) {
+                // delete the images from the bucket for the 
+                if(delete_product.p_image_uri){
+                    Product.delete_images(delete_product.p_image_uri)
+                }
+                delete_product.deleteOne((err) => {
+                    if(err){
+                        res.send({
+                            success: false,
+                            message: err.message
+                        })
                     }
-                    product_model.deleteOne({ p_code: p_code }, (err,result) => {
-                        if(err){
-                            res.json(err)
-                        }
-                        else {
-                            if(result.deletedCount === 1){
-                                return res.json({ 
-                                    succes: true,
-                                    message: `The product with code ${p_code} was deleted` })
-                            }
-                            else {
-                                res.send(result)
-                            }
-                        }
-                    })
-                } 
-                else {
+                    else {
+                        res.send({
+                            success: true,
+                            message: `Product with p_code ${p_code} was deleted`
+                        })
+                    }
+                })
+            } 
+            else {
+                return res.json({ 
+                    success: false,
+                    message: `Product with code ${p_code} not found, no product was deleted`})
+            }
+            
+        }
+        catch (err) {
+            console.log(err)
+            return res.json({
+                success: false,
+                message: err.message
+            })
+        }
+    }
+
+    // @route   POST api/products/validate-products
+    // @desc    Validate if the products have matching info compared to input
+    // @access  Public 
+
+    async post_validate_products(req,res) {
+        try{
+            let { 
+                p_codes, 
+                // p_names, unit_prices,
+                // price_ids, images, p_sizes
+            } = req.body
+
+            // if field is empty
+            if(!p_codes) 
+            {
+                return res.json(empty_field)
+            }
+
+            // p_codes needs to be an array of at least size 1
+            if(!Array.isArray(p_codes) || p_codes.length === 0){
+                return res.json({
+                    success: false,
+                    message: "p_codes needs to be an array of at least size 1",
+                })
+            }
+
+            // find the valid products that contain matching info
+            product_model
+                .find({
+                    'p_code': { '$in': p_codes }
+                })
+                .then(docs => {
+                    return res.json({
+                        success: true,
+                        valid_pcodes: docs
+                    });
+                })
+                .catch(err => {
+                    res.status(404)
                     return res.json({ 
                         success: false,
-                        message: `Product with code ${p_code} not found, no product was deleted`})
-                }
-            }
+                        valid_pcodes: [],
+                        message: err.message 
+                    });
+                })
         }
         catch (err) {
             return res.json({
@@ -472,45 +529,6 @@ class Product {
         }
     }
 
-    //====== Do we even need this?? ==============//
-
-    // @route   POST api/products/product-sold
-    // @desc    Increase the products sold count
-    // @access  Public
-
-    // async post_product_sold(req,res) {
-    //     try{
-    //         var { p_code, count } = req.body
-
-    //         // find the code and matching product
-    //         var found_product = await product_model.findOne({ p_code: p_code })
-
-    //         if(!found_product){
-    //             res.status(404)
-    //             return res.json({ success: false,
-    //                               message: "No product was found" })
-    //         }
-
-    //         var updated_product = product_model.findByIdAndUpdate(found_product._id,{
-    //             p_units_sold: Number(count) + found_product.p_units_sold
-    //         })
-    //         updated_product.exec(err => {
-    //             if(err)
-    //                 console.log(err)
-    //             return res.json({ success: true,
-    //                               message: `Product ${1111} sales has been updated` })
-    //         })
-    //         // how do i ensure concistency?!
-    //         // need to update this if there is something more i need to do 
-            
-    //     }
-    //     catch(err){
-    //         return res.json({
-    //             success: false,
-    //             message: err.message
-    //         })
-    //     }
-    // }
 }
 
 const product_controller = new Product

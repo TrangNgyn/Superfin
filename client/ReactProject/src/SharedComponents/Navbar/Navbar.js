@@ -7,7 +7,7 @@ import { useAuthUpdate, useAuth } from '../AuthContext/AuthContext';
 import { _logout } from '../../_services/SharedFunctions';
 import { userConstants } from '../../_constants/user.constants';
 import { getAllCategories } from '../../_actions/categoryActions';
-import image from '../../_assets/Images/new_logo.jpg'
+import image from '../../_assets/Images/new_logo2.jpg'
 import { history } from '../../_helpers/history';
 import axios from 'axios';
 import { baseURL } from '../../_helpers/axiosBaseURL';
@@ -24,7 +24,7 @@ export default function Navbar(){
     const updateAuth = useAuthUpdate();             //authorization data
     const auth = useAuth();
 
-  //  const [userDetails, setUserDetails] = useState({});             //stores users detials to access their name
+    const [userDetails, setUserDetails] = useState({});             //stores users detials to access their name
 
     const [parentCategoires, setParentCategories] = useState([]);         //categories in local state
     const [childCategories, setChildCategories] = useState([]);
@@ -56,20 +56,20 @@ export default function Navbar(){
     }, [categories.length, dispatch, categories, childCategories.length, emptyCategories, parentCategoires.length]);
 
     useEffect(() => {   //for populating the welcome name    
-        if(auth.roles[0] !== userConstants.ROLE_GUEST /*&& JSON.stringify(userDetails) === '{}'*/){
+        if(auth.roles[0] !== userConstants.ROLE_GUEST && JSON.stringify(userDetails) === '{}'){
 
             const config = { headers:{ authorization : `Bearer ${auth.access_token}` }};
             axios.defaults.baseURL = baseURL;
 
-           /* axios.get('api/user/', config)
+            axios.get('api/user/', config)
             .then(res => { setUserDetails(res.data) })
             .catch(err => {
                 console.log(err);
                 if(err.response.status === 401) _logout(updateAuth);
-            });*/
+            });
         } 
-        else if(auth.roles[0] === userConstants.ROLE_GUEST /*&& JSON.stringify(userDetails) !== '{}') setUserDetails({}*/);   //very important condition
-    }, [auth, updateAuth, /*userDetails*/]);
+        else if(auth.roles[0] === userConstants.ROLE_GUEST && JSON.stringify(userDetails) !== '{}') setUserDetails({});   //very important condition
+    }, [auth, updateAuth, userDetails]);
  
     const logout = () => {         
         _logout(updateAuth);
@@ -82,9 +82,6 @@ export default function Navbar(){
     const customerMenu = (                  //menus to be conditionally rendered 
         <>
         <Menu.Item>
-            <Link to="/myAccount"> My Account </Link>
-        </Menu.Item>
-        <Menu.Item>
             <Link to="/products"> Browse Products </Link>
         </Menu.Item>
         <Menu.Item>
@@ -94,7 +91,7 @@ export default function Navbar(){
             <Link to="/manageOrders"> Manage Orders </Link>
         </Menu.Item>
         <Menu.Item>
-            <Link to="/editProfile"> Edit Profile </Link>
+            <Link to="/editCustomer"> Edit Profile </Link>
         </Menu.Item>
         </>
     );
@@ -116,7 +113,7 @@ export default function Navbar(){
             key="AccountMenuMobile" 
             className="submenu-background"  
             icon={<UserOutlined />} 
-            title={"Welcome, "/* + userDetails.first_name*/}
+            title={"Welcome, " + userDetails.first_name}
         >
             {accountSpecificMenu}
             <Menu.Item onClick={logout}>Logout</Menu.Item>
@@ -127,7 +124,7 @@ export default function Navbar(){
         const sub_categories = childCategories
             .filter(c => { return c.path === `,${p.c_name},`})
             .map(c => {
-                return <Menu.Item key={c._id}>{c.c_name}</Menu.Item>
+                return <Menu.Item onClick={() => {history.push(`/products/${c._id}`)}} key={c._id}>{c.c_name}</Menu.Item>
             });
             return (
                 <SubMenu expandIcon={<></>} key={p._id} title={p.c_name}>{sub_categories}</SubMenu>
@@ -143,19 +140,17 @@ export default function Navbar(){
             </Menu.Item>
                 {categoriesMenu}
             <Menu.Item>
-            <Link to="/products">
-                <b>{"View all Products  >"}</b>
-            </Link>
+                <Link to="/products">
+                    <b>{"View all Products  >"}</b>
+                </Link>
             </Menu.Item>
         </Menu>
     );
 
   const ourProductsSubmenuMobile = ( //Our Products Submenu
         <SubMenu key="OurProductsSubmenu" className="submenu-background" title="Our Products">
-            <Menu.Item>
-                <Link to="/products/categories">
-                    <b>Shop By Category</b>
-                </Link>
+            <Menu.Item disabled>
+                <b>Shop By Category</b>
             </Menu.Item>
             {categoriesMenu}
             <Menu.Item>
@@ -179,7 +174,7 @@ export default function Navbar(){
         login = (
             <Menu.Item key = "Welcome"  icon={<UserOutlined />}>
                 <Dropdown overlay={accountMenu}>
-                    <span> Welcome, {/*userDetails.first_name*/} </span>
+                    <span> Welcome, {userDetails.first_name} </span>
                 </Dropdown>
             </Menu.Item>
         );
@@ -330,8 +325,8 @@ export default function Navbar(){
                         {login}
                     </Menu>
 
-                    <Menu className="Navbar-Mobile" mode="inline" selectable={false} onClick={() => {history.push(logoLink)}}>
-                        <Menu.Item key="Logo" id="Logo">
+                    <Menu className="Navbar-Mobile" mode="inline" selectable={false}>
+                        <Menu.Item key="Logo" id="Logo" onClick={() => {history.push(logoLink)}}>
                             {
                                 auth.roles[0] === userConstants.ROLE_ADMIN
                                 ?
@@ -347,7 +342,11 @@ export default function Navbar(){
 
                         {mainMenuMobile}
 
-                        <Menu.Item key="Cart" icon = {<ShoppingCartOutlined/>}>
+                        <Menu.Item key="Cart" icon = {
+                            <Badge count={itemCount} showZero style={{backgroundColor: "#EB6E00"}} >
+                                <ShoppingCartOutlined />
+                            </Badge>          
+                        }>
                             <Link to="/cart"> Cart </Link>
                         </Menu.Item>
 

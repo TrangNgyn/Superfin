@@ -91,9 +91,19 @@ export const checkPasswordStrength = password => {
 }
 
 export const _logout = updateAuth => {
-   // localStorage.setItem('SUPERFIN_USER', JSON.stringify({roles: [userConstants.ROLE_GUEST]}));
-   // updateAuth({roles: [userConstants.ROLE_GUEST]});
-   // history.push('/login');
+    localStorage.setItem('SUPERFIN_USER', JSON.stringify({roles: [userConstants.ROLE_GUEST]}));
+    updateAuth({roles: [userConstants.ROLE_GUEST]});
+    history.push('/login');
 }
 
+//check the SUPERFIN_USER obj in local storage meets the correct criteria
+export const _checkLocalStorageObj = obj => {
+    const objStr = JSON.stringify({roles: [userConstants.ROLE_GUEST]});
 
+    if(objStr === JSON.stringify(obj)) return true; 
+    else if(obj.hasOwnProperty('access_token') && obj.hasOwnProperty('expires_in') && obj.hasOwnProperty('roles') //&& obj.hasOwnProperty('email') 
+            && obj.hasOwnProperty('token_type') && Array.isArray(obj.roles) && Object.keys(obj).length === 4) return true;
+    else return false;
+}
+
+ 

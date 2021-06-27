@@ -28,17 +28,18 @@ router.post('/delete-order',
     order_controller.delete_order); 
 router.post('/single-order', 
     [auth_jwt.verify_token, auth_jwt.is_admin],
-    order_controller.single_order);  
+    order_controller.single_order); 
+router.post('/edit-order', 
+    [auth_jwt.verify_token, auth_jwt.is_admin],
+    order_controller.edit_order);      
 
 // CUSTOMER ORDER ROUTES //
 router.get('/orders-for-user',
-[auth_jwt.verify_token, auth_jwt.is_customer]
-,order_controller.get_customer_orders) 
+    [auth_jwt.verify_token, auth_jwt.is_customer],
+    order_controller.get_customer_orders) 
 router.post('/single-order-for-user', 
     [auth_jwt.verify_token, auth_jwt.is_customer],
     order_controller.get_single_order_customer) 
-router.post('/edit-order', 
-    [auth_jwt.verify_token, auth_jwt.is_admin],
-    order_controller.edit_order); 
+
 
 module.exports = router;

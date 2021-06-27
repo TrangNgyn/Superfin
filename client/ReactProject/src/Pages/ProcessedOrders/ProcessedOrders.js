@@ -1,4 +1,3 @@
-import '../../_assets/CSS/pages/ProcessedOrders/ProcessedOrders.css';
 import { Select, Pagination, Input, Button, Spin } from 'antd';
 import { history } from '../../_helpers/history';
 import { useState, useEffect } from 'react';
@@ -11,10 +10,6 @@ const { Option, OptGroup } = Select;
 
 const itemsPerPage = 10;
 
-
-
-
-
 const ProcessedOrders = () => {
     const dispatch = useDispatch();
     const updateAuth = useAuthUpdate();             //authorization data
@@ -23,6 +18,7 @@ const ProcessedOrders = () => {
     const orders = useSelector(state => state.completeOrdersState.completeOrders);
     const error = useSelector(state => state.completeOrdersState.error);
     const loading = useSelector(state => state.completeOrdersState.loading);
+    const empty = useSelector(state => state.completeOrdersState.empty);
 
     const [page, setPage] = useState(0);
     const [ordersList, setOrdersList] = useState([]);
@@ -32,20 +28,12 @@ const ProcessedOrders = () => {
     let renderableProducts = [];
     let row = <></>
 
-
-
-
-
     useEffect(() => {
-        if(!orders.length) dispatch(getCompleteOrders(auth.access_token, updateAuth));
+        if(!orders.length && !empty) dispatch(getCompleteOrders(auth.access_token, updateAuth));
         else setOrdersList(orders);      
-    }, [orders.length, orders, dispatch, auth.access_token]);
+    }, [orders.length, orders, dispatch, auth.access_token, updateAuth]);
     
     const onChange = p => { setPage(p - 1) };
-
-
-
-
 
     if(ordersList.length !== 0){
         renderableProducts = ordersList.slice( page * itemsPerPage, 
@@ -56,104 +44,86 @@ const ProcessedOrders = () => {
                 const dateString = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
                 
                 return (
-                    <tr key = {o.po_number} className="processed-orders-table-row">
+                    <tr key = {o.po_number}>
                         <td>{o.po_number}</td>
                         <td>{o.c_email}</td>
                         <td>{dateString}</td>
-                        <td>{o.trackingNumber}</td>
-                        <td>{o.carrier}</td>
-                        <td><b className="processed-orders-view" onClick={() => {
+                        <td><strong>{(o.tracking_number === null || (o.tracking_number !== null && o.tracking_number.length === 0)) ? <em>Not Available</em> : o.tracking_number}</strong></td>
+                        <td>{(o.carrier === null || (o.carrier !== null && o.carrier.length === 0)) ? <em>Not Available</em> : o.carrier}</td>
+                        <td><Button type="secondary" onClick={() => {
                             history.push(`/order/${o.po_number}/${o.status}`);
-                        }}>View</b></td>
+                        }}> View </Button></td>
                     </tr>
                 );
             });
     }
 
-
-
-
-
     return (
-        <div>
-            <div id="processed-orders-header">Processed Orders</div>
-
-            <div>
-                <table id="processed-orders-select-table">
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div style={{fontSize: "30px", fontWeight: "bold"}}>Orders</div>
-                            </td>
-
-                            <td>
-                                <Select allowClear placeholder="Order By" style = {{width:"300px"}} onSelect={v => {setOrder(v, ordersList, setOrdersList)}}>
-                                    <OptGroup label="Data Issued">
-                                        <Option value="d_decending">Latest</Option>
-                                        <Option value="d_ascending">Earliest</Option>
-                                    </OptGroup>
-                                    <OptGroup label="Customer Email">
-                                        <Option value="c_ascending">A-Z</Option>
-                                        <Option value="c_decending">Z-A</Option>
-                                    </OptGroup>
-                                    <OptGroup label="Carrier Name">
-                                        <Option value="cn_ascending">A-Z</Option>
-                                        <Option value="cn_decending">Z-A</Option>
-                                    </OptGroup>  
-                                </Select>
-                            </td>
-
-                            <td>
-                                <Input.Search
-                                    id='processed-orders-email-filter'
-                                    style = {{width:"300px"}}
-                                    placeholder="Search Customer Email"
-                                    enterButton="Search"
-                                    onSearch = { c_email => { 
-                                        if(c_email !== ""){
-                                            filterEmail(ordersList, c_email, setOrdersList);
-                                            setPage(0);
-                                        } 
-                                    }}
-                                />
-                            </td>
-
-                            <td>
-                                <Button onClick = { () => {
-                                    setOrdersList(orders);
-                                    document.getElementById('processed-orders-email-filter').value = "";
-                                }}>Reset Filters</Button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>  
+        <>
+            <div className="page-title-holder fill">
+                <h2>Processed Orders</h2>
+            </div>
+            <div className="container flex-horizontal-box-container">
+                <Select allowClear placeholder="Order By" className="box-item-xs-6 box-item-sm-4 box-item-md-4 box-item-lg-4 box-item-xl-3"
+                onSelect={v => {setOrder(v, ordersList, setOrdersList)}}>
+                    <OptGroup label="Data Issued">
+                        <Option value="d_decending">Latest</Option>
+                        <Option value="d_ascending">Earliest</Option>
+                    </OptGroup>
+                    <OptGroup label="Customer Email">
+                        <Option value="c_ascending">A-Z</Option>
+                        <Option value="c_decending">Z-A</Option>
+                    </OptGroup>
+                    <OptGroup label="Carrier Name">
+                        <Option value="cn_ascending">A-Z</Option>
+                        <Option value="cn_decending">Z-A</Option>
+                    </OptGroup>  
+                </Select>
+            
+                <Input.Search
+                    id='processed-orders-email-filter'
+                    className="box-item-xs-6 box-item-sm-4 box-item-md-4 box-item-lg-4 box-item-xl-3"
+                    placeholder="Search Customer Email"
+                    enterButton="Search"
+                    onSearch = { c_email => { 
+                        if(c_email !== ""){
+                            filterEmail(ordersList, c_email, setOrdersList);
+                            setPage(0);
+                        } 
+                    }}
+                />
+            
+                <Button
+                    className="box-item-xs-3 box-item-sm-4 box-item-md-3 box-item-lg-2 box-item-xl-2"
+                    type="secondary"
+                    onClick = { () => {
+                    setOrdersList(orders);
+                    document.getElementById('processed-orders-email-filter').value = "";
+                }}>Reset Filters</Button>
             </div>
 
-            <div style = {{height: "400px", display: "table"}}>
-                <table style={{width:"100%", textAlign: "center", tableLayout: "fixed"}}>
-                    <tbody>
-                        <tr style = {{border: "solid black 1px"}}>
-                            <th>PO Number</th>
-                            <th>Customer Email</th> 
-                            <th>Date Issued</th>
-                            <th>Tracking Number</th> 
-                            <th>Carrier</th>
-                            <th>View Order</th>
-                        </tr>
-                            
-                        {row}
-                    </tbody>
-                </table>  
-
-                {loading ? <div style = {{textAlign: 'center'}}><Spin size='large'/></div> : <></>}
-
-                {error ? <h1 style = {{textAlign: 'center', color: 'red'}}>Could not load data, please try refreshing page</h1> : <></>}
+            <div className="container table-container">
+                {loading ? <div style={{ textAlign: 'center' }}><Spin size='large' /></div> :
+                    error ? <h1 style={{ textAlign: 'center', color: 'red' }}> Could not load data, please try refreshing page </h1> :
+                        <table className="box-shadow center-content">
+                            <thead>
+                                <tr>
+                                    <th>PO Number</th>
+                                    <th>Customer Email</th> 
+                                    <th>Date Issued</th>
+                                    <th>Tracking Number</th> 
+                                    <th>Carrier</th>
+                                    <th>View Order</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {row}
+                            </tbody>
+                        </table>
+                }
+                <Pagination current={page + 1} defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange={onChange} className="text-center" />
             </div>
-
-            <div style = {{textAlign: "center"}}>
-                <Pagination current={page+1} defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange = {onChange}/>
-            </div>
-        </div>
+        </>
     );
 }
 

@@ -1,10 +1,5 @@
 import HomepageAdminOrder from './HomepageAdminOrder';
-import '../../_assets/CSS/pages/HomepageAdmin/HomepageAdminOrderList.css';
-import { Spin } from 'antd';
-
-
-
-
+import { Spin, List } from 'antd';
 
 const HomepageAdminOrderList = props => {
     const orders = props.orders;
@@ -19,26 +14,38 @@ const HomepageAdminOrderList = props => {
     let renderableOrders = [];
     if(orders.length !== 0){
         renderableOrders = orders.map(o => {
-            const orderProps = {
+            return {
                 order: o,
                 dispatch: dispatch,
                 updateAuth: updateAuth,
                 access_token: access_token
             }
-            return <div key={o._id}>< HomepageAdminOrder {...orderProps}/></div>
         }); 
     }
     
     return (
-      <div>
+      <>
         {loading ? <div style = {{textAlign: 'center'}}> <Spin size="large"/> </div> : <></>}
         
-        {error ? <h1 style = {{textAlign: 'center', color: 'red'}}>Could not load data, please try refreshing page</h1> : <></>}
-        
-        <div id="homepage-admin-orderlist-container">
-           {renderableOrders} 
-        </div>
-      </div>
+        {error ? <h1 style = {{textAlign: 'center', color: 'red'}}>Could not load data, please try refreshing page</h1> : <>
+                <List
+                    grid={{
+                        gutter: 6, xs: 1, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5
+                    }}
+                    pagination={{
+                        position: 'bottom',
+                        defaultPageSize: 8
+                    }}
+                    dataSource={renderableOrders}
+                    renderItem={orderProps => {
+                    return(
+                        <List.Item>                        
+                            <HomepageAdminOrder {...orderProps}/>
+                        </List.Item>
+                    )}}
+                />
+            </>}
+      </>
   );
 };
 

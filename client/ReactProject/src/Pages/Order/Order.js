@@ -32,6 +32,7 @@ const Order = () => {
     const { po_number, status } = useParams();
     const incompleteOrders = useSelector(state => state.incompleteOrdersState.incompleteOrders);
     const compeletOrders = useSelector(state => state.completeOrdersState.completeOrders);
+    const empty = useSelector(state => state.incompleteOrdersState.empty);
     const [order, setOrder] = useState({items: []});
     const [orderOriginal, setOrderOriginal] = useState(order);
     const [mode, setMode] = useState(MODE.ADD);
@@ -109,7 +110,7 @@ const Order = () => {
             }
         }
         
-    }, [compeletOrders, form_1, incompleteOrders, po_number, status, auth.access_token]);
+    }, [compeletOrders, form_1, incompleteOrders, po_number, status, auth.access_token, updateAuth]);
 
     
     
@@ -136,7 +137,7 @@ const Order = () => {
         if(mode===MODE.ADD){
             let order = createOrderAdd(values, address);
             console.log(order);
-            if(incompleteOrders.length > 0){
+            if(incompleteOrders.length > 0 || empty){
                 order.issued_date = new Date();
                 _addIncompleteOrder(order, dispatch);
             }

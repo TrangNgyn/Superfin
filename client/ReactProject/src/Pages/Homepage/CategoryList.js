@@ -1,14 +1,11 @@
-import '../../_assets/CSS/pages/Homepage/CategoryList.css';
-
 import Category from './Category';
 import { getAllCategories } from '../../_actions/categoryActions';
 import { getAllProducts, setDefaultOrder } from '../../_actions/productActions';
 import { useState, useEffect } from "react";
-import { Pagination, Spin, Button } from 'antd';
+import { Spin, Button, message, List } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import noImage from '../../_assets/Images/No_Image.jpg';
-
-const itemsPerPage = 6;
+import { history } from '../../_helpers/history';
 
 const CategoryList = () => {
     const dispatch = useDispatch();
@@ -19,38 +16,40 @@ const CategoryList = () => {
     const emptyCategories = useSelector(state => state.categoryState.empty);
     const productsList = useSelector(state => state.productState.products);
    
-
-    const [page, setPage] = useState(0);
     const [currentCategories, setCurrentCategories] = useState([]);
     const [isChild, setIsChild] = useState(false);
     const [parentCategoires, setParentCategories] = useState([]);
     const [childCategories, setChildCategories] = useState([]);
+    const [currerntCategory, setCurrentCategory] = useState(null);
 
-   /* const maxNumberOfPages = (Math.ceil(categories.length/itemsPerPage) - 1);
+    const underConstructionMessage = () => {
+        message.info({
+          content: 'We are still adding products to this category. Check back soon!',
+          style: {
+            marginTop: '20vh',
+            height: '40px'
+          },
+        });
+      };
     
-    const renderableArray = categories.slice( page * itemsPerPage,
-        ((page + 1) * itemsPerPage) > categories.length ? categories.length : ((page + 1) * itemsPerPage));
-
-    const rederableCats = renderableArray.map((c, i) => {
-        return <div key={i}><Category {...c}/></div>
-    });*/
-
-
-
-
-    
-    const changeCategoryType = c_name => {
+    const changeCategoryType = cat => {
         if(!isChild){
-            setIsChild(true);
+            
             const childrenOfParent = childCategories.filter(c => {
-                return c.path === `,${c_name},`
+                return c.path === `,${cat.c_name},`
             });
-            setCurrentCategories(childrenOfParent);
-            setPage(0);
+            if(childrenOfParent.length === 0) underConstructionMessage();
+            else{
+                setCurrentCategories(childrenOfParent);
+                setCurrentCategory(cat);
+                setIsChild(true);
+            }
         }
         else{
-           //navigate
-        }
+            const productFound = productsList.find(p => {return p.p_categories === cat._id});
+            if(productFound === undefined) underConstructionMessage();
+            else history.push(`/products/${cat._id}`);
+        } 
     }
 
     const getCategoryImage = c_id => {
@@ -70,7 +69,7 @@ const CategoryList = () => {
     const goBack = () => {
         setIsChild(false);
         setCurrentCategories(parentCategoires);
-        setPage(0);
+        setCurrentCategory(null);
     }
 
      useEffect(() => {    
@@ -95,26 +94,6 @@ const CategoryList = () => {
         }
     }, [categories.length, dispatch, categories, childCategories, emptyCategories, parentCategoires.length, productsList.length]);
 
-    const onChange = p => { setPage(p - 1) };
-
-
-
-
-    
-    const maxNumberOfPages = (Math.ceil(currentCategories.length/itemsPerPage) - 1);
-    
-    const renderableArray = currentCategories.slice( page * itemsPerPage,
-        ((page + 1) * itemsPerPage) > currentCategories.length ? currentCategories.length : ((page + 1) * itemsPerPage));
-
-        
-    const rederableCats = renderableArray.map((c, i) => {
-        const img = getCategoryImage(c._id.toString());
-        return <div key={i}><Category {...c} onClick={changeCategoryType} image={img}/></div>
-    });
-
-
-
-
 
     return (
         <>
@@ -124,14 +103,42 @@ const CategoryList = () => {
                 :   <></>
             }
             {
-                isChild ? <Button onClick={goBack}>Go back</Button> : <></>
+                isChild ? <div className="container"><Button onClick={goBack}>Go back</Button></div> : <></>
             }
             {
                 loading 
-                ?   <Spin size='large'/> 
+                ?   <div style={{textAlign: 'center'}}><Spin size='large'/> </div>
                 :   <>
-                        <div className="Category-List-Container">{rederableCats}</div>
-                        <Pagination current={page + 1} defaultCurrent={1} total={(maxNumberOfPages + 1) * 10} onChange = {onChange}/>
+                        <div className="container">
+                            <div style={{paddingBottom: "1%", cursor: "pointer"}}>
+                                <u>
+                                    <span onClick={() => window.location.reload()}>/home</span>
+                                    {
+                                        currerntCategory
+                                        ?
+                                        <span>/{currerntCategory.c_name}</span>
+                                        :
+                                        <></>
+                                    }
+                                </u>
+                            </div>
+                            <List
+                                grid={{
+                                    gutter: 6, xs: 1, sm: 2, md: 2, lg: 3, xl: 4, xxl: 5
+                                }}
+                                pagination={{
+                                    position: 'bottom',
+                                    defaultPageSize: 8,
+                                }}
+                                dataSource={currentCategories}
+                                renderItem={item => {
+                                return(
+                                    <List.Item>                        
+                                        <Category {...item} onClick={ () => changeCategoryType(item)} image={getCategoryImage(item._id.toString())}/>
+                                    </List.Item>
+                                )}}
+                            />
+                        </div>
                     </>  
             }  
         </>

@@ -8,7 +8,7 @@ var validateProductUnit = function(unit) {
     return re.test(unit)
 };
 
-//Create schema
+//product schema
 const productSchema = new Schema({
     p_code : {
         type: String,
@@ -59,25 +59,27 @@ const productSchema = new Schema({
 
 });
 
-productSchema.pre("save", async function(next) {
+// pre save hook to add the product to stripe and attach the price id to the product model
+productSchema.pre("save", function(next) {
     var doc = this
-    var stripe_product = await stripe_add_product(doc.p_code, doc.p_name, doc.p_price);
-    if(!stripe_product.success)
-        return next(new Error(stripe_product.message))
-    else{
+    stripe_add_product(doc.p_code, doc.p_name, doc.p_price, (err, stripe_product) => {
+        if(err) {
+            return next(new Error(err))
+        }
         doc.p_price_id = stripe_product.price_id
         next(); 
-    }
+        
+    });
 })
 
-productSchema.post("remove", async function(next){
+// delete one pre hook to remove the product from stripe before removing from the db
+productSchema.pre("deleteOne", {document: true, query: false},function(next) {
     var doc = this
-    var stripe_product = await stripe_deactivate_product(doc.p_code, doc.p_price_id);
-    if(!stripe_product.success)
-        return next(new Error(stripe_product.message))
-    else{
-        next(); 
-    }
+    stripe_deactivate_product(doc.p_code, doc.p_price_id,(err) => {
+        if(err) 
+            return new Error(err)
+    })
+    next()
 })
 
 module.exports = product = mongoose.model("products", productSchema)

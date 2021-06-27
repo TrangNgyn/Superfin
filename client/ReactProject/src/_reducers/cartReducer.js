@@ -12,7 +12,9 @@ import {
   LOAD_STRIPE,
   INCREASE_QUANTITY,
   DECREASE_QUANTITY,
-  CLEAR_CART
+  REMOVE_ITEMS,
+  CLEAR_CART,
+  UPDATE_ITEM_INFO,
 } from '../_constants/cart.constants'
 
 // initial state of address
@@ -29,7 +31,7 @@ const address_init = {
 const initialState = {
   items: JSON.parse(localStorage.getItem("items")) || [],// array of {item_code, price_id (for stripe), unit_price, 
                                                          //   quantity, special_requirements, image_uri[]}
-  total: JSON.parse(localStorage.getItem("total")) || 0, // order total
+  total: 0, // order total
   address: JSON.parse(localStorage.getItem("address")) || address_init, // shipping address
   c_email: JSON.parse(localStorage.getItem("email")) || "", // user email         
   loading: false,    // page's loading state
@@ -73,13 +75,9 @@ const cartReducer= (state = initialState, action)=>{
         items: [...state.items, 
           {
             item_code: addedItem.p_code,
-            p_name: addedItem.p_name,
-            price_id: addedItem.p_price_id,
-            unit_price: addedItem.p_price,
             p_size: action.p_size,
             quantity: action.quantity,
             special_requirements: action.special_requirements,
-            p_image_uri: addedItem.p_image_uri[0],
           }
         ],            
         total : newTotal
@@ -113,6 +111,24 @@ const cartReducer= (state = initialState, action)=>{
 
     return {...state, total: newTotal};
   }
+  else if(action.type === REMOVE_ITEMS){
+    let newItems = state.items;
+    action.invalid_pcodes.forEach(invalid => {
+      // remove items that are in invalid_pcodes
+      newItems = state.items.filter(item =>
+        (item.item_code !== invalid.item_code && item.p_size !== invalid.p_size)
+      );
+    });  
+    
+    // calc new total
+    let newTotal = 0;
+    state.items.forEach(item => {
+      newTotal += item.quantity * item.unit_price;
+    });
+
+    return {...state, items: newItems, total: newTotal};
+
+  }
   else if(action.type === CLEAR_CART){
     return{
       ...state,
@@ -120,8 +136,35 @@ const cartReducer= (state = initialState, action)=>{
       items: [],
       address: address_init,
       c_email: "",
-    }
+    };
 
+  }
+  else if(action.type === UPDATE_ITEM_INFO){
+    // set item info for each item in cart
+    action.items.forEach(item => {
+      if(state.items){
+        for(let i = 0; i < state.items.length; i++){
+          if(state.items[i].item_code === item.p_code){
+            // add updated info on item
+            state.items[i].p_name = item.p_name;
+            state.items[i].price_id = item.p_price_id;
+            state.items[i].unit_price = item.p_price;
+            state.items[i].p_image_uri = item.p_image_uri[0];
+          }
+  
+        }
+      }
+    });
+
+    // calc new total
+    let newTotal = 0;
+    state.items.forEach(item => {
+      newTotal += item.quantity * item.unit_price;
+    });
+
+    console.log({total: newTotal})
+
+    return {...state, total: newTotal};
   }
   else if(action.type === SET_SHIPPING_INFO){
     return { ...state, address: action.address, c_email: action.email };

@@ -1,4 +1,3 @@
-import '../../_assets/CSS/pages/Blog/Blog.css';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getCompanyInfo } from '../../_actions/companyInfoActions';
@@ -14,16 +13,14 @@ const Blog = () => {
         }
     }, [dispatch, companyInfo]);
 
-    return(
-        <div>
-            <div id="blog-window">
-                Company Blog
-            </div>
-            <div id="blog-text">
-                {companyInfo.c_blog}
-            </div>
+    return(<>
+        <div className="page-title-holder fill">
+            <h2>Company Blog</h2>
         </div>
-    )
+        <div className="container">
+            <p style={{textAlign: 'center'}}>{companyInfo.c_blog}</p>
+        </div>
+    </>)
 }
 
 export default Blog;

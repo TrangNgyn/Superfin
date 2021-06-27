@@ -12,13 +12,13 @@ const ProductsList = props => {
                 }}
                 pagination={{
                     showSizeChanger: true,
-                    position: 'both',
+                    position: 'bottom',
                 }}
                 dataSource={Object.values(productDetails)}
                 renderItem={item => {
                   return(
                     <List.Item>                        
-                        <Product key={item} productDetails={item} />
+                        <Product key={item} productDetails={item} category={props.category}/>
                     </List.Item>
                 )}}
             />

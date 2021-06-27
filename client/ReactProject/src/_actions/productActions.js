@@ -11,18 +11,15 @@ import {
 } from '../_constants/actionTypes.constants';
 import axios from 'axios';
 import { _logout } from '../_services/SharedFunctions';
+import {baseURL} from '../_helpers/axiosBaseURL';
 
-/*
-const config = {
-    headers: {
-        'content-type': 'multipart/form-data'
-    }
-}*/
+axios.defaults.baseURL = baseURL;
+
+
 
 export const getAllProducts = () => dispatch  => {
     dispatch(setIsLoading(true));
-
-    axios.get('api/products/all-product')
+    axios.get('/api/products/all-product')
     .then(res => {
         dispatch({
             type: GET_PRODUCTS,
@@ -39,7 +36,7 @@ export const getAllProducts = () => dispatch  => {
 
 export const getProductDetails = p_code => dispatch => {
     dispatch(setLoadingProductDetails(true));
-    axios.post('api/products/product-by-id', {
+    axios.post('/api/products/product-by-id', {
         p_code: p_code
     }).then(res => {
         dispatch({
@@ -71,7 +68,7 @@ export const deleteProduct = (p_code, access_token, updateAuth) => dispatch => {
         p_code: p_code
     }, config)
     .then(res => {
-        if(res.data.succes){                            //This may need to be changed to 'success'
+        if(res.data.success){                            //This may need to be changed to 'success'
             dispatch({
                 type: DELETE_PRODUCT,
                 payload: p_code

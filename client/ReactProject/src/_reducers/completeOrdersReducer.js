@@ -4,13 +4,15 @@ import {
     LOADING_COMPLETE_ORDERS, 
     DELETE_COMPLETE_ORDER, 
     ADD_COMPLETE_ORDER, 
-    EDIT_COMPLETE_ORDER 
+    EDIT_COMPLETE_ORDER,
+    EMPTY_COMPLETE_ORDER
 } from '../_constants/actionTypes.constants';
 
 const initState = {
     completeOrders: [],
     loading: false,
-    error: false
+    error: false,
+    empty:false
 }
 
 const completeOrdersReducer = (state = initState, {type, payload}) => {
@@ -21,6 +23,12 @@ const completeOrdersReducer = (state = initState, {type, payload}) => {
                 completeOrders: payload.sort((a,b) => { return new Date(b.issued_date) - new Date(a.issued_date)}),
                 loading: false,
                 error: false
+            }
+        case EMPTY_COMPLETE_ORDER:
+            return{
+                ...state,
+                empty: true,
+                loading: false
             }
         case ERROR_COMPLETE_ORDERS:
             return {

@@ -1,18 +1,22 @@
 import { Select, Input, Button } from 'antd';
 import { ShoppingOutlined } from '@ant-design/icons';
-import { useDispatch, connect } from 'react-redux';
+import { connect } from 'react-redux';
 import React, {useEffect, useState} from 'react';
 import {addToCart} from '../../_actions/cartActions'
 import { formatNumber } from '../../_helpers/utils';
+import { useParams } from 'react-router';
+import { history } from '../../_helpers/history';
 
 // quantity can be upto 10
 const quantityOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 const ProductMainTitle = props => {
     const { Option } = Select;
+    const {category} = useParams();
     const { TextArea } = Input;
     const productDetails = props.productDetails;
-    console.log(productDetails)
+
+ 
     
     // line items' variables
     const [quantity, setQuantity] = useState((!productDetails) ? 0 : 1);
@@ -63,9 +67,19 @@ const ProductMainTitle = props => {
     );
 
     useEffect(() => {
+        // get only user input values
+        const items = props.items.map(i => {
+            return {
+                item_code: i.item_code,
+                p_size: i.p_size,
+                quantity: i.quantity,
+                special_requirements: i.special_requirements,
+            }
+        });
+
         // store cart state to local storage
-        localStorage.setItem("items", JSON.stringify(props.items));
-        localStorage.setItem("total", JSON.stringify(props.total));
+        localStorage.setItem("items", JSON.stringify(items));
+
     }, [props.total, props.items]);
 
     return (
@@ -105,13 +119,17 @@ const ProductMainTitle = props => {
                 />
             </div>
             <br/>
-            <Button type="primary" icon={<ShoppingOutlined />}
+            <Button type="primary" icon={<ShoppingOutlined />} size="large"
                 onClick={()=>
                     {
                         addToCart(productDetails, quantity, specialRequirements, productSize)
                     }}
             >
                 Add to Cart
+            </Button>
+
+            <Button size="large" onClick={()=> history.push(`/products/${category}`)}>
+                Go back
             </Button>
         </div>
     );

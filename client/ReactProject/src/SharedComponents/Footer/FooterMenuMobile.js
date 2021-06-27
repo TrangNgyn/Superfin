@@ -6,15 +6,11 @@ export default function FooterMenuMobile(){
       return (
         <Menu className="footer-menubar-mobile" mode="vertical" >
             <Menu.Item key="Home" className="item">
-              Home
+                <Link to="/"> Home </Link>
             </Menu.Item >
 
             <Menu.Item key="Terms" className="item">
               <Link to="/termsAndConditions"> Terms and Conditions </Link>
-            </Menu.Item >
-
-            <Menu.Item key="Support" className="item">
-              Support
             </Menu.Item >
 
             <Menu.Item key="Contact" className="item">

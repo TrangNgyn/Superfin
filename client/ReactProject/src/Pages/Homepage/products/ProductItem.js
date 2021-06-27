@@ -10,7 +10,7 @@ const ProductItem = ({product}) => {
               style={{height: '310px', width:'310px'}}
           />
 
-          <table id="product-text-container">
+          <table id="product-text-container" className="center-content">
               <tbody>
                   <tr>
                       <td>Product Code: {product.p_code}</td>

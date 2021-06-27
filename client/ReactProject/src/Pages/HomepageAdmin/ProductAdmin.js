@@ -1,13 +1,11 @@
 import React from "react";
-import '../../_assets/CSS/pages/HomepageAdmin/ProductAdmin.css';
 import altImage from "../../_assets/Images/No_Image.jpg"
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { deleteConfirm } from '../../SharedComponents/Modals/Modals';
 import { history } from '../../_helpers/history';
+import { Card } from 'antd';
 
-
-
-
+const { Meta } = Card;
 
 const Product = props => {
     const dispatch = props.dispatch;
@@ -15,47 +13,37 @@ const Product = props => {
     const categoryName = props.categoryName;
 
 
-    
-    const viewCategory = () => {
-        console.log("View product info for " + product.name);
-        //This will link to product info page
-    } 
-
-
-
-
-    
     return (
-        <div id="admin-product-container">
-            <img id="admin-product-image"
-                src= {product.p_image_uri[0]}
-                alt={altImage}
-                onClick={viewCategory}
-                style={{height: '310px', width:'310px'}}
+        <Card className="card-shadow-hoverable"
+            tabIndex={0}
+            cover={
+                <img className="cover-img fixed-size" 
+                    style={{ cursor: 'pointer' }} 
+                    alt={altImage}
+                    src={(product.p_image_uri[0] === null || product.p_image_uri[0] === undefined || (product.p_image_uri[0] !== null && product.p_image_uri[0] !== undefined && product.p_image_uri[0].length === 0)) ? altImage : product.p_image_uri[0]}
+                    onClick={() => { history.push(`/editAddProducts/${product.p_code}`)}}
+                />
+            }
+            actions={[
+                <DeleteOutlined onClick={() => {deleteConfirm(product.p_code, dispatch, props.access_token, props.updateAuth)}} style={{color: 'red'}}/>,
+                <EditOutlined onClick={() => { history.push(`/editAddProducts/${product.p_code}`)}}/>
+            ]}
+            >
+            <Meta
+                title={
+                    <span
+                        id="view-product-title"
+                        onClick={() => { history.push(`/editAddProducts/${product.p_code}`)}}>
+                        {product.p_name}
+                    </span>
+                }
+                description={<>
+                    <p><b>Product Code: </b>{product.p_code}</p>
+                    <p><b>Unit Price: </b>${product.p_price}</p>
+                    <p><b>Category: </b>{ categoryName }</p>
+                </>}
             />
-        
-            <table id="admin-product-text-container">
-                <tbody>
-                    <tr>
-                        <td>Product Code: {product.p_code}</td>
-                    </tr>
-                    <tr>
-                        <td>Product Name: {product.p_name}</td>
-                    </tr>
-                    <tr>
-                        <td>Unit Price: ${product.p_price}</td>
-                    </tr>
-                    <tr>
-                        <td>Category: { categoryName }</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div id="admin-product-icon-container">
-                <DeleteOutlined onClick={() => {deleteConfirm(product.p_code, dispatch, props.access_token, props.updateAuth)}} className="admin-product-icon"/>
-                <EditOutlined onClick={() => { history.push(`/editAddProducts/${product.p_code}`)}} className="admin-product-icon"/>
-            </div>  
-        </div>
+        </Card>
     );
 };
 

@@ -38,7 +38,7 @@ const ProductTableRows = props => {
                     <td>{p.p_name}</td>
                     <td>{p.p_code}</td>
                     <td>${p.p_price}</td>
-                    <td>{p.p_units_sold}</td>
+                    <td>{p.p_unit}</td>
                     <td>{ getCategoryName(p.p_categories, categories) }</td>
                     <td>
                         <EditOutlined props={p.p_code} className="manage-products-icon" onClick={() => {
