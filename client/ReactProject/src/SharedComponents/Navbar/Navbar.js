@@ -124,10 +124,10 @@ export default function Navbar(){
         const sub_categories = childCategories
             .filter(c => { return c.path === `,${p.c_name},`})
             .map(c => {
-                return <Menu.Item onClick={() => {history.push(`/products/${c._id}`)}} key={c._id}>{c.c_name}</Menu.Item>
+                return <Menu.Item key={c._id}><Link onClick={() => { history.push(`/products/${c._id}`) }}>{c.c_name}</Link></Menu.Item>
             });
             return (
-                <SubMenu key={p._id} title={<div onClick={() => {history.push(`/products/${p._id}`)}}>{p.c_name}</div>}>{sub_categories}</SubMenu>
+                <SubMenu key={p._id} expandIcon={<></>} title={<Link onClick={() => {history.push(`/products/${p._id}`)}}>{p.c_name}</Link>}>{sub_categories}</SubMenu>
             );
     })
 
@@ -139,6 +139,12 @@ export default function Navbar(){
                 </Link>
             </Menu.Item>
                 {categoriesMenu}
+            <SubMenu key={12} icon={<></>} title={<Link onClick={() => { history.push(`/products/woopa`) }}>Test</Link>}>
+                <Menu.Item key={13}><Link onClick={() => { history.push(`/products/123`) }}>TESTPROD</Link></Menu.Item>
+                <Menu.Item key={14}><Link onClick={() => { history.push(`/products/123`) }}>TESTPROD</Link></Menu.Item>
+                <Menu.Item key={15}><Link onClick={() => { history.push(`/products/123`) }}>TESTPROD</Link></Menu.Item>
+                <Menu.Item key={16}><Link onClick={() => { history.push(`/products/123`) }}>TESTPROD</Link></Menu.Item>
+            </SubMenu>
             <Menu.Item>
                 <Link to="/products">
                     <b>{"View all Products  >"}</b>
